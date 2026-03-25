@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yumiya Candle – Dino Run</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff5f8;font-family:'Lato',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:20px 10px 30px;overflow-x:hidden}
+h1{font-family:'Playfair Display',serif;font-size:26px;color:#c94e79;letter-spacing:.04em;margin-bottom:4px}
+.tagline{font-size:12px;color:#d4849f;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+#topbar{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:680px;margin-bottom:10px}
+.hud{display:flex;gap:10px;align-items:center}
+.hud-box{background:white;border:1.5px solid #f0c0d0;border-radius:20px;padding:4px 14px;font-size:13px;font-weight:700;color:#b5406b}
+#canvas-wrap{position:relative;border:2.5px solid #e8799e;border-radius:18px;overflow:hidden;box-shadow:0 6px 32px #e8799e22}
+canvas{display:block}
+#overlay{display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;position:absolute;inset:0;background:rgba(255,245,248,.95);border-radius:16px}
+.ov-title{font-family:'Playfair Display',serif;font-size:26px;color:#c94e79;text-align:center}
+.ov-sub{font-size:14px;color:#a0607a;text-align:center;line-height:1.8;max-width:300px}
+.ov-code{font-family:'Playfair Display',serif;font-size:32px;color:#c94e79;letter-spacing:.12em;background:white;border:2.5px solid #e8799e;border-radius:14px;padding:10px 30px;margin:2px 0}
+.ov-small{font-size:11px;color:#d4849f;text-align:center;letter-spacing:.06em}
+.ov-btn{background:linear-gradient(135deg,#e8799e,#c94e79);color:white;border:none;padding:12px 36px;border-radius:30px;font-family:'Lato',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.05em;box-shadow:0 4px 16px #e8799e44}
+.ov-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px #e8799e66}
+.ov-btn:active{transform:scale(.97)}
+#controls{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:14px}
+#jump-btn{background:white;border:2px solid #e8799e;border-radius:30px;padding:13px 50px;font-family:'Lato',sans-serif;font-size:15px;font-weight:700;color:#c94e79;cursor:pointer;letter-spacing:.05em;box-shadow:0 2px 10px #e8799e22;transition:all .15s}
+#jump-btn:hover{background:#fff0f5;transform:translateY(-1px)}
+#jump-btn:active{background:#fde8f0;transform:scale(.96)}
+.hint{font-size:11px;color:#d4849f;text-align:center;line-height:1.7}
+.prog-wrap{width:100%;max-width:680px;margin-bottom:6px}
+.prog-label{display:flex;justify-content:space-between;font-size:11px;color:#d4849f;margin-bottom:3px}
+.prog-bg{background:#fde8f0;border-radius:10px;height:7px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#e8799e,#c94e79);height:100%;border-radius:10px;transition:width .2s}
+</style>
+</head>
+<body>
+<h1>Yumiya Candle</h1>
+<div class="tagline">✦ Le Dino Run Gourmand ✦</div>
+<div id="topbar">
+  <div class="hud">
+    <div class="hud-box" id="sc">Score : 0</div>
+    <div class="hud-box" id="hi">Meilleur : 0</div>
+  </div>
+  <div class="hud">
+    <div class="hud-box" id="lv">❤️❤️❤️</div>
+    <div class="hud-box" id="spd">Vitesse : 1</div>
+  </div>
+</div>
+<div class="prog-wrap">
+  <div class="prog-label"><span>Départ</span><span id="pct">0%</span><span>🕯️ Bougie</span></div>
+  <div class="prog-bg"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+</div>
+<div id="canvas-wrap">
+  <canvas id="gc"></canvas>
+  <div id="overlay">
+    <div style="font-size:48px" id="ov-icon">🎉</div>
+    <div class="ov-title" id="ov-title"></div>
+    <div class="ov-sub" id="ov-sub"></div>
+    <div class="ov-code" id="ov-code" style="display:none">YUMIYA10</div>
+    <div class="ov-small" id="ov-small"></div>
+    <button class="ov-btn" id="ov-btn" onclick="restartGame()">Rejouer</button>
+  </div>
+</div>
+<div id="controls">
+  <button id="jump-btn" ontouchstart="doJump()" onclick="doJump()">⬆ SAUTER</button>
+  <div class="hint">Appuie sur <strong>ESPACE</strong> ou le bouton pour sauter<br>Évite les cactus et rochers • Atteins la bougie pour gagner −10% !</div>
+</div>
+
+<script>
+const canvas=document.getElementById('gc');
+const ctx=canvas.getContext('2d');
+let W,H,GY,SCALE;
+
+function resize(){
+  const maxW=Math.min(window.innerWidth-24,680);
+  W=maxW; H=Math.round(maxW*0.35); GY=Math.round(H*0.72);
+  SCALE=W/680;
+  canvas.width=W; canvas.height=H;
+}
+resize();
+window.addEventListener('resize',()=>{resize();});
+
+const GOAL=12000;
+let player,obstacles,clouds,flowers,score,hiScore,lives,gameOver,won,animId,dist,speed,nextObs,candleX,phase,frame,petals,groundParts;
+hiScore=0;
+
+function initGame(){
+  player={x:80*SCALE,y:GY,vy:0,onGround:true,w:34*SCALE,h:44*SCALE,legPhase:0,jumping:false,dead:false,deathAnim:0};
+  obstacles=[];clouds=[];flowers=[];petals=[];groundParts=[];
+  score=0;lives=3;gameOver=false;won=false;
+  dist=0;speed=12.65;nextObs=300;candleX=W+100;phase='running';frame=0;
+  document.getElementById('overlay').style.display='none';
+  updateHUD();
+  for(let i=0;i<8;i++) clouds.push({x:Math.random()*W,y:20+Math.random()*40,w:60+Math.random()*60,speed:.4+Math.random()*.4});
+  for(let i=0;i<12;i++) flowers.push({x:Math.random()*W,y:GY+player.h+2+Math.random()*8,type:Math.floor(Math.random()*3)});
+  for(let i=0;i<20;i++) groundParts.push({x:Math.random()*W,w:8+Math.random()*30,y:GY+player.h+Math.random()*12});
+  if(animId)cancelAnimationFrame(animId);
+  animId=requestAnimationFrame(loop);
+}
+
+function updateHUD(){
+  document.getElementById('sc').textContent='Score : '+score;
+  document.getElementById('hi').textContent='Meilleur : '+hiScore;
+  const h=['','❤️','❤️❤️','❤️❤️❤️'];
+  document.getElementById('lv').textContent=h[Math.max(0,lives)];
+  document.getElementById('spd').textContent='Vitesse : 2.3x';
+  const pct=Math.min(100,Math.floor(dist/GOAL*100));
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('pfill').style.width=pct+'%';
+}
+
+let last=0;
+function loop(ts){
+  const dt=Math.min((ts-last)/16.67,3);last=ts;
+  update(dt);draw();
+  if(!gameOver)animId=requestAnimationFrame(loop);
+}
+
+function update(dt){
+  frame+=dt;
+  if(phase==='running'){
+    dist+=speed*dt;
+    score=Math.floor(dist/8);
+    if(score>hiScore)hiScore=score;
+    speed=12.65;
+    if(dist>=GOAL-W*1.2){phase='approach';candleX=W+120;}
+    updateHUD();
+  }
+  if(phase==='approach'){
+    dist+=speed*dt*.5;
+    candleX-=speed*dt;
+    if(candleX<player.x+50&&Math.abs(player.y-GY)<player.h*1.5&&!player.dead){triggerWin();return;}
+    updateHUD();
+  }
+
+  if(player.dead){
+    player.deathAnim+=dt*0.18;
+    return;
+  }
+
+  if(!player.onGround){
+    player.vy+=(0.90+speed*0.020)*dt;
+    player.y+=player.vy*dt;
+    if(player.y>=GY){player.y=GY;player.vy=0;player.onGround=true;player.jumping=false;}
+  }
+  if(player.onGround)player.legPhase+=0.22*dt;
+
+  clouds.forEach(c=>{c.x-=c.speed*dt;if(c.x<-c.w)c.x=W+20;});
+  flowers.forEach(f=>{f.x-=speed*dt*.15;if(f.x<-20)f.x=W+Math.random()*60;});
+  groundParts.forEach(g=>{g.x-=speed*dt*.6;if(g.x<-g.w)g.x=W+Math.random()*40;});
+
+  if(phase==='running'){
+    nextObs-=speed*dt;
+    if(nextObs<=0){spawnObs();nextObs=310+Math.random()*220;}
+  }
+  obstacles.forEach(o=>{o.x-=speed*dt;});
+  obstacles=obstacles.filter(o=>o.x>-100);
+
+  petals.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=.12*dt;p.rot+=p.vr*dt;p.life-=dt;p.alpha=Math.min(1,p.life/8);});
+  petals=petals.filter(p=>p.life>0);
+
+  if(!player.dead){
+    for(const o of obstacles){
+      if(collide(player,o)){hitObs();return;}
+    }
+  }
+}
+
+function collide(p,o){
+  const px=p.x,py=p.y,pw=p.w,ph=p.h;
+  const m=6*SCALE;
+  return px+m<o.x+o.w-m&&px+pw-m>o.x+m&&py+m<o.y+o.h&&py+ph-m>o.y+m;
+}
+
+function spawnObs(){
+  const t=Math.random();
+  if(t<.18) obstacles.push({x:W+10,y:GY,w:22*SCALE,h:48*SCALE,type:'cactus'});
+  else if(t<.32) obstacles.push({x:W+10,y:GY+10*SCALE,w:18*SCALE,h:56*SCALE,type:'cactus2'});
+  else if(t<.44) obstacles.push({x:W+10,y:GY+18*SCALE,w:44*SCALE,h:26*SCALE,type:'rock'});
+  else if(t<.56){
+    obstacles.push({x:W+10,y:GY,w:20*SCALE,h:44*SCALE,type:'cactus'});
+    obstacles.push({x:W+46*SCALE,y:GY,w:20*SCALE,h:36*SCALE,type:'cactus'});
+  } else if(t<.66){
+    obstacles.push({x:W+10,y:GY+2*SCALE,w:16*SCALE,h:52*SCALE,type:'cactus2'});
+    obstacles.push({x:W+52*SCALE,y:GY+14*SCALE,w:38*SCALE,h:22*SCALE,type:'rock'});
+  } else if(t<.75){
+    obstacles.push({x:W+10,y:GY,w:20*SCALE,h:44*SCALE,type:'cactus'});
+    obstacles.push({x:W+40*SCALE,y:GY,w:20*SCALE,h:38*SCALE,type:'cactus'});
+    obstacles.push({x:W+70*SCALE,y:GY,w:20*SCALE,h:50*SCALE,type:'cactus'});
+  } else if(t<.84){
+    obstacles.push({x:W+10,y:GY+16*SCALE,w:40*SCALE,h:24*SCALE,type:'rock'});
+    obstacles.push({x:W+68*SCALE,y:GY,w:22*SCALE,h:44*SCALE,type:'cactus'});
+  } else {
+    obstacles.push({x:W+10,y:GY,w:18*SCALE,h:52*SCALE,type:'cactus2'});
+    obstacles.push({x:W+44*SCALE,y:GY+14*SCALE,w:36*SCALE,h:22*SCALE,type:'rock'});
+    obstacles.push({x:W+96*SCALE,y:GY,w:18*SCALE,h:44*SCALE,type:'cactus'});
+  }
+}
+
+function doJump(){
+  if(gameOver)return;
+  if(player.onGround&&!player.dead){
+    player.vy=-(13+speed*.08)*SCALE;
+    player.onGround=false;player.jumping=true;
+  }
+}
+
+function hitObs(){
+  lives--;
+  updateHUD();
+  spawnHitPetals(player.x+player.w/2,player.y+player.h/2,20);
+  player.dead=true;player.deathAnim=0;
+  setTimeout(()=>{
+    if(lives<=0){triggerLose();return;}
+    player.x=80*SCALE;player.y=GY;player.vy=0;player.onGround=true;player.dead=false;player.jumping=false;
+    obstacles=[];
+  },900);
+}
+
+function spawnHitPetals(x,y,n){
+  const cols=['#e8799e','#f9a8c9','#fde8f0','#c94e79','#fff0f5'];
+  for(let i=0;i<n;i++) petals.push({x,y,vx:(Math.random()-0.5)*7,vy:-4-Math.random()*5,vr:(Math.random()-.5)*.4,rot:Math.random()*6,life:25+Math.random()*15,alpha:1,col:cols[Math.floor(Math.random()*cols.length)],size:(4+Math.random()*5)*SCALE});
+}
+
+function triggerWin(){
+  won=true;gameOver=true;
+  if(score>hiScore)hiScore=score;
+  document.getElementById('ov-icon').textContent='🎉';
+  document.getElementById('ov-title').textContent='Félicitations !';
+  document.getElementById('ov-sub').innerHTML='Tu as atteint la bougie gourmande Yumiya !<br><strong style="color:#c94e79">Voici ton code de réduction :</strong>';
+  document.getElementById('ov-code').style.display='block';
+  document.getElementById('ov-small').textContent='-10% sur toutes nos bougies gourmandes · À présenter lors de l\'achat';
+  document.getElementById('ov-btn').textContent='Rejouer';
+  document.getElementById('overlay').style.display='flex';
+  for(let i=0;i<50;i++) setTimeout(()=>spawnHitPetals(Math.random()*W,Math.random()*H*.5,3),i*60);
+}
+
+function triggerLose(){
+  gameOver=true;
+  document.getElementById('ov-icon').textContent='😢';
+  document.getElementById('ov-title').textContent='Dommage !';
+  document.getElementById('ov-sub').innerHTML='Tu as perdu toutes tes vies avant d\'atteindre<br>la bougie gourmande. Retente ta chance !';
+  document.getElementById('ov-code').style.display='none';
+  document.getElementById('ov-small').textContent='';
+  document.getElementById('ov-btn').textContent='Réessayer';
+  document.getElementById('overlay').style.display='flex';
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  ctx.fillStyle='#fff5f8';
+  ctx.fillRect(0,0,W,H);
+
+  clouds.forEach(c=>{
+    ctx.fillStyle='#fde8f0';
+    ctx.beginPath();ctx.ellipse(c.x,c.y,c.w/2,14*SCALE,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(c.x-c.w*.2,c.y+4*SCALE,c.w*.3,10*SCALE,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(c.x+c.w*.2,c.y+4*SCALE,c.w*.28,9*SCALE,0,0,Math.PI*2);ctx.fill();
+  });
+
+  if(phase==='approach'||dist>=GOAL-W*1.5){
+    drawGoalCandle(candleX,GY-58*SCALE);
+  }
+
+  ctx.fillStyle='#f0d8e0';
+  ctx.fillRect(0,GY+player.h,W,H-GY-player.h);
+  ctx.fillStyle='#e8c8d4';
+  ctx.fillRect(0,GY+player.h,W,4*SCALE);
+
+  groundParts.forEach(g=>{
+    ctx.fillStyle='#f5dce4';
+    ctx.beginPath();ctx.ellipse(g.x+g.w/2,g.y,g.w/2,2.5*SCALE,0,0,Math.PI*2);ctx.fill();
+  });
+
+  flowers.forEach(f=>drawFlower(f.x,f.y,f.type));
+  obstacles.forEach(o=>drawObs(o));
+
+  if(player.dead){
+    ctx.save();
+    ctx.globalAlpha=1-player.deathAnim;
+    ctx.translate(player.x+player.w/2,player.y+player.h/2);
+    ctx.rotate(player.deathAnim*Math.PI*.6);
+    ctx.translate(-(player.x+player.w/2),-(player.y+player.h/2));
+    drawDino(player.x,player.y,0,false,true);
+    ctx.restore();
+  } else {
+    drawDino(player.x,player.y,player.legPhase,player.jumping,false);
+  }
+
+  petals.forEach(p=>{
+    ctx.save();
+    ctx.globalAlpha=p.alpha;
+    ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+    ctx.fillStyle=p.col;
+    ctx.beginPath();ctx.ellipse(0,0,p.size,p.size*.5,0,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  });
+
+  const pct=Math.min(1,dist/GOAL);
+  const markers=[.2,.4,.6,.8];
+  markers.forEach(m=>{
+    if(pct<m){
+      const mx=W-(W*m*(1-pct/(m*.8)));
+      ctx.fillStyle='#f5c8d8';
+      ctx.font=`bold ${10*SCALE}px Lato,sans-serif`;
+      ctx.textAlign='center';
+      ctx.fillText('🌸',Math.max(20,Math.min(W-20,mx)),GY-8*SCALE);
+      ctx.textAlign='left';
+    }
+  });
+}
+
+function drawDino(x,y,leg,jumping,dead){
+  const s=SCALE;
+  ctx.save();
+  ctx.translate(x,y);
+
+  ctx.fillStyle='#d4849f';
+  ctx.strokeStyle='#c94e79';ctx.lineWidth=1.5*s;
+
+  ctx.beginPath();
+  ctx.roundRect(6*s,8*s,22*s,28*s,4*s);
+  ctx.fill();ctx.stroke();
+
+  ctx.beginPath();
+  ctx.roundRect(18*s,0,16*s,18*s,4*s);
+  ctx.fill();ctx.stroke();
+
+  ctx.fillStyle='#fff0f5';
+  ctx.strokeStyle='#e8799e';ctx.lineWidth=1*s;
+  ctx.beginPath();ctx.roundRect(20*s,2*s,12*s,8*s,2*s);ctx.fill();ctx.stroke();
+
+  ctx.fillStyle='white';
+  ctx.beginPath();ctx.arc(25*s,6*s,3*s,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#c94e79';
+  ctx.beginPath();ctx.arc(26*s,6*s,1.5*s,0,Math.PI*2);ctx.fill();
+
+  ctx.fillStyle='#e8799e';
+  ctx.beginPath();ctx.moveTo(30*s,4*s);ctx.lineTo(36*s,2*s);ctx.lineTo(34*s,7*s);ctx.closePath();ctx.fill();
+
+  ctx.fillStyle='#f0a8c0';
+  ctx.strokeStyle='#e8799e';ctx.lineWidth=1.5*s;
+  ctx.beginPath();ctx.roundRect(6*s,10*s,8*s,12*s,2*s);ctx.fill();ctx.stroke();
+
+  ctx.fillStyle='#d4849f';
+  ctx.strokeStyle='#c94e79';ctx.lineWidth=2*s;
+  if(!jumping&&!dead){
+    const l1=Math.sin(leg)*5*s,l2=Math.sin(leg+Math.PI)*5*s;
+    ctx.beginPath();ctx.moveTo(10*s,34*s);ctx.lineTo(10*s+l1,44*s);ctx.lineTo(14*s+l1,44*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(20*s,34*s);ctx.lineTo(20*s+l2,44*s);ctx.lineTo(24*s+l2,44*s);ctx.stroke();
+  } else if(jumping){
+    ctx.beginPath();ctx.moveTo(10*s,34*s);ctx.lineTo(6*s,44*s);ctx.lineTo(10*s,44*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(20*s,34*s);ctx.lineTo(24*s,44*s);ctx.lineTo(28*s,44*s);ctx.stroke();
+  } else {
+    ctx.beginPath();ctx.moveTo(10*s,34*s);ctx.lineTo(14*s,44*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(20*s,34*s);ctx.lineTo(16*s,44*s);ctx.stroke();
+  }
+
+  ctx.strokeStyle='#d4849f';ctx.lineWidth=1.5*s;
+  ctx.beginPath();ctx.moveTo(6*s,18*s);ctx.lineTo(-2*s,30*s);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-2*s,30*s);ctx.arc(-2*s,30*s,4*s,0,Math.PI*2);
+
+  ctx.restore();
+}
+
+function drawObs(o){
+  ctx.save();ctx.translate(o.x,o.y);
+  const s=SCALE;
+  if(o.type==='cactus'){
+    ctx.fillStyle='#e8a0b8';ctx.strokeStyle='#c94e79';ctx.lineWidth=1.5*s;
+    ctx.beginPath();ctx.roundRect(o.w*.3,0,o.w*.4,o.h,3*s);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.roundRect(0,o.h*.25,o.w*.38,7*s,3*s);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.roundRect(o.w*.62,o.h*.45,o.w*.38,7*s,3*s);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.roundRect(-3*s,o.h*.15,8*s,8*s,4*s);ctx.fill();
+    ctx.beginPath();ctx.roundRect(o.w-5*s,o.h*.35,8*s,8*s,4*s);ctx.fill();
+  } else if(o.type==='cactus2'){
+    ctx.fillStyle='#f0a8c0';ctx.strokeStyle='#c94e79';ctx.lineWidth=1.5*s;
+    ctx.beginPath();ctx.roundRect(o.w*.32,0,o.w*.36,o.h,3*s);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.roundRect(0,o.h*.2,o.w*.4,6*s,3*s);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.roundRect(0,o.h*.1,7*s,7*s,4*s);ctx.fill();
+    ctx.beginPath();ctx.roundRect(o.w*.6,o.h*.35,o.w*.4,6*s,3*s);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.roundRect(o.w-7*s,o.h*.25,7*s,7*s,4*s);ctx.fill();
+  } else {
+    ctx.fillStyle='#f5c8d8';ctx.strokeStyle='#e8799e';ctx.lineWidth=1.5*s;
+    ctx.beginPath();ctx.ellipse(o.w/2,o.h/2,o.w/2,o.h/2,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.fillStyle='white';ctx.globalAlpha=.3;
+    ctx.beginPath();ctx.ellipse(o.w*.35,o.h*.3,o.w*.2,o.h*.15,-.3,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=1;
+  }
+  ctx.restore();
+}
+
+function drawFlower(x,y,type){
+  const s=SCALE;
+  ctx.save();ctx.translate(x,y);
+  if(type===0){
+    ctx.fillStyle='#f9a8c9';
+    for(let i=0;i<5;i++){ctx.save();ctx.rotate(i*Math.PI*2/5);ctx.beginPath();ctx.ellipse(4*s,-4*s,3*s,2*s,0,0,Math.PI*2);ctx.fill();ctx.restore();}
+    ctx.fillStyle='#ffe0ec';ctx.beginPath();ctx.arc(0,0,3*s,0,Math.PI*2);ctx.fill();
+  } else if(type===1){
+    ctx.fillStyle='#fde8f0';
+    ctx.beginPath();ctx.arc(0,0,5*s,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#e8799e';ctx.beginPath();ctx.arc(0,0,2*s,0,Math.PI*2);ctx.fill();
+  } else {
+    ctx.fillStyle='#e8799e';
+    ctx.beginPath();ctx.arc(0,0,3*s,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawGoalCandle(x,y){
+  const s=SCALE;
+  const bob=Math.sin(frame*.1)*5*s;
+  ctx.save();ctx.translate(x,y+bob);
+
+  ctx.fillStyle='#ffcc44';
+  ctx.beginPath();ctx.ellipse(20*s,-16*s,7*s,10*s,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#ffeeaa';
+  ctx.beginPath();ctx.ellipse(20*s,-20*s,4*s,6*s,0,0,Math.PI*2);ctx.fill();
+
+  ctx.fillStyle='#fff0f5';ctx.strokeStyle='#e8799e';ctx.lineWidth=2*s;
+  ctx.beginPath();ctx.roundRect(5*s,0,30*s,44*s,5*s);ctx.fill();ctx.stroke();
+
+  ctx.fillStyle='#fde8f0';
+  ctx.beginPath();ctx.roundRect(7*s,3*s,26*s,12*s,3*s);ctx.fill();
+  ctx.fillStyle='#f5c8d8';
+  ctx.beginPath();ctx.roundRect(7*s,15*s,26*s,3*s,1*s);ctx.fill();
+  ctx.beginPath();ctx.roundRect(7*s,22*s,26*s,3*s,1*s);ctx.fill();
+  ctx.beginPath();ctx.roundRect(7*s,29*s,26*s,3*s,1*s);ctx.fill();
+
+  ctx.fillStyle='#f5c8d8';ctx.strokeStyle='#e8799e';ctx.lineWidth=1.5*s;
+  ctx.beginPath();ctx.roundRect(0,42*s,40*s,14*s,4*s);ctx.fill();ctx.stroke();
+
+  ctx.strokeStyle='#c94e79';ctx.lineWidth=1.5*s;
+  ctx.beginPath();ctx.moveTo(20*s,0);ctx.lineTo(20*s,-16*s);ctx.stroke();
+
+  ctx.fillStyle='#c94e79';
+  ctx.font=`bold ${11*s}px Lato,sans-serif`;
+  ctx.textAlign='center';
+  ctx.fillText('-10%',20*s,52*s);
+  ctx.fillStyle='#d4849f';
+  ctx.font=`${9*s}px Lato,sans-serif`;
+  ctx.fillText('Objectif !',20*s,62*s);
+
+  ctx.restore();
+}
+
+document.addEventListener('keydown',e=>{if(e.code==='Space'){e.preventDefault();doJump();}});
+function restartGame(){initGame();}
+initGame();
+</script>
+</body>
+</html>
