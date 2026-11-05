@@ -1,622 +1,371 @@
 /* =========================================================
-   Yumiya Candle — interactions
+   AURA — interactions et animations
    ========================================================= */
 (() => {
   'use strict';
-
-  const $ = (s, root = document) => root.querySelector(s);
-  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-  const chf = (n) => n.toFixed(2) + ' CHF';
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  document.documentElement.classList.remove('no-js');
-
-  /* ---------------------------------------------------------
-     CATALOGUE — modifie ici tes produits.
-     img : photo du produit (assets/...). Si le fichier n'existe
-     pas, une illustration de bougie s'affiche à la place.
-     --------------------------------------------------------- */
-  const PRODUCTS = [
-    { id: 'rose-litchi',   name: 'Rose & Litchi',     sub: 'Floral · fruité',    price: 34, cats: ['new', 'best', 'floral'],   badge: 'Nouveau',     wax: '#f7c6d6', bg: ['#fde3ea', '#e8799e'], label: '#ffffff', img: 'assets/produit-rose-litchi.jpg' },
-    { id: 'vanille',       name: 'Vanille Bourbon',   sub: 'Gourmand · chaud',   price: 32, cats: ['best', 'gourmand'],        badge: 'Best-seller', wax: '#f6e6c8', bg: ['#fbefdc', '#d9a66b'], label: '#5a1a33', img: 'assets/produit-vanille.jpg' },
-    { id: 'figue',         name: 'Figue Noire',       sub: 'Boisé · fruité',     price: 36, cats: ['new', 'boise'],            badge: 'Nouveau',     wax: '#cdb7d9', bg: ['#ece2f2', '#7b4b94'], label: '#ffffff', img: 'assets/produit-figue.jpg' },
-    { id: 'coton',         name: 'Fleur de Coton',    sub: 'Frais · poudré',     price: 30, cats: ['best', 'frais'],           wax: '#ffffff', bg: ['#eef1f7', '#9fb0d0'], label: '#c94e79', img: 'assets/produit-coton.jpg' },
-    { id: 'ambre',         name: 'Ambre & Santal',    sub: 'Boisé · ambré',      price: 38, old: 44, cats: ['best', 'boise'],  badge: '−15 %',       wax: '#e9c79c', bg: ['#f4e5d2', '#a0764f'], label: '#ffffff', img: 'assets/produit-ambre.jpg' },
-    { id: 'peche',         name: 'Pêche Melba',       sub: 'Gourmand · fruité',  price: 32, cats: ['new', 'gourmand'],         badge: 'Nouveau',     wax: '#ffd2b3', bg: ['#ffeadb', '#f08a5d'], label: '#5a1a33', img: 'assets/produit-peche.jpg' },
-    { id: 'the-blanc',     name: 'Thé Blanc & Menthe',sub: 'Frais · vert',       price: 30, cats: ['frais'],                   wax: '#d8eedf', bg: ['#e6f4ea', '#3f8a68'], label: '#ffffff', img: 'assets/produit-the-blanc.jpg' },
-    { id: 'cerise',        name: 'Cerise Griotte',    sub: 'Gourmand · acidulé', price: 34, cats: ['gourmand', 'new'],         wax: '#f0a1ad', bg: ['#ffe1e4', '#d94f5c'], label: '#ffffff', img: 'assets/produit-cerise.jpg' },
-    { id: 'pivoine',       name: 'Pivoine Poudrée',   sub: 'Floral · doux',      price: 34, cats: ['floral'],                  wax: '#f9d6e3', bg: ['#fdeaf1', '#d4608a'], label: '#5a1a33', img: 'assets/produit-pivoine.jpg' },
-    { id: 'jasmin',        name: 'Jasmin de Nuit',    sub: 'Floral · intense',   price: 36, cats: ['floral', 'limitee'],       badge: 'Édition limitée', dark: true, wax: '#fff3d6', bg: ['#2a0f1c', '#8d2c55'], label: '#e8799e', img: 'assets/produit-jasmin.jpg' },
-    { id: 'cedre',         name: 'Cèdre Givré',       sub: 'Boisé · frais',      price: 38, cats: ['limitee', 'boise'],        badge: 'Édition limitée', dark: true, wax: '#e3eef2', bg: ['#16324a', '#5f8fae'], label: '#ffffff', img: 'assets/produit-cedre.jpg' },
-    { id: 'marron',        name: 'Marron Glacé',      sub: 'Gourmand · cocooning', price: 36, cats: ['limitee', 'gourmand'],   badge: 'Édition limitée', dark: true, wax: '#e6cdb4', bg: ['#3b2015', '#a0764f'], label: '#ffffff', img: 'assets/produit-marron.jpg' },
-    { id: 'coffret-duo',   name: 'Coffret Duo',       sub: '2 bougies au choix', price: 59, old: 66, cats: ['coffrets'], badge: 'Cadeau',  duo: true, wax: '#f7c6d6', wax2: '#f6e6c8', bg: ['#fde3ea', '#c94e79'], label: '#ffffff', img: 'assets/produit-coffret-duo.jpg' },
-    { id: 'coffret-trio',  name: 'Coffret Découverte',sub: '3 mini-bougies',     price: 49, cats: ['coffrets'],                badge: 'Cadeau', duo: true, wax: '#cdb7d9', wax2: '#d8eedf', bg: ['#efe6f5', '#7b4b94'], label: '#ffffff', img: 'assets/produit-coffret-trio.jpg' },
-    { id: 'coffret-hiver', name: 'Coffret Jardin d\'Hiver', sub: 'Bougie + fondants', price: 72, cats: ['coffrets', 'limitee'], badge: 'Édition limitée', dark: true, duo: true, wax: '#fff3d6', wax2: '#e3eef2', bg: ['#2a0f1c', '#5f8fae'], label: '#ffffff', img: 'assets/produit-coffret-hiver.jpg' },
-    { id: 'fondants',      name: 'Fondants Parfumés', sub: 'Lot de 6 · au choix', price: 14, cats: ['coffrets'],              wax: '#f9d6e3', bg: ['#fdeaf1', '#ee93b2'], label: '#5a1a33', img: 'assets/produit-fondants.jpg' },
-    { id: 'oranger',       name: 'Fleur d\'Oranger',  sub: 'Floral · solaire',   price: 34, cats: ['floral'],                  wax: '#fff0d4', bg: ['#fff4e0', '#f2a541'], label: '#5a1a33', img: 'assets/produit-oranger.jpg' },
-    { id: 'cachemire',     name: 'Bois de Cachemire', sub: 'Boisé · musqué',     price: 38, cats: ['boise'],                   wax: '#e7d8cf', bg: ['#f1e7e1', '#8b6a5c'], label: '#ffffff', img: 'assets/produit-cachemire.jpg' },
-    { id: 'citron',        name: 'Citron & Basilic',  sub: 'Frais · zesté',      price: 30, cats: ['frais'],                   wax: '#f6f3c4', bg: ['#f8f6d8', '#b5b33a'], label: '#ffffff', img: 'assets/produit-citron.jpg' },
-    { id: 'marine',        name: 'Brise Marine',      sub: 'Frais · iodé',       price: 32, cats: ['frais'],                   wax: '#d6ecf5', bg: ['#e2f2f8', '#3f8fb0'], label: '#ffffff', img: 'assets/produit-marine.jpg' },
-  ];
-  const byId = Object.fromEntries(PRODUCTS.map((p) => [p.id, p]));
-
-  /* ---------- Illustration de bougie (SVG) ---------- */
-  let svgUid = 0;
-  function jar(x, w, wax, label, uid) {
-    const h = w * 1.18, y = 160 - h - 4, cx = x + w / 2;
-    return `
-      <g>
-        <path class="flame" d="M${cx} ${y - 34}c6 9 10 15 10 22a10 10 0 0 1-20 0c0-7 4-13 10-22Z" fill="url(#fl${uid})"/>
-        <path d="M${cx} ${y - 3}v-10" stroke="#3a2a2f" stroke-width="2" stroke-linecap="round"/>
-        <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${w * .18}" fill="rgba(255,255,255,.38)" stroke="rgba(255,255,255,.85)" stroke-width="2"/>
-        <rect x="${x + 4}" y="${y + 9}" width="${w - 8}" height="${h - 13}" rx="${w * .14}" fill="${wax}"/>
-        <ellipse cx="${cx}" cy="${y + 10}" rx="${w / 2 - 5}" ry="4" fill="rgba(255,255,255,.55)"/>
-        <rect x="${x + w * .16}" y="${y + h * .42}" width="${w * .68}" height="${h * .32}" rx="4" fill="${label}" opacity=".95"/>
-        <text x="${cx}" y="${y + h * .6}" text-anchor="middle" font-family="Playfair Display, serif" font-size="${w * .13}" letter-spacing="1.5" fill="${label === '#ffffff' ? '#5a1a33' : '#ffffff'}">YUMIYA</text>
-        <rect x="${x + 7}" y="${y + 14}" width="${w * .08}" height="${h * .6}" rx="3" fill="rgba(255,255,255,.55)"/>
-      </g>`;
-  }
-  function candleSVG(p) {
-    const uid = ++svgUid;
-    const defs = `<defs><radialGradient id="fl${uid}" cx="50%" cy="70%" r="60%"><stop offset="0" stop-color="#fffbe0"/><stop offset=".55" stop-color="#ffd166"/><stop offset="1" stop-color="#ff8a3d"/></radialGradient></defs>`;
-    const body = p.duo
-      ? jar(8, 58, p.wax, p.label, uid) + jar(56, 58, p.wax2 || p.wax, p.label, uid)
-      : jar(22, 76, p.wax, p.label, uid);
-    return `<svg viewBox="0 0 122 162" aria-hidden="true">${defs}${body}</svg>`;
-  }
-
-  /* ---------- Emplacements médias ---------- */
-  const ICON_IMG = '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></svg>';
-  const ICON_VID = '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="14" height="14" rx="3"/><path d="m17 10 4-2.5v9L17 14"/></svg>';
-
-  function initSlot(el) {
-    if (el.dataset.ready) return;
-    el.dataset.ready = '1';
-    const label = el.dataset.label;
-    if (label) {
-      const ph = document.createElement('div');
-      ph.className = 'slot-ph';
-      ph.innerHTML = `<span class="slot-chip">${el.dataset.video ? ICON_VID : ICON_IMG}${label}</span>`;
-      el.appendChild(ph);
-    }
-    const useImg = () => {
-      if (!el.dataset.img) return;
-      const img = new Image();
-      img.alt = el.dataset.alt || '';
-      img.decoding = 'async';
-      img.loading = 'lazy';
-      img.onload = () => el.classList.add('has-media');
-      img.onerror = () => img.remove();
-      img.src = el.dataset.img;
-      el.prepend(img);
-    };
-    if (el.dataset.video) {
-      const v = document.createElement('video');
-      v.muted = true; v.playsInline = true; v.loop = !('controls' in el.dataset);
-      v.preload = 'metadata';
-      v.setAttribute('playsinline', '');
-      if ('controls' in el.dataset) v.controls = true; else v.autoplay = !reduceMotion;
-      v.addEventListener('loadeddata', () => { el.classList.add('has-media'); }, { once: true });
-      v.addEventListener('error', () => { v.remove(); useImg(); }, { once: true });
-      v.src = el.dataset.video;
-      el.prepend(v);
-      videoObserver.observe(el);
-    } else {
-      useImg();
-    }
-  }
-  // Les vidéos ne jouent que lorsqu'elles sont visibles (économie de batterie)
-  const videoObserver = new IntersectionObserver((entries) => {
-    entries.forEach(({ target, isIntersecting }) => {
-      const v = target.querySelector('video');
-      if (!v || v.controls) return;
-      if (isIntersecting && !reduceMotion) v.play().catch(() => {}); else v.pause();
+  /* ---------- Découpage du titre en lettres ---------- */
+  $$('[data-split]').forEach((el) => {
+    let c = 0;
+    $$('.hl', el).forEach((line) => {
+      const walk = (node) => {
+        [...node.childNodes].forEach((n) => {
+          if (n.nodeType === 3) {
+            const frag = document.createDocumentFragment();
+            n.textContent.split(/(\s+)/).forEach((part) => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) { frag.append(' '); return; }
+              const w = document.createElement('span');
+              w.className = 'word';
+              [...part].forEach((ch) => {
+                const s = document.createElement('span');
+                s.className = 'char'; s.textContent = ch; s.style.setProperty('--c', c++);
+                w.append(s);
+              });
+              frag.append(w);
+            });
+            n.replaceWith(frag);
+          } else walk(n);
+        });
+      };
+      walk(line);
     });
-  }, { threshold: .25 });
+  });
 
-  $$('[data-slot]').forEach(initSlot);
+  /* ---------- Intro : compteur 0 → 100 ---------- */
+  const loader = $('#loader');
+  const start = () => requestAnimationFrame(() => document.body.classList.add('is-ready'));
+  if (reduce) { document.documentElement.classList.add('no-loader'); start(); }
+  else {
+    const count = $('#loader-count');
+    const t0 = performance.now(), dur = 1100;
+    const tick = (t) => {
+      const k = clamp((t - t0) / dur, 0, 1);
+      count.textContent = Math.round(100 * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(tick);
+      else { loader.classList.add('is-done'); setTimeout(start, 250); setTimeout(() => loader.remove(), 1200); }
+    };
+    requestAnimationFrame(tick);
+  }
+
+  /* ---------- Aurore animée (canvas) ---------- */
+  const cv = $('#aurora');
+  const ctx = cv.getContext('2d');
+  const blobs = [
+    { c: [91, 61, 245], x: .25, y: .3, r: .55, sx: .13, sy: .17, p: 0 },
+    { c: [255, 91, 58], x: .75, y: .35, r: .45, sx: .11, sy: .09, p: 2 },
+    { c: [139, 123, 255], x: .55, y: .75, r: .5, sx: .07, sy: .15, p: 4 },
+    { c: [216, 246, 92], x: .85, y: .8, r: .28, sx: .16, sy: .12, p: 1 },
+    { c: [56, 189, 248], x: .1, y: .8, r: .35, sx: .1, sy: .14, p: 3 },
+  ];
+  let heroVisible = true, mx = .5, my = .4, tmx = .5, tmy = .4;
+  function sizeCanvas() { cv.width = Math.max(1, Math.round(cv.offsetWidth / 6)); cv.height = Math.max(1, Math.round(cv.offsetHeight / 6)); }
+  sizeCanvas(); addEventListener('resize', sizeCanvas);
+  function drawAurora(t) {
+    const w = cv.width, h = cv.height, s = t / 1000;
+    mx = lerp(mx, tmx, .04); my = lerp(my, tmy, .04);
+    ctx.fillStyle = '#0a0a0f'; ctx.fillRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'lighter';
+    blobs.forEach((b, i) => {
+      const px = (b.x + Math.sin(s * b.sx + b.p) * .18 + (mx - .5) * .12 * (i % 2 ? 1 : -1)) * w;
+      const py = (b.y + Math.cos(s * b.sy + b.p) * .16 + (my - .5) * .1) * h;
+      const r = b.r * Math.max(w, h);
+      const g = ctx.createRadialGradient(px, py, 0, px, py, r);
+      g.addColorStop(0, `rgba(${b.c},.55)`); g.addColorStop(1, `rgba(${b.c},0)`);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+    });
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  (function loop(t) {
+    if (heroVisible) drawAurora(reduce ? 0 : t);
+    if (!reduce) requestAnimationFrame(loop);
+  })(0);
+  new IntersectionObserver(([e]) => { heroVisible = e.isIntersecting; }).observe($('.hero'));
+
+  // Halo lumineux qui suit la souris
+  const hero = $('.hero'), spot = $('#spotlight');
+  hero.addEventListener('pointermove', (e) => {
+    const r = hero.getBoundingClientRect();
+    tmx = (e.clientX - r.left) / r.width; tmy = (e.clientY - r.top) / r.height;
+    spot.style.setProperty('--mx', e.clientX - r.left + 'px');
+    spot.style.setProperty('--my', e.clientY - r.top + 'px');
+  });
 
   /* ---------- Apparitions au scroll ---------- */
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add('is-in'); revealObserver.unobserve(e.target); }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+  }, { threshold: .15, rootMargin: '0px 0px -8% 0px' });
+  $$('.reveal').forEach((el) => {
+    const sib = [...el.parentElement.children].filter((c) => c.classList.contains('reveal'));
+    const i = sib.indexOf(el);
+    if (i > 0) el.style.setProperty('--d', Math.min(i, 6) * .08 + 's');
+    io.observe(el);
+  });
+  io.observe($('#wordmark'));
+
+  /* ---------- Compteurs ---------- */
+  const countIO = new IntersectionObserver((entries) => {
+    entries.forEach(({ target, isIntersecting }) => {
+      if (!isIntersecting) return;
+      countIO.unobserve(target);
+      const end = parseFloat(target.dataset.count), dec = +(target.dataset.decimals || 0), suf = target.dataset.suffix || '';
+      const fmt = (v) => v.toFixed(dec).replace('.', ',') + suf;
+      if (reduce) { target.textContent = fmt(end); return; }
+      const t0 = performance.now(), dur = 1800;
+      const step = (t) => {
+        const k = clamp((t - t0) / dur, 0, 1);
+        target.textContent = fmt(end * (1 - Math.pow(1 - k, 4)));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
     });
-  }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
-  function observeReveals(root = document) {
-    // Petit décalage en cascade entre éléments voisins
-    $$('.reveal, .reveal-scale', root).forEach((el) => {
-      const sibs = [...el.parentElement.children].filter((c) => c.classList.contains('reveal'));
-      const i = sibs.indexOf(el);
-      if (i > 0) el.style.setProperty('--d', Math.min(i, 6) * 0.07 + 's');
-      revealObserver.observe(el);
-    });
+  }, { threshold: .5 });
+  $$('[data-count]').forEach((el) => countIO.observe(el));
+
+  /* ---------- Couleur de page qui change selon la section (style Ciao) ---------- */
+  const themed = $$('main > section[data-theme], footer[data-theme]');
+  let currentTheme = 'dark';
+  function updateTheme() {
+    const line = innerHeight * .62;
+    let theme = currentTheme;
+    for (const s of themed) {
+      const r = s.getBoundingClientRect();
+      if (r.top <= line && r.bottom > line) { theme = s.dataset.theme; break; }
+    }
+    if (theme !== currentTheme) {
+      currentTheme = theme;
+      document.body.dataset.theme = theme;
+      $('meta[name="theme-color"]').content = getComputedStyle(document.body).getPropertyValue('--bg').trim() || '#0a0a0f';
+    }
   }
-  observeReveals();
 
-  requestAnimationFrame(() => document.body.classList.add('is-loaded'));
+  /* ---------- Manifeste : mots qui s'allument ---------- */
+  const mani = $('#manifesto');
+  const HOT = ['ressentir', 'mouvement', 'détail', 'précis'];
+  mani.innerHTML = mani.textContent.trim().split(/\s+/).map((w) => `<span class="w${HOT.some((h) => w.toLowerCase().startsWith(h)) ? ' hot' : ''}">${w}</span>`).join(' ');
+  const words = $$('.w', mani);
+  function updateManifesto() {
+    const r = mani.getBoundingClientRect();
+    const p = clamp((innerHeight * .85 - r.top) / (r.height + innerHeight * .35), 0, 1);
+    const n = Math.round(p * words.length);
+    words.forEach((w, i) => w.classList.toggle('lit', i < n));
+  }
 
-  /* ---------- Bandeau d'annonce rotatif ---------- */
-  const annItems = $$('#announce p');
-  let annIdx = 0;
-  setInterval(() => {
-    const cur = annItems[annIdx];
-    cur.classList.remove('is-active'); cur.classList.add('is-leaving');
-    setTimeout(() => cur.classList.remove('is-leaving'), 700);
-    annIdx = (annIdx + 1) % annItems.length;
-    annItems[annIdx].classList.add('is-active');
-  }, 4200);
+  /* ---------- Scroll horizontal (Méthode) ---------- */
+  const hs = $('.hscroll'), htrack = $('#htrack');
+  function updateHScroll() {
+    if (innerWidth <= 980 || reduce) return;
+    const r = hs.getBoundingClientRect();
+    const p = clamp(-r.top / (r.height - innerHeight), 0, 1);
+    const max = htrack.scrollWidth - innerWidth;
+    htrack.style.transform = `translate3d(${-p * max}px,0,0)`;
+  }
 
-  /* ---------- Navigation : transparente → verre dépoli, masquée au scroll ---------- */
-  const nav = $('#nav');
-  const hero = $('.hero');
-  const heroMedia = $('#hero-media');
-  const heroContent = $('.hero-content');
+  /* ---------- Navigation : masquée en descendant, lien actif ---------- */
+  const nav = $('#nav'), progress = $('#progress');
+  const navLinks = $$('.nav-links a');
+  const navTargets = navLinks.map((a) => $(a.getAttribute('href')));
   let lastY = scrollY;
-  let ticking = false;
-
-  function onScroll() {
+  function updateNav() {
     const y = scrollY;
-    const heroH = hero.offsetHeight;
-
-    nav.classList.toggle('is-solid', y > heroH - nav.offsetHeight - 40 || nav.classList.contains('search-open'));
-    const goingDown = y > lastY + 4, goingUp = y < lastY - 4;
-    if (!document.body.classList.contains('is-locked') && !megaWrap.classList.contains('is-open')) {
-      if (goingDown && y > heroH) nav.classList.add('is-hidden');
-      else if (goingUp || y < heroH) nav.classList.remove('is-hidden');
+    if (!document.body.classList.contains('is-locked')) {
+      if (y > lastY + 6 && y > 300) nav.classList.add('is-hidden');
+      else if (y < lastY - 6 || y < 300) nav.classList.remove('is-hidden');
     }
     lastY = y;
+    const h = document.documentElement.scrollHeight - innerHeight;
+    progress.style.transform = `scaleX(${h > 0 ? y / h : 0})`;
+    let active = -1;
+    navTargets.forEach((t, i) => { if (t && t.getBoundingClientRect().top < innerHeight * .4) active = i; });
+    navLinks.forEach((a, i) => a.classList.toggle('is-active', i === active));
+  }
 
-    // Hero façon Apple : le média rétrécit et s'arrondit
-    if (!reduceMotion && y < heroH * 1.2) {
-      const p = clamp(y / heroH, 0, 1);
-      heroMedia.style.transform = `translateY(${p * heroH * .35}px) scale(${1 - p * .1})`;
-      heroMedia.style.borderRadius = `${p * 40}px`;
-      heroContent.style.transform = `translateY(${p * -60}px)`;
-      heroContent.style.opacity = String(1 - p * 1.4);
-    }
-
-    updateStory();
+  let ticking = false;
+  function onScroll() {
+    updateNav(); updateTheme(); updateManifesto(); updateHScroll();
     ticking = false;
   }
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-
-  /* ---------- Méga menu ---------- */
-  const megaWrap = $('.has-mega');
-  const megaBtn = $('.has-mega > .nav-link');
-  let megaTimer;
-  const setMega = (open) => {
-    clearTimeout(megaTimer);
-    megaWrap.classList.toggle('is-open', open);
-    megaBtn.setAttribute('aria-expanded', String(open));
-    if (open) nav.classList.add('is-solid'); else onScroll();
-  };
-  megaWrap.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') { clearTimeout(megaTimer); megaTimer = setTimeout(() => setMega(true), 80); } });
-  megaWrap.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') { clearTimeout(megaTimer); megaTimer = setTimeout(() => setMega(false), 180); } });
-  megaBtn.addEventListener('click', () => setMega(!megaWrap.classList.contains('is-open')));
-  $$('.mega a').forEach((a) => a.addEventListener('click', () => setMega(false)));
+  addEventListener('resize', onScroll);
+  onScroll();
 
   /* ---------- Menu mobile ---------- */
-  const burger = $('#burger');
-  const mobileMenu = $('#mobile-menu');
+  const burger = $('#burger'), menu = $('#menu');
   function setMenu(open) {
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
-    mobileMenu.classList.toggle('is-open', open);
-    mobileMenu.setAttribute('aria-hidden', String(!open));
-    nav.classList.toggle('menu-open', open);
+    menu.classList.toggle('is-open', open);
+    menu.setAttribute('aria-hidden', String(!open));
     document.body.classList.toggle('is-locked', open);
-    if (open) nav.classList.remove('is-hidden');
+    nav.style.color = open ? '#fff' : '';
+    nav.style.background = open ? 'transparent' : '';
+    nav.style.boxShadow = open ? 'none' : '';
   }
   burger.addEventListener('click', () => setMenu(burger.getAttribute('aria-expanded') !== 'true'));
-  $$('#mobile-menu a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  $$('#menu a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu.classList.contains('is-open')) setMenu(false); });
 
-  /* ---------- Onglets produits ---------- */
-  const tabsEl = $('#product-tabs');
-  const pill = $('.tab-pill', tabsEl);
-  const productsEl = $('#products');
-  const favs = new Set(load('yumiya-favs', []));
-
-  function movePill(tab) {
-    pill.style.width = tab.offsetWidth + 'px';
-    pill.style.transform = `translateX(${tab.offsetLeft}px)`;
+  /* ---------- Boutons magnétiques ---------- */
+  if (finePointer && !reduce) {
+    $$('.magnetic').forEach((btn) => {
+      const inner = btn.querySelector('span');
+      btn.addEventListener('pointermove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width / 2, y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = `translate(${x * .22}px, ${y * .32}px)`;
+        if (inner) inner.style.transform = `translate(${x * .1}px, ${y * .12}px)`;
+      });
+      btn.addEventListener('pointerleave', () => {
+        btn.style.transform = ''; if (inner) inner.style.transform = '';
+      });
+    });
   }
 
-  function productCard(p, i) {
-    const badge = p.badge ? `<span class="badge ${p.dark ? 'badge--dark' : ''}">${p.badge}</span>` : '';
-    const price = p.old ? `<s>${p.old} CHF</s>${p.price} CHF` : `${p.price} CHF`;
-    return `
-      <article class="card" style="animation-delay:${i * 60}ms">
-        <div class="card-media">
-          <div class="slot" data-slot data-img="${p.img}" style="--c1:${p.bg[0]};--c2:${p.bg[1]}">
-            <div class="candle-art">${candleSVG(p)}</div>
-          </div>
-          ${badge}
-          <button class="fav" aria-label="Ajouter ${p.name} aux favoris" aria-pressed="${favs.has(p.id)}" data-fav="${p.id}">
-            <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>
-          </button>
-          <button class="quick-add" data-add="${p.id}" aria-label="Ajouter ${p.name} au panier">
-            <span aria-hidden="true">＋</span><span class="qa-label">Ajouter au panier</span>
-          </button>
-        </div>
-        <div class="card-info">
-          <div>
-            <h3 class="card-name">${p.name}</h3>
-            <p class="card-sub">${p.sub}</p>
-          </div>
-          <p class="card-price">${price}</p>
-        </div>
-      </article>`;
+  /* ---------- Cartes inclinables avec reflet ---------- */
+  if (finePointer && !reduce) {
+    $$('.tilt').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+        card.style.setProperty('--ry', (px - .5) * 8 + 'deg');
+        card.style.setProperty('--rx', (.5 - py) * 8 + 'deg');
+        card.style.setProperty('--gx', px * 100 + '%');
+        card.style.setProperty('--gy', py * 100 + '%');
+      });
+      card.addEventListener('pointerleave', () => { card.style.setProperty('--rx', '0deg'); card.style.setProperty('--ry', '0deg'); });
+    });
   }
 
-  function showTab(key, { focus = false } = {}) {
-    const tab = $(`[data-tab="${key}"]`, tabsEl);
-    if (!tab) return;
-    $$('.tab', tabsEl).forEach((t) => { t.setAttribute('aria-selected', String(t === tab)); t.tabIndex = t === tab ? 0 : -1; });
-    movePill(tab);
-    tab.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
-    if (focus) tab.focus();
-    const list = PRODUCTS.filter((p) => p.cats.includes(key)).slice(0, 8);
-    productsEl.innerHTML = list.map(productCard).join('');
-    $$('[data-slot]', productsEl).forEach(initSlot);
-  }
-
-  tabsEl.addEventListener('click', (e) => { const t = e.target.closest('.tab'); if (t) showTab(t.dataset.tab); });
-  tabsEl.addEventListener('keydown', (e) => {
+  /* ---------- Onglets Usages ---------- */
+  const TABS = [
+    { title: 'Pour les créateurs', desc: 'Présentez votre univers avec une page qui vous ressemble, sans écrire une ligne de code.', list: ['Portfolio en quelques minutes', 'Mise en page éditoriale', 'Lien unique pour vos réseaux'], c: ['#8b7bff', '#ff5b3a', '#d8f65c'], bg: '#f1eef9' },
+    { title: 'Pour les équipes', desc: 'Un site que tout le monde peut mettre à jour, avec des sections prêtes à l\'emploi.', list: ['Édition à plusieurs', 'Sections réutilisables', 'Historique des versions'], c: ['#1aa37a', '#38bdf8', '#d8f65c'], bg: '#eaf6f1' },
+    { title: 'Pour les entreprises', desc: 'Une image de marque soignée qui inspire confiance dès la première seconde.', list: ['Design sur mesure', 'Performances optimisées', 'Accessibilité garantie'], c: ['#0ea5e9', '#5b3df5', '#c4b5fd'], bg: '#eaf2fb' },
+    { title: 'Pour les événements', desc: 'Annoncez, comptez les jours et remplissez la salle avec une page qui donne envie.', list: ['Compte à rebours', 'Programme en onglets', 'Inscriptions simplifiées'], c: ['#ff5b3a', '#e2a400', '#ff9ac1'], bg: '#fdf0ea' },
+  ];
+  const tabsEl = $('#tabs'), pill = $('.tabs-pill', tabsEl), panel = $('#tab-panel');
+  const ptext = $('#panel-text'), part = $('#panel-art');
+  let curTab = -1;
+  function movePill(el, thumb) { thumb.style.width = el.offsetWidth + 'px'; thumb.style.transform = `translateX(${el.offsetLeft}px)`; }
+  function setTab(i, focus) {
+    if (i === curTab) return;
+    const first = curTab === -1;
+    curTab = i;
     const tabs = $$('.tab', tabsEl);
-    const i = tabs.indexOf(document.activeElement);
-    if (i < 0) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); showTab(tabs[(i + 1) % tabs.length].dataset.tab, { focus: true }); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); showTab(tabs[(i - 1 + tabs.length) % tabs.length].dataset.tab, { focus: true }); }
-  });
-  $$('[data-tab-link]').forEach((a) => a.addEventListener('click', () => showTab(a.dataset.tabLink)));
-  addEventListener('resize', () => movePill($('[aria-selected="true"]', tabsEl)));
-  if (document.fonts) document.fonts.ready.then(() => movePill($('[aria-selected="true"]', tabsEl)));
-  showTab('new');
-
-  productsEl.addEventListener('click', (e) => {
-    const add = e.target.closest('[data-add]');
-    if (add) {
-      addToCart(add.dataset.add, add);
-      add.classList.add('is-added');
-      add.querySelector('.qa-label').textContent = 'Ajouté ✓';
-      setTimeout(() => { add.classList.remove('is-added'); add.querySelector('.qa-label').textContent = 'Ajouter au panier'; }, 1600);
-    }
-    const fav = e.target.closest('[data-fav]');
-    if (fav) {
-      const id = fav.dataset.fav;
-      const on = !favs.has(id);
-      on ? favs.add(id) : favs.delete(id);
-      fav.setAttribute('aria-pressed', String(on));
-      save('yumiya-favs', [...favs]);
-      toast(on ? `${byId[id].name} ajouté aux favoris ♥` : 'Retiré des favoris');
-    }
-  });
-
-  /* ---------- Panier ---------- */
-  let cart = load('yumiya-cart', []).filter((l) => byId[l.id]);
-  const drawer = $('#drawer');
-  const scrim = $('#scrim');
-  const FREE_SHIP = 60;
-
-  function renderCart() {
-    const count = cart.reduce((s, l) => s + l.qty, 0);
-    const total = cart.reduce((s, l) => s + l.qty * byId[l.id].price, 0);
-    const countEl = $('#cart-count');
-    countEl.textContent = count;
-    countEl.classList.toggle('has-items', count > 0);
-    $('#drawer-total').textContent = chf(total);
-    $('#ship-bar').style.width = clamp(total / FREE_SHIP * 100, 0, 100) + '%';
-    $('#ship-text').innerHTML = total >= FREE_SHIP
-      ? '🎉 La livraison est <strong>offerte</strong>'
-      : `Plus que <strong>${chf(FREE_SHIP - total)}</strong> pour la livraison offerte`;
-    const items = $('#drawer-items');
-    if (!cart.length) {
-      items.innerHTML = `<li class="drawer-empty"><p>Ton panier est vide… pour l'instant.</p><a href="#collections" class="btn btn--dark" data-close-cart>Découvrir nos bougies</a></li>`;
-    } else {
-      items.innerHTML = cart.map((l) => {
-        const p = byId[l.id];
-        return `<li class="d-item">
-          <div class="d-thumb"><div class="slot" style="--c1:${p.bg[0]};--c2:${p.bg[1]}">${candleSVG(p)}</div></div>
-          <div><p class="d-name">${p.name}</p><p class="d-price">${chf(p.price)}</p>
-            <div class="qty"><button data-dec="${p.id}" aria-label="Retirer un ${p.name}">−</button><span>${l.qty}</span><button data-inc="${p.id}" aria-label="Ajouter un ${p.name}">+</button></div>
-          </div>
-          <p class="d-line">${chf(p.price * l.qty)}</p>
-        </li>`;
-      }).join('');
-    }
-    save('yumiya-cart', cart);
-  }
-  function addToCart(id, fromEl) {
-    const line = cart.find((l) => l.id === id);
-    line ? line.qty++ : cart.push({ id, qty: 1 });
-    renderCart();
-    const c = $('#cart-count');
-    c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
-    if (fromEl && !reduceMotion) flyToCart(fromEl, byId[id]);
-    toast(`${byId[id].name} ajouté au panier`);
-  }
-  // Petite bulle qui « vole » jusqu'au panier
-  function flyToCart(fromEl, p) {
-    const a = fromEl.getBoundingClientRect();
-    const b = $('#cart-btn').getBoundingClientRect();
-    const dot = document.createElement('div');
-    Object.assign(dot.style, {
-      position: 'fixed', zIndex: 120, left: a.left + a.width / 2 - 14 + 'px', top: a.top + a.height / 2 - 14 + 'px',
-      width: '28px', height: '28px', borderRadius: '50%', background: p.bg[1], boxShadow: '0 6px 18px rgba(0,0,0,.25)', pointerEvents: 'none',
-    });
-    document.body.appendChild(dot);
-    const dx = b.left + b.width / 2 - (a.left + a.width / 2);
-    const dy = b.top + b.height / 2 - (a.top + a.height / 2);
-    dot.animate([
-      { transform: 'translate(0,0) scale(1)' },
-      { transform: `translate(${dx * .5}px, ${dy * .5 - 80}px) scale(1.1)`, offset: .5 },
-      { transform: `translate(${dx}px, ${dy}px) scale(.3)`, opacity: .6 },
-    ], { duration: 750, easing: 'cubic-bezier(.5,0,.3,1)' }).onfinish = () => dot.remove();
-  }
-  function setDrawer(open) {
-    drawer.classList.toggle('is-open', open);
-    drawer.setAttribute('aria-hidden', String(!open));
-    document.body.classList.toggle('is-locked', open);
-    if (open) { scrim.hidden = false; requestAnimationFrame(() => scrim.classList.add('is-open')); $('#drawer-close').focus(); }
-    else { scrim.classList.remove('is-open'); setTimeout(() => { scrim.hidden = true; }, 500); }
-  }
-  $('#cart-btn').addEventListener('click', () => setDrawer(true));
-  $('#drawer-close').addEventListener('click', () => setDrawer(false));
-  scrim.addEventListener('click', () => setDrawer(false));
-  $('#drawer-items').addEventListener('click', (e) => {
-    const inc = e.target.closest('[data-inc]'), dec = e.target.closest('[data-dec]');
-    if (inc) { cart.find((l) => l.id === inc.dataset.inc).qty++; renderCart(); }
-    if (dec) {
-      const l = cart.find((x) => x.id === dec.dataset.dec);
-      l.qty--; if (l.qty <= 0) cart = cart.filter((x) => x !== l);
-      renderCart();
-    }
-    if (e.target.closest('[data-close-cart]')) setDrawer(false);
-  });
-  renderCart();
-
-  /* ---------- Recherche ---------- */
-  const search = $('#search');
-  const sInput = $('#search-input');
-  const sResults = $('#search-results');
-  function setSearch(open) {
-    search.hidden = !open;
-    nav.classList.toggle('search-open', open);
-    if (open) { nav.classList.add('is-solid'); sInput.value = ''; renderSearch(''); sInput.focus(); }
-    else onScroll();
-  }
-  function renderSearch(q) {
-    const n = q.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    const list = (n ? PRODUCTS.filter((p) => norm(p.name + ' ' + p.sub).includes(n)) : PRODUCTS.filter((p) => p.cats.includes('best'))).slice(0, 6);
-    sResults.innerHTML = list.length
-      ? (n ? '' : '<p class="empty">Les plus aimées</p>') + list.map((p) => `<button data-goto="${p.id}"><span class="sr-thumb"><span class="slot" style="--c1:${p.bg[0]};--c2:${p.bg[1]};display:grid;place-items:center">${candleSVG(p)}</span></span><span><strong>${p.name}</strong><small>${p.sub} · ${p.price} CHF</small></span></button>`).join('')
-      : `<p class="empty">Aucun résultat pour « ${q.replace(/[<>&]/g, '')} ».</p>`;
-  }
-  $('#search-btn').addEventListener('click', () => setSearch(true));
-  $('#search-close').addEventListener('click', () => setSearch(false));
-  sInput.addEventListener('input', () => renderSearch(sInput.value));
-  sResults.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-goto]');
-    if (!b) return;
-    const p = byId[b.dataset.goto];
-    setSearch(false);
-    showTab(p.cats[0]);
-    $('#collections').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-  });
-
-  /* ---------- Histoire : étapes pilotées par le scroll ---------- */
-  const story = $('.story');
-  const steps = $$('#story-steps li');
-  const slides = $$('.story-slide');
-  const storyBar = $('#story-bar');
-  let storyIdx = 0;
-  function setStory(i) {
-    if (i === storyIdx) return;
-    storyIdx = i;
-    steps.forEach((s, k) => s.classList.toggle('is-active', k === i));
-    slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
-  }
-  function updateStory() {
-    if (innerWidth <= 900) return;
-    const r = story.getBoundingClientRect();
-    const p = clamp(-r.top / (r.height - innerHeight), 0, 1);
-    storyBar.style.transform = `scaleX(${p})`;
-    setStory(Math.min(steps.length - 1, Math.floor(p * steps.length * .999)));
-  }
-  // Sur mobile, les photos défilent toutes seules
-  setInterval(() => { if (innerWidth <= 900) setStory((storyIdx + 1) % steps.length); }, 3500);
-
-  /* ---------- Compteurs ---------- */
-  const countObserver = new IntersectionObserver((entries) => {
-    entries.forEach(({ target, isIntersecting }) => {
-      if (!isIntersecting) return;
-      countObserver.unobserve(target);
-      const end = parseFloat(target.dataset.count);
-      const dec = +(target.dataset.decimals || 0);
-      const suf = target.dataset.suffix || '';
-      const fmt = (v) => v.toFixed(dec).replace('.', ',') + suf;
-      if (reduceMotion) { target.textContent = fmt(end); return; }
-      const t0 = performance.now(), dur = 1600;
-      const tick = (t) => {
-        const k = clamp((t - t0) / dur, 0, 1);
-        target.textContent = fmt(end * (1 - Math.pow(1 - k, 4)));
-        if (k < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    });
-  }, { threshold: .6 });
-  $$('[data-count]').forEach((el) => countObserver.observe(el));
-
-  /* ---------- Trouver mon parfum ---------- */
-  const MOODS = {
-    cocon:    { id: 'coton',    kicker: 'Pour toi : douceur absolue', desc: 'Un linge propre séché au soleil, un plaid, un livre. Une odeur qui rassure dès la première flamme.', notes: [['Tête', 'Aldéhydes'], ['Cœur', 'Fleur de coton'], ['Fond', 'Musc blanc']] },
-    gourmand: { id: 'vanille',  kicker: 'Pour toi : la gourmandise', desc: 'Une gousse de vanille de Madagascar, une pointe de caramel. Comme une pâtisserie qui sort du four.', notes: [['Tête', 'Lait d\'amande'], ['Cœur', 'Vanille Bourbon'], ['Fond', 'Fève tonka']] },
-    floral:   { id: 'rose-litchi', kicker: 'Pour toi : le romantisme', desc: 'Une rose fraîchement coupée, un litchi juteux. Floral sans être sage, lumineux du matin au soir.', notes: [['Tête', 'Litchi'], ['Cœur', 'Rose de Damas'], ['Fond', 'Bois blond']] },
-    frais:    { id: 'the-blanc', kicker: 'Pour toi : un grand bol d\'air', desc: 'Des feuilles de thé infusées, de la menthe froissée. Parfait pour la cuisine ou la salle de bain.', notes: [['Tête', 'Menthe'], ['Cœur', 'Thé blanc'], ['Fond', 'Vétiver']] },
-  };
-  const finder = $('#parfums');
-  const finderInfo = $('.finder-info');
-  const finderCandle = $('#finder-candle');
-  let currentMood = 'cocon';
-  function renderMood(key, animate) {
-    const m = MOODS[key], p = byId[m.id];
-    currentMood = key;
+    tabs.forEach((t, k) => { t.setAttribute('aria-selected', String(k === i)); t.tabIndex = k === i ? 0 : -1; });
+    movePill(tabs[i], pill);
+    if (focus) tabs[i].focus();
+    const d = TABS[i];
     const apply = () => {
-      $('#finder-kicker').textContent = m.kicker;
-      $('#finder-name').textContent = p.name;
-      $('#finder-desc').textContent = m.desc;
-      $('#finder-notes').innerHTML = m.notes.map(([k, v]) => `<li><b>${k}</b>${v}</li>`).join('');
-      $('#finder-price').textContent = p.price + ' CHF';
-      finderCandle.innerHTML = candleSVG(p);
-      finderInfo.classList.remove('is-changing');
+      $('#panel-title').textContent = d.title;
+      $('#panel-desc').textContent = d.desc;
+      $('#panel-list').innerHTML = d.list.map((x) => `<li>${x}</li>`).join('');
+      $('#panel-big').textContent = String(i + 1).padStart(2, '0');
+      ptext.classList.remove('is-out');
+      part.classList.remove('is-swap');
     };
-    finder.dataset.mood = key;
-    $$('.mood').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.mood === key)));
-    if (animate && !reduceMotion) {
-      finderInfo.classList.add('is-changing');
-      finderCandle.classList.remove('swap'); void finderCandle.offsetWidth; finderCandle.classList.add('swap');
-      setTimeout(apply, 320);
-    } else apply();
+    panel.style.setProperty('--p1', d.c[0]); panel.style.setProperty('--p2', d.c[1]); panel.style.setProperty('--p3', d.c[2]);
+    part.style.backgroundColor = d.bg;
+    if (first || reduce) apply();
+    else { ptext.classList.add('is-out'); part.classList.add('is-swap'); setTimeout(apply, 330); }
   }
-  $('#moods').addEventListener('click', (e) => { const b = e.target.closest('.mood'); if (b && b.dataset.mood !== currentMood) renderMood(b.dataset.mood, true); });
-  $('#finder-add').addEventListener('click', (e) => addToCart(MOODS[currentMood].id, e.currentTarget));
-  renderMood('cocon', false);
+  tabsEl.addEventListener('click', (e) => { const t = e.target.closest('.tab'); if (t) setTab(+t.dataset.tab); });
+  tabsEl.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); setTab((curTab + 1) % TABS.length, true); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); setTab((curTab + TABS.length - 1) % TABS.length, true); }
+  });
+  setTab(0);
 
-  /* ---------- Carrousels : glisser à la souris avec élan ---------- */
-  $$('.carousel').forEach((track) => {
-    let down = false, startX = 0, startScroll = 0, moved = false, hist = [];
-    track.addEventListener('pointerdown', (e) => {
-      if (e.pointerType !== 'mouse' || e.button !== 0) return; // le tactile utilise le défilement natif
-      down = true; moved = false; startX = e.clientX; startScroll = track.scrollLeft; hist = [{ x: e.clientX, t: e.timeStamp }];
+  /* ---------- Tarifs : mensuel / annuel ---------- */
+  const bills = $$('.bill'), thumb = $('.bill-thumb');
+  function setBill(mode) {
+    bills.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bill === mode)));
+    movePill($(`.bill[data-bill="${mode}"]`), thumb);
+    $$('.price b').forEach((b) => {
+      const from = parseFloat(b.textContent), to = parseFloat(b.dataset[mode]);
+      if (reduce || from === to) { b.textContent = to; return; }
+      const t0 = performance.now();
+      const step = (t) => {
+        const k = clamp((t - t0) / 600, 0, 1);
+        b.textContent = Math.round(lerp(from, to, 1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
     });
-    addEventListener('pointermove', (e) => {
-      if (!down) return;
-      const dx = e.clientX - startX;
-      if (!moved && Math.abs(dx) > 6) { moved = true; track.classList.add('is-dragging'); }
-      if (moved) {
-        track.scrollLeft = startScroll - dx;
-        hist.push({ x: e.clientX, t: e.timeStamp }); if (hist.length > 5) hist.shift();
-      }
-    });
-    addEventListener('pointerup', () => {
-      if (!down) return;
-      down = false;
-      if (!moved) return;
-      // Projection de l'élan (formule de décélération utilisée par iOS)
-      const a = hist[0], b = hist[hist.length - 1];
-      const v = (b.t - a.t) > 0 ? (b.x - a.x) / (b.t - a.t) * 1000 : 0; // px/s
-      const d = .998;
-      const projected = (v / 1000) * d / (1 - d);
-      track.classList.remove('is-dragging');
-      track.scrollBy({ left: -projected * .35, behavior: reduceMotion ? 'auto' : 'smooth' });
-    });
-    track.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
-  });
-  $$('[data-carousel-next], [data-carousel-prev]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const track = $('#' + (btn.dataset.carouselNext || btn.dataset.carouselPrev));
-      const item = track.firstElementChild;
-      const step = item.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 16);
-      track.scrollBy({ left: btn.dataset.carouselNext ? step : -step, behavior: reduceMotion ? 'auto' : 'smooth' });
-    });
-  });
-  // Les reels se lancent au survol si une vidéo est présente
-  $$('.reel').forEach((r) => {
-    r.addEventListener('pointerenter', () => { const v = r.querySelector('video'); if (v) v.play().catch(() => {}); });
-  });
+  }
+  bills.forEach((b) => b.addEventListener('click', () => setBill(b.dataset.bill)));
 
-  /* ---------- Faux score du mini-jeu ---------- */
-  const fakeScore = $('#fake-score');
-  let fs = 0;
-  const gameObserver = new IntersectionObserver(([e]) => { fakeScore.dataset.on = e.isIntersecting ? '1' : ''; });
-  gameObserver.observe($('.game-card'));
-  setInterval(() => { if (fakeScore.dataset.on) { fs = (fs + 7) % 12000; fakeScore.textContent = fs; } }, 60);
+  const relayout = () => { movePill($$('.tab', tabsEl)[curTab], pill); movePill($('.bill[aria-pressed="true"]'), thumb); };
+  addEventListener('resize', relayout);
+  if (document.fonts) document.fonts.ready.then(relayout);
+  relayout();
 
-  /* ---------- Accordéon FAQ (un seul ouvert, ouverture animée) ---------- */
-  $$('#accordion .acc').forEach((d) => {
-    const summary = d.querySelector('summary');
-    const body = d.querySelector('.acc-body');
-    summary.addEventListener('click', (e) => {
-      e.preventDefault();
-      const opening = !d.open;
-      if (opening) {
-        $$('#accordion .acc[open]').forEach((o) => { if (o !== d) closeAcc(o); });
-        d.open = true;
-        if (reduceMotion) return;
-        const h = body.scrollHeight;
-        body.animate([{ height: '0px', opacity: 0 }, { height: h + 'px', opacity: 1 }], { duration: 450, easing: 'cubic-bezier(.22,1,.36,1)' });
-      } else closeAcc(d);
-    });
+  /* ---------- Carrousel : glisser avec élan ---------- */
+  const car = $('#carousel');
+  let down = false, sx = 0, ss = 0, moved = false, hist = [];
+  car.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    down = true; moved = false; sx = e.clientX; ss = car.scrollLeft; hist = [{ x: e.clientX, t: e.timeStamp }];
   });
+  addEventListener('pointermove', (e) => {
+    if (!down) return;
+    const dx = e.clientX - sx;
+    if (!moved && Math.abs(dx) > 6) { moved = true; car.classList.add('is-drag'); }
+    if (moved) { car.scrollLeft = ss - dx; hist.push({ x: e.clientX, t: e.timeStamp }); if (hist.length > 5) hist.shift(); }
+  });
+  addEventListener('pointerup', () => {
+    if (!down) return; down = false;
+    car.classList.remove('is-drag');
+    if (!moved) return;
+    const a = hist[0], b = hist[hist.length - 1];
+    const v = b.t > a.t ? (b.x - a.x) / (b.t - a.t) * 1000 : 0;
+    const d = .998, proj = (v / 1000) * d / (1 - d); // projection d'élan façon iOS
+    car.scrollBy({ left: -proj * .35, behavior: reduce ? 'auto' : 'smooth' });
+  });
+  const stepW = () => car.firstElementChild.getBoundingClientRect().width + 16;
+  $('[data-next]').addEventListener('click', () => car.scrollBy({ left: stepW(), behavior: 'smooth' }));
+  $('[data-prev]').addEventListener('click', () => car.scrollBy({ left: -stepW(), behavior: 'smooth' }));
+
+  /* ---------- FAQ : ouverture animée, une seule à la fois ---------- */
+  const accs = $$('.acc');
   function closeAcc(d) {
-    const body = d.querySelector('.acc-body');
-    if (reduceMotion) { d.open = false; return; }
-    const anim = body.animate([{ height: body.scrollHeight + 'px', opacity: 1 }, { height: '0px', opacity: 0 }], { duration: 350, easing: 'cubic-bezier(.22,1,.36,1)' });
-    anim.onfinish = () => { d.open = false; };
+    const body = $('.acc-body', d);
+    if (reduce) { d.open = false; return; }
+    body.animate([{ height: body.scrollHeight + 'px', opacity: 1 }, { height: '0px', opacity: 0 }], { duration: 380, easing: 'cubic-bezier(.22,1,.36,1)' }).onfinish = () => { d.open = false; };
   }
+  accs.forEach((d) => {
+    $('summary', d).addEventListener('click', (e) => {
+      e.preventDefault();
+      if (d.open) { closeAcc(d); return; }
+      accs.forEach((o) => { if (o !== d && o.open) closeAcc(o); });
+      d.open = true;
+      if (reduce) return;
+      const body = $('.acc-body', d);
+      body.animate([{ height: '0px', opacity: 0 }, { height: body.scrollHeight + 'px', opacity: 1 }], { duration: 480, easing: 'cubic-bezier(.22,1,.36,1)' });
+    });
+  });
 
-  // Footer : colonnes repliées sur mobile
-  const fcols = $$('.fcol');
-  const syncFooter = () => fcols.forEach((f) => { f.open = innerWidth > 900; });
-  syncFooter();
-  let lastW = innerWidth;
-  addEventListener('resize', () => { if ((lastW > 900) !== (innerWidth > 900)) syncFooter(); lastW = innerWidth; });
-
-  /* ---------- Newsletter ---------- */
-  const form = $('#news-form');
+  /* ---------- Formulaire de contact ---------- */
+  const form = $('#cta-form'), msg = $('#cta-msg');
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const email = $('#news-email').value.trim();
-    const msg = $('#news-msg');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    const v = $('#cta-email').value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
       form.classList.remove('is-error'); void form.offsetWidth; form.classList.add('is-error');
-      msg.textContent = 'Oups, cette adresse e-mail ne semble pas valide.';
+      msg.textContent = 'Cette adresse ne semble pas valide.';
       return;
     }
     form.classList.remove('is-error');
-    msg.textContent = 'Bienvenue au Club ! Ton code −10 % arrive par e-mail ✦';
+    msg.textContent = 'Merci ! On vous répond très vite ✦';
     form.reset();
   });
 
-  /* ---------- Film ---------- */
-  const film = $('#film');
-  function setFilm(open) {
-    film.hidden = !open;
-    document.body.classList.toggle('is-locked', open);
-    const v = film.querySelector('video');
-    if (v) { if (open) v.play().catch(() => {}); else v.pause(); }
-    if (open) $('#film-close').focus();
-  }
-  $('#play-film').addEventListener('click', () => setFilm(true));
-  $('#film-close').addEventListener('click', () => setFilm(false));
-  film.addEventListener('click', (e) => { if (e.target === film) setFilm(false); });
-
-  /* ---------- Échap ferme tout ---------- */
-  addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    if (!film.hidden) setFilm(false);
-    if (drawer.classList.contains('is-open')) setDrawer(false);
-    if (!search.hidden) setSearch(false);
-    if (megaWrap.classList.contains('is-open')) setMega(false);
-    if (mobileMenu.classList.contains('is-open')) setMenu(false);
-  });
-
-  /* ---------- Toast ---------- */
-  const toastEl = $('#toast');
-  let toastTimer;
-  function toast(text) {
-    toastEl.textContent = text;
-    toastEl.classList.add('is-on');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('is-on'), 2200);
-  }
-
-  /* ---------- Stockage local (protégé) ---------- */
-  function load(k, fallback) { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } }
-  function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* navigation privée */ } }
-
+  $('#to-top').addEventListener('click', () => scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }));
   $('#year').textContent = new Date().getFullYear();
-  onScroll();
 })();

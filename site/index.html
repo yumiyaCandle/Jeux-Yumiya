@@ -3,459 +3,342 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Yumiya Candle — Bougies parfumées coulées à la main</title>
-<meta name="description" content="Bougies parfumées artisanales Yumiya Candle : cire végétale, mèche en coton, parfums gourmands et floraux. Coffrets, éditions limitées et jeux pour gagner des réductions.">
-<meta name="theme-color" content="#fff7f3">
+<title>Aura — Modèle de site vitrine</title>
+<meta name="description" content="Aura, un modèle de site vitrine animé : sections modulables, animations fluides et design soigné. Remplacez les textes, c'est prêt.">
+<meta name="theme-color" content="#0a0a0f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-theme="dark">
 
-<a class="skip" href="#main">Aller au contenu</a>
-
-<!-- ============ BANDEAU D'ANNONCE (rotatif, style Nike) ============ -->
-<div class="announce" role="region" aria-label="Annonces">
-  <div class="announce-track" id="announce">
-    <p class="is-active">Livraison offerte dès 60 CHF d'achat</p>
-    <p>Nouveau : la collection <strong>Jardin d'Hiver</strong> est arrivée</p>
-    <p>Joue au Dino Run et gagne <strong>−10 %</strong> sur ta commande</p>
+<!-- ===== Écran d'intro ===== -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <span class="loader-logo">Aura</span>
+    <span class="loader-count" id="loader-count">0</span>
   </div>
 </div>
 
-<!-- ============ NAVIGATION ============ -->
+<div class="progress" id="progress" aria-hidden="true"></div>
+<a class="skip" href="#main">Aller au contenu</a>
+
+<!-- ===== Navigation flottante ===== -->
 <header class="nav" id="nav">
-  <div class="nav-inner">
-    <button class="icon-btn nav-burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
-      <span></span><span></span>
-    </button>
-
-    <a href="#top" class="logo" aria-label="Yumiya Candle, accueil">
-      <svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 2c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10Z" fill="currentColor"/><rect x="6" y="18" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-      <span>Yumiya</span>
-    </a>
-
-    <nav class="nav-links" aria-label="Navigation principale">
-      <div class="has-mega">
-        <button class="nav-link" aria-expanded="false" aria-controls="mega">Boutique</button>
-        <div class="mega" id="mega">
-          <div class="mega-inner">
-            <div class="mega-col">
-              <p class="mega-title">Par parfum</p>
-              <a href="#collections" data-tab-link="gourmand">Gourmands</a>
-              <a href="#collections" data-tab-link="floral">Floraux</a>
-              <a href="#collections" data-tab-link="boise">Boisés</a>
-              <a href="#collections" data-tab-link="frais">Frais</a>
-            </div>
-            <div class="mega-col">
-              <p class="mega-title">Par format</p>
-              <a href="#collections">Bougies 180 g</a>
-              <a href="#collections">Bougies 300 g</a>
-              <a href="#collections" data-tab-link="coffrets">Coffrets cadeaux</a>
-              <a href="#collections">Fondants parfumés</a>
-            </div>
-            <a href="#collections" class="mega-feature" data-tab-link="limitee">
-              <div class="slot" data-slot data-img="assets/menu-feature.jpg" data-label="Photo menu · 800×600" style="--c1:#f6c9d7;--c2:#c94e79"></div>
-              <span>Édition limitée — Jardin d'Hiver →</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      <a class="nav-link" href="#histoire">Notre histoire</a>
-      <a class="nav-link" href="#parfums">Trouver mon parfum</a>
-      <a class="nav-link" href="#jeux">Jeux</a>
-      <a class="nav-link" href="#journal">Journal</a>
-    </nav>
-
-    <div class="nav-actions">
-      <button class="icon-btn" id="search-btn" aria-label="Rechercher">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      </button>
-      <button class="icon-btn cart-btn" id="cart-btn" aria-label="Ouvrir le panier">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-        <span class="cart-count" id="cart-count" aria-live="polite">0</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Barre de recherche -->
-  <div class="search" id="search" hidden>
-    <div class="search-inner">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input type="search" id="search-input" placeholder="Rose, vanille, coffret…" aria-label="Rechercher un produit">
-      <button class="search-close" id="search-close">Annuler</button>
-    </div>
-    <div class="search-results" id="search-results"></div>
-  </div>
+  <a href="#top" class="logo" aria-label="Aura, accueil">
+    <span class="logo-mark" aria-hidden="true"></span>Aura
+  </a>
+  <nav class="nav-links" aria-label="Navigation principale">
+    <a href="#fonctions">Fonctions</a>
+    <a href="#etapes">Méthode</a>
+    <a href="#usages">Usages</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a href="#contact" class="btn btn--sm btn--fg nav-cta">Commencer</a>
+  <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
 </header>
 
-<!-- Menu mobile -->
-<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+<div class="menu" id="menu" aria-hidden="true">
   <nav aria-label="Menu mobile">
-    <a href="#collections">Boutique</a>
-    <a href="#histoire">Notre histoire</a>
-    <a href="#parfums">Trouver mon parfum</a>
-    <a href="#jeux">Jeux</a>
-    <a href="#journal">Journal</a>
-    <a href="#faq">Aide &amp; FAQ</a>
+    <a href="#fonctions"><small>01</small>Fonctions</a>
+    <a href="#etapes"><small>02</small>Méthode</a>
+    <a href="#usages"><small>03</small>Usages</a>
+    <a href="#tarifs"><small>04</small>Tarifs</a>
+    <a href="#faq"><small>05</small>FAQ</a>
+    <a href="#contact"><small>06</small>Contact</a>
   </nav>
-  <p class="mobile-menu-foot">Livraison offerte dès 60 CHF · Retours 30 jours</p>
 </div>
 
 <main id="main">
 
-<!-- ============ HERO VIDÉO (style Apple : rétrécit au scroll) ============ -->
-<section class="hero" id="top">
-  <div class="hero-media" id="hero-media">
-    <div class="slot slot--hero" data-slot data-video="assets/hero.mp4" data-img="assets/hero.jpg" data-label="Vidéo hero · 1920×1080 · assets/hero.mp4" style="--c1:#f9d8e2;--c2:#b8406a;--c3:#5a1a33"></div>
-    <div class="hero-shade"></div>
-  </div>
-  <div class="hero-content">
-    <p class="eyebrow reveal">Collection Jardin d'Hiver</p>
-    <h1 class="hero-title">
-      <span class="line"><span>La lumière</span></span>
-      <span class="line"><span><em>qui sent bon.</em></span></span>
+<!-- ===== HERO ===== -->
+<section class="hero" id="top" data-theme="dark">
+  <canvas class="aurora" id="aurora" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <a href="#fonctions" class="pill-badge intro" style="--i:0">
+      <span class="pill-dot"></span> Nouveau — Version 2.0 <span class="pill-arrow">→</span>
+    </a>
+    <h1 class="hero-title" data-split>
+      <span class="hl">Donnez vie</span>
+      <span class="hl">à vos <em>idées.</em></span>
     </h1>
-    <p class="hero-sub reveal">Bougies coulées à la main, en cire végétale et mèche en coton. 50 heures de douceur par pot.</p>
-    <div class="hero-ctas reveal">
-      <a href="#collections" class="btn btn--light">Découvrir la boutique</a>
-      <button class="btn btn--ghost-light" id="play-film">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5Z" fill="currentColor"/></svg>
-        Voir le film
-      </button>
+    <p class="hero-sub intro" style="--i:3">Un modèle de site pensé dans les moindres détails&nbsp;: animations fluides, sections modulables et design soigné. Remplacez les textes, c'est prêt.</p>
+    <div class="hero-ctas intro" style="--i:4">
+      <a href="#contact" class="btn btn--fg magnetic"><span>Commencer gratuitement</span></a>
+      <a href="#fonctions" class="btn btn--ghost magnetic"><span>Découvrir</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
     </div>
   </div>
-  <a href="#marquee" class="scroll-hint" aria-label="Faire défiler"><span></span></a>
-</section>
 
-<!-- ============ MARQUEE PARFUMS (style Ciao) ============ -->
-<section class="marquee" id="marquee" aria-label="Nos parfums">
-  <div class="marquee-row">
-    <div class="marquee-track">
-      <span>Rose &amp; Litchi</span><i>✦</i><span>Vanille Bourbon</span><i>✦</i><span>Figue Noire</span><i>✦</i><span>Fleur de Coton</span><i>✦</i><span>Ambre &amp; Santal</span><i>✦</i><span>Pêche Melba</span><i>✦</i>
-    </div>
-  </div>
-  <div class="marquee-row marquee-row--rev">
-    <div class="marquee-track">
-      <span>Cire végétale</span><i>●</i><span>Mèche en coton</span><i>●</i><span>Coulée à la main</span><i>●</i><span>Pot réutilisable</span><i>●</i><span>50 h de combustion</span><i>●</i><span>Sans paraffine</span><i>●</i>
+  <div class="trust intro" style="--i:5">
+    <p>Ils nous font confiance</p>
+    <div class="trust-row">
+      <div class="trust-track">
+        <span>NORDIK</span><span>◐ Vela</span><span>KAIRO</span><span>Lumo&nbsp;✦</span><span>ATLAS/</span><span>orbit°</span><span>FJORD</span><span>Maison&nbsp;Ito</span>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ============ COLLECTIONS AVEC ONGLETS ============ -->
-<section class="section collections" id="collections">
+<!-- ===== MANIFESTE (mots qui s'allument au scroll) ===== -->
+<section class="manifesto" data-theme="dark">
   <div class="container">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow reveal">La boutique</p>
-        <h2 class="h2 reveal">Choisis ton ambiance.</h2>
-      </div>
-      <a href="#collections" class="link-arrow reveal">Tout voir <span>→</span></a>
-    </div>
-
-    <div class="tabs reveal" role="tablist" aria-label="Catégories de bougies" id="product-tabs">
-      <span class="tab-pill" aria-hidden="true"></span>
-      <button role="tab" class="tab" aria-selected="true" data-tab="new">Nouveautés</button>
-      <button role="tab" class="tab" aria-selected="false" data-tab="best">Best-sellers</button>
-      <button role="tab" class="tab" aria-selected="false" data-tab="gourmand">Gourmands</button>
-      <button role="tab" class="tab" aria-selected="false" data-tab="floral">Floraux</button>
-      <button role="tab" class="tab" aria-selected="false" data-tab="boise">Boisés</button>
-      <button role="tab" class="tab" aria-selected="false" data-tab="frais">Frais</button>
-      <button role="tab" class="tab" aria-selected="false" data-tab="coffrets">Coffrets</button>
-      <button role="tab" class="tab" aria-selected="false" data-tab="limitee">Édition limitée</button>
-    </div>
-
-    <div class="products" id="products" role="tabpanel" aria-live="polite"></div>
+    <p class="eyebrow">Le manifeste</p>
+    <p class="manifesto-text" id="manifesto">Nous croyons qu'un site doit se ressentir avant de se lire. Chaque mouvement a une raison, chaque espace respire, chaque détail est pensé pour que vos visiteurs restent, explorent et reviennent. Simple en apparence, précis en profondeur.</p>
   </div>
 </section>
 
-<!-- ============ GRANDE PUB / CAMPAGNE ============ -->
-<section class="section section--tight">
+<!-- ===== BENTO FONCTIONS ===== -->
+<section class="section" id="fonctions" data-theme="light">
   <div class="container">
-    <a href="#collections" class="ad ad--wide reveal-scale" data-tab-link="coffrets" aria-label="Campagne coffrets cadeaux">
-      <div class="slot" data-slot data-img="assets/pub-campagne.jpg" data-video="assets/pub-campagne.mp4" data-label="Espace pub · 2400×1000 · assets/pub-campagne.jpg" style="--c1:#2a0f1c;--c2:#8d2c55;--c3:#e8799e"></div>
-      <div class="ad-content">
-        <p class="eyebrow eyebrow--light">Coffrets cadeaux</p>
-        <h2 class="h2 h2--light">Offre un moment,<br><em>pas juste un cadeau.</em></h2>
-        <span class="btn btn--light">Composer mon coffret</span>
-      </div>
-      <span class="ad-tag">Publicité</span>
-    </a>
+    <div class="head">
+      <p class="eyebrow reveal">Fonctions</p>
+      <h2 class="h2 reveal">Tout ce qu'il faut.<br><em>Rien de superflu.</em></h2>
+    </div>
+
+    <div class="bento">
+      <article class="tile tile--wide reveal tilt">
+        <div class="tile-art art-speed" aria-hidden="true">
+          <svg viewBox="0 0 200 120"><path class="speed-track" d="M20 110a80 80 0 0 1 160 0"/><path class="speed-fill" d="M20 110a80 80 0 0 1 160 0" pathLength="100"/></svg>
+          <div class="speed-num"><b data-count="99">0</b><small>/100</small></div>
+        </div>
+        <div class="tile-text"><h3>Ultra rapide</h3><p>Aucune dépendance lourde. Le site s'affiche en un éclair, même sur mobile.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile reveal tilt">
+        <div class="tile-art art-spring" aria-hidden="true"><span class="ball"></span><span class="ball-shadow"></span></div>
+        <div class="tile-text"><h3>Animations fluides</h3><p>Des mouvements à ressort, naturels et interruptibles.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile reveal tilt">
+        <div class="tile-art art-device" aria-hidden="true"><span class="device"><i></i><i></i><i></i></span></div>
+        <div class="tile-text"><h3>Responsive</h3><p>Parfait du téléphone au grand écran.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile reveal tilt">
+        <div class="tile-art art-shield" aria-hidden="true">
+          <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+          <svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="tile-text"><h3>Accessible</h3><p>Navigation au clavier et mouvements réduits respectés.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile reveal tilt">
+        <div class="tile-art art-theme" aria-hidden="true">
+          <div class="mini-ui"><span class="mu-bar"></span><span class="mu-line"></span><span class="mu-line short"></span><span class="mu-btn"></span></div>
+        </div>
+        <div class="tile-text"><h3>Personnalisable</h3><p>Couleurs, polices et textes se changent en un instant.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile tile--wide reveal tilt">
+        <div class="tile-art art-chart" aria-hidden="true">
+          <div class="bars"><span style="--h:38%"></span><span style="--h:55%"></span><span style="--h:46%"></span><span style="--h:70%"></span><span style="--h:62%"></span><span style="--h:84%"></span><span style="--h:76%"></span><span style="--h:96%"></span></div>
+          <div class="chart-badge">+<b data-count="248">0</b>&nbsp;%</div>
+        </div>
+        <div class="tile-text"><h3>Pensé pour convertir</h3><p>Une hiérarchie claire qui guide chaque visiteur jusqu'à l'action.</p></div>
+        <span class="glare"></span>
+      </article>
+    </div>
   </div>
 </section>
 
-<!-- ============ HISTOIRE : SCROLL COLLANT (style Apple) ============ -->
-<section class="story" id="histoire">
-  <div class="story-sticky">
-    <div class="container story-grid">
-      <div class="story-text">
-        <p class="eyebrow">Notre histoire</p>
-        <h2 class="h2">De la cire à la flamme,<br><em>tout est fait main.</em></h2>
-        <ol class="story-steps" id="story-steps">
-          <li class="is-active"><span class="step-num">01</span><div><h3>Cire végétale</h3><p>Une cire de soja et de colza, sans paraffine, pour une combustion lente et propre.</p></div></li>
-          <li><span class="step-num">02</span><div><h3>Mèche en coton</h3><p>Tressée sans plomb, elle garde une flamme calme qui ne fume pas.</p></div></li>
-          <li><span class="step-num">03</span><div><h3>Parfums choisis</h3><p>Des compositions de parfumeurs, dosées pour diffuser sans entêter.</p></div></li>
-          <li><span class="step-num">04</span><div><h3>Coulée à la main</h3><p>Chaque pot est coulé, étiqueté et emballé à la main, en petites séries.</p></div></li>
-        </ol>
-        <div class="story-progress"><span id="story-bar"></span></div>
+<!-- ===== MARQUEE ===== -->
+<section class="marquee" data-theme="light" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Créer</span><i>✦</i><span class="outline">Animer</span><i>✦</i><span>Séduire</span><i>✦</i><span class="outline">Convertir</span><i>✦</i><span>Grandir</span><i>✦</i>
+    <span>Créer</span><i>✦</i><span class="outline">Animer</span><i>✦</i><span>Séduire</span><i>✦</i><span class="outline">Convertir</span><i>✦</i><span>Grandir</span><i>✦</i>
+  </div>
+</section>
+
+<!-- ===== MÉTHODE : scroll horizontal ===== -->
+<section class="hscroll" id="etapes" data-theme="coral">
+  <div class="hscroll-sticky">
+    <div class="container hscroll-head">
+      <p class="eyebrow">La méthode</p>
+      <h2 class="h2">Quatre étapes,<br><em>zéro prise de tête.</em></h2>
+    </div>
+    <div class="hscroll-track" id="htrack">
+      <article class="step"><span class="step-n">01</span><div class="shape shape--circle"></div><h3>Imaginer</h3><p>On pose vos objectifs, votre ton et ce qui vous rend unique.</p></article>
+      <article class="step"><span class="step-n">02</span><div class="shape shape--squircle"></div><h3>Composer</h3><p>On assemble les sections comme des briques, dans l'ordre qui raconte votre histoire.</p></article>
+      <article class="step"><span class="step-n">03</span><div class="shape shape--tri"></div><h3>Animer</h3><p>On ajoute le mouvement là où il aide à comprendre, jamais pour décorer.</p></article>
+      <article class="step"><span class="step-n">04</span><div class="shape shape--star"></div><h3>Lancer</h3><p>On publie, on mesure, on améliore. Votre site vit et grandit avec vous.</p></article>
+      <div class="step-end"><a href="#contact" class="btn btn--fg magnetic"><span>Démarrer mon projet</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== USAGES : onglets ===== -->
+<section class="section" id="usages" data-theme="light">
+  <div class="container">
+    <div class="head head--center">
+      <p class="eyebrow reveal">Usages</p>
+      <h2 class="h2 reveal">Un modèle,<br><em>mille possibilités.</em></h2>
+    </div>
+
+    <div class="tabs reveal" role="tablist" aria-label="Usages" id="tabs">
+      <span class="tabs-pill" aria-hidden="true"></span>
+      <button class="tab" role="tab" aria-selected="true" aria-controls="tab-panel" data-tab="0">Créateurs</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-panel" data-tab="1">Équipes</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-panel" data-tab="2">Entreprises</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-panel" data-tab="3">Événements</button>
+    </div>
+
+    <div class="panel reveal" id="tab-panel" role="tabpanel">
+      <div class="panel-text" id="panel-text">
+        <h3 id="panel-title"></h3>
+        <p id="panel-desc"></p>
+        <ul id="panel-list"></ul>
+        <a href="#contact" class="link-arrow">En savoir plus <span>→</span></a>
       </div>
-      <div class="story-media">
-        <div class="story-frame">
-          <div class="slot story-slide is-active" data-slot data-img="assets/histoire-1.jpg" data-label="Photo étape 1 · 1200×1500" style="--c1:#fbe3d6;--c2:#e8a77e"></div>
-          <div class="slot story-slide" data-slot data-img="assets/histoire-2.jpg" data-label="Photo étape 2 · 1200×1500" style="--c1:#f4e9dc;--c2:#b98f6a"></div>
-          <div class="slot story-slide" data-slot data-img="assets/histoire-3.jpg" data-label="Photo étape 3 · 1200×1500" style="--c1:#f8d3e0;--c2:#c94e79"></div>
-          <div class="slot story-slide" data-slot data-video="assets/histoire-4.mp4" data-img="assets/histoire-4.jpg" data-label="Vidéo étape 4 · 1200×1500" style="--c1:#e9d9f2;--c2:#7b4b94"></div>
+      <div class="panel-art" id="panel-art" aria-hidden="true">
+        <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+        <div class="panel-glass">
+          <span class="pg-dot"></span><span class="pg-dot"></span><span class="pg-dot"></span>
+          <span class="pg-line w80"></span><span class="pg-line w60"></span><span class="pg-line w70"></span>
+          <span class="pg-big" id="panel-big">01</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ CHIFFRES ============ -->
-<section class="section stats">
-  <div class="container stats-grid">
-    <div class="stat reveal"><strong data-count="50">0</strong><span>heures de combustion</span></div>
-    <div class="stat reveal"><strong data-count="100" data-suffix=" %">0</strong><span>cire végétale</span></div>
-    <div class="stat reveal"><strong data-count="24">0</strong><span>parfums à découvrir</span></div>
-    <div class="stat reveal"><strong data-count="4.9" data-decimals="1" data-suffix="/5">0</strong><span>note de nos clients</span></div>
-  </div>
-</section>
-
-<!-- ============ TROUVER MON PARFUM (onglets + couleur qui change, style Ciao) ============ -->
-<section class="section finder" id="parfums" data-mood="cocon">
+<!-- ===== CHIFFRES ===== -->
+<section class="section stats" data-theme="lime">
   <div class="container">
-    <div class="section-head section-head--center">
-      <p class="eyebrow reveal">Trouver mon parfum</p>
-      <h2 class="h2 reveal">Tu te sens plutôt…</h2>
-    </div>
-    <div class="moods reveal" role="tablist" aria-label="Humeurs" id="moods">
-      <button role="tab" class="mood" aria-selected="true" data-mood="cocon">☁️ Cocooning</button>
-      <button role="tab" class="mood" aria-selected="false" data-mood="gourmand">🍑 Gourmand</button>
-      <button role="tab" class="mood" aria-selected="false" data-mood="floral">🌸 Romantique</button>
-      <button role="tab" class="mood" aria-selected="false" data-mood="frais">🌿 Frais</button>
-    </div>
-    <div class="finder-card" id="finder-card">
-      <div class="finder-visual">
-        <div class="finder-blob"></div>
-        <div class="finder-candle" id="finder-candle"></div>
-      </div>
-      <div class="finder-info">
-        <p class="finder-kicker" id="finder-kicker">Ton parfum</p>
-        <h3 class="finder-name" id="finder-name">Fleur de Coton</h3>
-        <p class="finder-desc" id="finder-desc"></p>
-        <ul class="notes" id="finder-notes"></ul>
-        <div class="finder-actions">
-          <span class="finder-price" id="finder-price"></span>
-          <button class="btn btn--dark" id="finder-add">Ajouter au panier</button>
-        </div>
-      </div>
+    <h2 class="h2 stats-title reveal">Des résultats<br><em>qui parlent.</em></h2>
+    <div class="stats-grid">
+      <div class="stat reveal"><b data-count="12" data-suffix="k+">0</b><span>sites lancés</span></div>
+      <div class="stat reveal"><b data-count="98" data-suffix=" %">0</b><span>de clients satisfaits</span></div>
+      <div class="stat reveal"><b data-count="3.2" data-decimals="1" data-suffix="×">0</b><span>plus de conversions</span></div>
+      <div class="stat reveal"><b data-count="24" data-suffix="/7">0</b><span>support réactif</span></div>
     </div>
   </div>
 </section>
 
-<!-- ============ VIDÉOS / REELS (carrousel glissable) ============ -->
-<section class="section reels" id="videos">
+<!-- ===== TÉMOIGNAGES ===== -->
+<section class="section quotes" data-theme="light">
   <div class="container">
-    <div class="section-head">
+    <div class="head head--row">
       <div>
-        <p class="eyebrow reveal">En vidéo</p>
-        <h2 class="h2 reveal">Les moments Yumiya.</h2>
+        <p class="eyebrow reveal">Témoignages</p>
+        <h2 class="h2 reveal">Ils en parlent<br><em>mieux que nous.</em></h2>
       </div>
-      <div class="carousel-btns reveal">
-        <button class="round-btn" data-carousel-prev="reels-track" aria-label="Précédent">←</button>
-        <button class="round-btn" data-carousel-next="reels-track" aria-label="Suivant">→</button>
+      <div class="arrows reveal">
+        <button class="round" data-prev aria-label="Précédent">←</button>
+        <button class="round" data-next aria-label="Suivant">→</button>
       </div>
     </div>
   </div>
-  <div class="carousel" id="reels-track">
-    <article class="reel"><div class="slot" data-slot data-video="assets/video-1.mp4" data-label="Vidéo 9:16 · assets/video-1.mp4" style="--c1:#f9d8e2;--c2:#c94e79"></div><div class="reel-cap"><span>Rituel du soir</span><small>0:32</small></div></article>
-    <article class="reel"><div class="slot" data-slot data-video="assets/video-2.mp4" data-label="Vidéo 9:16 · assets/video-2.mp4" style="--c1:#fbe3d6;--c2:#d0835a"></div><div class="reel-cap"><span>Dans l'atelier</span><small>0:45</small></div></article>
-    <article class="reel"><div class="slot" data-slot data-video="assets/video-3.mp4" data-label="Vidéo 9:16 · assets/video-3.mp4" style="--c1:#e9d9f2;--c2:#7b4b94"></div><div class="reel-cap"><span>Unboxing coffret</span><small>0:28</small></div></article>
-    <article class="reel"><div class="slot" data-slot data-video="assets/video-4.mp4" data-label="Vidéo 9:16 · assets/video-4.mp4" style="--c1:#dcefe4;--c2:#3f8a68"></div><div class="reel-cap"><span>Brunch parfumé</span><small>0:19</small></div></article>
-    <article class="reel"><div class="slot" data-slot data-video="assets/video-5.mp4" data-label="Vidéo 9:16 · assets/video-5.mp4" style="--c1:#f4e9dc;--c2:#a0764f"></div><div class="reel-cap"><span>Coulage de la cire</span><small>0:51</small></div></article>
-    <article class="reel"><div class="slot" data-slot data-video="assets/video-6.mp4" data-label="Vidéo 9:16 · assets/video-6.mp4" style="--c1:#ffe1e1;--c2:#d94f5c"></div><div class="reel-cap"><span>Idées déco</span><small>0:37</small></div></article>
+  <div class="carousel" id="carousel">
+    <blockquote class="quote" style="--q:#5b3df5"><p>« Texte d'exemple : le site a changé la façon dont nos clients nous perçoivent. Tout est plus clair, plus vivant. »</p><footer><span class="av">A</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+    <blockquote class="quote" style="--q:#ff5b3a"><p>« Texte d'exemple : on a lancé en une semaine. Les animations font vraiment la différence sur mobile. »</p><footer><span class="av">B</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+    <blockquote class="quote" style="--q:#1aa37a"><p>« Texte d'exemple : chaque section se modifie facilement. Notre équipe s'en occupe sans développeur. »</p><footer><span class="av">C</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+    <blockquote class="quote" style="--q:#e2a400"><p>« Texte d'exemple : le souci du détail se voit partout, jusqu'au moindre bouton. »</p><footer><span class="av">D</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+    <blockquote class="quote" style="--q:#0ea5e9"><p>« Texte d'exemple : nos visiteurs restent deux fois plus longtemps qu'avant. »</p><footer><span class="av">E</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
   </div>
 </section>
 
-<!-- ============ DOUBLE PUB ============ -->
-<section class="section section--tight">
-  <div class="container ad-duo">
-    <a href="#jeux" class="ad ad--half reveal">
-      <div class="slot" data-slot data-img="assets/pub-gauche.jpg" data-label="Espace pub · 1200×1200 · assets/pub-gauche.jpg" style="--c1:#fff1c9;--c2:#f2a541"></div>
-      <div class="ad-content ad-content--dark">
-        <p class="eyebrow">Offre du moment</p>
-        <h3 class="h3">2 bougies achetées,<br>le fondant offert.</h3>
-        <span class="link-arrow">J'en profite <span>→</span></span>
-      </div>
-      <span class="ad-tag">Publicité</span>
-    </a>
-    <a href="#collections" class="ad ad--half reveal" data-tab-link="limitee">
-      <div class="slot" data-slot data-img="assets/pub-droite.jpg" data-label="Espace pub · 1200×1200 · assets/pub-droite.jpg" style="--c1:#d9e7ff;--c2:#4a6fd1"></div>
-      <div class="ad-content ad-content--dark">
-        <p class="eyebrow">Partenariat</p>
-        <h3 class="h3">Ton logo ou ta marque<br>peut s'afficher ici.</h3>
-        <span class="link-arrow">Nous contacter <span>→</span></span>
-      </div>
-      <span class="ad-tag">Publicité</span>
-    </a>
-  </div>
-</section>
-
-<!-- ============ JEUX ============ -->
-<section class="section games" id="jeux">
-  <div class="container games-grid">
-    <div class="games-text">
-      <p class="eyebrow eyebrow--light reveal">Jeux Yumiya</p>
-      <h2 class="h2 h2--light reveal">Joue, gagne,<br><em>allume.</em></h2>
-      <p class="lead lead--light reveal">Fais courir notre petit dino jusqu'à la bougie sans toucher un cactus. Si tu y arrives, tu débloques un code de <strong>−10 %</strong>.</p>
-      <div class="games-ctas reveal">
-        <a href="../index.html" class="btn btn--light">Jouer au Dino Run</a>
-        <span class="code-chip" aria-label="Code à débloquer">YUMIYA<span>••</span></span>
-      </div>
-    </div>
-    <div class="game-card reveal-scale" aria-hidden="true">
-      <div class="game-sky">
-        <span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span>
-      </div>
-      <div class="game-dino">
-        <svg viewBox="0 0 60 60"><path d="M20 14h22a6 6 0 0 1 6 6v6h-8v4h10v4H34v10l-6 6v6h-5v-6l-4 4v6h-5V44l-6-8V26h6v6l4 4V20a6 6 0 0 1 6-6Z" fill="#fff"/><circle cx="38" cy="20" r="2" fill="#5a1a33"/></svg>
-      </div>
-      <div class="game-cactus"><svg viewBox="0 0 20 40"><path d="M8 0h4v40H8zM2 12h3v10h3v3H2zM15 8h3v12h-6v-3h3z" fill="#fff" opacity=".85"/></svg></div>
-      <div class="game-goal">🕯️</div>
-      <div class="game-ground"></div>
-      <p class="game-score">Score <b id="fake-score">0</b></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ GALERIE PHOTO (mosaïque) ============ -->
-<section class="section gallery" id="journal">
+<!-- ===== TARIFS ===== -->
+<section class="section pricing" id="tarifs" data-theme="dark">
   <div class="container">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow reveal">@yumiyacandle</p>
-        <h2 class="h2 reveal">Chez vous, avec nous.</h2>
+    <div class="head head--center">
+      <p class="eyebrow reveal">Tarifs</p>
+      <h2 class="h2 reveal">Simple et <em>transparent.</em></h2>
+      <div class="billing reveal" role="group" aria-label="Période de facturation">
+        <button class="bill" aria-pressed="true" data-bill="m">Mensuel</button>
+        <button class="bill" aria-pressed="false" data-bill="y">Annuel <span class="save">−20 %</span></button>
+        <span class="bill-thumb" aria-hidden="true"></span>
       </div>
-      <a href="#journal" class="link-arrow reveal">Suivre sur Instagram <span>→</span></a>
     </div>
-    <div class="mosaic">
-      <figure class="m m--tall reveal"><div class="slot" data-slot data-img="assets/galerie-1.jpg" data-label="Photo · 800×1200" style="--c1:#f9d8e2;--c2:#c94e79"></div></figure>
-      <figure class="m reveal"><div class="slot" data-slot data-img="assets/galerie-2.jpg" data-label="Photo · 800×800" style="--c1:#fbe3d6;--c2:#d0835a"></div></figure>
-      <figure class="m m--wide reveal"><div class="slot" data-slot data-img="assets/galerie-3.jpg" data-label="Photo · 1600×800" style="--c1:#f4e9dc;--c2:#a0764f"></div></figure>
-      <figure class="m reveal"><div class="slot" data-slot data-img="assets/galerie-4.jpg" data-label="Photo · 800×800" style="--c1:#e9d9f2;--c2:#7b4b94"></div></figure>
-      <figure class="m m--tall reveal"><div class="slot" data-slot data-img="assets/galerie-5.jpg" data-label="Photo · 800×1200" style="--c1:#dcefe4;--c2:#3f8a68"></div></figure>
-      <figure class="m reveal"><div class="slot" data-slot data-img="assets/galerie-6.jpg" data-label="Photo · 800×800" style="--c1:#ffe1e1;--c2:#d94f5c"></div></figure>
-      <figure class="m reveal"><div class="slot" data-slot data-img="assets/galerie-7.jpg" data-label="Photo · 800×800" style="--c1:#fff1c9;--c2:#e0a03a"></div></figure>
+    <div class="plans">
+      <article class="plan reveal">
+        <h3>Essentiel</h3><p class="plan-desc">Pour démarrer en beauté.</p>
+        <p class="price"><b data-m="0" data-y="0">0</b><span>€ / mois</span></p>
+        <ul><li>1 page</li><li>Sections de base</li><li>Hébergement inclus</li></ul>
+        <a href="#contact" class="btn btn--line btn--block">Choisir</a>
+      </article>
+      <article class="plan plan--hot reveal">
+        <span class="plan-tag">Populaire</span>
+        <h3>Pro</h3><p class="plan-desc">Le meilleur équilibre.</p>
+        <p class="price"><b data-m="29" data-y="23">29</b><span>€ / mois</span></p>
+        <ul><li>Pages illimitées</li><li>Toutes les animations</li><li>Nom de domaine</li><li>Statistiques</li></ul>
+        <a href="#contact" class="btn btn--fg btn--block magnetic"><span>Choisir Pro</span></a>
+      </article>
+      <article class="plan reveal">
+        <h3>Studio</h3><p class="plan-desc">Pour les équipes exigeantes.</p>
+        <p class="price"><b data-m="79" data-y="63">79</b><span>€ / mois</span></p>
+        <ul><li>Tout le plan Pro</li><li>5 membres</li><li>Support prioritaire</li></ul>
+        <a href="#contact" class="btn btn--line btn--block">Choisir</a>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- ============ AVIS ============ -->
-<section class="section reviews">
-  <div class="container">
-    <div class="section-head section-head--center">
-      <p class="eyebrow reveal">Ils nous ont adoptés</p>
-      <h2 class="h2 reveal">4,9 sur 5, <em>et des bougies qui fondent de plaisir.</em></h2>
-    </div>
-  </div>
-  <div class="carousel carousel--reviews" id="reviews-track">
-    <blockquote class="review"><div class="stars" aria-label="5 étoiles">★★★★★</div><p>« Rose &amp; Litchi embaume tout le salon sans être entêtante. Déjà ma troisième. »</p><footer><span class="avatar" style="--a:#e8799e">C</span>Camille · Lausanne</footer></blockquote>
-    <blockquote class="review"><div class="stars" aria-label="5 étoiles">★★★★★</div><p>« Le coffret est sublime, ma mère a adoré. Emballage soigné jusqu'au ruban. »</p><footer><span class="avatar" style="--a:#d0835a">T</span>Thomas · Genève</footer></blockquote>
-    <blockquote class="review"><div class="stars" aria-label="5 étoiles">★★★★★</div><p>« Une vraie flamme calme, aucun noir sur le pot. On sent la qualité de la cire. »</p><footer><span class="avatar" style="--a:#7b4b94">L</span>Léa · Fribourg</footer></blockquote>
-    <blockquote class="review"><div class="stars" aria-label="4 étoiles">★★★★☆</div><p>« J'ai gagné mon code au Dino Run après 6 essais. La Vanille Bourbon est parfaite. »</p><footer><span class="avatar" style="--a:#3f8a68">N</span>Noah · Neuchâtel</footer></blockquote>
-    <blockquote class="review"><div class="stars" aria-label="5 étoiles">★★★★★</div><p>« Je réutilise les pots pour mes plantes. Joli, durable, et ça sent divinement bon. »</p><footer><span class="avatar" style="--a:#c94e79">S</span>Sofia · Sion</footer></blockquote>
-  </div>
-</section>
-
-<!-- ============ FAQ (accordéon) ============ -->
-<section class="section faq" id="faq">
+<!-- ===== FAQ ===== -->
+<section class="section faq" id="faq" data-theme="light">
   <div class="container faq-grid">
-    <div>
-      <p class="eyebrow reveal">Questions fréquentes</p>
-      <h2 class="h2 reveal">Tout savoir<br><em>avant d'allumer.</em></h2>
+    <div class="faq-head">
+      <p class="eyebrow reveal">FAQ</p>
+      <h2 class="h2 reveal">Questions<br><em>fréquentes.</em></h2>
+      <p class="muted reveal">Une autre question&nbsp;? <a href="#contact" class="underline">Écrivez-nous</a>.</p>
     </div>
-    <div class="accordion" id="accordion">
-      <details class="acc reveal"><summary>Combien de temps dure une bougie ?<span class="acc-icon"></span></summary><div class="acc-body"><p>Environ 50 heures pour le pot de 180 g et 80 heures pour le 300 g, si tu coupes la mèche à 5 mm avant chaque utilisation.</p></div></details>
-      <details class="acc reveal"><summary>Quels sont les délais de livraison ?<span class="acc-icon"></span></summary><div class="acc-body"><p>Les commandes partent sous 48 h ouvrées. Comptez 2 à 4 jours de livraison. La livraison est offerte dès 60 CHF.</p></div></details>
-      <details class="acc reveal"><summary>Comment utiliser mon code de réduction ?<span class="acc-icon"></span></summary><div class="acc-body"><p>Saisis ton code dans le panier, au moment du paiement. Un seul code par commande.</p></div></details>
-      <details class="acc reveal"><summary>Que faire du pot une fois la bougie finie ?<span class="acc-icon"></span></summary><div class="acc-body"><p>Passe-le sous l'eau chaude pour retirer la cire restante : il devient un verre, un pot à crayons ou un cache-pot.</p></div></details>
-      <details class="acc reveal"><summary>Puis-je retourner un produit ?<span class="acc-icon"></span></summary><div class="acc-body"><p>Oui, tu as 30 jours pour retourner un produit non allumé dans son emballage d'origine.</p></div></details>
+    <div class="accordion">
+      <details class="acc reveal"><summary>Puis-je changer les couleurs&nbsp;?<i></i></summary><div class="acc-body"><p>Oui. Toutes les couleurs sont regroupées en haut du fichier styles.css&nbsp;: changez-les une fois, elles s'appliquent partout.</p></div></details>
+      <details class="acc reveal"><summary>Le site fonctionne-t-il sur mobile&nbsp;?<i></i></summary><div class="acc-body"><p>Chaque section a été pensée d'abord pour le téléphone, puis adaptée à la tablette et à l'ordinateur.</p></div></details>
+      <details class="acc reveal"><summary>Puis-je ajouter mes photos plus tard&nbsp;?<i></i></summary><div class="acc-body"><p>Bien sûr. Les visuels actuels sont dessinés en code et peuvent être remplacés par vos images ou vidéos à tout moment.</p></div></details>
+      <details class="acc reveal"><summary>Les animations ralentissent-elles le site&nbsp;?<i></i></summary><div class="acc-body"><p>Non. Elles n'utilisent que des propriétés légères pour le navigateur et se mettent en pause quand elles ne sont pas visibles.</p></div></details>
+      <details class="acc reveal"><summary>Et pour les personnes sensibles au mouvement&nbsp;?<i></i></summary><div class="acc-body"><p>Si l'appareil demande de réduire les animations, le site passe automatiquement en mode calme.</p></div></details>
     </div>
   </div>
 </section>
 
-<!-- ============ NEWSLETTER ============ -->
-<section class="section newsletter">
+<!-- ===== CTA ===== -->
+<section class="section cta" id="contact" data-theme="violet">
   <div class="container">
-    <div class="news-card reveal-scale">
-      <div class="news-glow"></div>
-      <p class="eyebrow eyebrow--light">Le Club Yumiya</p>
-      <h2 class="h2 h2--light">Les nouveautés avant tout le monde.</h2>
-      <p class="lead lead--light">Inscris-toi et reçois −10 % sur ta première commande, plus nos éditions limitées en avant-première.</p>
-      <form class="news-form" id="news-form" novalidate>
-        <label class="sr-only" for="news-email">Adresse e-mail</label>
-        <input type="email" id="news-email" placeholder="ton@email.ch" required autocomplete="email">
-        <button class="btn btn--light" type="submit">S'inscrire</button>
+    <div class="cta-card">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <p class="eyebrow">Contact</p>
+      <h2 class="cta-title">Prêt à <em>briller&nbsp;?</em></h2>
+      <p class="cta-sub">Laissez votre e-mail, on vous recontacte sous 24&nbsp;h.</p>
+      <form class="cta-form" id="cta-form" novalidate>
+        <label class="sr-only" for="cta-email">Adresse e-mail</label>
+        <input type="email" id="cta-email" placeholder="vous@exemple.com" autocomplete="email" required>
+        <button class="btn btn--fg magnetic" type="submit"><span>Envoyer</span></button>
       </form>
-      <p class="news-msg" id="news-msg" role="status"></p>
+      <p class="cta-msg" id="cta-msg" role="status"></p>
     </div>
   </div>
 </section>
 
 </main>
 
-<!-- ============ FOOTER ============ -->
-<footer class="footer">
+<!-- ===== FOOTER ===== -->
+<footer class="footer" data-theme="dark">
   <div class="container">
-    <div class="footer-top">
-      <a href="#top" class="logo logo--big" aria-label="Retour en haut">
-        <svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 2c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10Z" fill="currentColor"/><rect x="6" y="18" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
-        <span>Yumiya</span>
-      </a>
-      <p class="footer-claim">Bougies coulées à la main,<br><em>pour les soirées qui comptent.</em></p>
-    </div>
     <div class="footer-cols">
-      <details class="fcol" open><summary>Boutique</summary><ul><li><a href="#collections">Nouveautés</a></li><li><a href="#collections">Best-sellers</a></li><li><a href="#collections">Coffrets</a></li><li><a href="#collections">Édition limitée</a></li></ul></details>
-      <details class="fcol" open><summary>Yumiya</summary><ul><li><a href="#histoire">Notre histoire</a></li><li><a href="#journal">Journal</a></li><li><a href="#jeux">Jeux</a></li><li><a href="#parfums">Trouver mon parfum</a></li></ul></details>
-      <details class="fcol" open><summary>Aide</summary><ul><li><a href="#faq">FAQ</a></li><li><a href="#faq">Livraison</a></li><li><a href="#faq">Retours</a></li><li><a href="mailto:contact@yumiyacandle.com">Contact</a></li></ul></details>
-      <details class="fcol" open><summary>Suivre</summary><ul><li><a href="#journal">Instagram</a></li><li><a href="#journal">TikTok</a></li><li><a href="#journal">Pinterest</a></li></ul></details>
+      <div><p class="f-title">Produit</p><a href="#fonctions">Fonctions</a><a href="#tarifs">Tarifs</a><a href="#usages">Usages</a></div>
+      <div><p class="f-title">Ressources</p><a href="#faq">FAQ</a><a href="#etapes">Méthode</a><a href="#contact">Contact</a></div>
+      <div><p class="f-title">Réseaux</p><a href="#top">Instagram</a><a href="#top">LinkedIn</a><a href="#top">TikTok</a></div>
+      <div class="f-news"><p class="f-title">Restez informé</p><p class="muted">Une lettre par mois, jamais plus.</p></div>
     </div>
+    <div class="wordmark" id="wordmark" aria-hidden="true"><span>A</span><span>u</span><span>r</span><span>a</span></div>
     <div class="footer-bottom">
-      <p>© <span id="year"></span> Yumiya Candle. Tous droits réservés.</p>
-      <p><a href="#top">Mentions légales</a> · <a href="#top">CGV</a> · <a href="#top">Confidentialité</a></p>
+      <p>© <span id="year"></span> Aura. Modèle de démonstration.</p>
+      <p><a href="#top">Mentions légales</a> · <a href="#top">Confidentialité</a> · <button class="to-top" id="to-top">Haut de page ↑</button></p>
     </div>
   </div>
 </footer>
-
-<!-- ============ PANIER (tiroir) ============ -->
-<div class="scrim" id="scrim" hidden></div>
-<aside class="drawer" id="drawer" aria-label="Panier" aria-hidden="true">
-  <div class="drawer-head">
-    <h2>Ton panier</h2>
-    <button class="icon-btn" id="drawer-close" aria-label="Fermer le panier"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-  </div>
-  <div class="ship">
-    <p id="ship-text">Plus que 60 CHF pour la livraison offerte</p>
-    <div class="ship-bar"><span id="ship-bar"></span></div>
-  </div>
-  <ul class="drawer-items" id="drawer-items"></ul>
-  <div class="drawer-foot">
-    <div class="drawer-total"><span>Sous-total</span><strong id="drawer-total">0.00 CHF</strong></div>
-    <button class="btn btn--dark btn--block">Passer commande</button>
-    <p class="drawer-note">Codes de réduction à saisir à l'étape suivante.</p>
-  </div>
-</aside>
-
-<!-- ============ FILM (modale vidéo) ============ -->
-<div class="film" id="film" hidden role="dialog" aria-modal="true" aria-label="Film de marque">
-  <button class="film-close" id="film-close" aria-label="Fermer la vidéo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-  <div class="film-frame">
-    <div class="slot" data-slot data-video="assets/film.mp4" data-controls data-label="Film de marque · 1920×1080 · assets/film.mp4" style="--c1:#2a0f1c;--c2:#c94e79"></div>
-  </div>
-</div>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="app.js"></script>
 </body>
