@@ -15,100 +15,61 @@
 <main id="main">
 <section class="hero" data-theme="plum">
   <canvas class="aurora" aria-hidden="true"></canvas><div class="grain" aria-hidden="true"></div>
-  <div class="container hero-grid">
-    <div>
-      <a href="nouveautes.html" class="pill-badge intro" style="--i:0"><span class="pill-dot"></span>Bientôt : les bonshommes pain d’épices <span aria-hidden="true">→</span></a>
-      <h1 class="h1 hero-title" data-split><span class="hl">La lumière,</span><span class="hl"><em>faite main.</em></span></h1>
-      <p class="lead hero-sub intro" style="--i:3">Des bougies gourmandes et florales, coulées et décorées une à une à La Neuveville, en cire de soja 100&nbsp;% végétale.</p>
-      <div class="row intro" style="--i:4">
-        <a class="btn btn--fg magnetic" href="boutique.html"><span>Découvrir la boutique</span></a>
-        <a class="btn btn--ghost magnetic" href="creer.html"><span>Créer la vôtre</span></a>
-      </div>
+  <img class="hero-side l intro" style="--i:5" src="img/cut-aut.webp" alt="" aria-hidden="true">
+  <img class="hero-side r intro" style="--i:6" src="img/tulip-hq-rose.webp" alt="" aria-hidden="true">
+  <div class="container hero-center">
+    <a href="nouveautes.html" class="pill-badge intro" style="--i:0"><span class="pill-dot"></span>Bientôt : les bonshommes pain d’épices <span aria-hidden="true">→</span></a>
+    <h1 class="h1 hero-title" data-split>La lumière, <em>faite main.</em></h1>
+    <p class="lead intro" style="--i:3">Bougies gourmandes et florales, coulées et décorées une à une à La Neuveville, en cire de soja 100&nbsp;% végétale.</p>
+    <div class="row intro" style="--i:4;justify-content:center">
+      <a class="btn btn--fg magnetic" href="boutique.html"><span>Découvrir la boutique</span></a>
+      <a class="btn btn--ghost magnetic" href="creer.html"><span>Créer la vôtre</span></a>
     </div>
-    <div class="hero-stage intro" style="--i:2" aria-hidden="true">
-      <div class="hero-halo"></div>
-      <img class="hs-left" src="img/cut-aut.webp" alt="">
-      <img class="hs-right" src="img/cut-marsh.webp" alt="">
-      <img class="hs-main" src="img/cut-lav.webp" alt="">
-      <img class="hs-tulip" src="img/cut-tulip.webp" alt="">
+    <div class="hero-candle intro" style="--i:2"><img src="img/cut-lav.webp" alt="Bougie gourmande Lavande Yumiya"></div>
+  </div>
+</section>
+
+<section class="show" id="vitrine" data-theme="lav" aria-label="Nos quatre bougies">
+  <div class="show-sticky">
+    <div class="show-bg"></div>
+    <div class="show-names" aria-hidden="true"><span class="show-name">Lavande</span><span class="show-name">Automne</span><span class="show-name">Tulipe</span><span class="show-name">Coffret</span></div>
+    <div class="show-bits" aria-hidden="true"></div>
+    <div class="show-head"><p class="eyebrow">La collection · faites défiler</p></div>
+    <div class="show-stage">
+      <div class="show-candle"><img src="img/cut-lav.webp" alt="Bougie gourmande Lavande"></div>
+      <div class="show-candle"><img src="img/cut-aut.webp" alt="Bougie gourmande Automne"></div>
+      <div class="show-candle"><img src="img/tulip-hq-rose.webp" alt="Bougie Tulipe"></div>
+      <div class="show-candle"><img src="img/cut-box2.webp" alt="Coffret cadeau Yumiya"></div>
     </div>
+    <div class="show-info">
+      <div><p class="num">N° 01 · Bougie gourmande</p><h3>Lavande</h3><p>Florale & apaisante. Nuances de violet et de crème, chantilly travaillée à la main, petits cœurs et chocolat violet.</p><div class="row"><span class="price">10.90 CHF</span><a class="btn btn--fg btn--sm" href="produit.html?p=lav"><span>Découvrir</span></a><button class="btn btn--ghost btn--sm" data-add="lav"><span>Ajouter</span></button></div></div>
+      <div><p class="num">N° 02 · Édition d’automne</p><h3>Automne</h3><p>Chaleureuse & gourmande. De douces notes de pomme, des couches orange et crème, chantilly et décorations faites main.</p><div class="row"><span class="price">10.90 CHF</span><a class="btn btn--fg btn--sm" href="produit.html?p=aut"><span>Découvrir</span></a><button class="btn btn--ghost btn--sm" data-add="aut"><span>Ajouter</span></button></div></div>
+      <div><p class="num">N° 03 · Bougie florale</p><h3>Tulipe</h3><p>Florale & délicate. Un bouquet de tulipes en cire sur un socle vert mousse, parfum vanille-fraise. Quatre coloris.</p><div class="row"><span class="price">6.30 CHF</span><a class="btn btn--fg btn--sm" href="produit.html?p=tulip"><span>Choisir le coloris</span></a></div></div>
+      <div><p class="num">N° 04 · Prêt à offrir</p><h3>Coffret</h3><p>Une gourmande marshmallow-framboise et une tulipe vanille-fraise, dans une boîte pastel nouée d’un ruban.</p><div class="row"><span class="price">13.30 CHF</span><a class="btn btn--fg btn--sm" href="produit.html?p=box"><span>Découvrir</span></a><button class="btn btn--ghost btn--sm" data-add="box"><span>Ajouter</span></button></div></div>
+    </div>
+    <nav class="show-nav" aria-label="Choisir une bougie">
+      <button aria-current="true"><span>01 Lavande</span><i></i></button>
+      <button aria-current="false"><span>02 Automne</span><i></i></button>
+      <button aria-current="false"><span>03 Tulipe</span><i></i></button>
+      <button aria-current="false"><span>04 Coffret</span><i></i></button>
+    </nav>
   </div>
 </section>
 
 <section class="marquee" data-theme="cream" aria-hidden="true">
   <div class="marquee-track">
-    <span>Lavande</span><i>✦</i><span class="serif">Automne</span><i>✦</i><span class="outline">Tulipe</span><i>✦</i><span>Coffret</span><i>✦</i>
-    <span>Lavande</span><i>✦</i><span class="serif">Automne</span><i>✦</i><span class="outline">Tulipe</span><i>✦</i><span>Coffret</span><i>✦</i>
+    <span>Lavande</span><i>✦</i><span><em>Automne</em></span><i>✦</i><span class="outline">Tulipe</span><i>✦</i><span>Coffret</span><i>✦</i>
+    <span>Lavande</span><i>✦</i><span><em>Automne</em></span><i>✦</i><span class="outline">Tulipe</span><i>✦</i><span>Coffret</span><i>✦</i>
   </div>
 </section>
 
-<section class="section" data-theme="cream" style="padding-top:clamp(40px,6vw,80px)">
+<section class="section" data-theme="cream" style="padding-top:clamp(24px,4vw,56px)">
   <div class="container">
     <div class="head head--row">
-      <div><p class="eyebrow reveal">La collection</p><h2 class="h2 reveal">Quatre bougies,<br><em>une seule envie.</em></h2></div>
+      <div><p class="eyebrow reveal">La boutique</p><h2 class="h2 reveal">Quatre bougies,<br><em>une seule envie.</em></h2></div>
       <a class="link-arrow reveal" href="boutique.html">Voir la boutique <span>→</span></a>
     </div>
     <div class="products" data-products="all"></div>
-  </div>
-</section>
-
-<section class="morph spot" data-theme="lav">
-  <span class="spot-big" aria-hidden="true">Lavande</span>
-  <div class="container spot-grid">
-    <div class="spot-media reveal"><img src="img/cut-lav.webp" alt="Bougie Lavande" data-parallax="50" loading="lazy"></div>
-    <div class="reveal">
-      <p class="spot-num">N° 01 · Bougie gourmande</p>
-      <h2 class="h2">Lavande</h2>
-      <p class="mood">Florale & apaisante</p>
-      <p class="desc">La douceur apaisante de la lavande. Nuances de violet et de crème, chantilly blanche travaillée à la main, petits cœurs et tablette de chocolat violette.</p>
-      <div class="chips"><span class="chip"><b>Senteur</b>Lavande · Crème</span><span class="chip"><b>Cire</b>Soja végétale</span></div>
-      <div class="buyline"><span class="price">10.90 CHF</span><a class="btn btn--fg magnetic" href="produit.html?p=lav"><span>Découvrir</span></a><button class="btn btn--ghost" data-add="lav"><span>Ajouter au panier</span></button></div>
-    </div>
-  </div>
-</section>
-
-<section class="morph spot spot--rev" data-theme="aut">
-  <span class="spot-big" aria-hidden="true">Automne</span>
-  <div class="container spot-grid">
-    <div class="spot-media reveal"><img src="img/cut-aut.webp" alt="Bougie Automne" data-parallax="50" loading="lazy"></div>
-    <div class="reveal">
-      <p class="spot-num">N° 02 · Bougie gourmande · Édition d’automne</p>
-      <h2 class="h2">Automne</h2>
-      <p class="mood">Chaleureuse & gourmande</p>
-      <p class="desc">L’atmosphère chaleureuse de l’automne, portée par de douces notes de pomme. Couches de cire orange et crème, chantilly et décorations gourmandes faites à la main.</p>
-      <div class="chips"><span class="chip"><b>Senteur</b>Pomme · Crème</span><span class="chip"><b>Décor</b>Chantilly & douceurs</span></div>
-      <div class="buyline"><span class="price">10.90 CHF</span><a class="btn btn--fg magnetic" href="produit.html?p=aut"><span>Découvrir</span></a><button class="btn btn--ghost" data-add="aut"><span>Ajouter au panier</span></button></div>
-    </div>
-  </div>
-</section>
-
-<section class="morph spot" data-theme="rose">
-  <span class="spot-big" aria-hidden="true">Tulipe</span>
-  <div class="container spot-grid">
-    <div class="spot-media reveal"><img src="img/cut-tulip.webp" alt="Bougie Tulipe" data-parallax="50" loading="lazy" class="wide"></div>
-    <div class="reveal">
-      <p class="spot-num">N° 03 · Bougie florale</p>
-      <h2 class="h2">Tulipe</h2>
-      <p class="mood">Florale & délicate</p>
-      <p class="desc">Un bouquet de tulipes en cire posé sur un socle vert mousse, dans son verre. Une note vanille-fraise, délicate et printanière, pour fleurir la maison toute l’année.</p>
-      <div class="chips"><span class="chip"><b>Senteur</b>Vanille · Fraise</span><span class="chip"><b>Coloris</b>Rose, orange, rouge, violet</span></div>
-      <div class="buyline"><span class="price">6.30 CHF</span><a class="btn btn--fg magnetic" href="produit.html?p=tulip"><span>Découvrir</span></a><button class="btn btn--ghost" data-add="tulip"><span>Ajouter au panier</span></button></div>
-    </div>
-  </div>
-</section>
-
-<section class="morph spot spot--rev" data-theme="cream">
-  <span class="spot-big" aria-hidden="true">Coffret</span>
-  <div class="container spot-grid">
-    <div class="spot-media reveal"><img src="img/cut-box2.webp" alt="Bougie Coffret" data-parallax="50" loading="lazy"></div>
-    <div class="reveal">
-      <p class="spot-num">N° 04 · Coffret cadeau · Prêt à offrir</p>
-      <h2 class="h2">Coffret</h2>
-      <p class="mood">Le duo prêt à offrir</p>
-      <p class="desc">Une bougie gourmande marshmallow-framboise et une bougie tulipe vanille-fraise, réunies dans une boîte cadeau aux tons pastel. Plus avantageux que les deux bougies achetées séparément.</p>
-      <div class="chips"><span class="chip"><b>Contenu</b>Gourmande + Tulipe</span><span class="chip"><b>Écrin</b>Boîte nouée d’un ruban</span></div>
-      <div class="buyline"><span class="price">13.30 CHF</span><a class="btn btn--fg magnetic" href="produit.html?p=box"><span>Découvrir</span></a><button class="btn btn--ghost" data-add="box"><span>Ajouter au panier</span></button></div>
-    </div>
   </div>
 </section>
 
@@ -150,7 +111,7 @@
   </div>
 </section>
 
-<section class="section" data-theme="plum">
+<section class="section" data-theme="wine">
   <div class="container">
     <div class="cta-card">
       <div class="cta-glow" aria-hidden="true"></div>

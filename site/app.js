@@ -13,6 +13,12 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const PAGE = document.body.dataset.page;
 
+  // Chaque nouvelle page s'ouvre en haut (sauf lien vers une ancre précise)
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  const toTop = () => { if (!location.hash) scrollTo(0, 0); else { const t = document.getElementById(location.hash.slice(1)); if (t) t.scrollIntoView(); } };
+  toTop(); addEventListener('load', () => { toTop(); setTimeout(toTop, 60); });
+  addEventListener('pageshow', (e) => { if (e.persisted) toTop(); });
+
   /* =========================================================
      RÉGLAGES DE LA BOUTIQUE (repris du site actuel)
      ========================================================= */
@@ -281,7 +287,7 @@
   // Aurore (fond animé des en-têtes sombres)
   $$('canvas.aurora').forEach((cv) => {
     const ctx = cv.getContext('2d');
-    const blobs = [[181, 150, 220, .25, .3, .55, .13, .17, 0], [234, 127, 30, .78, .35, .42, .11, .09, 2], [224, 124, 140, .55, .78, .5, .07, .15, 4], [243, 223, 162, .88, .82, .28, .16, .12, 1], [107, 59, 110, .1, .85, .4, .1, .14, 3]];
+    const blobs = [[217, 185, 138, .5, .42, .42, .13, .17, 0], [116, 32, 58, .2, .3, .5, .11, .09, 2], [90, 21, 38, .82, .7, .5, .07, .15, 4], [176, 138, 82, .7, .25, .32, .16, .12, 1], [244, 233, 220, .45, .55, .18, .1, .14, 3]];
     let vis = true, mx = .5, my = .5, tx = .5, ty = .5;
     const size = () => { cv.width = Math.max(1, Math.round(cv.offsetWidth / 6)); cv.height = Math.max(1, Math.round(cv.offsetHeight / 6)); };
     size(); addEventListener('resize', size);
@@ -290,7 +296,7 @@
     const draw = (t) => {
       if (vis) {
         const w = cv.width, h = cv.height, s = t / 1000; mx = lerp(mx, tx, .04); my = lerp(my, ty, .04);
-        ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = '#24121f'; ctx.fillRect(0, 0, w, h);
+        ctx.globalCompositeOperation = 'source-over'; ctx.fillStyle = '#140d0b'; ctx.fillRect(0, 0, w, h);
         ctx.globalCompositeOperation = 'lighter';
         blobs.forEach(([r, g, b, x, y, rad, sx, sy, p], i) => {
           const px = (x + Math.sin(s * sx + p) * .18 + (mx - .5) * .12 * (i % 2 ? 1 : -1)) * w, py = (y + Math.cos(s * sy + p) * .16 + (my - .5) * .1) * h, R = rad * Math.max(w, h);
@@ -387,6 +393,7 @@
       const r = el.getBoundingClientRect(); const k = (r.top + r.height / 2 - innerHeight / 2) / innerHeight;
       el.style.transform = `translateY(${k * -parseFloat(el.dataset.parallax)}px) rotate(${k * -4}deg)`;
     });
+    updateHome();
     if (steps && innerWidth > 980) {
       const r = steps.getBoundingClientRect(); const p = clamp(-r.top / (r.height - innerHeight), 0, 1);
       const items = $$('.step-list li'), figs = $$('.step-frame figure'); const k = Math.min(items.length - 1, Math.floor(p * items.length * .999));
@@ -402,14 +409,61 @@
      PAGES
      ========================================================= */
 
-  /* ----- Accueil : bougies qui suivent la souris ----- */
-  const stage = $('.hero-stage');
-  if (stage && fine && !reduce) {
-    const imgs = $$('img', stage);
-    $('.hero').addEventListener('pointermove', (e) => {
-      const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
-      imgs.forEach((im, i) => { const d = (i + 1) * 10; im.style.transform = `translate(${x * d}px, ${y * d}px) rotate(${i === 1 ? -8 + x * 4 : x * 4}deg)`; });
-    });
+  /* ----- Accueil : bougie du héros et vitrine façon Ciao ----- */
+  const heroCandle = $('.hero-candle img'), sides = $$('.hero-side');
+  const show = $('#vitrine');
+  const SHOW = [
+    { bg: '#e4dbef', bits: ['sprig', 'heart', 'sprig', 'choco', 'heart', 'sprig'], c: ['#9b7cc8', '#b596dc', '#7a5aa6'] },
+    { bg: '#f2dcc6', bits: ['apple', 'leaf', 'apple', 'leaf', 'dollop', 'leaf'], c: ['#ea7f1e', '#c8561c', '#d9a35a'] },
+    { bg: '#f3dcdd', bits: ['tulip', 'petal', 'leaf', 'tulip', 'petal', 'petal'], c: ['#e07c8c', '#c94a61', '#8b5bb5'] },
+    { bg: '#efe6da', bits: ['bow', 'heart', 'star', 'bow', 'heart', 'star'], c: ['#5a1526', '#e07c8c', '#d9b98a'] },
+  ];
+  // Petits éléments qui flottent autour de la bougie (lavande, pommes, pétales, rubans…)
+  const BIT = {
+    sprig: (c) => `<svg viewBox="0 0 40 90"><path d="M20 88C20 60 22 40 20 6" stroke="#6f8f4e" stroke-width="2.4" fill="none" stroke-linecap="round"/>${[10, 20, 30, 40, 50].map((y, i) => `<ellipse cx="${i % 2 ? 26 : 14}" cy="${y}" rx="6" ry="9" fill="${c[i % 3]}" transform="rotate(${i % 2 ? 25 : -25} ${i % 2 ? 26 : 14} ${y})"/>`).join('')}</svg>`,
+    heart: (c) => `<svg viewBox="0 0 40 36"><path d="M20 10C14-2 0 2 2 14c1 8 10 14 18 20 8-6 17-12 18-20C40 2 26-2 20 10Z" fill="${c[1]}"/><ellipse cx="11" cy="11" rx="4" ry="2.6" fill="#fff" opacity=".5"/></svg>`,
+    choco: (c) => `<svg viewBox="0 0 50 40"><rect x="2" y="2" width="46" height="36" rx="5" fill="${c[2]}"/><path d="M17 2v36M33 2v36M2 20h46" stroke="rgba(0,0,0,.18)" stroke-width="2"/><rect x="6" y="6" width="8" height="8" rx="2" fill="#fff" opacity=".25"/></svg>`,
+    apple: (c) => `<svg viewBox="0 0 60 64"><path d="M30 16C18 6 2 12 4 32c2 18 14 30 26 28 12 2 24-10 26-28C58 12 42 6 30 16Z" fill="${c[0]}"/><path d="M30 16c0-6 2-10 6-14" stroke="#6b4a2a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M34 8c8-6 16-2 16 2-6 4-12 4-16-2Z" fill="#7a9a4a"/><ellipse cx="17" cy="28" rx="5" ry="9" fill="#fff" opacity=".28"/></svg>`,
+    leaf: (c) => `<svg viewBox="0 0 60 60"><path d="M6 54C6 24 26 6 56 4 54 34 36 54 6 54Z" fill="${c[2]}"/><path d="M8 52C22 38 36 22 52 8" stroke="rgba(0,0,0,.18)" stroke-width="2" fill="none"/></svg>`,
+    dollop: () => `<svg viewBox="0 0 60 50"><ellipse cx="30" cy="40" rx="26" ry="9" fill="#e6d9c6"/><circle cx="30" cy="32" r="20" fill="#fdf8f0"/><circle cx="28" cy="18" r="13" fill="#fffdf8"/><circle cx="27" cy="7" r="6" fill="#fff"/></svg>`,
+    tulip: (c) => `<svg viewBox="0 0 50 90"><path d="M25 88V40" stroke="#6f9a4e" stroke-width="3" stroke-linecap="round"/><path d="M25 70c-14-4-18-14-16-22 8 2 14 10 16 22Z" fill="#7daa5b"/><path d="M10 14c0 18 6 28 15 28s15-10 15-28c-5 4-8 6-10 2-2-6-3-10-5-14-2 4-3 8-5 14-2 4-5 2-10-2Z" fill="${c[0]}"/><path d="M25 2c-2 4-3 8-5 14 2 2 8 2 10 0-2-6-3-10-5-14Z" fill="${c[1]}"/></svg>`,
+    petal: (c) => `<svg viewBox="0 0 40 50"><path d="M20 2C34 14 38 30 20 48 2 30 6 14 20 2Z" fill="${c[0]}"/><path d="M20 8v34" stroke="rgba(255,255,255,.4)" stroke-width="2"/></svg>`,
+    bow: (c) => `<svg viewBox="0 0 80 50"><path d="M40 22C26 4 6 4 6 16s16 20 34 8ZM40 22C54 4 74 4 74 16s-16 20-34 8Z" fill="${c[0]}"/><path d="M36 26 24 48l8-2 6 4 2-22ZM44 26l12 22-8-2-6 4-2-22Z" fill="${c[0]}" opacity=".85"/><rect x="34" y="16" width="12" height="14" rx="4" fill="${c[0]}" stroke="rgba(0,0,0,.2)"/></svg>`,
+    star: (c) => `<svg viewBox="0 0 40 40"><path d="M20 2l5 12 13 1-10 8 3 13-11-7-11 7 3-13L2 15l13-1Z" fill="${c[2]}"/></svg>`,
+  };
+  const SPOTS = [[30, 24, 86, -18], [70, 20, 72, 16], [27, 52, 66, 22], [73, 54, 88, -12], [37, 84, 58, 30], [63, 86, 64, -24]];
+  let showIdx = -1;
+  function setShow(i) {
+    if (i === showIdx) return;
+    showIdx = i;
+    const f = SHOW[i];
+    $('.show-bg', show).style.setProperty('--sbg', f.bg);
+    $$('.show-name', show).forEach((el, k) => { el.classList.toggle('on', k === i); el.classList.toggle('out', k < i); });
+    $$('.show-candle', show).forEach((el, k) => { el.classList.toggle('on', k === i); el.classList.toggle('out', k < i); });
+    $$('.show-info > div', show).forEach((el, k) => el.classList.toggle('on', k === i));
+    $$('.show-nav button', show).forEach((el, k) => el.setAttribute('aria-current', String(k === i)));
+    const bits = $('.show-bits', show);
+    bits.innerHTML = f.bits.map((b, k) => { const [x, y, sz, r] = SPOTS[k]; return `<span class="bit" style="--x:${x}%;--y:${y}%;--s:${sz}px;--r:${r}deg;--dl:${k * 70}ms">${BIT[b](f.c)}</span>`; }).join('');
+    requestAnimationFrame(() => requestAnimationFrame(() => $$('.bit', bits).forEach((b) => b.classList.add('on'))));
+  }
+  if (show) {
+    setShow(0);
+    $$('.show-nav button', show).forEach((b, k) => b.addEventListener('click', () => {
+      const top = show.getBoundingClientRect().top + scrollY, span = show.offsetHeight - innerHeight;
+      scrollTo({ top: top + span * (k + .5) / SHOW.length, behavior: reduce ? 'auto' : 'smooth' });
+    }));
+  }
+  function updateHome() {
+    if (heroCandle && !reduce) {
+      const y = Math.min(scrollY, innerHeight);
+      heroCandle.style.transform = `translateY(${y * -.18}px) scale(${1 + y * .0004})`;
+      sides.forEach((el, k) => { el.style.translate = `0 ${y * (k ? -.4 : -.3)}px`; });
+    }
+    if (show && !reduce) {
+      const r = show.getBoundingClientRect();
+      const p = clamp(-r.top / (show.offsetHeight - innerHeight), 0, .999);
+      setShow(Math.floor(p * SHOW.length));
+    }
   }
 
   /* ----- Boutique : filtres + quiz ----- */
@@ -538,49 +592,69 @@
       return L;
     };
 
-    // Dessin de la bougie gourmande (SVG)
+    // Dessin de la bougie gourmande : verre en volume, couches ombrées, chantilly pochée
+    const shade = (hex, k) => { const n = parseInt(hex.slice(1), 16); const f = (v) => Math.round(clamp(k < 0 ? v * (1 + k) : v + (255 - v) * k, 0, 255)); return `rgb(${f(n >> 16)},${f((n >> 8) & 255)},${f(n & 255)})`; };
     function deco(type, x, y, c, s = 1) {
-      const t = `translate(${x} ${y}) scale(${s})`;
+      const t = `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${s})`, d = shade(c, -.25), l = shade(c, .45);
       switch (type) {
-        case 'coeurs': return `<path transform="${t}" d="M0 4C-6-2-10 2-7 6L0 12L7 6C10 2 6-2 0 4Z" fill="${c}"/>`;
-        case 'tablette': return `<g transform="${t} rotate(-12)"><rect x="-9" y="-6" width="18" height="12" rx="2" fill="${c}"/><path d="M-3-6v12M3-6v12M-9 0h18" stroke="rgba(0,0,0,.18)" stroke-width="1"/></g>`;
-        case 'papillons': return `<g transform="${t}"><ellipse cx="-5" cy="0" rx="5" ry="7" fill="${c}"/><ellipse cx="5" cy="0" rx="5" ry="7" fill="${c}"/><rect x="-1" y="-6" width="2" height="12" rx="1" fill="rgba(0,0,0,.35)"/></g>`;
-        case 'fleurs': return `<g transform="${t}">${[0, 72, 144, 216, 288].map((a) => `<circle cx="${Math.cos(a * Math.PI / 180) * 5}" cy="${Math.sin(a * Math.PI / 180) * 5}" r="4" fill="${c}"/>`).join('')}<circle r="3" fill="#F3DFA2"/></g>`;
-        case 'etoiles': return `<path transform="${t}" d="M0-8 2.4-2.5 8-2.5 3.5 1 5.2 7 0 3.6-5.2 7-3.5 1-8-2.5-2.4-2.5Z" fill="${c}"/>`;
-        default: return `<g transform="${t}"><circle r="3.6" fill="#fffaf2"/><circle cx="-1" cy="-1" r="1.2" fill="#fff"/></g>`;
+        case 'coeurs': return `<g transform="${t}"><path d="M0 5C-7-2-12 3-8 8L0 15L8 8C12 3 7-2 0 5Z" fill="${c}" stroke="${d}" stroke-width=".8"/><ellipse cx="-4" cy="3" rx="2.2" ry="1.4" fill="${l}" opacity=".8"/></g>`;
+        case 'tablette': return `<g transform="${t} rotate(-14)"><rect x="-10" y="-7" width="20" height="14" rx="2" fill="${d}"/><rect x="-9" y="-6" width="18" height="12" rx="1.6" fill="${c}"/><path d="M-3-6v12M3-6v12M-9 0h18" stroke="${d}" stroke-width="1"/><rect x="-8" y="-5" width="4" height="4" rx="1" fill="${l}" opacity=".7"/></g>`;
+        case 'papillons': return `<g transform="${t}"><path d="M0 0C-4-10-14-10-12-2C-11 3-5 3 0 0ZM0 0C4-10 14-10 12-2C11 3 5 3 0 0ZM0 0C-3 5-9 9-9 4C-9 1-4 0 0 0ZM0 0C3 5 9 9 9 4C9 1 4 0 0 0Z" fill="${c}" stroke="${d}" stroke-width=".8"/><rect x="-1" y="-6" width="2" height="11" rx="1" fill="${d}"/></g>`;
+        case 'fleurs': return `<g transform="${t}">${[0, 72, 144, 216, 288].map((a) => `<ellipse cx="${(Math.cos(a * Math.PI / 180) * 5.5).toFixed(1)}" cy="${(Math.sin(a * Math.PI / 180) * 5.5).toFixed(1)}" rx="4.6" ry="3.4" transform="rotate(${a} ${(Math.cos(a * Math.PI / 180) * 5.5).toFixed(1)} ${(Math.sin(a * Math.PI / 180) * 5.5).toFixed(1)})" fill="${c}" stroke="${d}" stroke-width=".6"/>`).join('')}<circle r="3.2" fill="#e9c66a"/><circle cx="-1" cy="-1" r="1.1" fill="#fff3c4"/></g>`;
+        case 'etoiles': return `<g transform="${t}"><path d="M0-9 2.6-2.8 9-2.8 3.9 1.1 5.8 7.8 0 3.9-5.8 7.8-3.9 1.1-9-2.8-2.6-2.8Z" fill="${c}" stroke="${d}" stroke-width=".8" stroke-linejoin="round"/><path d="M0-6 1.4-2.4 0-1Z" fill="${l}"/></g>`;
+        default: return `<g transform="${t}"><circle r="4.2" fill="url(#pearl)"/></g>`;
       }
     }
+    function dollop(x, y, r) {
+      return `<g><ellipse cx="${x}" cy="${y + r * .25}" rx="${r * 1.05}" ry="${r * .7}" fill="#e9dfd0"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#cream)"/>
+        <circle cx="${x - r * .08}" cy="${y - r * .55}" r="${r * .68}" fill="url(#cream)"/><circle cx="${x - r * .12}" cy="${y - r * 1.02}" r="${r * .36}" fill="url(#cream)"/>
+        <path d="M${x - r * .8} ${y - r * .1}q${r * .8} ${r * .5} ${r * 1.6} 0M${x - r * .55} ${y - r * .62}q${r * .55} ${r * .35} ${r * 1.1} 0" stroke="rgba(150,120,95,.25)" stroke-width="1" fill="none"/></g>`;
+    }
     function candle() {
-      const big = CFG.size === 'grande', W = big ? 132 : 120, H = big ? 178 : 160, x0 = 100 - W / 2, yb = 238, yt = yb - H;
-      const inner = H - 12, fill = .64 * inner, L = CFG.layers.slice(0, CFG.n), lh = fill / L.length;
-      let svg = `<svg viewBox="0 0 200 260" role="img" aria-label="Aperçu de votre bougie"><defs><clipPath id="jar"><rect x="${x0 + 5}" y="${yt + 6}" width="${W - 10}" height="${H - 10}" rx="12"/></clipPath>
-        <radialGradient id="fl" cx="50%" cy="70%" r="60%"><stop offset="0" stop-color="#fffbe0"/><stop offset=".55" stop-color="#ffd166"/><stop offset="1" stop-color="#ff8a3d"/></radialGradient></defs>
-        <ellipse cx="100" cy="${yb + 6}" rx="${W / 2 + 6}" ry="6" fill="rgba(36,18,31,.15)"/><g clip-path="url(#jar)">`;
-      L.forEach((c, i) => { svg += `<rect x="${x0}" y="${yb - 4 - lh * (i + 1)}" width="${W}" height="${lh + 1}" fill="${c}"/>`; });
-      const ct = yb - 4 - fill; // haut de la cire
+      const big = CFG.size === 'grande', W = big ? 156 : 140, H = big ? 196 : 176, cx = 120, rx = W / 2, ry = 13, x0 = cx - rx, x1 = cx + rx, yb = 276, yt = yb - H;
+      const wrx = rx - 7, wry = ry - 1.5, wx0 = cx - wrx, wx1 = cx + wrx;
+      const F = .6 * (H - 14), L = CFG.layers.slice(0, CFG.n), lh = F / L.length, y0 = yb - 5, ct = y0 - F;
+      const band = (yl, yh) => `M${wx0} ${yh}L${wx0} ${yl}A${wrx} ${wry} 0 0 0 ${wx1} ${yl}L${wx1} ${yh}A${wrx} ${wry} 0 0 1 ${wx0} ${yh}Z`;
+      let g = `<svg viewBox="0 0 240 300" role="img" aria-label="Aperçu de votre bougie"><defs>
+        <linearGradient id="shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".26"/><stop offset=".22" stop-color="#000" stop-opacity="0"/><stop offset=".42" stop-color="#fff" stop-opacity=".22"/><stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>
+        <radialGradient id="cream" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#fffefb"/><stop offset=".6" stop-color="#f8f1e6"/><stop offset="1" stop-color="#e6d9c6"/></radialGradient>
+        <radialGradient id="pearl" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#f1ebf3"/><stop offset="1" stop-color="#cfc4d4"/></radialGradient>
+        <radialGradient id="glow"><stop offset="0" stop-color="#ffd58a" stop-opacity=".7"/><stop offset="1" stop-color="#ffd58a" stop-opacity="0"/></radialGradient>
+        <radialGradient id="fl" cx="50%" cy="72%" r="62%"><stop offset="0" stop-color="#fffbe6"/><stop offset=".5" stop-color="#ffd476"/><stop offset="1" stop-color="#ff9a3d"/></radialGradient>
+        <linearGradient id="glass" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".12" stop-color="#fff" stop-opacity=".08"/><stop offset=".8" stop-color="#fff" stop-opacity=".04"/><stop offset=".92" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity=".1"/></linearGradient>
+        <filter id="soft"><feGaussianBlur stdDeviation="6"/></filter>
+        <clipPath id="lbl"><circle cx="${cx}" cy="${yb - F * .42}" r="27"/></clipPath></defs>
+        <ellipse cx="${cx}" cy="${yb + 10}" rx="${rx + 6}" ry="10" fill="rgba(30,21,18,.22)" filter="url(#soft)"/>
+        <path d="M${x0} ${yt}L${x0} ${yb}A${rx} ${ry} 0 0 0 ${x1} ${yb}L${x1} ${yt}Z" fill="rgba(255,255,255,.28)"/>
+        <ellipse cx="${cx}" cy="${yt}" rx="${rx}" ry="${ry}" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.9)" stroke-width="1.5"/>`;
+      L.forEach((c, i) => { const yl = y0 - i * lh, yh = yl - lh - (i < L.length - 1 ? 1 : 0); g += `<path d="${band(yl, yh)}" fill="${c}"/><path d="${band(yl, yh)}" fill="url(#shade)"/>`; });
+      g += `<ellipse cx="${cx}" cy="${ct}" rx="${wrx}" ry="${wry}" fill="${shade(L[L.length - 1], .15)}"/>`;
+      // chantilly
+      let peak;
       if (CFG.topping === 'fouettee') {
-        svg += `<rect x="${x0}" y="${ct - 6}" width="${W}" height="12" fill="#fbf6ee"/>`;
-        for (let i = 0; i < 7; i++) svg += `<circle cx="${x0 + 10 + i * (W - 20) / 6}" cy="${ct - 6}" r="11" fill="#fdf9f2"/>`;
-        for (let i = 0; i < 5; i++) svg += `<circle cx="${x0 + 22 + i * (W - 44) / 4}" cy="${ct - 18}" r="10" fill="#fffdf8"/>`;
+        const ring = [...Array(8)].map((_, k) => { const a = k / 8 * Math.PI * 2; return { x: cx + Math.cos(a) * wrx * .74, y: ct + Math.sin(a) * wry * .9 - 4, z: Math.sin(a) }; }).sort((a, b) => a.z - b.z);
+        ring.forEach((d) => { g += dollop(d.x, d.y, 15 + d.z * 1.5); });
+        g += dollop(cx, ct - 18, 20);
+        peak = ct - 18 - 20 * 1.3;
       } else {
-        svg += `<rect x="${x0}" y="${ct - 4}" width="${W}" height="8" fill="#fbf6ee"/>`;
-        [[W / 2 - 4, 0], [W / 2 - 14, -10], [W / 2 - 24, -19], [W / 2 - 34, -27]].forEach(([rx, dy]) => { svg += `<ellipse cx="100" cy="${ct - 6 + dy}" rx="${rx}" ry="8" fill="#fdf9f2" stroke="rgba(0,0,0,.05)"/>`; });
+        for (let k = 0; k < 5; k++) { const ry2 = 11 - k, rr = wrx * (1 - k * .17), yy = ct - 4 - k * 12; g += `<ellipse cx="${cx}" cy="${yy + 3}" rx="${rr}" ry="${ry2}" fill="#e6d9c6"/><ellipse cx="${cx}" cy="${yy}" rx="${rr}" ry="${ry2}" fill="url(#cream)"/><path d="M${cx - rr * .85} ${yy + 2}q${rr * .85} ${ry2 * 1.1} ${rr * 1.7} 0" stroke="rgba(150,120,95,.22)" fill="none"/>`; }
+        g += `<path d="M${cx - 8} ${ct - 52}q8-16 9-6q1 6 7 6z" fill="url(#cream)"/>`;
+        peak = ct - 60;
       }
-      svg += `</g>`;
-      // mèche + flamme
-      const top = ct - (CFG.topping === 'fouettee' ? 26 : 38);
-      svg += `<path d="M100 ${top + 6}v-14" stroke="#3a2a2f" stroke-width="2" stroke-linecap="round"/><path class="flame" d="M100 ${top - 34}c6 9 10 15 10 22a10 10 0 0 1-20 0c0-7 4-13 10-22Z" fill="url(#fl)"/>`;
       // décors
       const n = { peu: 2, normal: 3, beaucoup: 5 }[CFG.qty];
-      const spots = [[-32, 2], [30, 0], [-12, -10], [16, -12], [0, 4], [-44, 8], [44, 6]];
-      CFG.decos.forEach((d, j) => { for (let i = 0; i < n; i++) { const [dx, dy] = spots[(i * 2 + j * 3) % spots.length]; svg += deco(d, 100 + dx * (W / 120), ct - 10 + dy + (CFG.topping === 'fouettee' ? -6 : -10), d === 'perles' ? '#fff' : CFG.deco, .9); } });
-      // verre + étiquette
-      svg += `<rect x="${x0}" y="${yt}" width="${W}" height="${H}" rx="16" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.95)" stroke-width="2.5"/>
-        <rect x="${x0 + 8}" y="${yt + 14}" width="6" height="${H - 40}" rx="3" fill="rgba(255,255,255,.6)"/>
-        <circle cx="100" cy="${yb - fill * .45}" r="22" fill="none" stroke="#2c2228" stroke-width="1.1"/>
-        <text x="100" y="${yb - fill * .45 - 4}" text-anchor="middle" font-family="Instrument Serif, serif" font-size="7.5" fill="#2c2228">Yumiya Candle</text>
-        <text x="100" y="${yb - fill * .45 + 9}" text-anchor="middle" font-family="Inter Tight, sans-serif" font-size="4.5" letter-spacing="1" fill="#2c2228">HANDMADE</text></svg>`;
-      return svg;
+      const spots = CFG.topping === 'fouettee' ? [[-44, -14], [42, -10], [-20, -30], [22, -34], [0, -6], [-56, 2], [56, 4], [-4, -46]] : [[-40, -8], [38, -12], [-22, -28], [20, -36], [0, -14], [-30, -44], [10, -52], [48, 0]];
+      let k = 0;
+      CFG.decos.forEach((d) => { for (let i = 0; i < n; i++) { const [dx, dy] = spots[k++ % spots.length]; g += deco(d, cx + dx * (wrx / 63), ct + dy, d === 'perles' ? '#fff' : CFG.deco, 1.05); } });
+      // mèche et flamme
+      g += `<circle cx="${cx}" cy="${peak - 30}" r="34" fill="url(#glow)"/><path d="M${cx} ${peak + 4}v-14" stroke="#3a2a2f" stroke-width="2.2" stroke-linecap="round"/><path class="flame" d="M${cx} ${peak - 46}c7 10 11 17 11 24a11 11 0 0 1-22 0c0-7 4-14 11-24Z" fill="url(#fl)"/>`;
+      // étiquette (logo) et verre avant
+      g += `<image href="img/logo.webp" x="${cx - 27}" y="${yb - F * .42 - 27}" width="54" height="54" clip-path="url(#lbl)" style="mix-blend-mode:multiply" opacity=".92"/>
+        <path d="M${x0} ${yt}L${x0} ${yb}A${rx} ${ry} 0 0 0 ${x1} ${yb}L${x1} ${yt}A${rx} ${ry} 0 0 1 ${x0} ${yt}Z" fill="url(#glass)" stroke="rgba(255,255,255,.95)" stroke-width="1.6"/>
+        <path d="M${x0} ${yt}A${rx} ${ry} 0 0 0 ${x1} ${yt}" fill="none" stroke="#fff" stroke-width="2.2" opacity=".95"/>
+        <path d="M${x0 + 12} ${yt + 22}V${yb - 18}" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".5"/><path d="M${x1 - 14} ${yt + 30}V${yb - 40}" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+        <ellipse cx="${cx}" cy="${yb}" rx="${rx - 2}" ry="${ry - 2}" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3"/></svg>`;
+      return g;
     }
 
     const group = (key, label, value, html) => `<div class="cfg-group"><p>${label}${value ? `<span>${value}</span>` : ''}</p>${html}</div>`;
