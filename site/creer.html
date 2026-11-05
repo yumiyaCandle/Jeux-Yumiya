@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Créer votre bougie — Yumiya Candle</title>
+<meta name="description" content="Composez votre bougie Yumiya : cire, chantilly, décors, senteur. Aperçu et prix en direct, ou demande sur mesure.">
+<link rel="icon" href="img/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="creer" data-theme="plum">
+<main id="main">
+<section class="page-hero" data-theme="plum">
+  <canvas class="aurora" aria-hidden="true"></canvas><div class="grain" aria-hidden="true"></div>
+  <div class="container">
+    <p class="eyebrow intro">Créer</p>
+    <h1 class="h1" data-split><span class="hl">Créez la vôtre,</span> <span class="hl"><em>couleur par couleur.</em></span></h1>
+    <p class="lead intro" style="--i:3">Choisissez le modèle, la cire, la chantilly, les décors et la senteur. L’aperçu et le prix se mettent à jour en direct.</p>
+  </div>
+</section>
+<section class="section" data-theme="cream" style="padding-top:clamp(48px,6vw,72px)">
+  <div class="container cfg" id="cfg">
+    <div class="cfg-preview" id="cfg-preview" aria-live="polite"></div>
+    <div class="cfg-form" id="cfg-form"></div>
+  </div>
+</section>
+
+<section class="section" id="sur-mesure" data-theme="lav">
+  <div class="container split" style="align-items:start">
+    <div class="prose reveal">
+      <p class="eyebrow">Sur mesure</p>
+      <h2 class="h2">Plusieurs bougies pour <em>un grand jour&nbsp;?</em></h2>
+      <p>Mariage, baptême, anniversaire ou cadeau d’entreprise : nous imaginons des bougies à vos couleurs. Le prix et le délai sont convenus avec vous avant la fabrication.</p>
+      <p>Décrivez votre projet, nous vous répondons par email.</p>
+    </div>
+    <form class="card-box form reveal" id="bsp-form" novalidate>
+      <div class="form-row">
+        <div class="field"><label for="b-name">Nom</label><input id="b-name" autocomplete="name"><span class="err">Indiquez votre nom.</span></div>
+        <div class="field"><label for="b-email">Email</label><input id="b-email" type="email" autocomplete="email"><span class="err">Entrez une adresse email valide.</span></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label for="b-occ">Occasion</label><select id="b-occ"><option>Mariage</option><option>Baptême</option><option>Anniversaire</option><option>Cadeau d’entreprise</option><option>Autre</option></select></div>
+        <div class="field"><label for="b-qty">Nombre de bougies</label><input id="b-qty" inputmode="numeric" placeholder="Par exemple 30"></div>
+      </div>
+      <div class="field"><label for="b-date">Date souhaitée</label><input id="b-date" type="date"></div>
+      <div class="field"><label for="b-msg">Votre projet</label><textarea id="b-msg" placeholder="Couleurs, senteurs, thème…"></textarea><span class="err">Décrivez votre projet en quelques mots.</span></div>
+      <button class="btn btn--fg" type="submit"><span>Envoyer ma demande</span></button>
+      <p class="form-msg" id="bsp-msg" role="status"></p>
+    </form>
+  </div>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

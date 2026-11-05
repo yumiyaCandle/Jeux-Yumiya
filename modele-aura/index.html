@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aura — Modèle de site vitrine</title>
+<meta name="description" content="Aura, un modèle de site vitrine animé : sections modulables, animations fluides et design soigné. Remplacez les textes, c'est prêt.">
+<meta name="theme-color" content="#0a0a0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="dark">
+
+<!-- ===== Écran d'intro ===== -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <span class="loader-logo">Aura</span>
+    <span class="loader-count" id="loader-count">0</span>
+  </div>
+</div>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+<a class="skip" href="#main">Aller au contenu</a>
+
+<!-- ===== Navigation flottante ===== -->
+<header class="nav" id="nav">
+  <a href="#top" class="logo" aria-label="Aura, accueil">
+    <span class="logo-mark" aria-hidden="true"></span>Aura
+  </a>
+  <nav class="nav-links" aria-label="Navigation principale">
+    <a href="#fonctions">Fonctions</a>
+    <a href="#etapes">Méthode</a>
+    <a href="#usages">Usages</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a href="#contact" class="btn btn--sm btn--fg nav-cta">Commencer</a>
+  <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <nav aria-label="Menu mobile">
+    <a href="#fonctions"><small>01</small>Fonctions</a>
+    <a href="#etapes"><small>02</small>Méthode</a>
+    <a href="#usages"><small>03</small>Usages</a>
+    <a href="#tarifs"><small>04</small>Tarifs</a>
+    <a href="#faq"><small>05</small>FAQ</a>
+    <a href="#contact"><small>06</small>Contact</a>
+  </nav>
+</div>
+
+<main id="main">
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top" data-theme="dark">
+  <canvas class="aurora" id="aurora" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
+  <div class="hero-inner">
+    <a href="#fonctions" class="pill-badge intro" style="--i:0">
+      <span class="pill-dot"></span> Nouveau — Version 2.0 <span class="pill-arrow">→</span>
+    </a>
+    <h1 class="hero-title" data-split>
+      <span class="hl">Donnez vie</span>
+      <span class="hl">à vos <em>idées.</em></span>
+    </h1>
+    <p class="hero-sub intro" style="--i:3">Un modèle de site pensé dans les moindres détails&nbsp;: animations fluides, sections modulables et design soigné. Remplacez les textes, c'est prêt.</p>
+    <div class="hero-ctas intro" style="--i:4">
+      <a href="#contact" class="btn btn--fg magnetic"><span>Commencer gratuitement</span></a>
+      <a href="#fonctions" class="btn btn--ghost magnetic"><span>Découvrir</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="trust intro" style="--i:5">
+    <p>Ils nous font confiance</p>
+    <div class="trust-row">
+      <div class="trust-track">
+        <span>NORDIK</span><span>◐ Vela</span><span>KAIRO</span><span>Lumo&nbsp;✦</span><span>ATLAS/</span><span>orbit°</span><span>FJORD</span><span>Maison&nbsp;Ito</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MANIFESTE (mots qui s'allument au scroll) ===== -->
+<section class="manifesto" data-theme="dark">
+  <div class="container">
+    <p class="eyebrow">Le manifeste</p>
+    <p class="manifesto-text" id="manifesto">Nous croyons qu'un site doit se ressentir avant de se lire. Chaque mouvement a une raison, chaque espace respire, chaque détail est pensé pour que vos visiteurs restent, explorent et reviennent. Simple en apparence, précis en profondeur.</p>
+  </div>
+</section>
+
+<!-- ===== BENTO FONCTIONS ===== -->
+<section class="section" id="fonctions" data-theme="light">
+  <div class="container">
+    <div class="head">
+      <p class="eyebrow reveal">Fonctions</p>
+      <h2 class="h2 reveal">Tout ce qu'il faut.<br><em>Rien de superflu.</em></h2>
+    </div>
+
+    <div class="bento">
+      <article class="tile tile--wide reveal tilt">
+        <div class="tile-art art-speed" aria-hidden="true">
+          <svg viewBox="0 0 200 120"><path class="speed-track" d="M20 110a80 80 0 0 1 160 0"/><path class="speed-fill" d="M20 110a80 80 0 0 1 160 0" pathLength="100"/></svg>
+          <div class="speed-num"><b data-count="99">0</b><small>/100</small></div>
+        </div>
+        <div class="tile-text"><h3>Ultra rapide</h3><p>Aucune dépendance lourde. Le site s'affiche en un éclair, même sur mobile.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile reveal tilt">
+        <div class="tile-art art-spring" aria-hidden="true"><span class="ball"></span><span class="ball-shadow"></span></div>
+        <div class="tile-text"><h3>Animations fluides</h3><p>Des mouvements à ressort, naturels et interruptibles.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile reveal tilt">
+        <div class="tile-art art-device" aria-hidden="true"><span class="device"><i></i><i></i><i></i></span></div>
+        <div class="tile-text"><h3>Responsive</h3><p>Parfait du téléphone au grand écran.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile reveal tilt">
+        <div class="tile-art art-shield" aria-hidden="true">
+          <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+          <svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6Z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="tile-text"><h3>Accessible</h3><p>Navigation au clavier et mouvements réduits respectés.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile reveal tilt">
+        <div class="tile-art art-theme" aria-hidden="true">
+          <div class="mini-ui"><span class="mu-bar"></span><span class="mu-line"></span><span class="mu-line short"></span><span class="mu-btn"></span></div>
+        </div>
+        <div class="tile-text"><h3>Personnalisable</h3><p>Couleurs, polices et textes se changent en un instant.</p></div>
+        <span class="glare"></span>
+      </article>
+
+      <article class="tile tile--wide reveal tilt">
+        <div class="tile-art art-chart" aria-hidden="true">
+          <div class="bars"><span style="--h:38%"></span><span style="--h:55%"></span><span style="--h:46%"></span><span style="--h:70%"></span><span style="--h:62%"></span><span style="--h:84%"></span><span style="--h:76%"></span><span style="--h:96%"></span></div>
+          <div class="chart-badge">+<b data-count="248">0</b>&nbsp;%</div>
+        </div>
+        <div class="tile-text"><h3>Pensé pour convertir</h3><p>Une hiérarchie claire qui guide chaque visiteur jusqu'à l'action.</p></div>
+        <span class="glare"></span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<section class="marquee" data-theme="light" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Créer</span><i>✦</i><span class="outline">Animer</span><i>✦</i><span>Séduire</span><i>✦</i><span class="outline">Convertir</span><i>✦</i><span>Grandir</span><i>✦</i>
+    <span>Créer</span><i>✦</i><span class="outline">Animer</span><i>✦</i><span>Séduire</span><i>✦</i><span class="outline">Convertir</span><i>✦</i><span>Grandir</span><i>✦</i>
+  </div>
+</section>
+
+<!-- ===== MÉTHODE : scroll horizontal ===== -->
+<section class="hscroll" id="etapes" data-theme="coral">
+  <div class="hscroll-sticky">
+    <div class="container hscroll-head">
+      <p class="eyebrow">La méthode</p>
+      <h2 class="h2">Quatre étapes,<br><em>zéro prise de tête.</em></h2>
+    </div>
+    <div class="hscroll-track" id="htrack">
+      <article class="step"><span class="step-n">01</span><div class="shape shape--circle"></div><h3>Imaginer</h3><p>On pose vos objectifs, votre ton et ce qui vous rend unique.</p></article>
+      <article class="step"><span class="step-n">02</span><div class="shape shape--squircle"></div><h3>Composer</h3><p>On assemble les sections comme des briques, dans l'ordre qui raconte votre histoire.</p></article>
+      <article class="step"><span class="step-n">03</span><div class="shape shape--tri"></div><h3>Animer</h3><p>On ajoute le mouvement là où il aide à comprendre, jamais pour décorer.</p></article>
+      <article class="step"><span class="step-n">04</span><div class="shape shape--star"></div><h3>Lancer</h3><p>On publie, on mesure, on améliore. Votre site vit et grandit avec vous.</p></article>
+      <div class="step-end"><a href="#contact" class="btn btn--fg magnetic"><span>Démarrer mon projet</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== USAGES : onglets ===== -->
+<section class="section" id="usages" data-theme="light">
+  <div class="container">
+    <div class="head head--center">
+      <p class="eyebrow reveal">Usages</p>
+      <h2 class="h2 reveal">Un modèle,<br><em>mille possibilités.</em></h2>
+    </div>
+
+    <div class="tabs reveal" role="tablist" aria-label="Usages" id="tabs">
+      <span class="tabs-pill" aria-hidden="true"></span>
+      <button class="tab" role="tab" aria-selected="true" aria-controls="tab-panel" data-tab="0">Créateurs</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-panel" data-tab="1">Équipes</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-panel" data-tab="2">Entreprises</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="tab-panel" data-tab="3">Événements</button>
+    </div>
+
+    <div class="panel reveal" id="tab-panel" role="tabpanel">
+      <div class="panel-text" id="panel-text">
+        <h3 id="panel-title"></h3>
+        <p id="panel-desc"></p>
+        <ul id="panel-list"></ul>
+        <a href="#contact" class="link-arrow">En savoir plus <span>→</span></a>
+      </div>
+      <div class="panel-art" id="panel-art" aria-hidden="true">
+        <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+        <div class="panel-glass">
+          <span class="pg-dot"></span><span class="pg-dot"></span><span class="pg-dot"></span>
+          <span class="pg-line w80"></span><span class="pg-line w60"></span><span class="pg-line w70"></span>
+          <span class="pg-big" id="panel-big">01</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHIFFRES ===== -->
+<section class="section stats" data-theme="lime">
+  <div class="container">
+    <h2 class="h2 stats-title reveal">Des résultats<br><em>qui parlent.</em></h2>
+    <div class="stats-grid">
+      <div class="stat reveal"><b data-count="12" data-suffix="k+">0</b><span>sites lancés</span></div>
+      <div class="stat reveal"><b data-count="98" data-suffix=" %">0</b><span>de clients satisfaits</span></div>
+      <div class="stat reveal"><b data-count="3.2" data-decimals="1" data-suffix="×">0</b><span>plus de conversions</span></div>
+      <div class="stat reveal"><b data-count="24" data-suffix="/7">0</b><span>support réactif</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TÉMOIGNAGES ===== -->
+<section class="section quotes" data-theme="light">
+  <div class="container">
+    <div class="head head--row">
+      <div>
+        <p class="eyebrow reveal">Témoignages</p>
+        <h2 class="h2 reveal">Ils en parlent<br><em>mieux que nous.</em></h2>
+      </div>
+      <div class="arrows reveal">
+        <button class="round" data-prev aria-label="Précédent">←</button>
+        <button class="round" data-next aria-label="Suivant">→</button>
+      </div>
+    </div>
+  </div>
+  <div class="carousel" id="carousel">
+    <blockquote class="quote" style="--q:#5b3df5"><p>« Texte d'exemple : le site a changé la façon dont nos clients nous perçoivent. Tout est plus clair, plus vivant. »</p><footer><span class="av">A</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+    <blockquote class="quote" style="--q:#ff5b3a"><p>« Texte d'exemple : on a lancé en une semaine. Les animations font vraiment la différence sur mobile. »</p><footer><span class="av">B</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+    <blockquote class="quote" style="--q:#1aa37a"><p>« Texte d'exemple : chaque section se modifie facilement. Notre équipe s'en occupe sans développeur. »</p><footer><span class="av">C</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+    <blockquote class="quote" style="--q:#e2a400"><p>« Texte d'exemple : le souci du détail se voit partout, jusqu'au moindre bouton. »</p><footer><span class="av">D</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+    <blockquote class="quote" style="--q:#0ea5e9"><p>« Texte d'exemple : nos visiteurs restent deux fois plus longtemps qu'avant. »</p><footer><span class="av">E</span><span><b>Prénom Nom</b><small>Fonction, Entreprise</small></span></footer></blockquote>
+  </div>
+</section>
+
+<!-- ===== TARIFS ===== -->
+<section class="section pricing" id="tarifs" data-theme="dark">
+  <div class="container">
+    <div class="head head--center">
+      <p class="eyebrow reveal">Tarifs</p>
+      <h2 class="h2 reveal">Simple et <em>transparent.</em></h2>
+      <div class="billing reveal" role="group" aria-label="Période de facturation">
+        <button class="bill" aria-pressed="true" data-bill="m">Mensuel</button>
+        <button class="bill" aria-pressed="false" data-bill="y">Annuel <span class="save">−20 %</span></button>
+        <span class="bill-thumb" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="plans">
+      <article class="plan reveal">
+        <h3>Essentiel</h3><p class="plan-desc">Pour démarrer en beauté.</p>
+        <p class="price"><b data-m="0" data-y="0">0</b><span>€ / mois</span></p>
+        <ul><li>1 page</li><li>Sections de base</li><li>Hébergement inclus</li></ul>
+        <a href="#contact" class="btn btn--line btn--block">Choisir</a>
+      </article>
+      <article class="plan plan--hot reveal">
+        <span class="plan-tag">Populaire</span>
+        <h3>Pro</h3><p class="plan-desc">Le meilleur équilibre.</p>
+        <p class="price"><b data-m="29" data-y="23">29</b><span>€ / mois</span></p>
+        <ul><li>Pages illimitées</li><li>Toutes les animations</li><li>Nom de domaine</li><li>Statistiques</li></ul>
+        <a href="#contact" class="btn btn--fg btn--block magnetic"><span>Choisir Pro</span></a>
+      </article>
+      <article class="plan reveal">
+        <h3>Studio</h3><p class="plan-desc">Pour les équipes exigeantes.</p>
+        <p class="price"><b data-m="79" data-y="63">79</b><span>€ / mois</span></p>
+        <ul><li>Tout le plan Pro</li><li>5 membres</li><li>Support prioritaire</li></ul>
+        <a href="#contact" class="btn btn--line btn--block">Choisir</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section faq" id="faq" data-theme="light">
+  <div class="container faq-grid">
+    <div class="faq-head">
+      <p class="eyebrow reveal">FAQ</p>
+      <h2 class="h2 reveal">Questions<br><em>fréquentes.</em></h2>
+      <p class="muted reveal">Une autre question&nbsp;? <a href="#contact" class="underline">Écrivez-nous</a>.</p>
+    </div>
+    <div class="accordion">
+      <details class="acc reveal"><summary>Puis-je changer les couleurs&nbsp;?<i></i></summary><div class="acc-body"><p>Oui. Toutes les couleurs sont regroupées en haut du fichier styles.css&nbsp;: changez-les une fois, elles s'appliquent partout.</p></div></details>
+      <details class="acc reveal"><summary>Le site fonctionne-t-il sur mobile&nbsp;?<i></i></summary><div class="acc-body"><p>Chaque section a été pensée d'abord pour le téléphone, puis adaptée à la tablette et à l'ordinateur.</p></div></details>
+      <details class="acc reveal"><summary>Puis-je ajouter mes photos plus tard&nbsp;?<i></i></summary><div class="acc-body"><p>Bien sûr. Les visuels actuels sont dessinés en code et peuvent être remplacés par vos images ou vidéos à tout moment.</p></div></details>
+      <details class="acc reveal"><summary>Les animations ralentissent-elles le site&nbsp;?<i></i></summary><div class="acc-body"><p>Non. Elles n'utilisent que des propriétés légères pour le navigateur et se mettent en pause quand elles ne sont pas visibles.</p></div></details>
+      <details class="acc reveal"><summary>Et pour les personnes sensibles au mouvement&nbsp;?<i></i></summary><div class="acc-body"><p>Si l'appareil demande de réduire les animations, le site passe automatiquement en mode calme.</p></div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="section cta" id="contact" data-theme="violet">
+  <div class="container">
+    <div class="cta-card">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <p class="eyebrow">Contact</p>
+      <h2 class="cta-title">Prêt à <em>briller&nbsp;?</em></h2>
+      <p class="cta-sub">Laissez votre e-mail, on vous recontacte sous 24&nbsp;h.</p>
+      <form class="cta-form" id="cta-form" novalidate>
+        <label class="sr-only" for="cta-email">Adresse e-mail</label>
+        <input type="email" id="cta-email" placeholder="vous@exemple.com" autocomplete="email" required>
+        <button class="btn btn--fg magnetic" type="submit"><span>Envoyer</span></button>
+      </form>
+      <p class="cta-msg" id="cta-msg" role="status"></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" data-theme="dark">
+  <div class="container">
+    <div class="footer-cols">
+      <div><p class="f-title">Produit</p><a href="#fonctions">Fonctions</a><a href="#tarifs">Tarifs</a><a href="#usages">Usages</a></div>
+      <div><p class="f-title">Ressources</p><a href="#faq">FAQ</a><a href="#etapes">Méthode</a><a href="#contact">Contact</a></div>
+      <div><p class="f-title">Réseaux</p><a href="#top">Instagram</a><a href="#top">LinkedIn</a><a href="#top">TikTok</a></div>
+      <div class="f-news"><p class="f-title">Restez informé</p><p class="muted">Une lettre par mois, jamais plus.</p></div>
+    </div>
+    <div class="wordmark" id="wordmark" aria-hidden="true"><span>A</span><span>u</span><span>r</span><span>a</span></div>
+    <div class="footer-bottom">
+      <p>© <span id="year"></span> Aura. Modèle de démonstration.</p>
+      <p><a href="#top">Mentions légales</a> · <a href="#top">Confidentialité</a> · <button class="to-top" id="to-top">Haut de page ↑</button></p>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

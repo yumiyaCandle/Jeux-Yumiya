@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Commande — Yumiya Candle</title>
+<meta name="description" content="Finalisez votre commande Yumiya Candle : adresse de livraison et paiement TWINT.">
+<link rel="icon" href="img/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="commande" data-theme="cream">
+<main id="main">
+<section class="section" data-theme="cream" style="padding-top:clamp(120px,14vw,150px)">
+  <div class="container">
+    <p class="eyebrow">Commande</p>
+    <h1 class="h2" style="margin-bottom:clamp(32px,5vw,56px)">Presque <em>chez vous.</em></h1>
+    <div class="checkout">
+      <div class="card-box">
+        <div class="co-steps"><i class="on"></i><i></i><i></i></div>
+        <div id="co-step1">
+          <h2 class="h3" style="margin-bottom:20px">Adresse de livraison</h2>
+          <p class="note" id="co-empty" hidden>Ajoutez au moins une bougie à votre panier pour commander.</p>
+          <form class="form" id="co-form" novalidate>
+            <div class="form-row"><div class="field"><label for="o-fn">Prénom</label><input id="o-fn" type="text" autocomplete="given-name"><span class="err">Indiquez votre prénom.</span></div><div class="field"><label for="o-ln">Nom</label><input id="o-ln" type="text" autocomplete="family-name"><span class="err">Indiquez votre nom.</span></div></div>
+            <div class="field"><label for="o-ad">Adresse</label><input id="o-ad" type="text" autocomplete="street-address"><span class="err">Indiquez votre rue et numéro.</span></div>
+            <div class="form-row"><div class="field"><label for="o-npa">NPA</label><input id="o-npa" type="text" autocomplete="postal-code" inputmode="numeric" maxlength="4"><span class="err">Un NPA suisse a 4 chiffres.</span></div><div class="field"><label for="o-city">Localité</label><input id="o-city" type="text" autocomplete="address-level2"><span class="err">Indiquez votre localité.</span></div></div>
+            <div class="form-row"><div class="field"><label for="o-em">Email</label><input id="o-em" type="email" autocomplete="email"><span class="err">Entrez une adresse email valide.</span></div><div class="field"><label for="o-ph">Téléphone</label><input id="o-ph" type="tel" autocomplete="tel"><span class="err">Entrez un numéro de téléphone complet.</span></div></div>
+            <div class="field"><label for="o-note">Message cadeau (facultatif)</label><textarea id="o-note" placeholder="Nous le glissons dans le colis"></textarea></div>
+            <button class="btn btn--fg btn--block" type="submit"><span>Continuer vers le paiement</span></button>
+            <p class="note">Livraison partout en Suisse pour 8.90 CHF, en 5 à 10 jours ouvrables après le paiement.</p>
+          </form>
+        </div>
+        <div id="co-step2" hidden>
+          <button class="link-arrow" id="co-back" style="margin-bottom:18px">← Modifier l’adresse</button>
+          <h2 class="h3" style="margin-bottom:14px">Paiement</h2>
+          <p class="muted" style="margin-bottom:18px">Pour passer commande, réglez <b id="pay-amount"></b> avec TWINT. Le montant et la référence sont déjà remplis.</p>
+          <a class="pay-link" id="pay-twint" href="#" target="_blank" rel="noopener"><span>Payer avec TWINT<small>Montant et référence déjà remplis</small></span><span aria-hidden="true">→</span></a>
+          <div class="ref"><span>Référence</span><b id="pay-ref"></b></div>
+          <div class="row"><button class="btn btn--ghost btn--sm" data-copy="#pay-amount"><span>Copier le montant</span></button><button class="btn btn--ghost btn--sm" data-copy="#pay-ref"><span>Copier la référence</span></button></div>
+          <p class="note" id="pay-ok" hidden style="margin-top:16px">Merci ! Nous vérifions chaque paiement nous-mêmes. Votre commande est confirmée et préparée dès que nous avons bien reçu le montant avec votre référence. Vous recevez un email de confirmation.</p>
+          <div class="warn" id="pay-warn" hidden style="margin-top:14px"></div>
+          <p class="note" style="margin-top:16px">Sans paiement, la commande n’existe pas. Une question ? yumiyacandle@outlook.com</p>
+        </div>
+      </div>
+      <aside class="summary card-box"><h2 class="h3" style="margin-bottom:18px">Récapitulatif</h2><div id="co-summary"></div></aside>
+    </div>
+  </div>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

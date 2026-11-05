@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Boutique — Yumiya Candle</title>
+<meta name="description" content="Toutes les bougies Yumiya Candle : Lavande, Automne, Tulipe et le Coffret cadeau. Livraison partout en Suisse.">
+<link rel="icon" href="img/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="boutique" data-theme="plum">
+<main id="main">
+<section class="page-hero" data-theme="plum">
+  <canvas class="aurora" aria-hidden="true"></canvas><div class="grain" aria-hidden="true"></div>
+  <div class="container">
+    <p class="eyebrow intro">La boutique</p>
+    <h1 class="h1" data-split><span class="hl">Choisissez</span> <span class="hl"><em>votre bougie.</em></span></h1>
+    <p class="lead intro" style="--i:3">Quatre créations coulées à la main, à offrir ou à garder pour soi. Livraison partout en Suisse pour 8.90 CHF.</p>
+  </div>
+</section>
+<section class="section" data-theme="cream" style="padding-top:clamp(48px,6vw,72px)">
+  <div class="container">
+    <div class="tabs reveal" id="filters" role="tablist" aria-label="Filtrer les bougies" style="margin-bottom:32px">
+      <span class="tabs-pill" aria-hidden="true"></span>
+      <button class="tab" role="tab" aria-selected="true" data-f="all">Toutes</button>
+      <button class="tab" role="tab" aria-selected="false" data-f="gourmande">Gourmandes</button>
+      <button class="tab" role="tab" aria-selected="false" data-f="florale">Florales</button>
+      <button class="tab" role="tab" aria-selected="false" data-f="coffret">Coffrets</button>
+    </div>
+    <div class="products" id="shop" data-products="all"></div>
+  </div>
+</section>
+
+<section class="section" data-theme="lav" id="conseil">
+  <div class="container narrow">
+    <div class="head head--center"><p class="eyebrow reveal">Trois questions</p><h2 class="h2 reveal">Laquelle est<br><em>faite pour vous&nbsp;?</em></h2></div>
+    <div class="quiz reveal" id="quiz"><div class="quiz-steps"><i></i><i></i><i></i><i></i></div><div class="quiz-body"></div></div>
+  </div>
+</section>
+
+<section class="section" data-theme="cream" id="comparer">
+  <div class="container">
+    <div class="head"><p class="eyebrow reveal">Comparer</p><h2 class="h2 reveal">Côte à côte.</h2></div>
+    <div class="compare-wrap reveal">
+      <table class="compare">
+        <thead><tr><th></th>
+          <th><img src="img/cut-lav.webp" alt="">Lavande</th><th><img src="img/cut-aut.webp" alt="">Automne</th><th><img src="img/tulip-hq-rose.webp" alt="">Tulipe</th><th><img src="img/cut-box2.webp" alt="">Coffret</th></tr></thead>
+        <tbody>
+          <tr><th>Prix</th><td class="price">10.90 CHF</td><td class="price">10.90 CHF</td><td class="price">6.30 CHF</td><td class="price">13.30 CHF</td></tr>
+          <tr><th>Type</th><td>Bougie gourmande</td><td>Bougie gourmande</td><td>Bougie florale</td><td>Gourmande + Tulipe</td></tr>
+          <tr><th>Senteur</th><td>Lavande · Crème</td><td>Pomme · Crème</td><td>Vanille · Fraise</td><td>Marshmallow-framboise et vanille-fraise</td></tr>
+          <tr><th>Ambiance</th><td>Florale & apaisante</td><td>Chaleureuse & gourmande</td><td>Florale & délicate</td><td>Le duo prêt à offrir</td></tr>
+          <tr><th>Décor</th><td>Chantilly, cœurs, chocolat violet</td><td>Chantilly, décorations gourmandes</td><td>Tulipes en cire, socle vert mousse</td><td>Boîte cadeau nouée d’un ruban</td></tr>
+          <tr><th>Idéale pour</th><td>Se détendre</td><td>Les soirées cosy</td><td>Fleurir la maison</td><td>Offrir</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" data-theme="plum">
+  <div class="container">
+    <div class="cta-card">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <p class="eyebrow">Sur mesure</p>
+      <h2 class="cta-title">Vos couleurs, <em>votre bougie.</em></h2>
+      <p class="lead">Choisissez la cire, la chantilly, les décors et la senteur : l’aperçu se compose en direct.</p>
+      <a class="btn btn--fg magnetic" href="creer.html"><span>Créer la vôtre</span></a>
+    </div>
+  </div>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

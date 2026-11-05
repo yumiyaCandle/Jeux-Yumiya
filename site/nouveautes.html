@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nouveautés — Yumiya Candle</title>
+<meta name="description" content="Bientôt chez Yumiya Candle : les bonshommes pain d’épices et les oursons de roses. Soyez prévenu de leur sortie.">
+<link rel="icon" href="img/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="nouveautes" data-theme="plum">
+<main id="main">
+<section class="page-hero" data-theme="plum">
+  <canvas class="aurora" aria-hidden="true"></canvas><div class="grain" aria-hidden="true"></div>
+  <div class="container">
+    <p class="eyebrow intro">Nouveautés</p>
+    <h1 class="h1" data-split><span class="hl">Bientôt</span> <span class="hl"><em>à l’atelier.</em></span></h1>
+    <p class="lead intro" style="--i:3">Deux nouvelles collections se préparent. Inscrivez-vous pour être prévenu dès leur sortie.</p>
+  </div>
+</section>
+<section class="section" id="ginger" data-theme="cream">
+  <div class="container split">
+    <div class="reveal" style="">
+      <div class="split-img" style="aspect-ratio:4/3.4"><img src="img/soon-ginger.webp" alt="Bonshommes pain d’épices" loading="lazy"></div>
+      <div class="row" style="margin-top:12px;flex-wrap:nowrap"><div class="pp-main" style="aspect-ratio:1;flex:1;background:var(--card)"><img src="img/ginger-brown.webp" alt="" loading="lazy"></div><div class="pp-main" style="aspect-ratio:1;flex:1;background:var(--card)"><img src="img/ginger-cream.webp" alt="" loading="lazy"></div><div class="pp-main" style="aspect-ratio:1;flex:1;background:var(--card)"><img src="img/ginger-grey.webp" alt="" loading="lazy"></div></div>
+    </div>
+    <div class="prose reveal">
+      <p class="eyebrow">Nouveau · Collection de Noël</p>
+      <h2 class="h2">Bonshommes pain d’épices</h2>
+      <p style="font-size:1.4rem;color:var(--fg);font-weight:500;letter-spacing:-.02em">Le Noël le plus doux.</p>
+      <p>Trois petits bonshommes en cire, moulés avec leur sourire, leurs boutons et leurs petits zigzags de glaçage en relief. Posés sur une table de fête, glissés dans un calendrier de l’Avent ou offerts avec un mot, ils apportent une touche gourmande à l’hiver.</p>
+      <div class="chips"><span class="chip"><b>Coloris</b>Chocolat, crème et beige</span><span class="chip">Calendrier de l’Avent</span><span class="chip">Table de fête</span><span class="chip">Petit cadeau</span></div>
+      <a class="btn btn--fg magnetic" href="#alerte" style="justify-self:start"><span>Être prévenu de la sortie</span></a>
+    </div>
+  </div>
+</section>
+<section class="section" id="bear" data-theme="rose">
+  <div class="container split">
+    <div class="reveal" style="order:2">
+      <div class="split-img" style="aspect-ratio:4/3.4"><img src="img/soon-bear.webp" alt="Oursons" loading="lazy"></div>
+      <div class="row" style="margin-top:12px;flex-wrap:nowrap"><div class="pp-main" style="aspect-ratio:1;flex:1;background:var(--card)"><img src="img/bear-pink.webp" alt="" loading="lazy"></div><div class="pp-main" style="aspect-ratio:1;flex:1;background:var(--card)"><img src="img/bear-lilac.webp" alt="" loading="lazy"></div><div class="pp-main" style="aspect-ratio:1;flex:1;background:var(--card)"><img src="img/bear-blue.webp" alt="" loading="lazy"></div></div>
+    </div>
+    <div class="prose reveal">
+      <p class="eyebrow">Nouveau · Collection tendresse</p>
+      <h2 class="h2">Oursons</h2>
+      <p style="font-size:1.4rem;color:var(--fg);font-weight:500;letter-spacing:-.02em">Un câlin de roses.</p>
+      <p>Un ourson entièrement couvert de petites roses en relief, avec un nœud sur le ventre. Une bougie à offrir pour une naissance, un anniversaire ou simplement pour dire je t’aime, qui décore la pièce même éteinte.</p>
+      <div class="chips"><span class="chip"><b>Coloris</b>Rose, lilas et bleu</span><span class="chip">Naissance</span><span class="chip">Anniversaire</span><span class="chip">Pour dire je t’aime</span></div>
+      <a class="btn btn--fg magnetic" href="#alerte" style="justify-self:start"><span>Être prévenu de la sortie</span></a>
+    </div>
+  </div>
+</section>
+<section class="section" id="alerte" data-theme="plum">
+  <div class="container narrow">
+    <div class="cta-card">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <p class="eyebrow">Alerte nouveautés</p>
+      <h2 class="cta-title" style="font-size:clamp(2.6rem,7vw,5.6rem)">Soyez les <em>premiers.</em></h2>
+      <p class="lead">Laissez votre email : nous vous écrivons le jour de la sortie, et seulement ce jour-là.</p>
+      <form class="form" id="alert-form" novalidate style="width:100%;max-width:480px">
+        <div class="field"><label for="a-email">Votre email</label><input type="email" id="a-email" autocomplete="email" placeholder="vous@exemple.ch"><span class="err">Entrez une adresse email valide.</span></div>
+        <button class="btn btn--fg" type="submit"><span>Me prévenir</span></button>
+        <p class="form-msg" id="alert-msg" role="status"></p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
