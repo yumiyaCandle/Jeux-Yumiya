@@ -11,21 +11,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body data-page="index" data-theme="plum">
+<body data-page="index" data-theme="cream">
 <main id="main">
-<section class="hero" data-theme="plum">
-  <canvas class="aurora" aria-hidden="true"></canvas><div class="grain" aria-hidden="true"></div>
-  <img class="hero-side l intro" style="--i:5" src="img/cut-aut.webp" alt="" aria-hidden="true">
-  <img class="hero-side r intro" style="--i:6" src="img/tulip-hq-rose.webp" alt="" aria-hidden="true">
-  <div class="container hero-center">
-    <a href="nouveautes.html" class="pill-badge intro" style="--i:0"><span class="pill-dot"></span>Bientôt : les bonshommes pain d’épices <span aria-hidden="true">→</span></a>
-    <h1 class="h1 hero-title" data-split>La lumière, <em>faite main.</em></h1>
-    <p class="lead intro" style="--i:3">Bougies gourmandes et florales, coulées et décorées une à une à La Neuveville, en cire de soja 100&nbsp;% végétale.</p>
-    <div class="row intro" style="--i:4;justify-content:center">
-      <a class="btn btn--fg magnetic" href="boutique.html"><span>Découvrir la boutique</span></a>
-      <a class="btn btn--ghost magnetic" href="creer.html"><span>Créer la vôtre</span></a>
+<section class="h3d" id="decouvrir" data-theme="cream" aria-label="La bougie Lavande en 3D">
+  <div class="h3d-sticky">
+    <div class="h3d-bg" aria-hidden="true"></div>
+    <p class="h3d-giant" aria-hidden="true">Yumiya</p>
+    <div class="h3d-canvas" id="candle3d"><img class="h3d-fallback" src="img/cut-lav.webp" alt="Bougie gourmande Yumiya"></div>
+
+    <div class="h3d-intro">
+      <p class="eyebrow intro">Bougies coulées à la main · La Neuveville</p>
+      <h1 class="h1" data-split>La lumière, <em>faite main.</em></h1>
+      <p class="lead intro" style="--i:3">Cire de soja végétale, chantilly pochée, décors façonnés un à un. Faites-la tourner, allumez-la.</p>
+      <div class="row intro" style="--i:4"><a class="btn btn--fg magnetic" href="boutique.html"><span>Découvrir la boutique</span></a><a class="btn btn--ghost magnetic" href="creer.html"><span>Créer la vôtre</span></a></div>
     </div>
-    <div class="hero-candle intro" style="--i:2"><img src="img/cut-lav.webp" alt="Bougie gourmande Lavande Yumiya"></div>
+
+    <div class="h3d-callouts" aria-live="polite">
+      <div class="co co--r"><span class="co-n">01</span><b>Chantilly pochée à la main</b><p>Montée et posée à la poche, comme en pâtisserie.</p></div>
+      <div class="co co--l"><span class="co-n">02</span><b>Décors façonnés un à un</b><p>Cœurs, tablette de chocolat et papillons en cire.</p></div>
+      <div class="co co--r"><span class="co-n">03</span><b>Cire de soja 100 % végétale</b><p>Sans paraffine, coulée couche après couche.</p></div>
+      <div class="co co--l"><span class="co-n">04</span><b>Mèche en coton</b><p>Une flamme douce et régulière, environ 12 heures.</p></div>
+    </div>
+
+    <div class="h3d-end">
+      <p class="eyebrow">N° <span id="h3d-n">01</span> · Bougie gourmande</p>
+      <p class="h3d-name" id="h3d-name">Lavande</p>
+      <div class="row"><span class="price" id="h3d-price">10.90 CHF</span><a class="btn btn--fg magnetic" id="h3d-go" href="produit.html?p=lav"><span>Découvrir</span></a><button class="btn btn--ghost" id="h3d-add" data-add="lav"><span>Ajouter au panier</span></button></div>
+    </div>
+
+    <div class="h3d-controls">
+      <div class="tabs" role="tablist" aria-label="Choisir le parfum" id="h3d-flavors"><span class="tabs-pill" aria-hidden="true"></span><button class="tab" role="tab" aria-selected="true" data-f="lav">Lavande</button><button class="tab" role="tab" aria-selected="false" data-f="aut">Automne</button></div>
+      <button class="round" id="h3d-flame" aria-pressed="true" aria-label="Éteindre la bougie"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3c2.5 3.2 4 5.6 4 7.6a4 4 0 0 1-8 0C8 8.6 9.5 6.2 12 3Z"/><path d="M12 21v-4"/></svg></button>
+      <span class="h3d-hint">← Glissez pour la faire tourner →</span>
+    </div>
+    <div class="h3d-bar" aria-hidden="true"><span></span></div>
   </div>
 </section>
 
@@ -125,6 +144,9 @@
     </div>
   </div>
 </section>
+
+<script src="vendor/three.min.js"></script>
+<script src="candle3d.js"></script>
 </main>
 <script src="app.js"></script>
 </body>
