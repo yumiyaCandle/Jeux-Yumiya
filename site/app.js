@@ -500,44 +500,27 @@
       scrollTo({ top: top + span * (k + .5) / SHOW.length, behavior: reduce ? 'auto' : 'smooth' });
     }));
   }
-  /* ----- Accueil : bougie 3D façon Ciao Energy ----- */
-  const h3d = $('#decouvrir');
-  let c3d = null;
-  if (h3d) {
-    try { c3d = window.Candle3D ? window.Candle3D.mount($('#candle3d'), { flavor: 'lav' }) : null; } catch (e) { c3d = null; }
-    if (c3d) h3d.classList.add('has-3d');
-    h3d.dataset.flavor = 'lav';
-    pillTabs($('#h3d-flavors'), (f) => {
-      h3d.dataset.flavor = f;
-      if (c3d) c3d.setFlavor(f);
-      const p = PRODUCTS[f];
-      $('#h3d-n').textContent = p.n; $('#h3d-name').textContent = p.name; $('#h3d-price').textContent = chf(p.price);
-      $('#h3d-go').href = 'produit.html?p=' + f; $('#h3d-add').dataset.add = f;
-      const fb = $('.h3d-fallback'); if (fb) fb.src = p.cut;
-    });
-    const fl = $('#h3d-flame');
-    fl.addEventListener('click', () => {
-      const on = fl.getAttribute('aria-pressed') !== 'true';
-      fl.setAttribute('aria-pressed', String(on)); fl.setAttribute('aria-label', on ? 'Éteindre la bougie' : 'Allumer la bougie');
-      if (c3d) c3d.setLit(on);
-    });
+  /* ----- Accueil : photos des collections ----- */
+  const ph = $('.ph');
+  if (ph) {
+    // Sur téléphone, les trois photos se relaient
+    const panels = $$('.ph-panel', ph), dots = $$('.ph-dots i', ph);
+    let cur = 0;
+    const show = (k) => { panels.forEach((x, i) => x.classList.toggle('on', i === k)); dots.forEach((x, i) => x.classList.toggle('on', i === k)); };
+    show(0);
+    setInterval(() => { if (innerWidth <= 760 && !reduce) { cur = (cur + 1) % panels.length; show(cur); } }, 4200);
   }
-  function updateH3d() {
-    if (!h3d) return;
-    const r = h3d.getBoundingClientRect();
-    const p = clamp(-r.top / (h3d.offsetHeight - innerHeight), 0, 1);
-    h3d.classList.toggle('p1', p > .1);
-    h3d.classList.toggle('p3', p > .86);
-    const cos = $$('.co', h3d);
-    cos.forEach((c, i) => { const a = .16 + i * .175; c.classList.toggle('on', p > a && p < a + .175); });
-    $('.h3d-bar span', h3d).style.transform = `scaleY(${p})`;
-    const wide = innerWidth > 760;
-    const ox = wide ? 2.2 * (1 - clamp(p / .14, 0, 1)) : 0, oy = Math.max(0, p - .78) * (wide ? 7 : 11);
-    if (c3d) c3d.setScroll(p * Math.PI * 2, Math.sin(p * Math.PI) * .12, 1 + Math.sin(p * Math.PI) * .1 - Math.max(0, p - .78) * 1.4, ox, oy);
+  function updatePh() {
+    if (!ph || reduce) return;
+    const y = scrollY;
+    if (y > innerHeight * 1.2) return;
+    $$('.ph-panel img', ph).forEach((im) => { im.style.translate = `0 ${y * parseFloat(im.dataset.speed) / 400}px`; });
+    $('.ph-content', ph).style.transform = `translateY(${y * -.25}px)`;
+    $('.ph-content', ph).style.opacity = String(Math.max(0, 1 - y / (innerHeight * .7)));
   }
 
   function updateHome() {
-    updateH3d();
+    updatePh();
     if (heroCandle && !reduce) {
       const y = Math.min(scrollY, innerHeight);
       heroCandle.style.transform = `translateY(${y * -.18}px) scale(${1 + y * .0004})`;

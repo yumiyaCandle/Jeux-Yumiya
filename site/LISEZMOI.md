@@ -6,7 +6,7 @@ Aucune installation n'est nécessaire.
 ## Pages
 | Fichier | Page |
 |---|---|
-| `index.html` | Accueil (bougie en 3D, vitrine des 4 bougies) |
+| `index.html` | Accueil (photos des collections, vitrine des 4 bougies) |
 | `boutique.html` | Boutique, quiz et comparateur |
 | `produit.html?p=lav` · `aut` · `tulip` · `box` | Fiche de chaque bougie |
 | `nouveautes.html` | Bonshommes pain d'épices et oursons |
@@ -20,7 +20,6 @@ Aucune installation n'est nécessaire.
 ## Modifier le site
 - **Produits, prix, réglages** (email, TWINT, Formspree, EmailJS) : en haut de `app.js`, dans `SITE` et `PRODUCTS`.
 - **Couleurs** : en haut de `styles.css`.
-- **Bougie 3D** : `candle3d.js` (utilise three.js, fourni dans `vendor/`).
 - **Photos** : dossier `img/`.
 
 ## Mettre en ligne sur GitHub Pages
