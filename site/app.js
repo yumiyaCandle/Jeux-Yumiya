@@ -260,7 +260,35 @@
     });
     walk(el);
   });
-  requestAnimationFrame(() => setTimeout(() => document.body.classList.add('is-ready'), 60));
+  let firstVisit = false;
+  try { firstVisit = PAGE === 'index' && !reduce && !sessionStorage.getItem('yumiya-intro'); sessionStorage.setItem('yumiya-intro', '1'); } catch { /* stockage bloqué */ }
+  if (firstVisit) {
+    const veil = document.createElement('div');
+    veil.className = 'intro-veil'; veil.setAttribute('aria-hidden', 'true');
+    veil.innerHTML = `<div><img src="img/logo.webp" alt=""><p>${[...'Yumiya'].map((c, i) => `<span style="--i:${i}">${c}</span>`).join('')}</p><small>CANDLE · HANDMADE · LA NEUVEVILLE</small></div>`;
+    document.body.appendChild(veil);
+    setTimeout(() => { veil.classList.add('out'); document.body.classList.add('is-ready'); }, 1700);
+    setTimeout(() => veil.remove(), 2800);
+  } else requestAnimationFrame(() => setTimeout(() => document.body.classList.add('is-ready'), 60));
+
+  // Titres de section : chaque mot monte depuis un masque
+  $$('.h2.reveal').forEach((el) => {
+    let w = 0;
+    const walk = (node) => [...node.childNodes].forEach((n) => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach((part) => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.append(' '); return; }
+          const o = document.createElement('span'); o.className = 'rw';
+          const i = document.createElement('span'); i.style.setProperty('--w', w++); i.textContent = part;
+          o.append(i); frag.append(o);
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeName !== 'BR') walk(n);
+    });
+    walk(el);
+  });
 
   // Apparitions
   const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
@@ -308,6 +336,25 @@
     };
     draw(0);
   });
+
+  // Cartes produits : inclinaison 3D et bulle « Découvrir » (ordinateur)
+  if (fine && !reduce) {
+    const pill = document.createElement('div'); pill.className = 'cursor-pill'; pill.textContent = 'Découvrir'; pill.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(pill);
+    let px = 0, py = 0, tx = 0, ty = 0, raf = 0;
+    const follow = () => { px += (tx - px) * .25; py += (ty - py) * .25; pill.style.left = px + 'px'; pill.style.top = py + 'px'; raf = Math.abs(tx - px) + Math.abs(ty - py) > .5 ? requestAnimationFrame(follow) : 0; };
+    document.addEventListener('pointermove', (e) => {
+      tx = e.clientX; ty = e.clientY; if (!raf) raf = requestAnimationFrame(follow);
+      const c = e.target.closest('.pcard'), onBtn = e.target.closest('.qa');
+      pill.classList.toggle('on', !!c && !onBtn);
+      $$('.pcard.tilting').forEach((x) => { if (x !== c) { x.classList.remove('tilting'); x.style.transform = ''; } });
+      if (c) {
+        const r = c.getBoundingClientRect(), kx = (e.clientX - r.left) / r.width - .5, ky = (e.clientY - r.top) / r.height - .5;
+        c.classList.add('tilting'); c.style.transform = `perspective(900px) rotateX(${-ky * 7}deg) rotateY(${kx * 9}deg) translateY(-8px)`;
+      }
+    }, { passive: true });
+    document.addEventListener('pointerleave', () => pill.classList.remove('on'));
+  }
 
   // Boutons magnétiques
   if (fine && !reduce) $$('.magnetic').forEach((btn) => {
@@ -593,6 +640,23 @@
       if (q) { qty = clamp(qty + +q.dataset.q, 1, 20); $('#pp-qty').textContent = qty; }
       if (e.target.closest('#pp-add')) addProduct(k, { color, qty }, e.target.closest('#pp-add'));
     });
+    // Barre d'achat qui apparaît quand le bouton principal sort de l'écran
+    document.body.insertAdjacentHTML('beforeend', `<div class="buybar" id="buybar" style="--tint:${p.tint}"><img src="${p.colors ? p.colors[0].img : p.cut}" alt=""><p class="buybar-name">${p.name}<small>${p.line} · ${chf(p.price)}</small></p><button class="btn" id="buybar-add" ${p.active ? '' : 'disabled'}><span>Ajouter au panier</span></button></div>`);
+    const bar = $('#buybar');
+    new IntersectionObserver(([e]) => bar.classList.toggle('on', !e.isIntersecting && e.boundingClientRect.top < 0)).observe($('#pp-add'));
+    $('#buybar-add').addEventListener('click', (e) => addProduct(k, { color, qty }, e.currentTarget));
+    pp.addEventListener('click', (e) => { if (e.target.closest('[data-color]')) $('img', bar).src = p.colors[color].img; });
+    const more = $('#pp-more');
+    if (more) {
+      more.innerHTML = `<div class="container">
+        <div class="pp-story split-img reveal"><img src="${p.imgs[0]}" alt="${esc(p.full)} en situation" loading="lazy">
+          <div class="pp-story-text"><p class="eyebrow">Les détails</p><h2 class="h2">Faite à la main, <em>une à une.</em></h2></div></div>
+        <div class="values" style="margin-top:16px">
+          ${p.facts.slice(0, 2).map(([a, b], i) => `<div class="value reveal"><span class="big">${['i', 'ii'][i]}</span><h3>${a}</h3><p>${b}</p></div>`).join('')}
+          <div class="value reveal"><span class="big">iii</span><h3>Livraison</h3><p>Partout en Suisse pour 8.90 CHF, en 5 à 10 jours ouvrables. Retour possible sous 30 jours.</p></div>
+        </div></div>`;
+      observe(more);
+    }
     const others = Object.keys(PRODUCTS).filter((x) => x !== k);
     const rel = $('#related'); if (rel) { rel.innerHTML = others.map(card).join(''); observe(rel); }
     // re-découpe du titre inséré
