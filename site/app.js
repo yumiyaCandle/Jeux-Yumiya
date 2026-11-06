@@ -1128,6 +1128,64 @@
     navigator.clipboard ? navigator.clipboard.writeText(txt).then(() => done(true), () => done(false)) : done(false);
   }));
 
+
+  /* =========================================================
+     FINITIONS DE MOUVEMENT
+     ========================================================= */
+  // Défilement doux à la molette (ordinateur) : la page glisse au lieu de sauter
+  if (fine && !reduce) {
+    let target = scrollY, current = scrollY, gliding = false;
+    const maxY = () => document.documentElement.scrollHeight - innerHeight;
+    const glide = () => {
+      current += (target - current) * .11;
+      if (Math.abs(target - current) < .5) { current = target; gliding = false; }
+      scrollTo({ top: current, behavior: 'instant' });
+      if (gliding) requestAnimationFrame(glide);
+    };
+    addEventListener('wheel', (e) => {
+      if (e.ctrlKey || e.defaultPrevented || document.body.classList.contains('is-locked')) return;
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      // laisse défiler normalement les zones qui ont leur propre défilement
+      for (let n = e.target; n && n !== document.body; n = n.parentElement) {
+        if (n.scrollHeight > n.clientHeight + 2 && /(auto|scroll)/.test(getComputedStyle(n).overflowY)) return;
+      }
+      e.preventDefault();
+      if (!gliding) { target = current = scrollY; }
+      const d = e.deltaMode === 1 ? e.deltaY * 32 : e.deltaMode === 2 ? e.deltaY * innerHeight : e.deltaY;
+      target = clamp(target + d, 0, maxY());
+      if (!gliding) { gliding = true; requestAnimationFrame(glide); }
+    }, { passive: false });
+    addEventListener('scroll', () => { if (!gliding) target = current = scrollY; }, { passive: true });
+  }
+
+  // Menu : une pastille glisse sous le lien survolé
+  const links = $('.nav-links');
+  if (links && fine) {
+    const hov = document.createElement('span'); hov.className = 'nav-hover'; links.prepend(hov);
+    links.addEventListener('pointerover', (e) => { const a = e.target.closest('a'); if (!a) return; hov.style.width = a.offsetWidth + 'px'; hov.style.transform = `translateX(${a.offsetLeft}px)`; hov.classList.add('on'); });
+    links.addEventListener('pointerleave', () => hov.classList.remove('on'));
+  }
+
+  // Accueil : les photos des collections suivent légèrement la souris
+  const phPanels = $$('.ph-panel');
+  if (phPanels.length && fine && !reduce) {
+    $('.ph').addEventListener('pointermove', (e) => {
+      const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+      phPanels.forEach((p, i) => { const k = (i - 1) * .6 + 1; p.style.transform = `translate(${x * -14 * k}px, ${y * -10}px)`; });
+    });
+  }
+
+  // Bandes de texte et galerie : elles accélèrent avec la vitesse du défilement
+  const loops = [...$$('.marquee-track'), ...$$('.insta-track')].map((el) => el.getAnimations()[0]).filter(Boolean);
+  if (loops.length && !reduce) {
+    let lastSY = scrollY, vel = 0;
+    (function boost() {
+      const d = scrollY - lastSY; lastSY = scrollY;
+      vel += (Math.min(Math.abs(d), 120) - vel) * .12;
+      loops.forEach((a) => { a.playbackRate = 1 + vel * .12; });
+      requestAnimationFrame(boost);
+    })();
+  }
   renderCart();
   onScroll();
 })();

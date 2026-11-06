@@ -957,3 +957,19 @@ main > section.morph { background: transparent; }
   .ss-h { font-size: 2.2rem; top: 96px; }
 }
 @media (prefers-reduced-motion: reduce) { .ss-h span, .ss-h em { opacity: 1; } }
+
+/* =========================================================
+   FINITIONS DE MOUVEMENT
+   ========================================================= */
+.nav-links { position: relative; }
+.nav-hover { position: absolute; z-index: -1; top: 50%; left: 0; height: 36px; margin-top: -18px; border-radius: 999px; background: var(--soft); box-shadow: inset 0 0 0 1px var(--line); opacity: 0; transition: transform .45s var(--ease), width .45s var(--ease), opacity .3s; pointer-events: none; }
+.nav-hover.on { opacity: 1; }
+.ph-panel { transition: transform 1.2s var(--ease); }
+.insta { overflow: hidden; }
+.insta-row { margin-top: 10px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.insta-track { display: flex; gap: 14px; width: max-content; animation: slide 60s linear infinite; }
+.insta-track img { width: clamp(200px, 22vw, 300px); aspect-ratio: 4 / 5; object-fit: cover; border-radius: 20px; transition: transform .6s var(--ease), filter .6s; }
+.insta-track img:nth-child(even) { margin-top: 40px; }
+.insta-row:hover .insta-track img { filter: saturate(.85); }
+.insta-row:hover .insta-track img:hover { transform: scale(1.04) rotate(-1deg); filter: none; }
+@media (prefers-reduced-motion: reduce) { .insta-track { animation: none; } }
