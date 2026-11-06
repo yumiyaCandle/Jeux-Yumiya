@@ -10,7 +10,7 @@ Aucune installation n'est nécessaire.
 | `boutique.html` | Boutique, quiz et comparateur |
 | `produit.html?p=lav` · `aut` · `tulip` · `box` | Fiche de chaque bougie |
 | `nouveautes.html` | Bonshommes pain d'épices et oursons |
-| `atelier.html` | Fabrication, étape par étape |
+| `atelier.html` | Le film de fabrication (120 images dans `img/film/`) |
 | `creer.html` | Composer sa bougie + demande sur mesure |
 | `journal.html` | Articles et questions fréquentes |
 | `maison.html` | L'histoire des cinq élèves |

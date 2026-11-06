@@ -28,7 +28,11 @@
     shipping: 8.90,
     formspree: 'https://formspree.io/f/xlgzandp',
     twint: 'https://go.twint.ch/1/e/tw?tw=acq.Ym3w05jiSvied2R3BRgLV99gzY1xEgp4HkHFveezjEUlzb_7czPOsxlqogPRkuSn',
-    emailjs: { publicKey: 'Z6kx6GmRHGnW63JHW', serviceId: 'service_1exfcph', templateId: 'template_yg7yy6z' },
+    sumup: 'https://pay.sumup.com/b2c/QHKF9ZF6',
+    // EmailJS : confirmation de commande + email de bienvenue (alerte nouveautés)
+    emailjs: { publicKey: 'Z6kx6GmRHGnW63JHW', serviceId: 'service_1exfcph', templateId: 'template_yg7yy6z', welcomeTemplateId: 'template_bwd1waf' },
+    url: 'https://yumiyacandle.github.io/Yumiya-Candle-Web/',
+    adresse: 'Route de Neuchâtel 7, 2520 La Neuveville, Suisse',
   };
 
   /* Catalogue — active:false affiche le produit comme épuisé */
@@ -99,10 +103,11 @@
           <div>
             <a class="brand" href="index.html"><img src="img/logo.webp" alt="" width="38" height="38"><span>YUMIYA<small>CANDLE · HANDMADE</small></span></a>
             <p class="f-about">Bougies coulées et décorées à la main par cinq élèves de l’École Supérieure de Commerce de La Neuveville.</p>
+            <p class="f-about" style="margin-top:8px">${SITE.adresse}</p>
           </div>
           <div><p class="f-title">Boutique</p><a href="boutique.html">Toutes les bougies</a><a href="produit.html?p=box">Coffret cadeau</a><a href="creer.html">Créer la vôtre</a><a href="nouveautes.html">Nouveautés</a></div>
           <div><p class="f-title">Yumiya</p><a href="maison.html">La maison</a><a href="atelier.html">L’atelier</a><a href="journal.html">Journal</a><a href="journal.html#questions">Questions fréquentes</a></div>
-          <div><p class="f-title">Contact</p><a href="mailto:${SITE.email}">${SITE.email}</a><a href="https://instagram.com/${SITE.instagram}" target="_blank" rel="noopener">Instagram @${SITE.instagram}</a><a href="legal.html#mentions">Mentions légales</a><a href="legal.html#cgv">Conditions de vente</a></div>
+          <div><p class="f-title">Contact</p><a href="maison.html#contact">Nous écrire</a><a href="mailto:${SITE.email}">${SITE.email}</a><a href="https://instagram.com/${SITE.instagram}" target="_blank" rel="noopener">Instagram @${SITE.instagram}</a><a href="legal.html#mentions">Mentions légales</a><a href="legal.html#cgv">Conditions de vente</a></div>
         </div>
         <div class="wordmark" id="wordmark" aria-hidden="true"><span>Y</span><span>u</span><span>m</span><span>i</span><span>y</span><span>a</span></div>
         <div class="footer-bottom">
@@ -533,6 +538,107 @@
     }
   }
 
+  /* ----- L'atelier : film de fabrication piloté par le défilement (repris du site en ligne) ----- */
+  const filmSec = $('#naissance');
+  if (filmSec) {
+    const N = 120, cv = $('#film-cv'), cx = cv.getContext('2d', { alpha: false });
+    const fcaps = $$('.fcap', filmSec), chap = $$('.film-chap li', filmSec), fbar = $('#film-bar'), lineup = $$('#film-lineup a');
+    const R = fcaps.map((c) => c.dataset.r.split(',').map(Number));
+    const imgs = new Array(N); let W = 0, H = 0, drawn = -1, shown = 0, target = 0, G = null, bg = '#1a1210';
+    const src = (i) => 'img/film/f' + String(i).padStart(3, '0') + '.webp';
+    // chargement progressif : d'abord une image sur 8, puis on complète
+    const order = []; for (let st = 8; st >= 1; st >>= 1) for (let i = 0; i < N; i += st) if (!order.includes(i)) order.push(i);
+    let started = false;
+    const load = () => {
+      if (started) return; started = true; let k = 0;
+      const next = () => { if (k >= order.length) return; const i = order[k++]; const im = new Image(); im.decoding = 'async'; im.onload = () => { imgs[i] = im; if (i === 0) { const c = document.createElement('canvas'); c.width = c.height = 4; const g = c.getContext('2d'); g.drawImage(im, 0, 0, 4, 4, 0, 0, 4, 4); const d = g.getImageData(0, 0, 1, 1).data; bg = `rgb(${d[0]},${d[1]},${d[2]})`; filmSec.style.setProperty('--film-bg', bg); } drawn = -1; next(); }; im.onerror = next; im.src = src(i); };
+      for (let p = 0; p < 4; p++) next();
+    };
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) load(); }, { rootMargin: '600px' }).observe(filmSec);
+    const nearest = (i) => { for (let d = 0; d < N; d++) { if (imgs[i - d]) return imgs[i - d]; if (imgs[i + d]) return imgs[i + d]; } return null; };
+    const size = () => { const dpr = Math.min(devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0); drawn = -1; };
+    size(); addEventListener('resize', size);
+    const place = () => { if (!G) return; lineup.forEach((a) => { a.style.left = (G.x + +a.dataset.x * G.dw) + 'px'; a.style.top = (G.y + +a.dataset.y * G.dh) + 'px'; }); };
+    const draw = () => {
+      const i = Math.round(shown * (N - 1)); if (i === drawn) return;
+      const im = nearest(i); if (!im) return; drawn = imgs[i] ? i : -1;
+      const wide = innerWidth > 760, s = wide ? Math.min(W / im.width, H / im.height) * .96 : W / im.width * 1.05, dw = im.width * s, dh = im.height * s, x = (W - dw) / 2, y = (H - dh) / 2 + (wide ? H * .03 : -H * .04);
+      cx.fillStyle = bg; cx.fillRect(0, 0, W, H); cx.drawImage(im, x, y, dw, dh);
+      G = { x, y, dw, dh }; place();
+    };
+    const filmTick = () => {
+      const r = filmSec.getBoundingClientRect(); if (r.bottom < -100 || r.top > innerHeight + 100) return;
+      target = clamp(-r.top / (filmSec.offsetHeight - innerHeight), 0, 1);
+    };
+    (function loop() {
+      shown += (target - shown) * (reduce ? 1 : .16);
+      if (Math.abs(target - shown) < .0005) shown = target;
+      draw();
+      fcaps.forEach((c, k) => c.classList.toggle('on', shown >= R[k][0] && shown < R[k][1]));
+      const ci = R.findIndex(([a, b]) => shown >= a && shown < b);
+      chap.forEach((c, k) => c.classList.toggle('on', k === ci));
+      fbar.style.transform = `scaleX(${shown})`;
+      filmSec.classList.toggle('end', shown > .9);
+      filmSec.classList.toggle('started', shown > .02);
+      requestAnimationFrame(loop);
+    })();
+    addEventListener('scroll', filmTick, { passive: true }); filmTick();
+  }
+
+  /* ----- Boutique : les bougies viennent se ranger (repris du site en ligne) ----- */
+  const ssRun = $('.ss-run');
+  if (ssRun) {
+    const st = ssRun.firstElementChild, its = $$('.ss-it', ssRun), hs = [...$('.ss-h', ssRun).children], fl = $('.ss-floor', ssRun);
+    const FROM = [[-.62, -.35, -24], [-.25, .7, 16], [.3, -.72, -14], [.66, .4, 22]];
+    const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1), ease = (t) => 1 - Math.pow(1 - t, 3);
+    const ssTick = () => {
+      const r = ssRun.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+      const p = reduce ? 1 : clamp(-r.top / Math.max(1, ssRun.offsetHeight - st.offsetHeight), -.4, 1);
+      const W = st.clientWidth, H = st.clientHeight, phone = W < 700;
+      its.forEach((it, i) => {
+        const t = ease(seg(p, -.4 + i * .06, .5 + i * .05));
+        const ih = phone ? H * .2 : Math.min(H * .42, W * .19), cxp = phone ? W * (i % 2 ? .72 : .28) : W * (.2 + i * .2), base = phone ? H * (i < 2 ? .46 : .8) : H * .7;
+        it.style.height = ih + 'px'; it.style.left = cxp + 'px'; it.style.top = (base - ih) + 'px';
+        it.style.transform = `translate(-50%,0) translate(${lerp(FROM[i][0] * W, 0, t).toFixed(1)}px,${lerp(FROM[i][1] * H, 0, t).toFixed(1)}px) rotate(${lerp(FROM[i][2], 0, t).toFixed(2)}deg) scale(${lerp(1.7, 1, t).toFixed(3)})`;
+        it.style.opacity = Math.min(1, t * 2.2).toFixed(3);
+        const l = ease(seg(p, .6 + i * .04, .78 + i * .04)); it.style.setProperty('--l', l.toFixed(3)); it.classList.toggle('live', l > .6);
+      });
+      const a = ease(seg(p, -.4, -.05)), b = ease(seg(p, .42, .6));
+      hs[0].style.opacity = a.toFixed(3); hs[0].style.transform = `scale(${lerp(1.15, 1, a).toFixed(3)})`;
+      hs[1].style.opacity = b.toFixed(3); hs[1].style.transform = `translateY(${lerp(24, 0, b).toFixed(1)}px)`;
+      fl.style.opacity = ease(seg(p, .4, .65)).toFixed(3);
+      st.style.setProperty('--z', lerp(1, .94, ease(seg(p, .88, 1))).toFixed(3));
+    };
+    addEventListener('scroll', () => requestAnimationFrame(ssTick), { passive: true }); addEventListener('resize', ssTick); ssTick();
+  }
+  /* ----- Boutique : le coffret plein écran qui recule dans sa carte ----- */
+  const szRun = $('.sz-run');
+  if (szRun) {
+    const st = szRun.firstElementChild, fr = $('.sz-frame', szRun), im = $('img', fr), cp = $('.sz-copy', szRun);
+    const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1), ease = (t) => 1 - Math.pow(1 - t, 3);
+    const szTick = () => {
+      const r = szRun.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+      const p = reduce ? 1 : clamp(-r.top / Math.max(1, szRun.offsetHeight - st.offsetHeight), 0, 1);
+      const W = st.clientWidth, H = st.clientHeight, phone = W < 800, t = ease(seg(p, .08, .6));
+      const fh = phone ? H * .5 : H * .78, fw = phone ? Math.min(W * .84, fh * .742) : fh * .742;
+      const fx = phone ? (W - fw) / 2 : W * .5 - fw - W * .02, fy = phone ? H * .1 : (H - fh) / 2 + 20;
+      fr.style.left = (fx * t).toFixed(1) + 'px'; fr.style.top = (fy * t).toFixed(1) + 'px';
+      fr.style.width = (W + (fw - W) * t).toFixed(1) + 'px'; fr.style.height = (H + (fh - H) * t).toFixed(1) + 'px';
+      fr.style.borderRadius = (28 * t).toFixed(1) + 'px';
+      im.style.transform = `scale(${(1.25 - .25 * t).toFixed(3)})`;
+      const c = ease(seg(p, .5, .78)); cp.style.opacity = c.toFixed(3); cp.style.transform = `translateY(${(30 * (1 - c)).toFixed(1)}px)`; cp.classList.toggle('live', c > .6);
+    };
+    addEventListener('scroll', () => requestAnimationFrame(szTick), { passive: true }); addEventListener('resize', szTick); szTick();
+  }
+  /* ----- Boutique : phrase qui s'allume mot par mot ----- */
+  const stw = $('#st-words');
+  if (stw) {
+    stw.innerHTML = stw.textContent.trim().split(/\s+/).map((w) => `<span>${w} </span>`).join('');
+    const ws = $$('span', stw);
+    const wTick = () => { const r = stw.getBoundingClientRect(); const pp2 = clamp((innerHeight * .85 - r.top) / (r.height + innerHeight * .35), 0, 1) * (ws.length + 6); ws.forEach((s, i) => s.style.setProperty('--w', clamp((pp2 - i) / 6, 0, 1).toFixed(3))); };
+    addEventListener('scroll', () => requestAnimationFrame(wTick), { passive: true }); wTick();
+  }
+
   /* ----- Boutique : filtres + quiz ----- */
   const filt = $('#filters');
   if (filt) pillTabs(filt, (f) => {
@@ -597,7 +703,7 @@
       <div class="pp-info">
         <a href="boutique.html" class="link-arrow" style="opacity:.7">← Toutes les bougies</a>
         <p class="pp-line">${p.line} · N° ${p.n}${p.badge ? ' · ' + p.badge : ''}</p>
-        <h1 class="h1" data-split>${p.name}</h1>
+        <h2 class="h1" data-split>${p.name}</h2>
         <p class="pp-price price">${p.active ? chf(p.price) : 'Épuisé'}</p>
         <p class="pp-desc">${p.desc}</p>
         ${p.colors ? `<div><p class="opt-label">Coloris <span id="pp-color">${p.colors[0].n}</span></p><div class="swatches">${p.colors.map((c, i) => `<button class="sw" aria-pressed="${i === 0}" data-color="${i}"><i style="--c:${c.c.length > 1 ? `linear-gradient(135deg, ${c.c[0]} 50%, ${c.c[1]} 50%)` : c.c[0]}"></i>${c.n}</button>`).join('')}</div></div>` : ''}
@@ -623,23 +729,119 @@
       if (q) { qty = clamp(qty + +q.dataset.q, 1, 20); $('#pp-qty').textContent = qty; }
       if (e.target.closest('#pp-add')) addProduct(k, { color, qty }, e.target.closest('#pp-add'));
     });
+    /* ---------- Récit de la bougie (repris du site en ligne) ---------- */
+    const PP = {
+      lav: { amb: 'img/p-lav.webp', hl: ['img/p-lav.webp', 'img/real.webp', 'img/spring2.webp', 'img/giftbox.webp'], burn: 12, weight: 90 },
+      aut: { amb: 'img/p-aut.webp', hl: ['img/p-aut.webp', 'img/real.webp', 'img/spring2.webp', 'img/giftbox.webp'], burn: 12, weight: 90 },
+      tulip: { amb: 'img/spring1.webp', hl: ['img/spring1.webp', 'img/real.webp', 'img/spring2.webp', 'img/giftbox.webp'], cut: 'img/tulip-hq-violet.webp' },
+      box: { amb: 'img/box-white.webp', hl: ['img/box-white.webp', 'img/p-lav.webp', 'img/p-aut.webp', 'img/spring1.webp'], cut: 'img/cut-box2.webp' },
+    };
+    const D = PP[k], cut = D.cut || p.cut, isBox = k === 'box', isTul = k === 'tulip', wideCut = p.wide && !D.cut;
+    const hl = ['Coulée à la main, une à une, à l’atelier de La Neuveville.', '100 % cire de soja végétale. Zéro paraffine.',
+      isBox ? 'Un écrin pastel noué d’un ruban, prêt à offrir.' : 'Une mèche en coton pour une flamme douce et régulière.', 'Livrée avec soin, partout en Suisse.'];
+    const caps = [[p.facts[0][0], p.facts[0][1], p.mood], [p.facts[1][0], p.facts[1][1], 'Façonné et posé à la main, pièce par pièce.'], ['Cire', 'Soja, 100 % végétale', 'Biodégradable, sans paraffine, pour une combustion propre.']];
+    const tile = (num, small, label, sub, cls = '') => `<div class="ps-tile reveal ${cls}"><div class="ps-num">${num}${small ? `<small>${small}</small>` : ''}</div><b>${label}</b>${sub ? `<span>${sub}</span>` : ''}</div>`;
+    const word = (w, label, sub, cls = '') => `<div class="ps-tile reveal ${cls}"><div class="ps-word">${w}</div><b>${label}</b>${sub ? `<span>${sub}</span>` : ''}</div>`;
+    const soy = tile('<span data-count="100">0</span>', '%', 'cire de soja', 'Végétale, biodégradable, sans paraffine.');
+    const one = tile('1', '/1', 'pièce unique', 'Jamais deux fois la même.');
+    const ch = tile('CH', '', 'Fabriquée en Suisse', 'La Neuveville');
+    const durer = isBox ? `
+      <h2 class="h2 reveal">Deux bougies, <em>un écrin.</em></h2>
+      <p class="lead reveal" style="margin:18px 0 34px">Le coffret réunit une bougie gourmande et une bougie tulipe, emballées une à une et posées dans le papier frisé.</p>
+      <div class="duo-h reveal"><span class="duo-n">1</span><img src="img/cut-marsh.webp" alt=""><div><h3>Bougie gourmande</h3><p>Marshmallow-framboise</p></div></div>
+      <div class="ps-grid">${tile('<span data-count="12">0</span>', ' h', 'de combustion environ', 'En coupant la mèche à 5 mm avant chaque allumage.', 'big')}${tile('<span data-count="90">0</span>', ' g', 'de cire coulée', 'Format petit.')}${soy}${word('Chantilly', 'décor de cire', 'Montée à la poche, cœurs posés à la main.')}${one}</div>
+      <div class="duo-h reveal"><span class="duo-n">2</span><img src="img/tulip-hq-corail.webp" alt=""><div><h3>Bougie tulipe</h3><p>Vanille-fraise</p></div></div>
+      <div class="ps-grid">${word('Tulipes', 'bouquet en cire', 'Modelées pétale par pétale, sur un socle vert mousse.', 'big')}${soy}${word('Verre', 'contenant transparent', '')}${one}${ch}</div>
+      <div class="duo-box reveal"><b>L’écrin</b><span>Boîte pastel festonnée, papier frisé, bougies emballées et nouées d’une ficelle. Prêt à offrir.</span></div>`
+      : `<h2 class="h2 reveal">Faite pour <em>durer.</em></h2>
+      <div class="ps-grid" style="margin-top:34px">${D.burn ? tile(`<span data-count="${D.burn}">0</span>`, ' h', 'de combustion environ', 'En coupant la mèche à 5 mm avant chaque allumage.', 'big') : ''}
+        ${tile('<span data-count="100">0</span>', '%', 'cire de soja', 'Végétale, biodégradable, sans paraffine.', D.burn ? '' : 'big')}
+        ${D.weight ? tile(`<span data-count="${D.weight}">0</span>`, ' g', 'de cire coulée', '') : ''}${one}${ch}</div>`;
+    const looks = isTul
+      ? `<div class="swatches ps-looks">${p.colors.map((c, i) => `<button class="sw" aria-pressed="${i === 3}" data-look="${c.img}" data-name="${c.n}"><i style="--c:${c.c.length > 1 ? `linear-gradient(135deg, ${c.c[0]} 50%, ${c.c[1]} 50%)` : c.c[0]}"></i>${c.n}</button>`).join('')}</div>`
+      : `<div class="tabs ps-seg" role="tablist" aria-label="Affichage"><span class="tabs-pill" aria-hidden="true"></span><button class="tab" role="tab" aria-selected="true" data-f="cut">Studio</button><button class="tab" role="tab" aria-selected="false" data-f="amb">Ambiance</button></div>`;
+    const story = `
+<section class="ps-hero" data-theme="${p.theme}"><div class="ps-hero-st"><div class="ps-glow"></div>
+  <p class="eyebrow">${p.badge || p.line} · N° ${p.n}</p><h1 class="ps-title">${p.name}</h1><p class="ps-sub">${p.mood}.</p>
+  <div class="row ps-cta"><a class="btn btn--fg" href="#acheter"><span>Acheter · ${chf(p.price)}</span></a></div>
+  <img class="ps-hero-img${wideCut ? ' wide' : ''}" src="${cut}" alt="${esc(p.full)}"></div></section>
+<section class="section ps-hl-sec" data-theme="cream">
+  <div class="container"><h2 class="h2 reveal">Les points <em>forts.</em></h2></div>
+  <div class="ps-hl" id="ps-hl">${D.hl.map((src, i) => `<figure class="ps-card${i ? '' : ' cur'}${src.includes('box-white') ? ' wb' : ''}"><img src="${src}" alt="" loading="lazy"><figcaption>${hl[i]}</figcaption></figure>`).join('')}</div>
+  <div class="ps-dots"><div class="ps-dotbar">${D.hl.map((_, i) => `<button class="${i ? '' : 'cur'}" data-hl="${i}" aria-label="Photo ${i + 1}"><i></i></button>`).join('')}</div><button class="round ps-play" id="ps-play" aria-label="Pause">❚❚</button></div>
+</section>
+<section class="ps-pin" data-theme="${p.theme}"><div class="ps-pin-st"><img class="ps-pin-img${wideCut ? ' wide' : ''}" src="${cut}" alt="">
+  ${caps.map((c, i) => `<div class="ps-cap ${i % 2 ? 'r' : 'l'}"><p class="k">${c[0]}</p><b>${esc(c[1])}</b><span>${esc(c[2])}</span></div>`).join('')}</div></section>
+<section class="section" data-theme="cream"><div class="container"><p class="ps-stmt" id="ps-stmt">${'Rien n’est fait en série. Chaque bougie est unique.'.split(' ').map((w) => `<span>${w} </span>`).join('')}</p></div></section>
+<section class="section" data-theme="cream" style="padding-top:0"><div class="container">${durer}</div></section>
+<section class="section" data-theme="cream" style="padding-top:0"><div class="container">
+  <h2 class="h2 reveal">Regardez de <em>plus près.</em></h2>
+  <div class="ps-look reveal"><img id="ps-look" src="${isTul ? p.colors[3].img : cut}" alt="${esc(p.full)}"></div>${looks}
+</div></section>
+<section class="section" data-theme="cream" style="padding-top:0"><div class="container">
+  <h2 class="h2 reveal">Commander, <em>tout simplement.</em></h2>
+  <div class="services" style="margin-top:34px">
+    <div class="service reveal"><b>Livraison 8.90 CHF</b><span>5 à 10 jours ouvrables, partout en Suisse.</span></div>
+    <div class="service reveal"><b>TWINT</b><span>Paiement sécurisé.</span></div>
+    <div class="service reveal"><b>Retour sous 30 jours</b><span>Simple et sans complication.</span></div>
+    <div class="service reveal"><b>Message cadeau</b><span>Glissé dans le colis, sur demande.</span></div>
+  </div>
+</div></section>`;
+    pp.insertAdjacentHTML('beforebegin', story);
+    pp.id = 'pp'; pp.insertAdjacentHTML('afterbegin', '<span id="acheter" style="position:relative;top:-90px;display:block"></span>');
+    const more0 = $('#pp-more'); if (more0) more0.remove();
+    themed.splice(0, themed.length, ...$$('main > section[data-theme], footer[data-theme]'));
+    observe(document); $$('main [data-count]').forEach((el) => cio.observe(el));
+
+    // Héros : la bougie monte et grandit au défilement
+    const psHero = $('.ps-hero'), psImg = $('.ps-hero-img');
+    // Infos qui apparaissent autour de la bougie
+    const pin = $('.ps-pin'), pinImg = $('.ps-pin-img'), pcaps = $$('.ps-cap');
+    const stmt = $$('#ps-stmt span');
+    const prog = (sec) => { const r = sec.getBoundingClientRect(); return clamp(-r.top / Math.max(1, sec.offsetHeight - innerHeight), 0, 1); };
+    let lastCap = -2;
+    const storyTick = () => {
+      psHero.style.setProperty('--p', prog(psHero).toFixed(4));
+      const t = prog(pin), i = t < .3 ? 0 : t < .62 ? 1 : t < .97 ? 2 : -1;
+      pcaps.forEach((c, j) => c.classList.toggle('on', j === i));
+      if (i !== lastCap) { lastCap = i; const wide = innerWidth > 760; pinImg.style.setProperty('--x', (i < 0 ? 0 : wide ? (i % 2 ? -1 : 1) * Math.min(220, innerWidth * .16) : 0) + 'px'); pinImg.style.setProperty('--r', (i < 0 ? 0 : i % 2 ? -4 : 4) + 'deg'); pinImg.style.setProperty('--s', i === 1 ? 1.08 : 1); }
+      const sr = $('#ps-stmt').getBoundingClientRect(), w = clamp((innerHeight * .85 - sr.top) / (sr.height + innerHeight * .35), 0, 1) * stmt.length;
+      stmt.forEach((s, j) => s.style.setProperty('--w', clamp(w - j, 0, 1).toFixed(3)));
+    };
+    addEventListener('scroll', () => requestAnimationFrame(storyTick), { passive: true }); storyTick();
+
+    // Carrousel « Les points forts » : avance seul, pause au clic
+    const hlEl = $('#ps-hl'), cards = [...hlEl.children], hdots = $$('[data-hl]'), play = $('#ps-play');
+    let hcur = 0, ht0 = performance.now(), playing = !reduce, hprog = 0; const HDUR = 5000;
+    const hshow = (i, scroll = true) => {
+      hcur = (i + cards.length) % cards.length; ht0 = performance.now();
+      cards.forEach((c, j) => c.classList.toggle('cur', j === hcur)); hdots.forEach((d, j) => { d.classList.toggle('cur', j === hcur); d.firstChild.style.transform = 'scaleX(0)'; });
+      if (scroll) hlEl.scrollTo({ left: cards[hcur].offsetLeft - parseFloat(getComputedStyle(hlEl).paddingLeft), behavior: reduce ? 'auto' : 'smooth' });
+    };
+    const setPlay = (v) => { playing = v; play.textContent = v ? '❚❚' : '▶'; play.setAttribute('aria-label', v ? 'Pause' : 'Lecture'); ht0 = performance.now() - hprog * HDUR; };
+    hdots.forEach((d, i) => d.addEventListener('click', () => { setPlay(false); hshow(i); }));
+    play.addEventListener('click', () => setPlay(!playing)); setPlay(playing);
+    let hvis = false; new IntersectionObserver(([e]) => { hvis = e.isIntersecting; }).observe(hlEl);
+    (function hloop(now) {
+      if (playing && hvis) { hprog = Math.min(1, (now - ht0) / HDUR); hdots[hcur].firstChild.style.transform = `scaleX(${hprog})`; if (hprog >= 1) hshow(hcur + 1); }
+      else ht0 = now - hprog * HDUR;
+      requestAnimationFrame(hloop);
+    })(performance.now());
+
+    // « Regardez de plus près » : studio / ambiance, ou coloris de la tulipe
+    const look = $('#ps-look');
+    const swapLook = (src) => { look.classList.add('swap'); setTimeout(() => { look.src = src; look.classList.toggle('photo', !/cut-|tulip-hq/.test(src)); look.classList.remove('swap'); }, 220); };
+    if (isTul) $$('[data-look]').forEach((b) => b.addEventListener('click', () => { $$('[data-look]').forEach((x) => x.setAttribute('aria-pressed', String(x === b))); swapLook(b.dataset.look); }));
+    else pillTabs($('.ps-seg'), (f) => swapLook(f === 'amb' ? D.amb : cut));
+
     // Barre d'achat qui apparaît quand le bouton principal sort de l'écran
     document.body.insertAdjacentHTML('beforeend', `<div class="buybar" id="buybar" style="--tint:${p.tint}"><img src="${p.colors ? p.colors[0].img : p.cut}" alt=""><p class="buybar-name">${p.name}<small>${p.line} · ${chf(p.price)}</small></p><button class="btn" id="buybar-add" ${p.active ? '' : 'disabled'}><span>Ajouter au panier</span></button></div>`);
     const bar = $('#buybar');
-    new IntersectionObserver(([e]) => bar.classList.toggle('on', !e.isIntersecting && e.boundingClientRect.top < 0)).observe($('#pp-add'));
+    let ppVisible = false;
+    new IntersectionObserver(([e]) => { ppVisible = e.isIntersecting; bar.classList.toggle('on', !ppVisible && scrollY > innerHeight * .8); }, { threshold: .15 }).observe(pp);
+    addEventListener('scroll', () => bar.classList.toggle('on', !ppVisible && scrollY > innerHeight * .8), { passive: true });
     $('#buybar-add').addEventListener('click', (e) => addProduct(k, { color, qty }, e.currentTarget));
     pp.addEventListener('click', (e) => { if (e.target.closest('[data-color]')) $('img', bar).src = p.colors[color].img; });
-    const more = $('#pp-more');
-    if (more) {
-      more.innerHTML = `<div class="container">
-        <div class="pp-story split-img reveal"><img src="${p.imgs[0]}" alt="${esc(p.full)} en situation" loading="lazy">
-          <div class="pp-story-text"><p class="eyebrow">Les détails</p><h2 class="h2">Faite à la main, <em>une à une.</em></h2></div></div>
-        <div class="values" style="margin-top:16px">
-          ${p.facts.slice(0, 2).map(([a, b], i) => `<div class="value reveal"><span class="big">${['i', 'ii'][i]}</span><h3>${a}</h3><p>${b}</p></div>`).join('')}
-          <div class="value reveal"><span class="big">iii</span><h3>Livraison</h3><p>Partout en Suisse pour 8.90 CHF, en 5 à 10 jours ouvrables. Retour possible sous 30 jours.</p></div>
-        </div></div>`;
-      observe(more);
-    }
     const others = Object.keys(PRODUCTS).filter((x) => x !== k);
     const rel = $('#related'); if (rel) { rel.innerHTML = others.map(card).join(''); observe(rel); }
     // re-découpe du titre inséré
@@ -813,6 +1015,37 @@
     });
   }
 
+  /* ----- La maison : formulaire de contact (Formspree) ----- */
+  const ct = $('#ct-form');
+  if (ct) ct.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!check([['ct-name', (x) => x.length > 1], ['ct-email', EMAIL], ['ct-msg', (x) => x.length > 3]])) return;
+    const v = (id) => $('#' + id).value.trim(), out = $('#ct-msg-out'), btn = $('button[type=submit]', ct);
+    const data = { nom: v('ct-name'), email: v('ct-email'), sujet: v('ct-subject'), message: v('ct-msg'), langue: 'FR', date: new Date().toLocaleString('fr-CH') };
+    const subj = 'Message (contact) — ' + data.sujet + ' — Yumiya Candle';
+    btn.disabled = true; out.textContent = 'Envoi…';
+    sendForm(Object.assign({ _subject: subj, type: 'Message' }, data, { _replyto: data.email })).then((ok) => {
+      btn.disabled = false;
+      if (ok) { out.textContent = 'Merci, message envoyé. Nous vous répondons très vite.'; ct.reset(); }
+      else out.innerHTML = `Votre message n’a pas pu être envoyé automatiquement. <a class="link-arrow" href="${mailtoFor(subj, data)}">Envoyez-le par email, il est déjà rédigé <span>→</span></a>`;
+    });
+  });
+
+  // Email de bienvenue (EmailJS) quand quelqu'un s'inscrit aux alertes nouveautés
+  function sendWelcome(email, list) {
+    const E = SITE.emailjs; if (!E.publicKey || !E.welcomeTemplateId) return;
+    const params = {
+      to_email: email, to_name: '', reply_to: SITE.email, subject: 'Vous serez les premiers ✨', preheader: 'Nous vous écrirons le jour de la sortie.',
+      image_url: SITE.url + 'img/mail/bienvenue.jpg', eyebrow: 'Alerte nouveautés', title: 'C’est noté.',
+      intro: 'Merci de votre inscription. Dès qu’une nouvelle collection sort de l’atelier, vous recevez un email, avant tout le monde.',
+      label_collections: 'Vos alertes', collections: list,
+      body: 'Chaque bougie est coulée et décorée à la main, en petites séries à La Neuveville. En attendant, découvrez celles qui sont déjà disponibles.',
+      site_url: SITE.url + '#/boutique', label_button: 'Voir la boutique', outro: 'Une question ? Répondez simplement à cet email.',
+      unsub: 'Vous ne souhaitez plus recevoir nos alertes ? Répondez « stop » à cet email.',
+    };
+    fetch('https://api.emailjs.com/api/v1.0/email/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ service_id: E.serviceId, template_id: E.welcomeTemplateId, user_id: E.publicKey, template_params: params }) }).catch(() => {});
+  }
+
   /* ----- Nouveautés : alerte ----- */
   const alertForm = $('#alert-form');
   if (alertForm) alertForm.addEventListener('submit', (e) => {
@@ -821,8 +1054,8 @@
     const em = $('#a-email').value.trim(), msg = $('#alert-msg');
     msg.textContent = 'Inscription en cours…';
     sendForm({ _subject: 'Alerte nouveautés — ' + em, email: em, _replyto: em, demande: 'Prévenir à la sortie des nouveautés' }).then((ok) => {
-      msg.innerHTML = ok ? 'C’est noté ! Nous vous écrivons dès la sortie.' : `L’inscription n’a pas pu partir. <a class="link-arrow" href="mailto:${SITE.email}?subject=${encodeURIComponent('Alerte nouveautés')}">Écrivez-nous <span>→</span></a>`;
-      if (ok) alertForm.reset();
+      msg.innerHTML = ok ? 'Merci ! Un email de confirmation vous attend. Nous vous écrirons le jour de la sortie.' : `L’inscription n’a pas pu partir. <a class="link-arrow" href="mailto:${SITE.email}?subject=${encodeURIComponent('Alerte nouveautés')}">Écrivez-nous <span>→</span></a>`;
+      if (ok) { sendWelcome(em, 'Bonshommes pain d’épices, Oursons'); alertForm.reset(); }
     });
   });
 

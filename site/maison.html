@@ -61,10 +61,30 @@
     </div>
   </div>
 </section>
-<section class="section" data-theme="plum">
-  <div class="container"><div class="cta-card"><div class="cta-glow" aria-hidden="true"></div><p class="eyebrow">Nous écrire</p><h2 class="cta-title">Une question&nbsp;? <em>Un projet&nbsp;?</em></h2>
-  <p class="lead">yumiyacandle@outlook.com · Instagram @yumiya.candle</p>
-  <div class="row" style="justify-content:center"><a class="btn btn--fg magnetic" href="mailto:yumiyacandle@outlook.com"><span>Nous écrire</span></a><a class="btn btn--ghost magnetic" href="https://instagram.com/yumiya.candle" target="_blank" rel="noopener"><span>Instagram</span></a></div></div></div>
+<section class="section" id="contact" data-theme="plum">
+  <div class="container split" style="align-items:start">
+    <div class="prose reveal">
+      <p class="eyebrow">Nous écrire</p>
+      <h2 class="h2">Une question&nbsp;? <em>Un projet&nbsp;?</em></h2>
+      <p>Une question sur une bougie, une commande ou une création sur mesure&nbsp;? Nous répondons rapidement.</p>
+      <dl class="facts contact-facts">
+        <div><dt>Email</dt><dd><a href="mailto:yumiyacandle@outlook.com">yumiyacandle@outlook.com</a></dd></div>
+        <div><dt>Instagram</dt><dd><a href="https://instagram.com/yumiya.candle" target="_blank" rel="noopener">@yumiya.candle</a></dd></div>
+        <div><dt>Atelier</dt><dd>Route de Neuchâtel 7<br>2520 La Neuveville, Suisse</dd></div>
+        <div><dt>Paiement</dt><dd>TWINT</dd></div>
+      </dl>
+    </div>
+    <form class="card-box form reveal" id="ct-form" novalidate>
+      <div class="form-row">
+        <div class="field"><label for="ct-name">Nom</label><input id="ct-name" autocomplete="name"><span class="err">Ce champ est nécessaire.</span></div>
+        <div class="field"><label for="ct-email">Email</label><input id="ct-email" type="email" autocomplete="email" inputmode="email"><span class="err">Indiquez un email valide.</span></div>
+      </div>
+      <div class="field"><label for="ct-subject">Sujet</label><select id="ct-subject"><option>Question sur un produit</option><option>Ma commande</option><option>Création sur mesure</option><option>Autre</option></select></div>
+      <div class="field"><label for="ct-msg">Message</label><textarea id="ct-msg"></textarea><span class="err">Ce champ est nécessaire.</span></div>
+      <button class="btn btn--fg" type="submit"><span>Envoyer le message</span></button>
+      <p class="form-msg" id="ct-msg-out" role="status"></p>
+    </form>
+  </div>
 </section>
 </main>
 <script src="app.js"></script>
