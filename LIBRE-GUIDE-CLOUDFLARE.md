@@ -1,4 +1,7 @@
-# Libre 2.0 : mise en ligne sur Cloudflare (gratuit)
+# Libre 2.0 : mise en ligne sur Cloudflare — 100 % gratuit
+
+Tout fonctionne avec le **plan gratuit** de Cloudflare, sans carte bancaire et sans clé API :
+comptes et sauvegarde (D1), IA de Sam (Workers AI), rappels quotidiens (Cron). Dans l'app, tout est gratuit : aucun achat, aucun abonnement, aucune publicité.
 
 ## Pourquoi « Le serveur Libre n'est pas configuré » ?
 
@@ -39,8 +42,7 @@ Le plan gratuit de Cloudflare inclut un quota d'IA chaque jour. S'il est dépass
 
 Facultatif : `AI_MODEL` (Paramètres → Variables, type Texte) pour choisir un autre modèle Workers AI, par ex. `@cf/meta/llama-3.1-8b-instruct-fast` (plus léger, donc plus de messages gratuits par jour, mais moins fin).
 
-### Plus tard, si tu veux une IA encore meilleure (payante)
-Ajoute un secret **`ANTHROPIC_API_KEY`** (ta clé de console.anthropic.com) dans **Paramètres → Variables et secrets**. Sam utilisera alors Claude en priorité (environ 1 à 2 centimes par message) et l'IA gratuite restera en secours.
+Tu n'as **pas** besoin de clé Claude ni de payer quoi que ce soit : l'IA gratuite suffit.
 
 ## 4. Activer les rappels quotidiens (1 min)
 
@@ -75,10 +77,11 @@ Ouvre `https://TON-SITE.workers.dev/api/status` :
 
 ---
 
-## Autre option : Cloudflare Pages
+## Pourquoi pas le zip ?
 
-Si tu préfères Pages (adresse en `…pages.dev`) : **Workers & Pages → Créer → onglet Pages → Importer des ressources**, glisse `Libre-Cloudflare-v2.zip`,
-puis dans le projet : **Paramètres → Liaisons** → D1 nommée `DB`, et **Variables et secrets** → `ANTHROPIC_API_KEY`, puis redéploie le zip.
+Le zip (`Libre-Cloudflare-v2.zip`) n'est utile que sur **Cloudflare Pages**, et même là les **rappels quotidiens ne marchent pas** (Pages n'a pas de déclencheur Cron).
+Sur **Workers** (ce que tu utilises), un zip est seulement affiché, sans serveur : pas de comptes, pas d'IA.
+👉 **La meilleure option est le fichier unique `libre-worker.js` sur un Worker** : tout marche, gratuitement.
 
 ## Modifier le code (facultatif)
 
