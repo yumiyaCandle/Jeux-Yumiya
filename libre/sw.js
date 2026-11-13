@@ -1,6 +1,6 @@
 /* Libre — service worker : l'app marche même sans réseau (SOS, compteur, Sam hors ligne)
  * et reçoit les rappels quotidiens (notifications). */
-const C = "libre-v2-4";
+const C = "libre-v2-5";
 const F = ["./", "index.html", "manifest.webmanifest", "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png",
   "img/welcome.jpg", "img/programme.jpg", "img/banner.jpg",
   "fonts/inter-latin-400-normal.woff2", "fonts/inter-latin-500-normal.woff2", "fonts/inter-latin-600-normal.woff2", "fonts/inter-latin-700-normal.woff2"];
