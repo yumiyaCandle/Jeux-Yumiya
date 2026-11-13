@@ -29,25 +29,31 @@ Ton site est en ligne sur `https://libre-lea.TON-COMPTE.workers.dev`.
 
 Les tables se créent automatiquement au premier compte.
 
-## 3. Activer la vraie IA de Sam (2 min)
+## 3. Activer l'IA de Sam — GRATUITE, sans clé (1 min)
 
-1. Crée une clé sur **console.anthropic.com** → **API Keys** → **Create Key**. Ajoute un peu de crédit et une **limite de dépense** (Settings → Limits).
-2. Dans ton Worker → **Paramètres** → **Variables et secrets** → **Ajouter** :
-   type **Secret**, nom **`ANTHROPIC_API_KEY`**, valeur : ta clé `sk-ant-…` → **Déployer**.
+1. Dans ton Worker → onglet **Liaisons** (« Bindings ») → **Ajouter une liaison** → **Workers AI**.
+2. **Nom de la variable : `AI`** (exactement, en majuscules) → **Ajouter la liaison**.
 
-Facultatif (type « Texte ») : `MODEL` = `claude-sonnet-5-5` pour diviser le coût par deux environ (par défaut `claude-opus-5-5`, environ 1 à 2 centimes par message).
+C'est tout : Sam devient une vraie IA, gratuite, hébergée par Cloudflare (modèle Llama 3.3 70B).
+Le plan gratuit de Cloudflare inclut un quota d'IA chaque jour. S'il est dépassé, Sam répond en mode hors ligne jusqu'au lendemain, puis l'IA revient toute seule.
+
+Facultatif : `AI_MODEL` (Paramètres → Variables, type Texte) pour choisir un autre modèle Workers AI, par ex. `@cf/meta/llama-3.1-8b-instruct-fast` (plus léger, donc plus de messages gratuits par jour, mais moins fin).
+
+### Plus tard, si tu veux une IA encore meilleure (payante)
+Ajoute un secret **`ANTHROPIC_API_KEY`** (ta clé de console.anthropic.com) dans **Paramètres → Variables et secrets**. Sam utilisera alors Claude en priorité (environ 1 à 2 centimes par message) et l'IA gratuite restera en secours.
 
 ## 4. Vérifier
 
 Ouvre `https://TON-SITE.workers.dev/api/status` :
 
 ```json
-{"ok":true,"ai":true,"accounts":true}
+{"ok":true,"ai":true,"engine":"cloudflare","accounts":true}
 ```
 
 - La page affiche autre chose / une erreur 404 → c'est encore l'ancien Worker ou le code n'a pas été collé.
 - `"accounts":false` → la liaison D1 `DB` manque.
-- `"ai":false` → le secret `ANTHROPIC_API_KEY` manque.
+- `"ai":false` → la liaison Workers AI nommée `AI` manque.
+- `"engine":"cloudflare"` = IA gratuite active, `"engine":"claude"` = Claude actif.
 
 ## 5. Pour ta copine
 

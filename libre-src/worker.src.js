@@ -5,7 +5,9 @@
  *
  * Réglages à faire une seule fois dans Cloudflare (voir GUIDE-CLOUDFLARE.md) :
  *   - Liaison D1 nommée  DB                 → comptes et sauvegarde des données
- *   - Secret            ANTHROPIC_API_KEY   → l'IA de Sam (personne n'a jamais à taper de clé dans l'app)
+ *   - Liaison Workers AI nommée  AI         → IA GRATUITE de Sam (aucune clé, quota gratuit quotidien)
+ *   - Secret            ANTHROPIC_API_KEY   → (facultatif, payant) Sam avec Claude, prioritaire sur l'IA gratuite
+ *   - (facultatif)      AI_MODEL            → modèle Workers AI, par défaut @cf/meta/llama-3.3-70b-instruct-fp8-fast
  *   - (facultatif)      MODEL               → modèle Claude, par défaut claude-opus-5-5
  *   - (facultatif)      CHAT_DAILY_LIMIT    → messages par jour et par personne, par défaut 200
  */
@@ -293,7 +295,7 @@ function cleanMessages(list) {
 }
 
 async function chat(req, env, ctx) {
-  if (!env.ANTHROPIC_API_KEY) return err("ai_off", 503, "L'IA n'est pas configurée sur le serveur.");
+  if (!env.ANTHROPIC_API_KEY && !env.AI) return err("ai_off", 503, "L'IA n'est pas configurée sur le serveur.");
   const body = await readJSON(req);
   const messages = cleanMessages(body.messages);
   if (!messages.length) return err("bad_messages", 400, "Message vide.");
@@ -304,6 +306,7 @@ async function chat(req, env, ctx) {
     if (n > limit) return err("quota", 429, "Sam a beaucoup parlé aujourd'hui. Il revient demain, et les outils SOS restent disponibles.");
   }
   const context = String(body.context || "").slice(0, 6000);
+  if (!env.ANTHROPIC_API_KEY) return freeChat(env, ctx, messages, context);
   const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, maxRetries: 2, ...(env.ANTHROPIC_BASE_URL ? { baseURL: env.ANTHROPIC_BASE_URL } : {}) });
 
   const { readable, writable } = new TransformStream();
@@ -347,6 +350,63 @@ async function chat(req, env, ctx) {
   });
 }
 
+/* ---------------- IA gratuite : Cloudflare Workers AI (liaison « AI », sans clé) ---------------- */
+const FREE_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
+const FREE_EXTRA = `
+
+## Règles très importantes
+- Réponds UNIQUEMENT en français, en tutoyant, comme un message de téléphone : 2 à 5 phrases courtes, chaleureuses et naturelles.
+- Ne récite jamais le contexte. Pas de listes, pas de titres.
+- N'écris une balise [[...]] que si elle est vraiment utile, une seule, à la toute fin.`;
+function freeChat(env, ctx, messages, context) {
+  const { readable, writable } = new TransformStream();
+  const w = writable.getWriter();
+  const run = (async () => {
+    let wrote = false;
+    try {
+      const res = await env.AI.run(env.AI_MODEL || FREE_MODEL, {
+        messages: [{ role: "system", content: COACH_SYSTEM + FREE_EXTRA + "\n\nContexte de la personne (à jour, fourni par l'app) :\n" + context }, ...messages.slice(-12)],
+        max_tokens: 700,
+        temperature: 0.7,
+        stream: true,
+      });
+      if (res && typeof res.getReader === "function") {
+        const rd = res.getReader(), dec = new TextDecoder();
+        let buf = "";
+        for (;;) {
+          const { done, value } = await rd.read();
+          if (done) break;
+          buf += dec.decode(value, { stream: true });
+          let i;
+          while ((i = buf.indexOf("\n")) >= 0) {
+            const line = buf.slice(0, i).trim();
+            buf = buf.slice(i + 1);
+            if (!line.startsWith("data:")) continue;
+            const data = line.slice(5).trim();
+            if (!data || data === "[DONE]") continue;
+            try {
+              const j = JSON.parse(data);
+              const piece = typeof j.response === "string" ? j.response : (j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content) || "";
+              if (piece) { wrote = true; await w.write(enc.encode(piece)); }
+            } catch {}
+          }
+        }
+      } else {
+        const text = (res && (res.response || (res.choices && res.choices[0] && res.choices[0].message && res.choices[0].message.content))) || "";
+        if (text) { wrote = true; await w.write(enc.encode(text)); }
+      }
+      if (!wrote) throw new Error("empty");
+    } catch (e) {
+      console.error("free chat error", e && e.message);
+      if (!wrote) await w.write(enc.encode("\u0000ERR"));
+    } finally {
+      try { await w.close(); } catch {}
+    }
+  })();
+  ctx.waitUntil(run);
+  return new Response(readable, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
+}
+
 /* ---------------- Routeur ---------------- */
 export default {
   async fetch(req, env, ctx) {
@@ -358,7 +418,7 @@ export default {
     if (req.method !== "GET" && origin && new URL(origin).host !== url.host) return err("origin", 403, "Origine refusée.");
     try {
       const p = url.pathname.replace(/\/+$/, ""), m = req.method;
-      if (p === "/api/status" && m === "GET") return json({ ok: true, ai: !!env.ANTHROPIC_API_KEY, accounts: !!env.DB });
+      if (p === "/api/status" && m === "GET") return json({ ok: true, ai: !!(env.ANTHROPIC_API_KEY || env.AI), engine: env.ANTHROPIC_API_KEY ? "claude" : env.AI ? "cloudflare" : "offline", accounts: !!env.DB });
       if (p === "/api/chat" && m === "POST") return await chat(req, env, ctx);
       if (p === "/api/register" && m === "POST") return await register(req, env);
       if (p === "/api/login" && m === "POST") return await login(req, env);
@@ -377,7 +437,7 @@ export default {
       return err("not_found", 404, "Introuvable.");
     } catch (e) {
       const s = (e && e.status) || 500;
-      if (s === 503) return err("no_db", 503, "La sauvegarde en ligne n'est pas configurée sur le serveur.");
+      if (s === 503) return err("no_db", 503, "La sauvegarde en ligne n'est pas encore activée : dans Cloudflare, ajoute la liaison D1 nommée DB.");
       if (s === 500) console.error(e);
       return err(e.message || "error", s, s === 413 ? "Données trop volumineuses." : "Erreur serveur, réessaie.");
     }
