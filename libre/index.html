@@ -596,21 +596,15 @@ svg{display:block}
 .mot-in .lead{font-size:17px;color:var(--label2);margin-top:10px;line-height:1.45}
 .mot-in .field{background:var(--card2)}
 .mot-ok{font-size:72px;margin-top:40px}
-/* garden */
-.garden{display:flex;align-items:center;gap:6px;margin:12px 16px 0;padding:12px 16px 12px 6px;border-radius:var(--r);background:linear-gradient(160deg,color-mix(in srgb,#34C759 10%,var(--card)),var(--card));box-shadow:var(--shadow);width:calc(100% - 32px);text-align:left;overflow:hidden}
-.gsvg{width:132px;height:100px;flex:none;overflow:visible}
-.gtxt{flex:1;min-width:0}.gtxt small{display:block;font-size:12px;font-weight:700;color:#2DB866;text-transform:uppercase;letter-spacing:.04em}
-.gtxt b{display:block;font-size:17px;margin-top:2px}.gtxt span{display:block;font-size:13px;color:var(--label2);line-height:1.4;margin-top:3px}
-.garden .stem{stroke-dasharray:1;stroke-dashoffset:1;animation:grow 1.4s cubic-bezier(.2,.8,.2,1) .2s forwards}
-@keyframes grow{to{stroke-dashoffset:0}}
-.garden .lf,.garden .fl{transform-box:fill-box;transform-origin:left center;transform:scale(0);animation:pop .6s cubic-bezier(.2,1.4,.4,1) var(--d) forwards}
-.garden .fl{transform-origin:center}
-@keyframes pop{to{transform:scale(1)}}
-.garden.wig .gsvg{animation:wig .8s ease}
-@keyframes wig{0%,100%{transform:rotate(0)}20%{transform:rotate(-4deg)}45%{transform:rotate(3.5deg)}70%{transform:rotate(-2deg)}}
-.spark text{animation:spk 1.1s ease-out forwards;opacity:0}
-@keyframes spk{0%{opacity:0;transform:translateY(6px) scale(.5)}30%{opacity:1}100%{opacity:0;transform:translateY(-26px) scale(1.1)}}
-@media (prefers-reduced-motion:reduce){.garden .stem{stroke-dashoffset:0;animation:none}.garden .lf,.garden .fl{transform:none;animation:none}.hero::before,.hero::after{animation:none}}
+/* rings */
+.rings{display:flex;align-items:center;gap:16px;margin:12px 16px 0;padding:16px;border-radius:var(--r);background:linear-gradient(150deg,#16161A,#0B0B0E);color:#fff;box-shadow:0 14px 30px -18px rgba(0,0,0,.6);width:calc(100% - 32px);text-align:left}
+.rsvg{width:112px;height:112px;flex:none;transform:rotate(-90deg)}
+.rings .rg{transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i)*.12s)}
+.rtxt{flex:1;min-width:0}.rtxt small{display:block;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#FF6B8A}
+.rtxt b{display:block;font-size:16px;line-height:1.3;margin-top:3px}
+.rl{display:flex;flex-direction:column;gap:5px;margin-top:10px}.rl span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:rgba(255,255,255,.7)}
+.rl i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}.rl em{font-style:normal;font-weight:700;color:#fff}
+@media (prefers-reduced-motion:reduce){.hero::before,.hero::after{animation:none}.rings .rg{transition:none}}
 /* account */
 .acc-ic{width:64px;height:64px;border-radius:20px;margin:4px auto 14px;background:linear-gradient(140deg,#34C759,#30B0C7);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -10px rgba(48,176,199,.7)}
 .acc-ic svg{width:32px;height:32px}
@@ -1232,20 +1226,20 @@ function activeHabit(){const ks=Object.keys(S.habits);if(!S.active||!S.habits[S.
 function greeting(){const h=new Date().getHours();return h<5?"Bonne nuit":h<12?"Bonjour":h<18?"Bon après-midi":"Bonsoir"}
 function msState(h){const days=sinceMs(h)/DAY;const ms=MILESTONES[h.type];let idx=ms.findIndex(m=>days<m[0]);if(idx<0)idx=ms.length;const prev=idx>0?ms[idx-1][0]:0;const next=ms[idx];const pct=next?Math.min(1,(days-prev)/(next[0]-prev)):1;return {days,idx,next,pct,ms}}
 function heroFx(){if(reduceMotion)return "";let s="";for(let i=0;i<7;i++){const z=6+((i*37)%14);s+=`<i style="left:${(i*15+7)%95}%;width:${z}px;height:${z}px;animation-duration:${7+(i*13)%8}s;animation-delay:${-(i*1.7)}s"></i>`}return `<div class="fx">${s}</div>`}
-/* ===== Ton jardin : une plante qui grandit chaque jour sans ===== */
-const GARDEN=[[0,"Une graine","Ta graine est plantée. Chaque heure sans la fait germer."],[1,"Une pousse","Elle sort de terre. Le plus dur, c'est de commencer, et c'est fait."],[3,"Les premières feuilles","Elle prend des forces, comme toi."],[7,"Un bouton","Une semaine ! Un bouton apparaît."],[14,"Une fleur","Deux semaines : ta première fleur s'ouvre."],[30,"Un bouquet","Un mois : ta plante est en pleine floraison."],[90,"Un petit arbre","Trois mois : elle est devenue un arbre."]];
-function gardenHTML(h){if(!h||(!isReduce(h)&&h.quitAt>Date.now()))return "";const d=isReduce(h)?(Date.now()-h.plan.start)/DAY*.5:sinceMs(h)/DAY;let k=0;GARDEN.forEach((g,i)=>{if(d>=g[0])k=i});const nx=GARDEN[k+1];
-  const stem=Math.min(1,.15+d/30*.85),H=150,top=H-18-stem*92,leaves=Math.min(8,Math.floor(d/1.2)+(d>0?1:0)),flowers=d>=90?5:d>=30?3:d>=14?1:0,bud=d>=7&&d<14;
-  let lv="";for(let i=0;i<leaves;i++){const y=H-28-(i+1)*(stem*92/(leaves+1)),L=i%2?-1:1;lv+=`<path class="lf" style="--d:${.35+i*.12}s" d="M100 ${y} q ${18*L} -14 ${30*L} -4 q ${-12*L} 14 ${-30*L} 4Z" fill="#34C759"/>`}
-  let fl="";const fp=[[100,top],[78,top+22],[122,top+18],[66,top+46],[134,top+44]];for(let i=0;i<flowers;i++){const [x,y]=fp[i];fl+=`<g class="fl" style="--d:${1+i*.18}s;transform-origin:${x}px ${y}px">${[0,72,144,216,288].map(a=>`<ellipse cx="${x}" cy="${y-7}" rx="5" ry="8" fill="${["#FF6B9A","#FFB340","#BF5AF2","#FF6B9A","#64D2FF"][i]}" transform="rotate(${a} ${x} ${y})"/>`).join("")}<circle cx="${x}" cy="${y}" r="4.5" fill="#FFD60A"/></g>`}
-  if(d>=90)fl=`<circle class="fl" style="--d:.8s;transform-origin:100px ${top+30}px" cx="100" cy="${top+30}" r="44" fill="#30B67A" opacity=".9"/>`+fl;
-  const budS=bud?`<ellipse class="fl" style="--d:1s;transform-origin:100px ${top}px" cx="100" cy="${top-4}" rx="6" ry="9" fill="#FF6B9A"/>`:"";
-  return `<button class="garden tap reveal" id="garden" aria-label="Ton jardin"><svg viewBox="0 0 200 ${H}" class="gsvg"><ellipse cx="100" cy="${H-12}" rx="70" ry="10" fill="#A2845E" opacity=".35"/><path d="M60 ${H-14} h80 l-8 -16 h-64 z" fill="#C7926B"/>
-    ${d<.5?`<ellipse cx="100" cy="${H-30}" rx="6" ry="4" fill="#8B6B4A"/>`:`<path class="stem" pathLength="1" d="M100 ${H-28} C 96 ${H-60}, 104 ${top+30}, 100 ${top}" stroke="#2DB866" stroke-width="5" fill="none" stroke-linecap="round"/>${lv}${budS}${fl}`}
-    <g class="spark" id="g-spark"></g></svg>
-    <div class="gtxt"><small>Ton jardin</small><b>${GARDEN[k][1]}</b><span>${GARDEN[k][2]}${nx?` Prochaine étape dans ${plural(Math.max(1,Math.ceil(nx[0]-d)),"jour","jours")}.`:""}</span></div></button>`}
-function bindGarden(){const g=$("#garden");if(!g)return;g.onclick=()=>{haptic("success");g.classList.remove("wig");void g.offsetWidth;g.classList.add("wig");const sp=$("#g-spark");if(!sp)return;sp.innerHTML="";for(let i=0;i<10;i++){const a=Math.random()*Math.PI*2,r=20+Math.random()*40;sp.insertAdjacentHTML("beforeend",`<text x="${100+Math.cos(a)*r}" y="${60+Math.sin(a)*r}" font-size="${10+Math.random()*8}" style="animation-delay:${Math.random()*.3}s">${["✨","💚","🌱","⭐"][i%4]}</text>`)}
-  hud(["Elle pousse grâce à toi","Continue, elle t'adore","Chaque jour compte"][Math.floor(Math.random()*3)],"leaf")}}
+/* ===== Tes anneaux : série, engagements, envies surmontées (style montre connectée) ===== */
+const LEVELS=[[0,"Départ","Tout commence maintenant."],[1,"Lancé·e","Le premier jour est derrière toi."],[3,"En route","Le pic du manque passe, tu tiens."],[7,"Solide","Une semaine. Ton corps te remercie."],[14,"Déterminé·e","Deux semaines, les envies faiblissent."],[30,"Inarrêtable","Un mois. Une nouvelle habitude est née."],[90,"Libre","Trois mois. Tu as changé ta vie."]];
+function ringsHTML(h){if(!h||(!isReduce(h)&&h.quitAt>Date.now()))return "";
+  const d=isReduce(h)?(Date.now()-h.plan.start)/DAY:sinceMs(h)/DAY;let k=0;LEVELS.forEach((g,i)=>{if(d>=g[0])k=i});const nx=LEVELS[k+1];
+  const p1=nx?Math.min(1,(d-LEVELS[k][0])/(nx[0]-LEVELS[k][0])):1;
+  let pl=0;for(let i=0;i<7;i++){if(S.pledges&&S.pledges[dkey(Date.now()-i*DAY)])pl++}const p2=pl/7;
+  const ok=S.cravings.filter(c=>c.ok&&Date.now()-c.t<7*DAY).length;const p3=Math.min(1,ok/5);
+  const R=[[54,p1,"#FF375F","#FF6B8A"],[40,p2,"#30D158","#A6FF7A"],[26,p3,"#0A84FF","#5AC8FA"]];
+  const ring=([r,v,a,b],i)=>{const C=2*Math.PI*r;return `<defs><linearGradient id="rg${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><circle cx="64" cy="64" r="${r}" fill="none" stroke="${a}" stroke-opacity=".18" stroke-width="11"/><circle class="rg" cx="64" cy="64" r="${r}" fill="none" stroke="url(#rg${i})" stroke-width="11" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" data-c="${C}" data-v="${Math.max(.015,v)}" style="--i:${i}"/>`};
+  return `<button class="rings tap reveal" id="rings" aria-label="Ton niveau"><svg viewBox="0 0 128 128" class="rsvg">${R.map(ring).join("")}</svg>
+    <div class="rtxt"><small>Niveau ${k+1} · ${esc(LEVELS[k][1])}</small><b>${esc(LEVELS[k][2])}</b>
+      <div class="rl"><span><i style="background:#FF375F"></i>Série <em>${nx?Math.round(p1*100)+" %":"max"}</em>${nx?" → "+esc(nx[1]):""}</span><span><i style="background:#30D158"></i>Engagements <em>${pl}/7</em></span><span><i style="background:#0A84FF"></i>Envies surmontées <em>${ok}/5</em></span></div></div></button>`}
+function animRings(){$$("#rings .rg").forEach(c=>{const C=+c.dataset.c,v=+c.dataset.v;c.style.strokeDashoffset=C;requestAnimationFrame(()=>requestAnimationFrame(()=>{c.style.strokeDashoffset=C*(1-v)}))})}
+function bindRings(){const g=$("#rings");if(!g)return;setTimeout(animRings,120);g.onclick=()=>{haptic("success");$$("#rings .rg").forEach(c=>{c.style.transition="none";c.style.strokeDashoffset=c.dataset.c});void g.offsetWidth;$$("#rings .rg").forEach(c=>c.style.transition="");animRings()}}
 function heroHTML(h){
   const T=TYPES[h.type];
   if(!isReduce(h)&&h.quitAt>Date.now())return pendingHero(h);
@@ -1293,7 +1287,7 @@ function renderHome(){
   <div class="lt"><div><small>${new Date().toLocaleDateString("fr-CH",{weekday:"long",day:"numeric",month:"long"})}</small><h1>${greeting()}${S.name?", "+esc(S.name):""}</h1></div><button class="avatar tap" data-open-settings aria-label="Réglages">${esc((S.name||"L")[0].toUpperCase())}</button></div>
   ${ks.length>1?`<div style="padding:4px 16px 4px"><div class="seg" id="hab-seg">${ks.map(k=>`<button data-h="${k}" class="${k===h.type?"on":""}">${ic(TICON[k],2)}${TYPES[k].name}</button>`).join("")}<i class="seg-ind"></i></div></div>`:""}
   ${heroHTML(h)}
-  ${gardenHTML(h)}${nightHTML()}${ritualHTML()}${riskHTML()}${challengeHTML()}${accountCardHTML()||remCardHTML()||installCardHTML()||calCardHTML()}
+  ${ringsHTML(h)}${nightHTML()}${ritualHTML()}${riskHTML()}${challengeHTML()}${accountCardHTML()||remCardHTML()||installCardHTML()||calCardHTML()}
   <div class="grid2">
     <div class="card stat reveal"><div class="k"><i style="background:var(--green)">${ic("coin",2.2)}</i>Économisé</div><div class="v num" id="h-saved">${chf(saved(h))}</div><div class="s">${chf(weekCost(h)*52.18,0)} par an</div></div>
     <div class="card stat reveal"><div class="k"><i style="background:${T.color}">${ic(TICON[h.type],2.2)}</i>${{vape:"Bouffées évitées",smoke:"Cigarettes évitées",weed:"Joints évités",alcohol:"Verres évités"}[h.type]}</div><div class="v num" id="h-avoid">${nf0.format(avoided(h))}</div><div class="s">${{alcohol:"verres non bus",smoke:"cigarettes non fumées",weed:"joints non fumés",vape:"bouffées non prises"}[h.type]}</div></div>
@@ -1326,7 +1320,7 @@ function renderHome(){
   $$("[data-prep]").forEach(b=>b.onclick=()=>{S.prep=S.prep||{};const k=b.dataset.prep;S.prep[k]=!S.prep[k];save();haptic();b.querySelector(".pcheck").classList.toggle("on",!!S.prep[k]);if(k==="plan"&&S.prep[k])openPlan()});
   const sn=$("#start-now");if(sn)sn.onclick=()=>alertBox("Commencer maintenant ?","Ton compteur démarre tout de suite.","Commencer",()=>{h.quitAt=Date.now();save();haptic("success");confetti();renderHome()});
   if(S.set.health)healthCard();
-  bindRitual(h);const wa=$("#why-add");if(wa)wa.onclick=openWhy;const cc=$("#cal-card");if(cc)cc.onclick=openCal;const rc=$("#rem-card");if(rc)rc.onclick=openReminders;const acx=$("#acc-card");if(acx)acx.onclick=()=>openAccount("create");bindHomeExtras();bindGarden();setTimeout(checkBadges,700);const wa2=$("#words-all");if(wa2)wa2.onclick=openWords;
+  bindRitual(h);const wa=$("#why-add");if(wa)wa.onclick=openWhy;const cc=$("#cal-card");if(cc)cc.onclick=openCal;const rc=$("#rem-card");if(rc)rc.onclick=openReminders;const acx=$("#acc-card");if(acx)acx.onclick=()=>openAccount("create");bindHomeExtras();bindRings();setTimeout(checkBadges,700);const wa2=$("#words-all");if(wa2)wa2.onclick=openWords;
   reveal(s);
   const f0=homeCounted;homeCounted=true;countTo($("#h-saved"),saved(h),v=>chf(v),f0?saved(h):0);countTo($("#h-avoid"),avoided(h),v=>nf0.format(v),f0?avoided(h):0);
 }
