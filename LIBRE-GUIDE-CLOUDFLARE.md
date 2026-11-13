@@ -73,7 +73,8 @@ Ouvre `https://TON-SITE.workers.dev/api/status` :
 1. Elle ouvre le lien dans **Safari**.
 2. Juste après « Commencer », l'app lui demande de **créer son compte** (identifiant + mot de passe) et lui donne un **code de secours** à garder.
 3. Ensuite tout est sauvegardé automatiquement. Nouveau téléphone ou Safari vidé : **« J'ai déjà un compte »** → elle retrouve tout.
-4. **Partager → Sur l'écran d'accueil** pour l'avoir comme une vraie app, puis **Réglages → Rappels quotidiens** pour recevoir un petit mot chaque jour.
+4. **Les mots des proches** : dans Réglages → « Mon pourquoi et les mots de mes proches » → **Demander un mot à un proche**, elle t'envoie un lien. Tu l'ouvres, tu écris ton mot avec ton prénom, et il apparaît dans son app (écran d'accueil + aide d'urgence), avec une notification « 💌 … t'a écrit un mot ». Tu peux en écrire autant que tu veux avec le même lien.
+5. **Partager → Sur l'écran d'accueil** pour l'avoir comme une vraie app, puis **Réglages → Rappels quotidiens** pour recevoir un petit mot chaque jour.
 
 ---
 

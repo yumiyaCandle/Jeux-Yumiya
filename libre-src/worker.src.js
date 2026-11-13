@@ -217,6 +217,10 @@ async function deleteAccount(req, env, a) {
     return err("bad_credentials", 401, "Mot de passe incorrect.");
   await D.batch([
     D.prepare("DELETE FROM data WHERE user=?").bind(a.user),
+    D.prepare("CREATE TABLE IF NOT EXISTS invites (token TEXT PRIMARY KEY, user TEXT NOT NULL UNIQUE, created INTEGER NOT NULL)"),
+    D.prepare("CREATE TABLE IF NOT EXISTS words (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT NOT NULL, from_name TEXT NOT NULL, msg TEXT NOT NULL, created INTEGER NOT NULL)"),
+    D.prepare("DELETE FROM invites WHERE user=?").bind(a.user),
+    D.prepare("DELETE FROM words WHERE user=?").bind(a.user),
     D.prepare("DELETE FROM sessions WHERE user=?").bind(a.user),
     D.prepare("DELETE FROM users WHERE id=?").bind(a.user),
   ]);
@@ -501,6 +505,78 @@ async function runReminders(env, onlyEndpoint) {
   return { sent };
 }
 
+/* ---------------- Mots des proches ----------------
+ * Elle partage un lien ; le proche ouvre ce lien, écrit son mot, et le mot arrive dans son app. */
+async function wordsTables(env) {
+  const D = await db(env);
+  await D.batch([
+    D.prepare("CREATE TABLE IF NOT EXISTS invites (token TEXT PRIMARY KEY, user TEXT NOT NULL UNIQUE, created INTEGER NOT NULL)"),
+    D.prepare("CREATE TABLE IF NOT EXISTS words (id INTEGER PRIMARY KEY AUTOINCREMENT, user TEXT NOT NULL, from_name TEXT NOT NULL, msg TEXT NOT NULL, created INTEGER NOT NULL)"),
+    D.prepare("CREATE INDEX IF NOT EXISTS words_user ON words(user)"),
+  ]);
+  return D;
+}
+async function inviteCreate(env, a) {
+  const D = await wordsTables(env);
+  let row = await D.prepare("SELECT token FROM invites WHERE user=?").bind(a.user).first();
+  if (!row) {
+    const token = randomHex(12);
+    await D.prepare("INSERT INTO invites (token,user,created) VALUES (?,?,?)").bind(token, a.user, Date.now()).run();
+    row = { token };
+  }
+  return json({ token: row.token });
+}
+async function inviteOwner(env, token) {
+  if (!/^[0-9a-f]{24}$/.test(token)) return null;
+  const D = await wordsTables(env);
+  const inv = await D.prepare("SELECT user FROM invites WHERE token=?").bind(token).first();
+  if (!inv) return null;
+  let name = "";
+  try {
+    const r = await D.prepare("SELECT json FROM data WHERE user=?").bind(inv.user).first();
+    if (r) name = String(JSON.parse(r.json).name || "").slice(0, 30);
+  } catch {}
+  return { user: inv.user, name, D };
+}
+async function inviteInfo(env, token) {
+  const o = await inviteOwner(env, token);
+  if (!o) return err("bad_link", 404, "Ce lien n'est plus valable. Demande-lui de t'en renvoyer un.");
+  return json({ name: o.name });
+}
+async function inviteWrite(req, env, token) {
+  const o = await inviteOwner(env, token);
+  if (!o) return err("bad_link", 404, "Ce lien n'est plus valable. Demande-lui de t'en renvoyer un.");
+  const body = await readJSON(req);
+  const from = String(body.from || "").trim().slice(0, 30);
+  const msg = String(body.msg || "").trim().slice(0, 500);
+  if (!from) return err("no_name", 400, "Écris ton prénom pour qu'elle sache que c'est toi.");
+  if (msg.length < 2) return err("no_msg", 400, "Écris ton message.");
+  if ((await bump(env, "word:" + ip(req), 3600)) > 12) return err("rate", 429, "Beaucoup de messages d'un coup : réessaie un peu plus tard.");
+  const { D } = o;
+  if (((await D.prepare("SELECT COUNT(*) AS n FROM words WHERE user=?").bind(o.user).first()) || {}).n > 300) return err("full", 429, "Sa boîte à mots est pleine.");
+  await D.prepare("INSERT INTO words (user,from_name,msg,created) VALUES (?,?,?,?)").bind(o.user, from, msg, Date.now()).run();
+  // Notification à la personne
+  try {
+    await pushTable(env);
+    const subs = (await D.prepare("SELECT * FROM push_subs WHERE user=?").bind(o.user).all()).results || [];
+    for (const s of subs) {
+      const st = await sendPush(D, s, { title: "💌 " + from + " t'a écrit un mot", body: msg.length > 120 ? msg.slice(0, 117) + "…" : msg, tag: "word", go: "words" }, "mailto:rappels@libre.app");
+      if (st === 404 || st === 410) await D.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint).run();
+    }
+  } catch (e) { console.error("word push", e && e.message); }
+  return json({ ok: true });
+}
+async function wordsList(env, a) {
+  const D = await wordsTables(env);
+  const r = await D.prepare("SELECT id, from_name, msg, created FROM words WHERE user=? ORDER BY created DESC LIMIT 200").bind(a.user).all();
+  return json({ words: (r.results || []).map((w) => ({ id: w.id, from: w.from_name, msg: w.msg, t: w.created })) });
+}
+async function wordDelete(env, a, id) {
+  const D = await wordsTables(env);
+  await D.prepare("DELETE FROM words WHERE id=? AND user=?").bind(+id || 0, a.user).run();
+  return json({ ok: true });
+}
+
 /* ---------------- Routeur ---------------- */
 export default {
   async scheduled(event, env, ctx) {
@@ -518,6 +594,9 @@ export default {
       if (p === "/api/status" && m === "GET") return json({ ok: true, ai: !!(env.ANTHROPIC_API_KEY || env.AI), engine: env.ANTHROPIC_API_KEY ? "claude" : env.AI ? "cloudflare" : "offline", accounts: !!env.DB });
       if (p === "/api/chat" && m === "POST") return await chat(req, env, ctx);
       if (p === "/api/register" && m === "POST") return await register(req, env);
+      const im = p.match(/^\/api\/invite\/([0-9a-f]{24})$/);
+      if (im && m === "GET") return await inviteInfo(env, im[1]);
+      if (im && m === "POST") return await inviteWrite(req, env, im[1]);
       if (p === "/api/push/key" && m === "GET") return json({ key: (await vapid(await db(env))).pub });
       if (p === "/api/push/subscribe" && m === "POST") return await pushSubscribe(req, env);
       if (p === "/api/push/unsubscribe" && m === "POST") return await pushUnsubscribe(req, env);
@@ -536,6 +615,10 @@ export default {
         await (await db(env)).prepare("DELETE FROM sessions WHERE token=?").bind(a.th).run();
         return json({ ok: true });
       }
+      if (p === "/api/invite" && m === "POST") return await inviteCreate(env, a);
+      if (p === "/api/words" && m === "GET") return await wordsList(env, a);
+      const wd = p.match(/^\/api\/words\/(\d+)$/);
+      if (wd && m === "DELETE") return await wordDelete(env, a, wd[1]);
       if (p === "/api/password" && m === "POST") return await changePassword(req, env, a);
       if (p === "/api/recovery" && m === "POST") return await newRecovery(req, env, a);
       if (p === "/api/account" && m === "DELETE") return await deleteAccount(req, env, a);
