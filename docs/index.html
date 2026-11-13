@@ -640,6 +640,20 @@ svg{display:block}
 .tk-timer.tense.rel b{color:var(--green)}
 .tk-timer.breath b,.tk-timer.tense b{font-size:30px}
 .sos-hi{background:linear-gradient(135deg,rgba(255,55,95,.45),rgba(255,159,10,.3))!important;border-color:rgba(255,255,255,.2)!important}
+/* évolution */
+.evo-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 16px 0}
+.evo-kpis div{padding:14px 10px;border-radius:18px;background:var(--card);box-shadow:var(--shadow);text-align:center}
+.evo-kpis b{display:block;font-family:var(--display);font-size:24px;font-weight:700;letter-spacing:-.02em}.evo-kpis b small{font-size:14px;color:var(--label2);margin-left:1px}
+.evo-kpis span{display:block;font-size:12px;color:var(--label2);margin-top:2px;line-height:1.25}
+.evo-ins{margin-top:12px!important}.evo-ins p{font-size:15px;line-height:1.45}.evo-ins p+p{margin-top:6px}
+.evo-card{margin-top:12px!important}.evo-card>b{display:block;font-size:16px}
+.evo-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.evo-h b{font-size:16px}.evo-h strong{font-family:var(--display);font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--label)}
+.evo-tip{font-size:13px;color:var(--label3);margin:3px 0 8px;min-height:18px;font-variant-numeric:tabular-nums}.evo-tip.on{color:var(--label)}
+.evo-svg{width:100%;height:auto;display:block;overflow:visible;touch-action:pan-y}
+.evo-svg .ax{stroke:var(--sep);stroke-width:1}.evo-svg .gr{stroke:var(--sep);stroke-width:.5;stroke-dasharray:2 3}
+.evo-svg .bl{stroke:var(--label2);stroke-width:1.2;stroke-dasharray:4 4}.evo-svg .bl-t{font-size:10px;fill:var(--label2)}
+.evo-svg .tk{font-size:9.5px;fill:var(--label3)}.evo-svg .end-t{font-size:11px;font-weight:700;fill:var(--label)}
+.evo-svg .xh{stroke:var(--label3);stroke-width:1}
 /* account */
 .acc-ic{width:64px;height:64px;border-radius:20px;margin:4px auto 14px;background:linear-gradient(140deg,#34C759,#30B0C7);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -10px rgba(48,176,199,.7)}
 .acc-ic svg{width:32px;height:32px}
@@ -1278,6 +1292,90 @@ function msState(h){const days=sinceMs(h)/DAY;const ms=MILESTONES[h.type];let id
 function heroFx(){if(reduceMotion)return "";let s="";for(let i=0;i<7;i++){const z=6+((i*37)%14);s+=`<i style="left:${(i*15+7)%95}%;width:${z}px;height:${z}px;animation-duration:${7+(i*13)%8}s;animation-delay:${-(i*1.7)}s"></i>`}return `<div class="fx">${s}</div>`}
 /* ===== Tes anneaux : série, engagements, envies surmontées (style montre connectée) ===== */
 const LEVELS=[[0,"Départ","Tout commence maintenant."],[1,"Lancé·e","Le premier jour est derrière toi."],[3,"En route","Le pic du manque passe, tu tiens."],[7,"Solide","Une semaine. Ton corps te remercie."],[14,"Déterminé·e","Deux semaines, les envies faiblissent."],[30,"Inarrêtable","Un mois. Une nouvelle habitude est née."],[90,"Libre","Trois mois. Tu as changé ta vie."]];
+/* ===== Mon évolution : graphiques (une habitude à la fois → une seule série par graphique) ===== */
+let EVO={h:null,per:30};
+function dayStart(t){const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()}
+function evoSeries(h,per){const T=TYPES[h.type];const start0=h.mode==="reduce"&&h.plan?h.plan.start:Math.min(h.start||h.quitAt,h.quitAt);
+  const first=Math.max(dayStart(start0),per?dayStart(Date.now())-(per-1)*DAY:0);const out=[];const base=perDay(h),uc=unitCost(h);
+  for(let d=first;d<=dayStart(Date.now());d+=DAY){const k=dkey(d);const slips=S.slips.filter(s=>s.h===h.type&&dkey(s.t)===k).length+S.cravings.filter(c=>c.h===h.type&&!c.ok&&dkey(c.t)===k&&!S.slips.some(s=>s.h===h.type&&Math.abs(s.t-c.t)<6e5)).length;
+    const pre=!(h.mode==="reduce"&&h.plan)&&d+DAY<=h.quitAt;
+    let used=h.log&&h.log[k]!=null?+h.log[k]:null;let state;
+    if(pre){state="avant";used=base}else if(used!=null){state=used<=0?"sans":"conso"}else{state=slips?"ecart":"sans";used=slips?null:0}
+    const frac=d===dayStart(Date.now())?Math.min(1,(Date.now()-Math.max(d,h.quitAt))/DAY):1;
+    const savedDay=pre?0:Math.max(0,(base-(used||0))*uc*Math.max(0,frac));
+    const C=S.cravings.filter(c=>c.h===h.type&&dkey(c.t)===k);
+    out.push({d,k,state,used,slips,saved:savedDay,ok:C.filter(c=>c.ok).length,ko:C.filter(c=>!c.ok).length,int:C.length?C.reduce((a,c)=>a+(c.int||3),0)/C.length:null})}
+  return out}
+const fmtD=d=>new Date(d).toLocaleDateString("fr-CH",{weekday:"short",day:"numeric",month:"short"});
+function chartBars(id,items,o){const W=320,H=o.h||130,n=items.length,gap=n>40?1:2,bw=Math.max(2,(W-gap*(n-1))/n);const max=Math.max(o.max||0,...items.map(x=>x.v||0),.0001);
+  let s=`<svg viewBox="0 0 ${W} ${H+18}" class="evo-svg" id="${id}" role="img" aria-label="${esc(o.label||"")}"><line x1="0" x2="${W}" y1="${H}" y2="${H}" class="ax"/>`;
+  if(o.baseline!=null){const y=H-o.baseline/max*H;s+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" class="bl"/><text x="${W}" y="${Math.max(10,y-4)}" class="bl-t" text-anchor="end">${esc(o.blLabel||"")}</text>`}
+  items.forEach((x,i)=>{const X=i*(bw+gap);const segs=x.segs||[{v:x.v||0,c:x.c}];let y=H;segs.forEach((g,j)=>{const hh=Math.max(g.v>0?2:0,g.v/max*H);if(!hh)return;y-=hh;s+=`<rect x="${X}" y="${y}" width="${bw}" height="${hh}" rx="${Math.min(4,bw/2)}" fill="${g.c}"/>`;y-=j<segs.length-1?2:0});
+    if(x.dot)s+=`<circle cx="${X+bw/2}" cy="${H-4}" r="${Math.min(3.5,bw/2)}" fill="${x.dot}"/>`;
+    s+=`<rect x="${X-gap/2}" y="0" width="${bw+gap}" height="${H+18}" fill="transparent" data-tip="${esc(x.tip)}"/>`;
+    if(x.lab)s+=`<text x="${X+bw/2}" y="${H+14}" text-anchor="middle" class="tk">${esc(x.lab)}</text>`});
+  return s+`</svg>`}
+function chartLine(id,pts,o){const W=320,H=o.h||120,n=pts.length;if(n<2)return `<p class="foot">Pas encore assez de données.</p>`;const vs=pts.map(p=>p.v).filter(v=>v!=null);const max=o.max!=null?o.max:Math.max(...vs,.0001),min=o.min!=null?o.min:0;
+  const X=i=>i/(n-1)*W,Y=v=>H-(v-min)/(max-min||1)*H;let path="",area="",started=false,lastI=-1;
+  pts.forEach((p,i)=>{if(p.v==null)return;const c=`${X(i).toFixed(1)},${Y(p.v).toFixed(1)}`;path+=(started?"L":"M")+c;if(!started)area=`M${X(i).toFixed(1)},${H}L`+c;else area+="L"+c;started=true;lastI=i});
+  area+=`L${X(lastI).toFixed(1)},${H}Z`;const last=pts[lastI];
+  let s=`<svg viewBox="0 0 ${W} ${H+18}" class="evo-svg" id="${id}" role="img" aria-label="${esc(o.label||"")}"><line x1="0" x2="${W}" y1="${H}" y2="${H}" class="ax"/>`;
+  (o.grid||[]).forEach(g=>{const y=Y(g.v);s+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" class="gr"/><text x="2" y="${y-3}" class="tk" text-anchor="start">${esc(g.l)}</text>`});
+  if(o.area!==false)s+=`<path d="${area}" fill="${o.c}" opacity=".14"/>`;
+  s+=`<path d="${path}" fill="none" stroke="${o.c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${X(lastI)}" cy="${Y(last.v)}" r="4.5" fill="${o.c}" stroke="var(--card)" stroke-width="2"/>`;
+  if(o.endLabel)s+=`<text x="${Math.min(W-2,X(lastI))}" y="${Math.max(12,Y(last.v)-9)}" text-anchor="end" class="end-t">${esc(o.endLabel)}</text>`;
+  pts.forEach((p,i)=>{if(p.lab)s+=`<text x="${X(i)}" y="${H+14}" text-anchor="${i===0?"start":i===n-1?"end":"middle"}" class="tk">${esc(p.lab)}</text>`;
+    s+=`<rect x="${X(i)-W/(2*n)}" y="0" width="${W/n}" height="${H+18}" fill="transparent" data-tip="${esc(p.tip)}" data-x="${X(i)}" data-y="${p.v==null?"":Y(p.v)}"/>`});
+  return s+`<line class="xh" x1="0" x2="0" y1="0" y2="${H}" style="display:none"/></svg>`}
+function bindTips(root){root.querySelectorAll(".evo-card").forEach(card=>{const out=card.querySelector(".evo-tip");const svg=card.querySelector("svg");if(!svg||!out)return;const def=out.textContent;const xh=svg.querySelector(".xh");
+  const show=e=>{const pt=e.touches?e.touches[0]:e;const el=document.elementFromPoint(pt.clientX,pt.clientY);const r=el&&el.closest?el.closest("[data-tip]"):null;if(!r||!svg.contains(r))return;out.textContent=r.dataset.tip;out.classList.add("on");
+    if(xh&&r.dataset.x){xh.style.display="";xh.setAttribute("x1",r.dataset.x);xh.setAttribute("x2",r.dataset.x)}};
+  const hide=()=>{out.textContent=def;out.classList.remove("on");if(xh)xh.style.display="none"};
+  svg.addEventListener("pointermove",show);svg.addEventListener("pointerdown",show);svg.addEventListener("touchmove",e=>{show(e)},{passive:true});svg.addEventListener("pointerleave",hide)})}
+function openEvolution(type){const ks=Object.keys(S.habits);if(!ks.length)return;if(type)EVO.h=type;if(!EVO.h||!S.habits[EVO.h])EVO.h=S.active&&S.habits[S.active]?S.active:ks[0];
+  const draw=()=>{const h=S.habits[EVO.h],T=TYPES[h.type];const per=EVO.per;const L=evoSeries(h,per);const base=perDay(h);
+    const after=L.filter(x=>x.state!=="avant");const nowAvg=after.length?after.reduce((a,x)=>a+(x.used||0),0)/after.length:0;
+    const sans=after.filter(x=>x.state==="sans").length;let cur=0;for(let i=L.length-1;i>=0&&L[i].state==="sans";i--)cur++;let best=0,run=0;L.forEach(x=>{if(x.state==="sans"){run++;best=Math.max(best,run)}else run=0});
+    const savedP=L.reduce((a,x)=>a+x.saved,0);const unitN=v=>h.type==="alcohol"?(v>=2?"verres std":"verre std"):(v>=2?T.units:T.unit);const unit=unitN(2);const fmt=v=>v<10?String(Math.round(v*10)/10).replace(".",","):nf0.format(Math.round(v));
+    const tick=(x,i)=>L.length<=10||i%Math.ceil(L.length/7)===0?new Date(x.d).getDate()+"":"";
+    // 1) conso par jour vs avant
+    const ok="#30D158",bad="#FF453A";
+    const bars=chartBars("ev-conso",L.map((x,i)=>({v:x.state==="ecart"?Math.max(base*.25,.5):x.used||0,c:x.state==="avant"?"var(--label3)":x.state==="ecart"?bad:x.state==="conso"?"var(--tint)":ok,dot:x.state==="sans"?ok:null,lab:tick(x,i),
+      tip:fmtD(x.d)+" · "+(x.state==="avant"?"avant l'arrêt (~"+fmt(base)+" "+unit+")":x.state==="sans"?"jour sans ✓":x.state==="ecart"?"écart noté":fmt(x.used)+" "+unitN(x.used))})),{max:base*1.1,baseline:base,blLabel:"avant : ~"+fmt(base)+"/jour",label:"Consommation par jour"});
+    // 2) argent cumulé
+    let cum=0;const money=L.map((x,i)=>{cum+=x.saved;return {v:cum,lab:i===0?new Date(x.d).getDate()+"/"+(new Date(x.d).getMonth()+1):i===L.length-1?"aujourd'hui":"",tip:fmtD(x.d)+" · "+chf(cum)+" économisés"}});
+    const moneyC=chartLine("ev-money",money,{c:"#30D158",label:"Argent économisé"});
+    // 3) envies par semaine (empilées : surmontées / écarts)
+    const weeks=[];for(let w=Math.min(8,Math.max(1,Math.ceil(L.length/7)))-1;w>=0;w--){const to=dayStart(Date.now())-w*7*DAY,from=to-6*DAY;const C=S.cravings.filter(c=>c.h===h.type&&c.t>=from&&c.t<to+DAY);
+      weeks.push({ok:C.filter(c=>c.ok).length,ko:C.filter(c=>!c.ok).length,int:C.length?C.reduce((a,c)=>a+(c.int||3),0)/C.length:null,lab:w===0?"cette sem.":"-"+w,from})}
+    const anyC=weeks.some(w=>w.ok+w.ko>0);
+    const cravC=anyC?chartBars("ev-crav",weeks.map(w=>({segs:[{v:w.ko,c:bad},{v:w.ok,c:"var(--tint)"}],v:w.ok+w.ko,lab:w.lab,tip:"Semaine du "+new Date(w.from).toLocaleDateString("fr-CH",{day:"numeric",month:"short"})+" · "+w.ok+" surmontée"+(w.ok>1?"s":"")+", "+w.ko+" écart"+(w.ko>1?"s":"")})),{h:110,label:"Envies par semaine"}):"";
+    const intPts=weeks.map(w=>({v:w.int,lab:w.lab,tip:w.int==null?"pas d'envie notée":"Intensité moyenne "+fmt(w.int)+"/5"}));const intC=intPts.filter(p=>p.v!=null).length>=2?chartLine("ev-int",intPts,{c:"#FF9F0A",min:0,max:5,area:false,grid:[{v:1,l:"1"},{v:3,l:"3"},{v:5,l:"5"}],label:"Intensité des envies"}):"";
+    // 4) humeur
+    const N=(S.notes||[]).filter(n=>n.m>=0);const moodPts=L.map((x,i)=>{const M=N.filter(n=>dkey(n.t)===x.k);const v=M.length?M.reduce((a,n)=>a+n.m,0)/M.length:null;return {v,lab:tick(x,i),tip:fmtD(x.d)+" · "+(v==null?"pas noté":MOODS[Math.round(v)][0]+" "+MOODS[Math.round(v)][1])}});
+    const moodC=moodPts.filter(p=>p.v!=null).length>=2?chartLine("ev-mood",moodPts,{c:"#5E5CE6",min:0,max:4,area:false,grid:[{v:0,l:"😣"},{v:2,l:"😐"},{v:4,l:"😄"}],label:"Humeur"}):"";
+    // insights
+    const ins=[];const drop=base>0?Math.round((1-nowAvg/base)*100):0;const nEc=after.filter(x=>x.state==="ecart").length;if(after.length)ins.push(drop>=100&&!nEc?`Tu es passée de ~${fmt(base)} ${unitN(base)} par jour à zéro. 💪`:nEc&&!after.some(x=>x.state==="conso")?`${plural(sans,"jour sans","jours sans")} sur ${after.length}, au lieu de ~${fmt(base)} ${unitN(base)} chaque jour avant.`:`Tu consommes ${drop} % de moins qu'avant (~${fmt(nowAvg)} au lieu de ~${fmt(base)} ${unit} par jour).`);
+    const w1=weeks.find(w=>w.ok+w.ko>0),wl=weeks[weeks.length-1];if(w1&&wl&&w1!==wl&&w1.ok+w1.ko>0){const a=w1.ok+w1.ko,b=wl.ok+wl.ko;if(b<a)ins.push(`Tes envies ont baissé de ${Math.round((1-b/a)*100)} % depuis la semaine ${w1.lab.replace("-","−")}.`)}
+    const ints=weeks.filter(w=>w.int!=null);if(ints.length>=2&&ints[ints.length-1].int<ints[0].int)ins.push(`Elles sont aussi moins fortes : ${fmt(ints[0].int)}/5 → ${fmt(ints[ints.length-1].int)}/5.`);
+    if(best>=2)ins.push(`Ta meilleure série : ${plural(best,"jour sans","jours sans")} d'affilée.`);
+    $("#if-body").innerHTML=`<div style="padding:0 20px"><h2 class="sh-big">Mon évolution</h2></div>
+    ${ks.length>1?`<div style="padding:12px 16px 0" class="chips">${ks.map(k=>`<button class="chip tap ${k===EVO.h?"on":""}" data-eh="${k}">${ic(TICON[k],2)}${TYPES[k].name}</button>`).join("")}</div>`:""}
+    <div style="padding:12px 16px 0"><div class="seg" id="ev-seg">${[[7,"7 jours"],[30,"30 jours"],[0,"Depuis le début"]].map(x=>`<button data-ep="${x[0]}" class="${x[0]===per?"on":""}">${x[1]}</button>`).join("")}<i class="seg-ind"></i></div></div>
+    <div class="evo-kpis"><div><b class="num">${cur}</b><span>jour${cur>1?"s":""} sans d'affilée</span></div><div><b class="num">${after.length?Math.round(sans/after.length*100):0}<small>%</small></b><span>de jours sans</span></div><div><b class="num">${chf(savedP,0)}</b><span>économisés</span></div></div>
+    ${ins.length?`<div class="card pad evo-ins"><div class="tip"><i>${ic("trend",2)}</i><div>${ins.map(x=>`<p>${esc(x)}</p>`).join("")}</div></div></div>`:""}
+    <div class="card pad evo-card"><b>Ta consommation par jour</b><p class="evo-tip">Touche une barre pour le détail</p>${bars}<div class="legend"><span><i style="background:${ok}"></i>Jour sans</span><span><i style="background:var(--tint)"></i>Conso</span><span><i style="background:${bad}"></i>Écart</span><span><i style="background:var(--label3)"></i>Avant</span></div></div>
+    <div class="card pad evo-card"><div class="evo-h"><b>Argent économisé</b><strong class="num">${chf(cum,0)}</strong></div><p class="evo-tip">Touche la courbe pour le détail</p>${moneyC}</div>
+    ${anyC?`<div class="card pad evo-card"><b>Tes envies par semaine</b><p class="evo-tip">Touche une barre pour le détail</p>${cravC}<div class="legend"><span><i style="background:var(--tint)"></i>Surmontées</span><span><i style="background:${bad}"></i>Écarts</span></div></div>`:`<div class="card pad evo-card"><b>Tes envies</b><p class="foot" style="margin-top:6px">Note tes envies avec le bouton SOS : tu verras ici si elles deviennent moins fréquentes.</p></div>`}
+    ${intC?`<div class="card pad evo-card"><b>Intensité des envies (sur 5)</b><p class="evo-tip">Touche la courbe pour le détail</p>${intC}</div>`:""}
+    ${moodC?`<div class="card pad evo-card"><b>Ton humeur</b><p class="evo-tip">Touche la courbe pour le détail</p>${moodC}</div>`:""}
+    <p class="hint">Les jours sans sont comptés à partir de ta date d'arrêt. Les écarts viennent de ce que tu notes dans l'app.</p>`;
+    const sg=$("#ev-seg");placeSeg(sg,false);sg.querySelectorAll("button").forEach(b=>b.onclick=()=>{EVO.per=+b.dataset.ep;placeSeg(sg,true,b);haptic();setTimeout(draw,160)});
+    $$("[data-eh]").forEach(b=>b.onclick=()=>{EVO.h=b.dataset.eh;haptic();draw()});bindTips($("#if-body"))};
+  openInfo("Évolution","");draw()}
+function evoCardHTML(h){if(!h||(!isReduce(h)&&h.quitAt>Date.now()))return "";const L=evoSeries(h,14);let cum=0;const pts=L.map(x=>{cum+=x.saved;return {v:cum}});
+  const W=90,H=34,n=pts.length,max=Math.max(cum,.01);const d=n<2?"":pts.map((p,i)=>(i?"L":"M")+(i/(n-1)*W).toFixed(1)+","+(H-p.v/max*H).toFixed(1)).join("");
+  return `<button class="ritual tap reveal" id="evo-card" style="margin-top:12px"><span class="rit-ic" style="background:linear-gradient(140deg,#5E5CE6,#0A84FF)">${ic("chart",2.2)}</span><div style="flex:1"><b>Mon évolution</b><span>Graphiques : conso, argent, envies, humeur</span></div>${d?`<svg viewBox="0 0 ${W} ${H}" style="width:72px;height:30px;flex:none;overflow:visible"><path d="${d}" fill="none" stroke="#30D158" stroke-width="2" stroke-linecap="round"/></svg>`:""}<svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 6 6-6 6"/></svg></button>`}
 function ringsHTML(h){if(!h||(!isReduce(h)&&h.quitAt>Date.now()))return "";
   const d=isReduce(h)?(Date.now()-h.plan.start)/DAY:sinceMs(h)/DAY;let k=0;LEVELS.forEach((g,i)=>{if(d>=g[0])k=i});const nx=LEVELS[k+1];
   const p1=nx?Math.min(1,(d-LEVELS[k][0])/(nx[0]-LEVELS[k][0])):1;
@@ -1337,7 +1435,7 @@ function renderHome(){
   <div class="lt"><div><small>${new Date().toLocaleDateString("fr-CH",{weekday:"long",day:"numeric",month:"long"})}</small><h1>${greeting()}${S.name?", "+esc(S.name):""}</h1></div><button class="avatar tap" data-open-settings aria-label="Réglages">${esc((S.name||"L")[0].toUpperCase())}</button></div>
   ${ks.length>1?`<div style="padding:4px 16px 4px"><div class="seg" id="hab-seg">${ks.map(k=>`<button data-h="${k}" class="${k===h.type?"on":""}">${ic(TICON[k],2)}${TYPES[k].name}</button>`).join("")}<i class="seg-ind"></i></div></div>`:""}
   ${heroHTML(h)}
-  ${ringsHTML(h)}${nightHTML()}${ritualHTML()}${riskHTML()}${challengeHTML()}${accountCardHTML()||remCardHTML()||installCardHTML()||calCardHTML()}
+  ${ringsHTML(h)}${evoCardHTML(h)}${nightHTML()}${ritualHTML()}${riskHTML()}${challengeHTML()}${accountCardHTML()||remCardHTML()||installCardHTML()||calCardHTML()}
   <div class="grid2">
     <div class="card stat reveal"><div class="k"><i style="background:var(--green)">${ic("coin",2.2)}</i>Économisé</div><div class="v num" id="h-saved">${chf(saved(h))}</div><div class="s">${chf(weekCost(h)*52.18,0)} par an</div></div>
     <div class="card stat reveal"><div class="k"><i style="background:${T.color}">${ic(TICON[h.type],2.2)}</i>${{vape:"Bouffées évitées",smoke:"Cigarettes évitées",weed:"Joints évités",alcohol:"Verres évités"}[h.type]}</div><div class="v num" id="h-avoid">${nf0.format(avoided(h))}</div><div class="s">${{alcohol:"verres non bus",smoke:"cigarettes non fumées",weed:"joints non fumés",vape:"bouffées non prises"}[h.type]}</div></div>
@@ -1370,7 +1468,7 @@ function renderHome(){
   $$("[data-prep]").forEach(b=>b.onclick=()=>{S.prep=S.prep||{};const k=b.dataset.prep;S.prep[k]=!S.prep[k];save();haptic();b.querySelector(".pcheck").classList.toggle("on",!!S.prep[k]);if(k==="plan"&&S.prep[k])openPlan()});
   const sn=$("#start-now");if(sn)sn.onclick=()=>alertBox("Commencer maintenant ?","Ton compteur démarre tout de suite.","Commencer",()=>{h.quitAt=Date.now();save();haptic("success");confetti();renderHome()});
   if(S.set.health)healthCard();
-  bindRitual(h);const wa=$("#why-add");if(wa)wa.onclick=openWhy;const cc=$("#cal-card");if(cc)cc.onclick=openCal;const rc=$("#rem-card");if(rc)rc.onclick=openReminders;const acx=$("#acc-card");if(acx)acx.onclick=()=>openAccount("create");const bkc=$("#bk-card");if(bkc)bkc.onclick=openSettings;bindHomeExtras();bindRings();const as=$("#alc-safe");if(as)as.onclick=openAlcSafety;setTimeout(checkBadges,700);const wa2=$("#words-all");if(wa2)wa2.onclick=openWords;
+  bindRitual(h);const wa=$("#why-add");if(wa)wa.onclick=openWhy;const cc=$("#cal-card");if(cc)cc.onclick=openCal;const rc=$("#rem-card");if(rc)rc.onclick=openReminders;const acx=$("#acc-card");if(acx)acx.onclick=()=>openAccount("create");const bkc=$("#bk-card");if(bkc)bkc.onclick=openSettings;bindHomeExtras();bindRings();const ev=$("#evo-card");if(ev)ev.onclick=()=>openEvolution(h.type);const as=$("#alc-safe");if(as)as.onclick=openAlcSafety;setTimeout(checkBadges,700);const wa2=$("#words-all");if(wa2)wa2.onclick=openWords;
   reveal(s);
   const f0=homeCounted;homeCounted=true;countTo($("#h-saved"),saved(h),v=>chf(v),f0?saved(h):0);countTo($("#h-avoid"),avoided(h),v=>nf0.format(v),f0?avoided(h):0);
 }
@@ -1675,7 +1773,7 @@ function renderJournal(){
   const peak=hours.indexOf(Math.max(...hours));
   const insight=C.length>=3?(tl.length?`Tes envies arrivent le plus souvent avec « ${tl[0][0].toLowerCase()} », surtout vers ${peak} h. Prépare un plan pour ce moment précis.`:`Tes envies arrivent surtout vers ${peak} h. Prévois une activité à ce moment-là.`):"Note quelques envies : Libre te montrera quand et pourquoi elles arrivent.";
   const proBlock=(inner)=>S.pro?inner:`<div class="locked"><div class="blurme">${inner}</div><div class="lock-ov"><b>Analyses détaillées</b><span class="foot">Découvre tes heures et déclencheurs à risque.</span><button class="pill-btn tap" data-pay>${ic("lock",2)}Débloquer avec Pro</button></div></div>`;
-  s.innerHTML=`<div class="lt"><div><small>Tes envies, tes victoires</small><h1>Journal</h1></div><button class="icon-btn tap" data-sos-log aria-label="Noter une envie">${ic("plus",2.4)}</button></div>
+  s.innerHTML=`<div class="lt"><div><small>Tes envies, tes victoires</small><h1>Journal</h1></div><button class="icon-btn tap" id="j-evo" aria-label="Mon évolution" style="margin-right:8px">${ic("chart",2.2)}</button><button class="icon-btn tap" data-sos-log aria-label="Noter une envie">${ic("plus",2.4)}</button></div>
   <div class="grid2" style="margin-top:6px">
     <div class="card stat reveal"><div class="k"><i style="background:var(--tint)">${ic("shield",2.2)}</i>Surmontées</div><div class="v num">${ok}</div><div class="s">sur ${plural(C.length,"envie notée","envies notées")}</div></div>
     <div class="card stat reveal"><div class="k"><i style="background:var(--mint)">${ic("trend",2.2)}</i>Réussite</div><div class="v num">${C.length?Math.round(ok/C.length*100):0}<small>%</small></div><div class="s">des envies dépassées</div></div>
@@ -1698,6 +1796,7 @@ function renderJournal(){
   <div class="card insight reveal" style="margin-top:12px"><i>${ic("sparkle",2)}</i><p>${esc(insight)}</p></div>
   <div class="sec"><h2>Historique</h2></div>
   ${C.length?`<p class="hint" style="margin:0 32px 8px">Touche une entrée pour la supprimer si tu t'es trompé·e.</p><div class="list reveal">${C.map((c,i)=>[c,i]).reverse().slice(0,60).map(([c,i])=>`<button class="row entry tap" data-ci="${i}"><span class="dot" style="background:${c.ok?"var(--tint)":"var(--red)"}"></span><div class="rt"><b>${c.ok?"Envie surmontée":"Écart"} · ${TYPES[c.h]?TYPES[c.h].name:""}</b><span>${new Date(c.t).toLocaleString("fr-CH",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}${c.trig&&c.trig.length?" · "+esc(c.trig.join(", ")):""}</span></div><span class="rv">${"●".repeat(c.int||0)}</span></button>`).join("")}</div>`:`<div class="card empty reveal">Aucune envie notée pour l'instant.<br>Quand une envie arrive, touche le bouton rouge.</div>`}`;
+  const je=$("#j-evo");if(je)je.onclick=()=>openEvolution();
   let mood=null;$$("[data-mood]").forEach(b=>b.onclick=()=>{mood=+b.dataset.mood;$$("[data-mood]").forEach(x=>x.classList.toggle("on",x===b));haptic()});
   $("#note-save").onclick=()=>{const x=$("#note-t").value.trim();if(mood==null&&!x)return hud("Choisis une humeur","x");const before=JSON.stringify(S);S.notes=S.notes||[];S.notes.push({t:Date.now(),m:mood==null?-1:mood,x:x.slice(0,1000)});if(S.notes.length>400)S.notes.shift();save();haptic("success");renderJournal();undoToast(mood!=null&&mood<=1?"Noté. Prends soin de toi 💙":"Ajouté à ton journal",before)};
   $$("[data-note]").forEach(b=>b.onclick=()=>alertBox("Supprimer cette note ?","Elle sera retirée de ton journal.","Supprimer",()=>{const before=JSON.stringify(S);S.notes.splice(+b.dataset.note,1);save();renderJournal();undoToast("Note supprimée",before)},true));
