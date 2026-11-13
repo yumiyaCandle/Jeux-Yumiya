@@ -12,8 +12,6 @@
 <title>Libre</title>
 <script>/* Version GitHub. Mets ici l'adresse de ton Worker Cloudflare (libre-worker.js) pour activer comptes, IA et rappels : */
 var LIBRE_SERVEUR="";
-/* Son allié·e (enregistré d'avance) : prénom et numéro */
-window.LIBRE_ALLY={name:"",phone:""};
 (function(){try{var q=new URLSearchParams(location.search).get("api");if(q&&/^https:\/\/[a-z0-9.-]+\.workers\.dev\/?$/i.test(q)){localStorage.setItem("libre.api",q.replace(/\/+$/,""));history.replaceState(null,"",location.pathname)}var a=LIBRE_SERVEUR||localStorage.getItem("libre.api")||"";if(a)window.LIBRE_API=a.replace(/\/+$/,"");else window.LIBRE_STATIC=true}catch(e){window.LIBRE_STATIC=true}})();</script>
 <style>@font-face{font-family:Inter;font-weight:400;font-display:swap;src:url(fonts/inter-latin-400-normal.woff2) format('woff2')}@font-face{font-family:Inter;font-weight:500;font-display:swap;src:url(fonts/inter-latin-500-normal.woff2) format('woff2')}@font-face{font-family:Inter;font-weight:600;font-display:swap;src:url(fonts/inter-latin-600-normal.woff2) format('woff2')}@font-face{font-family:Inter;font-weight:700;font-display:swap;src:url(fonts/inter-latin-700-normal.woff2) format('woff2')}</style>
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-180.png">
