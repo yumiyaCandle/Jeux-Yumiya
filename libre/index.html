@@ -620,6 +620,23 @@ svg{display:block}
 .mog{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}.mog b{font-size:11px;color:var(--label3);font-weight:600}
 .mo{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-size:13px;font-style:normal;font-weight:600;color:var(--label2);background:var(--fill)}
 .mo.e{background:none}.mo.ok{background:color-mix(in srgb,var(--green) 22%,transparent);color:var(--green)}.mo.sl{background:color-mix(in srgb,var(--red) 20%,transparent);color:var(--red)}.mo.fu{opacity:.35}.mo.td{box-shadow:0 0 0 2px var(--tint)}
+/* techniques */
+.techs{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.tech{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:14px;border-radius:20px;background:var(--card);box-shadow:var(--shadow);text-align:left;min-height:170px;border-top:4px solid var(--c)}
+.tk-top{display:flex;align-items:center;gap:6px;width:100%}.tk-dot{width:8px;height:8px;border-radius:50%;background:var(--c)}.tk-top small{font-size:12px;color:var(--label2);font-weight:600}
+.tech b{font-size:16px;line-height:1.25;margin-top:4px}.tech span{font-size:13px;color:var(--label2);line-height:1.35}.tech em{font-style:normal;font-size:11px;color:var(--c);font-weight:600;margin-top:auto;padding-top:6px;line-height:1.3}
+.tk-hero{margin:4px 16px 0;padding:22px 20px;border-radius:24px;background:linear-gradient(150deg,var(--c),color-mix(in srgb,var(--c) 55%,#000));color:#fff}
+.tk-hero small{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.85}.tk-hero h2{font-family:var(--display);font-size:30px;font-weight:700;letter-spacing:-.02em;margin-top:8px;line-height:1.1}
+.tk-hero p{font-size:16px;line-height:1.5;margin-top:10px;opacity:.95}.tk-hero span{display:block;font-size:13px;margin-top:12px;opacity:.8}
+.tk-src{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tk-rate{text-align:center;font-family:var(--display)}.tk-rate b{font-size:64px;font-weight:700;letter-spacing:-.04em}.tk-rate span{font-size:20px;color:var(--label2);margin-left:4px}
+.tk-timer{position:relative;width:200px;height:200px;margin:0 auto}.tk-timer svg{width:100%;height:100%;transform:rotate(-90deg)}
+.tk-timer circle{fill:none;stroke-width:9}.tk-timer .bg{stroke:var(--fill)}.tk-timer .fg{stroke:var(--c);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.tk-timer>div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}.tk-timer b{font-family:var(--display);font-size:40px;font-weight:700;letter-spacing:-.02em}.tk-timer span{font-size:14px;color:var(--label2)}
+.tk-timer.breath>div{transition:transform 4s ease-in-out}.tk-timer.breath.in>div{transform:scale(1.15)}.tk-timer.breath:not(.in)>div{transition-duration:6s}
+.tk-timer.tense.rel b{color:var(--green)}
+.tk-timer.breath b,.tk-timer.tense b{font-size:30px}
+.sos-hi{background:linear-gradient(135deg,rgba(255,55,95,.45),rgba(255,159,10,.3))!important;border-color:rgba(255,255,255,.2)!important}
 /* account */
 .acc-ic{width:64px;height:64px;border-radius:20px;margin:4px auto 14px;background:linear-gradient(140deg,#34C759,#30B0C7);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -10px rgba(48,176,199,.7)}
 .acc-ic svg{width:32px;height:32px}
@@ -687,6 +704,9 @@ svg{display:block}
       <div class="sos-pane on" data-p="menu" style="align-items:stretch;text-align:left;padding:0">
         <div class="sos-t" id="sos-menu-t"></div>
         <div class="sos-opts">
+          <button class="sos-o wide tap sos-hi" data-sosgo="t-tipp"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 5 13.5h6L10 22l8-11.5h-6L13 2Z"/></svg></i><div><b>Envie très forte ? Technique TIPP</b><span>4 gestes pour calmer le corps en 3 minutes</span></div></button>
+          <button class="sos-o tap" data-sosgo="t-surf"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-5 5-5s2.5 10 5 10 2.5-10 5-10 2.5 5 5 5"/></svg></i><div><b>Surfer l'envie</b><span>Observer sans céder, 4 min</span></div></button>
+          <button class="sos-o tap" data-sosgo="t-film"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m10 9 5 3-5 3V9Z"/></svg></i><div><b>Dérouler le film</b><span>Et après le premier verre ?</span></div></button>
           <button class="sos-o tap" data-sosgo="breathe"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h11a3 3 0 1 0-3-3M3 12h16a3 3 0 1 1-3 3M3 16h8"/></svg></i><div><b>Respirer</b><span>90 secondes guidées</span></div></button>
           <button class="sos-o tap" data-sosgo="wave"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-5 5-5s2.5 10 5 10 2.5-10 5-10 2.5 5 5 5"/></svg></i><div><b>Laisser passer</b><span>5 min, la vague redescend</span></div></button>
           <button class="sos-o tap" data-sosgo="reasons"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20Z"/></svg></i><div><b>Mes raisons</b><span>Pourquoi tu fais ça</span></div></button>
@@ -1434,14 +1454,18 @@ function alcSummary(){const h=S.habits.alcohol;if(!h)return "";const c=h.drinks&
 const ALC_SYM=[["tremb","Tremblements des mains"],["sueur","Sueurs, cœur qui bat vite"],["naus","Nausées"],["anx","Grosse angoisse"],["som","Je ne dors pas"],["matin","Je bois le matin pour aller mieux"]];
 function openAlcSafety(){S.alcSym=S.alcSym||{};
   openInfo("Mon plan alcool",`<div style="padding:0 20px"><h2 class="sh-big">Arrêter l'alcool, en sécurité</h2><p class="foot" style="margin-top:8px;line-height:1.5">La dépendance à l'alcool est une maladie, pas un manque de volonté. Elle se soigne, et tu n'as pas à le faire seul·e. Un médecin peut t'aider à arrêter sans danger.</p></div>
-  <div class="card pad" style="margin:16px 16px 0;border:1px solid color-mix(in srgb,var(--red) 35%,transparent)"><div class="tip"><i style="background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)">${ic("shield",2)}</i><div><b>Appelle le 144 tout de suite si</b><p>convulsions, confusion, hallucinations, ou tremblements très forts après avoir arrêté de boire.</p></div></div><a class="big-btn red tap" href="tel:144" style="width:100%;margin:12px 0 0;text-decoration:none">${ic("phone",2).replace("<svg",'<svg width="20" height="20"')}Appeler le 144</a></div>
+  <div class="grp-t">À faire seul·e, tout de suite</div><div class="list">${[["tipp","Envie très forte : technique TIPP","3 min · Thérapie dialectique (DBT)"],["surf","Surfer l'envie","4 min · Prévention de la rechute"],["film","Dérouler le film","2 min · Thérapie cognitive (TCC)"],["balance","Ma balance pour / contre","5 min · Entretien motivationnel"]].map(x=>`<button class="row tap" data-tq="${x[0]}"><span class="ri" style="background:#5E5CE6">${ic("sparkle",2)}</span><div class="rt"><b>${x[1]}</b><span>${x[2]}</span></div><svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 6 6-6 6"/></svg></button>`).join("")}</div>
   <div class="grp-t">Quand tu ne bois pas, tu ressens…</div><div class="symgrid" style="padding-top:0">${ALC_SYM.map(s=>`<button class="sym tap ${S.alcSym[s[0]]?"on":""}" data-as="${s[0]}"><span>${s[1]}</span></button>`).join("")}</div>
   <p class="hint" id="as-msg">${Object.values(S.alcSym).some(Boolean)?"<b style='color:var(--orange)'>Ces signes montrent que ton corps s'est habitué à l'alcool.</b> N'arrête pas d'un coup seul·e : vois un médecin, il t'aidera à réduire sans danger.":"Coche ce qui te concerne. C'est privé, et ça t'aide à préparer ton rendez-vous."}</p>
   <div class="grp-t">Préparer ton rendez-vous</div><div style="padding:0 16px"><div class="card pad" style="margin:0;font-size:15px;line-height:1.5;white-space:pre-wrap" id="as-sum">${esc(alcSummary())}</div></div>
   <p class="hint">Montre ce résumé à ton médecin de famille ou ton pédiatre, ou à l'infirmière scolaire. Tu peux aussi d'abord en parler, gratuitement et sans donner ton nom, au 147.</p>
   <div style="height:12px"></div><button class="big-btn sec2 tap" id="as-copy">${ic("share",2).replace("<svg",'<svg width="20" height="20"')}Copier le résumé</button>
   <div style="height:10px"></div><a class="big-btn tap" href="tel:147" style="text-decoration:none">${ic("phone",2).replace("<svg",'<svg width="20" height="20"')}Parler au 147 (jeunes, 24 h/24)</a>
-  <div class="grp-t">Ce qui aide vraiment</div><div class="card pad" style="margin:0 16px">${["Garde de l'eau ou une boisson sans alcool toujours à portée de main.","Dis à une personne de confiance que tu arrêtes, elle peut t'aider pendant les soirées.","Évite d'avoir de l'alcool chez toi les premières semaines.","Prévois quoi faire le vendredi et le samedi soir : c'est souvent là que c'est le plus dur.","Si tu craques, ce n'est pas un échec : note-le, et parles-en à Sam ou au 147."].map(x=>`<div class="perk" style="margin-top:8px;font-size:15px"><i>${ic("check",2.6)}</i>${x}</div>`).join("")}</div>`);
+  <div class="grp-t">Ce qui aide vraiment</div><div class="card pad" style="margin:0 16px">${["Garde de l'eau ou une boisson sans alcool toujours à portée de main.","Dis à une personne de confiance que tu arrêtes, elle peut t'aider pendant les soirées.","Évite d'avoir de l'alcool chez toi les premières semaines.","Prévois quoi faire le vendredi et le samedi soir : c'est souvent là que c'est le plus dur.","Si tu craques, ce n'est pas un échec : note-le, et parles-en à Sam ou au 147."].map(x=>`<div class="perk" style="margin-top:8px;font-size:15px"><i>${ic("check",2.6)}</i>${x}</div>`).join("")}</div>
+  <div class="grp-t">En cas d'urgence</div>
+  <div class="card pad" style="margin:0 16px;border:1px solid color-mix(in srgb,var(--red) 35%,transparent)"><div class="tip"><i style="background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)">${ic("shield",2)}</i><div><b>Appelle le 144 tout de suite si</b><p>convulsions, confusion, hallucinations, ou tremblements très forts après avoir arrêté de boire.</p></div></div><a class="big-btn red tap" href="tel:144" style="width:100%;margin:12px 0 0;text-decoration:none">${ic("phone",2).replace("<svg",'<svg width="20" height="20"')}Appeler le 144</a></div>
+`);
+  $$("[data-tq]").forEach(b=>b.onclick=()=>closeSheet(0,()=>openTech(b.dataset.tq)));
   $$("[data-as]").forEach(b=>b.onclick=()=>{const k=b.dataset.as;S.alcSym[k]=!S.alcSym[k];if(S.alcSym[k])S.alcoholRisk=true;save();haptic();b.classList.toggle("on",!!S.alcSym[k]);$("#as-sum").textContent=alcSummary();
     $("#as-msg").innerHTML=Object.values(S.alcSym).some(Boolean)?"<b style='color:var(--orange)'>Ces signes montrent que ton corps s'est habitué à l'alcool.</b> N'arrête pas d'un coup seul·e : vois un médecin, il t'aidera à réduire sans danger.":"Coche ce qui te concerne. C'est privé, et ça t'aide à préparer ton rendez-vous."});
   $("#as-copy").onclick=async()=>{try{await navigator.clipboard.writeText(alcSummary());hud("Copié")}catch(e){hud("Copie impossible","x")}}}
@@ -1521,6 +1545,94 @@ function monthHTML(){const hs=Object.values(S.habits);if(!hs.length)return "";co
     if(dt>now)c="fu";else if(end<=start)c="bf";else{const slip=S.slips.some(s=>dkey(s.t)===k)||S.cravings.some(x=>!x.ok&&dkey(x.t)===k);c=slip?"sl":"ok";if(!slip)free++}
     cells+=`<i class="mo ${c} ${k===dkey()?"td":""}">${d}</i>`}
   return `<div class="sec"><h2>${now.toLocaleDateString("fr-CH",{month:"long"}).replace(/^./,x=>x.toUpperCase())}</h2><span class="foot">${plural(free,"jour sans","jours sans")}</span></div><div class="card pad reveal"><div class="mog">${["L","M","M","J","V","S","D"].map(x=>`<b>${x}</b>`).join("")}${cells}</div><div class="legend"><span><i style="background:var(--green)"></i>Jour sans</span><span><i style="background:var(--red)"></i>Écart</span></div></div>`}
+/* ===== Techniques validées (psychologie, addictologie), guidées pas à pas ===== */
+const TECH={
+ tipp:{n:"TIPP : calmer le corps",src:"Thérapie dialectique comportementale (DBT, M. Linehan)",when:"Quand l'envie ou l'émotion est très forte, à 8/10 ou plus.",min:3,c:"#FF375F",
+  steps:[{k:"rate",id:"a",t:"À combien est ton envie, là ?",x:"0 = aucune envie, 10 = insupportable."},
+   {k:"timer",s:30,t:"T · Température",x:"Passe de l'eau très froide sur ton visage, ou tiens un glaçon / une canette froide contre tes poignets et ton visage. Le froid active un réflexe qui ralentit le cœur en quelques secondes."},
+   {k:"timer",s:60,t:"I · Intensité",x:"Bouge fort pendant 1 minute : jumping jacks, sauts sur place, montée d'escaliers, squats rapides. Ton corps brûle l'adrénaline de l'envie."},
+   {k:"breath",s:60,t:"P · Respiration rythmée",x:"Inspire 4 secondes, expire 6 secondes. L'expiration plus longue que l'inspiration calme le système nerveux."},
+   {k:"timer",s:45,t:"P · Relâchement musculaire",x:"Serre fort les poings, les épaules et la mâchoire pendant 5 secondes… puis relâche tout d'un coup en expirant. Recommence 3 fois. Sens la différence."},
+   {k:"rate",id:"b",t:"Et maintenant, l'envie est à combien ?",x:"Sois honnête, même si ça n'a pas beaucoup baissé."}]},
+ surf:{n:"Surfer l'envie",src:"Prévention de la rechute, pleine conscience (G. A. Marlatt)",when:"Pour une envie qui monte : on l'observe au lieu de lutter.",min:4,c:"#0A84FF",
+  steps:[{k:"rate",id:"a",t:"Note ton envie de 0 à 10",x:"Juste un chiffre, sans jugement."},
+   {k:"check",id:"where",t:"Où la sens-tu dans ton corps ?",x:"Touche tout ce qui correspond.",o:["Gorge, bouche","Poitrine","Ventre","Mains","Tête","Tout le corps"]},
+   {k:"timer",s:60,t:"Observe-la, comme une vague",x:"Ne la combats pas. Respire calmement et regarde-la : elle a une forme, une taille, une température. Dis-toi : « C'est une envie. Ce n'est qu'une sensation. Elle va passer. »"},
+   {k:"timer",s:60,t:"Respire dans la sensation",x:"À chaque inspiration, imagine que tu fais de la place autour de la sensation. À chaque expiration, laisse-la se desserrer un peu. Tu es le surfeur, pas la vague."},
+   {k:"timer",s:60,t:"Regarde-la changer",x:"Remarque que l'intensité bouge : elle monte, elle baisse, elle se déplace. Aucune envie ne reste au maximum. Tu n'as rien à faire, juste attendre."},
+   {k:"rate",id:"b",t:"Et maintenant, à combien ?",x:"Chaque vague surfée rend la suivante plus petite."}]},
+ film:{n:"Dérouler le film",src:"Thérapie cognitive et comportementale (TCC)",when:"Quand ta tête te dit « juste un, ce n'est rien ».",min:2,c:"#AF52DE",
+  steps:[{k:"choices",id:"h1",t:"Si je cède maintenant… dans 1 heure ?",x:"L'envie ne montre que les 5 premières minutes. Continue le film.",o:["J'en veux encore","Je me sens coupable","Je n'arrête plus","J'ai dépensé de l'argent","Je fais un truc que je regrette"]},
+   {k:"choices",id:"h2",t:"…et demain matin ?",x:"",o:["Mal à la tête, fatigue","Honte, je m'en veux","Mon compteur est à zéro","J'ai menti à quelqu'un","Je me sens nulle"]},
+   {k:"choices",id:"h3",t:"Et si je ne cède pas ? Demain matin…",x:"",o:["Je suis fière de moi","Je me réveille en forme","Mon compteur continue","J'ai tenu ma promesse","Je suis plus forte que l'envie"]},
+   {k:"text",id:"why",t:"Qu'est-ce qui compte le plus pour toi, là ?",x:"Une phrase, avec tes mots."}]},
+ halt:{n:"HALT : le vrai besoin",src:"Prévention de la rechute (addictologie)",when:"Quand une envie arrive « sans raison ».",min:1,c:"#FF9F0A",
+  steps:[{k:"check",id:"halt",t:"Est-ce que tu es…",x:"Les envies arrivent souvent quand un de ces besoins n'est pas satisfait.",o:["Affamée (Hungry)","En colère (Angry)","Seule (Lonely)","Fatiguée (Tired)"]},
+   {k:"halt",t:"Réponds au vrai besoin"}]},
+ balance:{n:"Ma balance pour / contre",src:"Entretien motivationnel (W. Miller, S. Rollnick)",when:"Quand tu doutes, ou que la motivation baisse.",min:5,c:"#30D158",
+  steps:[{k:"text",id:"p1",t:"Ce que l'alcool / la conso m'apporte",x:"Sois honnête : ça t'apporte quelque chose, sinon ce ne serait pas dur d'arrêter."},
+   {k:"text",id:"p2",t:"Ce qu'elle me coûte",x:"Santé, argent, relations, sommeil, école, estime de soi…"},
+   {k:"text",id:"p3",t:"Ce que l'arrêt va m'apporter",x:"Dans un mois, dans un an."},
+   {k:"text",id:"p4",t:"Ce qui me fait peur en arrêtant",x:"Perdre des potes, m'ennuyer, ne pas savoir gérer le stress…"},
+   {k:"rate",id:"imp",t:"À quel point c'est important pour toi d'arrêter ?",x:"0 = pas du tout, 10 = extrêmement."},
+   {k:"rate",id:"conf",t:"Et à quel point tu te sens capable ?",x:"0 = pas du tout, 10 = complètement."},
+   {k:"mi",t:"Ta réflexion"}]},
+ pmr:{n:"Relaxation musculaire",src:"Relaxation progressive (E. Jacobson)",when:"Stress, tension, pour s'endormir.",min:4,c:"#5E5CE6",
+  steps:[["Les mains","Serre fort les poings"],["Les bras","Plie les bras et contracte les biceps"],["Les épaules","Monte les épaules vers les oreilles"],["Le visage","Fronce tout le visage, serre les dents"],["Le ventre","Rentre et contracte le ventre"],["Les jambes","Tends les jambes, pointe les pieds"],["Tout le corps","Contracte tout en même temps"]].map(m=>({k:"tense",t:m[0],x:m[1]+" pendant 5 secondes… puis relâche tout d'un coup et sens la détente pendant 10 secondes."}))},
+ stop:{n:"STOP",src:"Thérapie dialectique comportementale (DBT)",when:"Juste avant d'agir sur un coup de tête.",min:1,c:"#FF453A",
+  steps:[{k:"timer",s:10,t:"S · Stop",x:"Arrête tout. Ne bouge plus. Ne prends rien."},{k:"timer",s:15,t:"T · Prends du recul",x:"Fais un pas en arrière, physiquement si tu peux. Une grande respiration."},
+   {k:"timer",s:20,t:"O · Observe",x:"Qu'est-ce qui se passe en toi ? Dans ton corps, dans ta tête ? Qu'est-ce qui se passe autour ?"},{k:"choices",id:"next",t:"P · Agis en conscience",x:"Qu'est-ce que la personne que tu veux être ferait maintenant ?",o:["Je bois de l'eau","Je sors 5 minutes","Je change de pièce","J'écris dans mon journal","Je lance une autre technique"]}]},
+ comp:{n:"Bienveillance après un écart",src:"Auto-compassion (K. Neff), prévention de la rechute",when:"Après un écart, quand tu t'en veux.",min:3,c:"#FF6B9A",
+  steps:[{k:"timer",s:20,t:"C'est un moment difficile",x:"Pose une main sur ton cœur. Dis-toi doucement : « C'est dur, là. J'ai mal. » Reconnaître la douleur, c'est déjà la soulager."},
+   {k:"timer",s:20,t:"Tu n'es pas seule",x:"Presque toutes les personnes qui arrêtent ont des écarts. Ça fait partie du chemin, pas de l'échec. La rechute est une étape normale du changement."},
+   {k:"text",id:"friend",t:"Que dirais-tu à ta meilleure amie ?",x:"Si elle venait de vivre la même chose, que lui dirais-tu ? Écris-le… pour toi."},
+   {k:"choices",id:"learn",t:"Qu'est-ce qui a déclenché l'écart ?",x:"Pas pour te juger : pour être prête la prochaine fois.",o:["Le stress","Une soirée","Les potes","La solitude","La fatigue","Une dispute","L'ennui"]},
+   {k:"text",id:"next",t:"La prochaine fois, je ferai…",x:"Un plan simple. Il sera ajouté à ton plan anti-envies."}]}
+};
+const TECH_ORDER=["tipp","surf","film","halt","stop","balance","comp","pmr"];
+function renderTech(pane){
+  pane.innerHTML=`<p class="hint" style="margin:0 24px 12px">Des techniques utilisées par les psychologues et les addictologues. Tu les fais seule, à ton rythme, guidée étape par étape.</p>
+  <div class="techs reveal">${TECH_ORDER.map(id=>{const T=TECH[id];const n=(S.techUse||{})[id]||0;return `<button class="tech tap" data-tk="${id}" style="--c:${T.c}"><div class="tk-top"><span class="tk-dot"></span><small>${T.min} min${n?" · fait "+n+"×":""}</small></div><b>${esc(T.n)}</b><span>${esc(T.when)}</span><em>${esc(T.src)}</em></button>`}).join("")}</div>
+  <p class="hint" style="margin-top:14px">Plus tu les pratiques quand ça va, plus elles marchent quand c'est dur.</p>`;
+  pane.querySelectorAll("[data-tk]").forEach(b=>b.onclick=()=>openTech(b.dataset.tk));reveal(pane)}
+let techTimer=null;
+function openTech(id){const T=TECH[id];if(!T)return;const A={};let k=-1;clearInterval(techTimer);
+  const fin=()=>{S.techUse=S.techUse||{};S.techUse[id]=(S.techUse[id]||0)+1;let sum=T.n;if(A.a!=null&&A.b!=null)sum+=` : envie de ${A.a}/10 à ${A.b}/10`;
+    if(id==="film"&&A.why)sum+=" — « "+A.why+" »";if(id==="balance")sum+=` : importance ${A.imp??"?"}/10, confiance ${A.conf??"?"}/10`;
+    if(id==="comp"&&A.next){S.plans=S.plans||{};const tr=(A.learn&&A.learn[0])||"Après un écart";S.plans[tr]=A.next.slice(0,160)}
+    if(id==="balance"){S.balance={t:Date.now(),p1:A.p1,p2:A.p2,p3:A.p3,p4:A.p4,imp:A.imp,conf:A.conf}}
+    S.notes=S.notes||[];S.notes.push({t:Date.now(),m:-1,x:"Technique · "+sum});save()};
+  const draw=()=>{clearInterval(techTimer);const st=T.steps[k];const body=$("#if-body");
+    if(k<0){body.innerHTML=`<div class="tk-hero" style="--c:${T.c}"><small>${esc(T.src)}</small><h2>${esc(T.n)}</h2><p>${esc(T.when)}</p><span>${T.steps.length} étapes · environ ${T.min} min</span></div><div style="height:18px"></div><button class="big-btn tap" id="tk-go" style="background:${T.c}">Commencer</button>`;$("#tk-go").onclick=()=>{k=0;haptic();draw()};return}
+    if(k>=T.steps.length){fin();haptic("success");
+      const drop=A.a!=null&&A.b!=null?A.a-A.b:null;
+      body.innerHTML=`<div class="tk-hero" style="--c:${T.c}"><small>Terminé</small><h2>${drop!=null?(drop>0?"−"+drop+" point"+(drop>1?"s":""):"Tu as tenu"):"Bravo"}</h2><p>${drop!=null?(drop>0?`Ton envie est passée de ${A.a} à ${A.b} sur 10. Tu viens de prouver que tu peux la faire baisser toute seule.`:"Même si l'envie n'a pas encore baissé, tu ne lui as pas obéi. C'est ça, la victoire. Elle va redescendre.")
+        :id==="balance"?miText(A):id==="halt"?"Prends soin de ce besoin maintenant : l'envie perd sa force quand le vrai besoin est satisfait.":id==="comp"?"Un écart n'efface rien. Ton plan est enregistré pour la prochaine fois.":id==="film"?"Tu as vu la fin du film. Maintenant, c'est toi qui choisis.":"Tu as pris soin de toi. Note comment tu te sens."}</p></div>
+        <div style="height:18px"></div><button class="big-btn tap" id="tk-end" style="background:${T.c}">Terminer</button><button class="linkbtn tap" id="tk-other">Essayer une autre technique</button>`;
+      if(drop>0)setTimeout(confetti,200);$("#tk-end").onclick=()=>{closeSheet();render(tab)};$("#tk-other").onclick=()=>closeSheet(0,()=>{go("coach");coachSub="tech";renderCoach()});return}
+    const prog=`<div class="dec-prog">${T.steps.map((x,i)=>`<i class="${i<k?"on":i===k?"cur":""}"></i>`).join("")}</div>`;
+    let inner="",canNext=true;
+    if(st.k==="rate"){const v=A[st.id]??5;inner=`<div class="tk-rate"><b id="tk-rv">${v}</b><span>/ 10</span></div><input type="range" class="range" id="tk-r" min="0" max="10" step="1" value="${v}"><div class="range-l"><span>0</span><span>5</span><span>10</span></div>`}
+    else if(st.k==="timer"||st.k==="breath"||st.k==="tense"){const s=st.s||15;inner=`<div class="tk-timer ${st.k}" id="tk-tm" style="--c:${T.c}"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" id="tk-fg" style="stroke-dasharray:${2*Math.PI*52};stroke-dashoffset:0"/></svg><div><b id="tk-tv">${st.k==="tense"?"Serre":s}</b><span id="tk-ts">${st.k==="tense"?"5 s":"secondes"}</span></div></div>`}
+    else if(st.k==="check"||st.k==="choices"){const sel=A[st.id]||[];inner=`<div class="chips" style="margin-top:6px">${st.o.map(o=>`<button class="chip tap ${sel.includes(o)?"on":""}" data-tc="${esc(o)}" style="padding:12px 16px">${esc(o)}</button>`).join("")}</div>`}
+    else if(st.k==="text"){inner=`<textarea class="planin" id="tk-t" rows="4" maxlength="400" placeholder="Écris ici…">${esc(A[st.id]||"")}</textarea>`}
+    else if(st.k==="halt"){const H=A.halt||[];const tips={"Affamée (Hungry)":"Mange quelque chose maintenant : un fruit, une tartine, un yaourt. La faim ressemble beaucoup à une envie.","En colère (Angry)":"Écris ce qui t'énerve sans te censurer, ou bouge 5 minutes. La colère a besoin de sortir, pas d'être noyée.","Seule (Lonely)":"Envoie un message à quelqu'un, même juste « coucou ». Ou parle à Sam. Le lien calme l'envie.","Fatiguée (Tired)":"Allonge-toi 20 minutes, ou couche-toi plus tôt. Fatiguée, on résiste moins bien : ce n'est pas un manque de volonté."};
+      inner=H.length?`<div class="list plain" style="margin:0">${H.map(h=>`<div class="row" style="align-items:flex-start"><span class="ri" style="background:${T.c};margin-top:2px">${ic("check",2.6)}</span><div class="rt"><b style="font-size:16px;font-weight:600">${esc(h)}</b><span style="font-size:15px;line-height:1.45">${esc(tips[h])}</span></div></div>`).join("")}</div>`:`<p class="foot" style="font-size:15px;line-height:1.5">Aucun de ces 4 besoins ? Alors c'est sûrement l'habitude ou un déclencheur. Essaie « Surfer l'envie » ou « Décoder mon envie ».</p>`}
+    else if(st.k==="mi"){inner=`<p style="font-size:16px;line-height:1.55">${miText(A)}</p>`}
+    body.innerHTML=`<div style="padding:0 20px">${prog}<small class="tk-src" style="color:${T.c}">${esc(T.n)} · étape ${k+1}/${T.steps.length}</small><h2 class="sh-big" style="margin-top:4px">${esc(st.t)}</h2>${st.x?`<p class="foot" style="margin-top:8px;line-height:1.55;font-size:15px">${esc(st.x)}</p>`:""}<div style="margin-top:18px">${inner}</div></div>
+      <div style="height:20px"></div><button class="big-btn tap" id="tk-next" style="background:${T.c}">${st.k==="timer"||st.k==="breath"||st.k==="tense"?"Passer":"Continuer"}</button>${k>0?`<button class="linkbtn tap" id="tk-back">Retour</button>`:""}`;
+    const nx=()=>{k++;haptic();draw()};$("#tk-next").onclick=()=>{if(st.k==="text")A[st.id]=$("#tk-t").value.trim();nx()};const bk=$("#tk-back");if(bk)bk.onclick=()=>{k--;draw()};
+    if(st.k==="rate"){const r=$("#tk-r");A[st.id]=+r.value;r.oninput=()=>{A[st.id]=+r.value;$("#tk-rv").textContent=r.value;haptic()}}
+    if(st.k==="check"||st.k==="choices")$$("[data-tc]").forEach(b=>b.onclick=()=>{const L=A[st.id]=A[st.id]||[];const o=b.dataset.tc;const i=L.indexOf(o);if(i>=0)L.splice(i,1);else L.push(o);b.classList.toggle("on");haptic()});
+    if(st.k==="timer"||st.k==="breath"||st.k==="tense"){const fg=$("#tk-fg"),C=2*Math.PI*52,tv=$("#tk-tv"),ts=$("#tk-ts"),tm=$("#tk-tm");
+      if(st.k==="tense"){let ph=0,c=5;const run=()=>{c--;if(c<=0){ph++;if(ph===1){tv.textContent="Relâche";c=10;haptic("success");tm.classList.add("rel")}else{clearInterval(techTimer);tv.textContent="✓";ts.textContent="";setTimeout(nx,700);return}}ts.textContent=c+" s";fg.style.strokeDashoffset=ph===0?C*(1-c/5):C*(c/10)};techTimer=setInterval(run,1000)}
+      else{let left=st.s,el=0;const lbl=()=>{if(st.k!=="breath")return;const cyc=el%10;tv.textContent=cyc<4?"Inspire":"Expire";tm.classList.toggle("in",cyc<4)};lbl();
+        techTimer=setInterval(()=>{left--;el++;fg.style.strokeDashoffset=C*(1-left/st.s);if(st.k==="breath"){lbl();ts.textContent=left+" s"}else tv.textContent=left;if(el%10===0||el%10===4)st.k==="breath"&&haptic();if(left<=0){clearInterval(techTimer);haptic("success");setTimeout(nx,600)}},1000)}}};
+  openInfo(T.n,"");draw();$("#sh-info").addEventListener("closed",()=>clearInterval(techTimer),{once:true})}
+function miText(A){const i=A.imp??null,c=A.conf??null;let s="";
+  if(i!=null)s+=`Tu as mis <b>${i}/10</b> pour l'importance. ${i>0?`Pourquoi ${i} et pas ${Math.max(0,i-3)} ? Ce qui te fait monter jusqu'à ${i}, ce sont tes vraies raisons : garde-les en tête.`:"Ce n'est peut-être pas encore le moment, et c'est ok d'y réfléchir."} `;
+  if(c!=null)s+=`<br><br>Pour la confiance, <b>${c}/10</b>. ${c<10?`Qu'est-ce qui t'aiderait à passer à ${Math.min(10,c+1)} ? Un plan pour les soirées, un·e allié·e, une technique que tu maîtrises ?`:"Super, tu te sens prête."}`;
+  if(A.p3)s+=`<br><br>Et n'oublie pas ce que tu as écrit : « ${esc(A.p3)} ».`;return s||"Ta balance est enregistrée dans ton journal."}
 /* ================= Program ================= */
 function progDay(){const start=S.programStart||S.created;return Math.min(30,Math.floor((Date.now()-new Date(dkey(start)).getTime())/DAY)+1)}
 function openLesson(i){if(!S.pro&&i>2)return openPaywall("Le programme complet de 30 jours fait partie de Libre Pro.");const l=LESSONS[i];
@@ -1693,7 +1805,7 @@ $("#log-int").oninput=e=>{logState.int=+e.target.value;$("#log-iv").textContent=
 function saveCraving(ok){S.cravings.push({t:Date.now(),h:logState.h||S.active,int:logState.int,trig:logState.trig,ok,dur:Math.round((Date.now()-sosStart)/1000)});if(S.cravings.length>800)S.cravings.shift();save()}
 $("#log-ok").onclick=()=>{const before=JSON.stringify(S);saveCraving(true);closeSheet();haptic("success");setTimeout(()=>{confetti();undoToast("Envie surmontée, bravo 💪",before)},250);render(tab)};
 $("#log-ko").onclick=()=>{saveCraving(false);closeSheet(0,()=>openSlip(S.habits[logState.h]||activeHabit(),true))};
-$$("[data-sosgo]").forEach(b=>b.onclick=()=>({breathe:()=>sosBreathe(),wave:sosWave,reasons:sosReasons,game:sosGame,ground:sosGround,sounds:sosSounds,alt:()=>closeSheet(0,openAlt),decode:()=>closeSheet(0,openDecode),ally:sosAlly,sam:()=>closeSheet(0,()=>{go("coach");coachSub="chat";renderCoach();setTimeout(()=>sendChat("J'ai besoin d'aide là, maintenant."),350)}),care:()=>{clearSos();sosPane("care");haptic()}}[b.dataset.sosgo])());
+$$("[data-sosgo]").forEach(b=>b.onclick=()=>({breathe:()=>sosBreathe(),wave:sosWave,reasons:sosReasons,game:sosGame,ground:sosGround,sounds:sosSounds,alt:()=>closeSheet(0,openAlt),decode:()=>closeSheet(0,openDecode),"t-tipp":()=>closeSheet(0,()=>openTech("tipp")),"t-surf":()=>closeSheet(0,()=>openTech("surf")),"t-film":()=>closeSheet(0,()=>openTech("film")),ally:sosAlly,sam:()=>closeSheet(0,()=>{go("coach");coachSub="chat";renderCoach();setTimeout(()=>sendChat("J'ai besoin d'aide là, maintenant."),350)}),care:()=>{clearSos();sosPane("care");haptic()}}[b.dataset.sosgo])());
 $("#care-sam").onclick=()=>closeSheet(0,()=>{go("coach");coachSub="chat";renderCoach();setTimeout(()=>$("#c-in").focus(),300)});
 $$("[data-soslog]").forEach(b=>b.onclick=()=>{clearSos();sosPane("log");buildLog()});
 $$("[data-sosmenu]").forEach(b=>b.onclick=()=>{clearSos();sosPane("menu")});
@@ -1706,8 +1818,8 @@ function openSlip(h,fromLog){const T=TYPES[h.type];const days=sinceMs(h)/DAY;
   <div style="height:24px"></div>
   ${days>=1||isReduce(h)?`<button class="big-btn tap" id="sl-keep">C'était un écart, je continue</button><div style="height:10px"></div>`:""}
   <button class="big-btn ${days>=1?"sec2":""} tap" id="sl-reset">${isReduce(h)?"Revenir à aujourd'hui":"Recommencer mon compteur"}</button>
-  <p class="hint" style="text-align:center">${days>=1?"Ton record de "+plural(Math.floor(days),"jour","jours")+" reste enregistré. ":""}Tu t'es trompé·e ? Touche « Annuler » en haut, rien ne sera noté.</p>`;
-  const before=JSON.stringify(S);
+  <button class="linkbtn tap" id="sl-comp" style="margin-top:6px">Exercice : bienveillance après un écart (3 min)</button><p class="hint" style="text-align:center">${days>=1?"Ton record de "+plural(Math.floor(days),"jour","jours")+" reste enregistré. ":""}Tu t'es trompé·e ? Touche « Annuler » en haut, rien ne sera noté.</p>`;
+  const before=JSON.stringify(S);const sc=$("#sl-comp");if(sc)sc.onclick=()=>closeSheet(0,()=>openTech("comp"));
   const k=$("#sl-keep");if(k)k.onclick=()=>{S.slips.push({t:Date.now(),h:h.type,keep:true});if(!fromLog)S.cravings.push({t:Date.now(),h:h.type,int:3,trig:[],ok:false});save();closeSheet();render(tab);setTimeout(()=>undoToast("Écart noté. Tu continues 💙",before),300)};
   $("#sl-reset").onclick=()=>{if(isReduce(h)){closeSheet();return}const prev=h.quitAt,prevBest=h.best||0;h.best=Math.max(h.best||0,Date.now()-h.quitAt);h.quitAt=Date.now();S.slips.push({t:Date.now(),h:h.type,keep:false,prev,prevBest});if(!fromLog)S.cravings.push({t:Date.now(),h:h.type,int:3,trig:[],ok:false});save();closeSheet();render(tab);setTimeout(()=>undoToast("Compteur remis à zéro. Nouveau départ ☀️",before,7000),300)};
   openSheet("sh-slip")}
@@ -2144,23 +2256,23 @@ Coach.init();
 let coachSub="chat",coachBusy=false;
 function usedToday(){return (S.chat||[]).filter(m=>m.r==="u"&&dkey(m.at)===dkey()).length}
 function bubbleHTML(m){
-  let t=esc(m.t);let act="";const mm=t.match(/\[\[(respirer|vague|raisons|symptomes|plan|ancrage|sons|allie|alcool|soiree|decoder|idee|pieges)\]\]/);
+  let t=esc(m.t);let act="";const mm=t.match(/\[\[(respirer|vague|raisons|symptomes|plan|ancrage|sons|allie|alcool|soiree|decoder|idee|pieges|tipp|surf|film|halt|balance|compassion|relax|stop)\]\]/);
   if(mm){t=t.replace(mm[0],"").trim();act=mm[1]}
   t=t.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/_\((.+?)\)_/g,'<span class="offnote">($1)</span>').replace(/\n/g,"<br>");
-  const lab={respirer:"Respirer avec moi",vague:"Laisser passer l'envie",raisons:"Mes raisons",symptomes:"Ce que je ressens",plan:"Mon plan anti-envies",ancrage:"Exercice 5-4-3-2-1",sons:"Sons apaisants",allie:"Écrire à mon allié·e",alcool:"Mon plan alcool",soiree:"Préparer ma soirée",decoder:"Décoder mon envie",idee:"Quoi faire à la place ?",pieges:"Les pensées pièges"};
+  const lab={respirer:"Respirer avec moi",vague:"Laisser passer l'envie",raisons:"Mes raisons",symptomes:"Ce que je ressens",plan:"Mon plan anti-envies",ancrage:"Exercice 5-4-3-2-1",sons:"Sons apaisants",allie:"Écrire à mon allié·e",alcool:"Mon plan alcool",soiree:"Préparer ma soirée",decoder:"Décoder mon envie",idee:"Quoi faire à la place ?",pieges:"Les pensées pièges",tipp:"Technique TIPP (3 min)",surf:"Surfer l'envie (4 min)",film:"Dérouler le film",halt:"HALT : mon vrai besoin",balance:"Ma balance pour / contre",compassion:"Bienveillance après un écart",relax:"Relaxation musculaire",stop:"Technique STOP"};
   return `<div class="msg ${m.r}"><div class="bub">${t||'<span class="typing"><i></i><i></i><i></i></span>'}</div>${act?`<button class="msg-act tap" data-act="${act}">${lab[act]} ›</button>`:""}</div>`;
 }
 function renderCoach(){
   const s=$("#s-coach");
   s.classList.toggle("chatmode",coachSub==="chat");
-  s.innerHTML=`<div class="lt"><div><small>${coachSub==="chat"?`<span class="dot-on ${Coach.available()?"":"dot-off"}"></span>Sam · ${Coach.available()?"en ligne 24 h/24":"mode hors ligne"}`:coachSub==="prog"?"30 jours pour changer":"Pour chaque situation"}</small><h1>${coachSub==="chat"?"Coach":coachSub==="prog"?"Programme":"Outils"}</h1></div>${coachSub==="chat"&&(S.chat||[]).length?`<button class="icon-btn tap" id="chat-new" aria-label="Nouvelle discussion">${ic("plus",2.4)}</button>`:""}</div>
-  <div style="padding:4px 16px 8px"><div class="seg" id="coach-seg"><button data-cs="chat" class="${coachSub==="chat"?"on":""}">Discussion</button><button data-cs="prog" class="${coachSub==="prog"?"on":""}">Programme</button><button data-cs="tools" class="${coachSub==="tools"?"on":""}">Outils</button><i class="seg-ind"></i></div></div>
+  s.innerHTML=`<div class="lt"><div><small>${coachSub==="chat"?`<span class="dot-on ${Coach.available()?"":"dot-off"}"></span>Sam · ${Coach.available()?"en ligne 24 h/24":"mode hors ligne"}`:coachSub==="tech"?"Ce qu'utilisent les psys":coachSub==="prog"?"30 jours pour changer":"Pour chaque situation"}</small><h1>${coachSub==="chat"?"Coach":coachSub==="tech"?"Techniques":coachSub==="prog"?"Programme":"Outils"}</h1></div>${coachSub==="chat"&&(S.chat||[]).length?`<button class="icon-btn tap" id="chat-new" aria-label="Nouvelle discussion">${ic("plus",2.4)}</button>`:""}</div>
+  <div style="padding:4px 16px 8px"><div class="seg" id="coach-seg"><button data-cs="chat" class="${coachSub==="chat"?"on":""}">Discussion</button><button data-cs="tech" class="${coachSub==="tech"?"on":""}">Techniques</button><button data-cs="prog" class="${coachSub==="prog"?"on":""}">Programme</button><button data-cs="tools" class="${coachSub==="tools"?"on":""}">Outils</button><i class="seg-ind"></i></div></div>
   <div id="coach-pane"></div>`;
   const seg=$("#coach-seg");placeSeg(seg,false);
   seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{if(b.dataset.cs===coachSub)return;placeSeg(seg,true,b);haptic();setTimeout(()=>{coachSub=b.dataset.cs;renderCoach()},180)});
   const nb=$("#chat-new");if(nb)nb.onclick=()=>alertBox("Nouvelle discussion ?","L'historique de la discussion sera effacé.","Effacer",()=>{S.chat=[];save();renderCoach()},true);
   const pane=$("#coach-pane");
-  if(coachSub==="chat")renderChat(pane);else if(coachSub==="prog")renderProg(pane);else renderTools(pane);
+  if(coachSub==="chat")renderChat(pane);else if(coachSub==="tech")renderTech(pane);else if(coachSub==="prog")renderProg(pane);else renderTools(pane);
   $("#composer").classList.toggle("on",coachSub==="chat"&&tab==="coach");
   onScroll(s);
 }
@@ -2195,7 +2307,7 @@ function renderChat(pane){
   requestAnimationFrame(()=>{const s=$("#s-coach");s.scrollTop=s.scrollHeight});
   if(S.chat.length)setTimeout(samOpener,500);
 }
-function bindActs(root){root.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{const a=b.dataset.act;if(a==="respirer"){openSOS(false);setTimeout(sosBreathe,450)}else if(a==="vague"){openSOS(false);setTimeout(sosWave,450)}else if(a==="raisons"){openSOS(false);setTimeout(sosReasons,450)}else if(a==="symptomes")openSymptoms();else if(a==="plan")openPlan();else if(a==="ancrage"){openSOS(false);setTimeout(sosGround,450)}else if(a==="sons")openSounds();else if(a==="allie")openAlly();else if(a==="alcool")openAlcSafety();else if(a==="soiree")openParty();else if(a==="decoder")openDecode();else if(a==="idee")openAlt();else if(a==="pieges")openTraps()})}
+function bindActs(root){root.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{const a=b.dataset.act;if(a==="respirer"){openSOS(false);setTimeout(sosBreathe,450)}else if(a==="vague"){openSOS(false);setTimeout(sosWave,450)}else if(a==="raisons"){openSOS(false);setTimeout(sosReasons,450)}else if(a==="symptomes")openSymptoms();else if(a==="plan")openPlan();else if(a==="ancrage"){openSOS(false);setTimeout(sosGround,450)}else if(a==="sons")openSounds();else if(a==="allie")openAlly();else if(a==="alcool")openAlcSafety();else if(a==="soiree")openParty();else if(a==="decoder")openDecode();else if(a==="idee")openAlt();else if(a==="pieges")openTraps();else if({tipp:1,surf:1,film:1,halt:1,balance:1,stop:1}[a])openTech(a);else if(a==="compassion")openTech("comp");else if(a==="relax")openTech("pmr")})}
 /* ================= Sam hors ligne (filet de sécurité, sans IA ni internet) ================= */
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
 const CRISIS=/(suicid|me tuer|me suicider|en finir|mettre fin|plus envie de vivre|envie de mourir|veux mourir|me faire du mal|scarif|disparaitre pour toujours|plus la force de vivre)/;
@@ -2230,10 +2342,10 @@ function localReply(text){
     return set("ecart",fresh("ecart",[`Merci de me le dire${nm}, vraiment. Un écart n'efface pas ${durTxt(F)} d'efforts. Qu'est-ce qui s'est passé juste avant ? C'est là qu'on apprend le plus. [[raisons]]`,
       `Ok, respire. Presque tout le monde passe par là en chemin. Ce qui compte c'est maintenant : on repart ensemble ? Raconte-moi la situation.`,
       `Je ne te juge pas une seconde. ${F.ok?"Tu as déjà surmonté "+F.ok+" envie"+(F.ok>1?"s":"")+", ce n'est pas un moment qui efface ça.":"Tu as déjà fait le plus dur : décider de changer."} C'était plutôt la fatigue, le stress, ou l'ambiance ?`,
-      `Ça arrive. L'important c'est que tu en parles au lieu de lâcher. Si tu t'es trompé·e dans l'app, tu peux supprimer l'entrée dans le Journal. Et sinon : qu'est-ce qu'on retient pour la prochaine fois ?`]));
+      `Ne sois pas dure avec toi. Il y a un exercice de 3 minutes pour ça, utilisé par les psys : il aide à repartir sans se détester. [[compassion]]`,`Ça arrive. L'important c'est que tu en parles au lieu de lâcher. Si tu t'es trompé·e dans l'app, tu peux supprimer l'entrée dans le Journal. Et sinon : qu'est-ce qu'on retient pour la prochaine fois ?`]));
   // Envie maintenant
   if(has(/(envie|craquer|besoin d[e']? ?(fumer|vaper|boire|une|un)|manque|tentation|je vais (fumer|boire|vaper|craquer)|tenir|tiens pas|j'en peux plus de pas)/))
-    return set("envie",fresh("envie",[`Je suis là${nm}. Cette envie va monter, culminer, puis redescendre, en général en 3 à 5 minutes. On la laisse passer ensemble ? [[vague]]`,
+    return set("envie",fresh("envie",[`Je suis là${nm}. Cette envie va monter, culminer, puis redescendre, en général en 3 à 5 minutes. On la surfe ensemble ? C'est une technique de psy, ça marche vraiment. [[surf]]`,`Si elle est très forte, essaie la technique TIPP : eau froide sur le visage, une minute de mouvement, respiration lente. En 3 minutes ton corps redescend. [[tipp]]`,`Ta tête te dit sûrement « juste un ». On déroule le film jusqu'au bout ? Dans 1 h, demain matin… [[film]]`,
       `Ok, stop deux secondes. Tu n'as rien à décider maintenant, juste à attendre 10 minutes. ${F.d>0?durTxt(F)+" que tu tiens : une envie de quelques minutes ne pèse pas lourd face à ça. ":""}Tu veux qu'on respire ensemble ? [[respirer]]`,
       `Où es-tu là, maintenant, et qu'est-ce que tu faisais juste avant que l'envie arrive ? Le simple fait de l'écrire la fait déjà baisser.${F.plan?" Et rappelle-toi ton plan : « "+F.plan+" ».":""}`,
       `${F.why?"Tu m'as écrit un jour : « "+F.why+" ». C'est toujours vrai. ":F.reason?"Rappelle-toi pourquoi tu fais ça : "+F.reason.toLowerCase()+". ":""}Bois un grand verre d'eau froide, lentement, et reviens me dire comment tu te sens dans 5 minutes.`,
