@@ -12,6 +12,7 @@
  *   - (facultatif)      CHAT_DAILY_LIMIT    → messages par jour et par personne, par défaut 200
  */
 import Anthropic from "@anthropic-ai/sdk";
+import { vapid, sendPush } from "./push.js";
 
 const DEFAULT_MODEL = "claude-opus-5-5";
 const MAX_BODY = 4_000_000; // 4 Mo (photos compressées comprises)
@@ -407,8 +408,104 @@ function freeChat(env, ctx, messages, context) {
   return new Response(readable, { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
 }
 
+/* ---------------- Rappels quotidiens (notifications push) ---------------- */
+async function pushTable(env) {
+  const D = await db(env);
+  await D.prepare("CREATE TABLE IF NOT EXISTS push_subs (endpoint TEXT PRIMARY KEY, p256dh TEXT NOT NULL, auth TEXT NOT NULL, user TEXT, name TEXT, tz TEXT, prefs TEXT, last TEXT, created INTEGER, site TEXT)").run();
+  return D;
+}
+const HM = /^([01]\d|2[0-3]):[0-5]\d$/;
+function cleanPrefs(p) {
+  const o = {};
+  for (const k of ["morning", "evening", "risk"]) o[k] = p && HM.test(p[k]) ? p[k] : null;
+  return o;
+}
+async function pushSubscribe(req, env) {
+  const body = await readJSON(req);
+  const s = body.sub || {};
+  const keys = s.keys || {};
+  if (!/^https:\/\//.test(s.endpoint || "") || !keys.p256dh || !keys.auth) return err("bad_sub", 400, "Abonnement invalide.");
+  if ((await bump(env, "psub:" + ip(req), 3600)) > 30) return err("rate", 429, "Trop d'essais.");
+  const D = await pushTable(env);
+  const a = await auth(req, env).catch(() => null);
+  let tz = String(body.tz || "Europe/Zurich").slice(0, 60);
+  try { new Intl.DateTimeFormat("fr-CH", { timeZone: tz }); } catch { tz = "Europe/Zurich"; }
+  const site = new URL(req.url).origin;
+  await D.prepare("INSERT INTO push_subs (endpoint,p256dh,auth,user,name,tz,prefs,last,created,site) VALUES (?,?,?,?,?,?,?,?,?,?) ON CONFLICT(endpoint) DO UPDATE SET p256dh=excluded.p256dh, auth=excluded.auth, user=excluded.user, name=excluded.name, tz=excluded.tz, prefs=excluded.prefs, site=excluded.site")
+    .bind(s.endpoint, keys.p256dh, keys.auth, a ? a.user : null, String(body.name || "").slice(0, 30), tz, JSON.stringify(cleanPrefs(body.prefs)), "{}", Date.now(), site).run();
+  return json({ ok: true });
+}
+async function pushUnsubscribe(req, env) {
+  const body = await readJSON(req);
+  const D = await pushTable(env);
+  await D.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(body.endpoint || "")).run();
+  return json({ ok: true });
+}
+const pick = (a) => a[Math.floor(Math.random() * a.length)];
+async function personal(D, row) {
+  // Quelques infos pour personnaliser (si la personne a un compte)
+  const out = { name: row.name || "", days: null, thing: "" };
+  if (!row.user) return out;
+  try {
+    const r = await D.prepare("SELECT json FROM data WHERE user=?").bind(row.user).first();
+    if (!r) return out;
+    const S = JSON.parse(r.json);
+    out.name = S.name || out.name;
+    const h = S.habits && (S.habits[S.active] || Object.values(S.habits)[0]);
+    if (h && !(h.mode === "reduce" && h.plan && Date.now() < h.plan.end) && h.quitAt < Date.now()) {
+      out.days = Math.floor((Date.now() - h.quitAt) / 864e5);
+      out.thing = { vape: "la vape", smoke: "la cigarette", weed: "le cannabis", alcohol: "l'alcool" }[h.type] || "";
+    }
+  } catch {}
+  return out;
+}
+function message(kind, P) {
+  const n = P.name ? " " + P.name : "";
+  const streak = P.days != null && P.days > 0 ? `Jour ${P.days + 1} sans ${P.thing}. ` : "";
+  if (kind === "morning") return { title: pick(["☀️ Bonjour" + n + " !", "☀️ Nouvelle journée" + (n ? "," + n : ""), "🌱 Coucou" + n]), body: streak + pick(["Prends 10 secondes pour ton engagement du jour : « Aujourd'hui, je reste libre. »", "Comment tu te sens ce matin ? Dis-le à Libre en un geste.", "Un verre d'eau, une grande respiration, et c'est parti. Tu es capable."]), tag: "morning", go: "checkin" };
+  if (kind === "evening") return { title: pick(["🌙 Comment ça va" + (n ? "," + n : "") + " ?", "🌙 Ta journée s'est bien passée ?", "💬 Sam prend de tes nouvelles"]), body: streak + pick(["Raconte ta journée en 20 secondes : ça t'aide à voir tes progrès.", "Une journée de plus, ça compte. Note comment tu te sens ce soir.", "Facile, ça va ou difficile ? Dis-le à Libre, sans jugement."]), tag: "evening", go: "checkin" };
+  return { title: "🌊 Ton moment sensible approche", body: pick(["C'est souvent l'heure où l'envie arrive. Prépare ce que tu feras à la place.", "Si l'envie monte : respire 90 secondes avec Libre, elle redescend.", "Garde ton plan en tête. Et Sam est là si besoin."]), tag: "risk", go: "sos" };
+}
+async function runReminders(env, onlyEndpoint) {
+  if (!env.DB) return { sent: 0 };
+  const D = await pushTable(env);
+  const rows = onlyEndpoint
+    ? (await D.prepare("SELECT * FROM push_subs WHERE endpoint=?").bind(onlyEndpoint).all()).results
+    : (await D.prepare("SELECT * FROM push_subs").all()).results;
+  let sent = 0;
+  for (const row of rows || []) {
+    try {
+      const prefs = JSON.parse(row.prefs || "{}"), last = JSON.parse(row.last || "{}");
+      const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: row.tz || "Europe/Zurich", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date()).map((x) => [x.type, x.value]));
+      const day = `${parts.year}-${parts.month}-${parts.day}`, now = +parts.hour * 60 + +parts.minute;
+      const due = onlyEndpoint ? ["test"] : ["morning", "evening", "risk"].filter((k) => {
+        if (!prefs[k] || last[k] === day) return false;
+        const [h, m] = prefs[k].split(":").map(Number);
+        const t = h * 60 + m;
+        return now >= t && now < t + 45;
+      });
+      if (!due.length) continue;
+      const P = await personal(D, row);
+      for (const k of due) {
+        const msg = k === "test" ? { title: "✅ Rappels activés", body: "Parfait" + (P.name ? " " + P.name : "") + " ! Libre te fera signe chaque jour. Tu peux changer les heures dans Réglages.", tag: "test", go: "home" } : message(k, P);
+        const status = await sendPush(D, row, msg, "mailto:rappels@libre.app");
+        if (status === 404 || status === 410) { await D.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(row.endpoint).run(); break; }
+        if (status >= 200 && status < 300) { sent++; if (k !== "test") last[k] = day; }
+        else console.error("push status", status, new URL(row.endpoint).host);
+      }
+      if (!onlyEndpoint) await D.prepare("UPDATE push_subs SET last=? WHERE endpoint=?").bind(JSON.stringify(last), row.endpoint).run();
+    } catch (e) {
+      console.error("reminder error", e && e.message);
+    }
+  }
+  return { sent };
+}
+
 /* ---------------- Routeur ---------------- */
 export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runReminders(env));
+  },
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     if (!url.pathname.startsWith("/api/")) return env.ASSETS.fetch(req);
@@ -421,6 +518,14 @@ export default {
       if (p === "/api/status" && m === "GET") return json({ ok: true, ai: !!(env.ANTHROPIC_API_KEY || env.AI), engine: env.ANTHROPIC_API_KEY ? "claude" : env.AI ? "cloudflare" : "offline", accounts: !!env.DB });
       if (p === "/api/chat" && m === "POST") return await chat(req, env, ctx);
       if (p === "/api/register" && m === "POST") return await register(req, env);
+      if (p === "/api/push/key" && m === "GET") return json({ key: (await vapid(await db(env))).pub });
+      if (p === "/api/push/subscribe" && m === "POST") return await pushSubscribe(req, env);
+      if (p === "/api/push/unsubscribe" && m === "POST") return await pushUnsubscribe(req, env);
+      if (p === "/api/push/test" && m === "POST") {
+        const b = await readJSON(req);
+        if ((await bump(env, "ptest:" + ip(req), 3600)) > 10) return err("rate", 429, "Trop d'essais.");
+        return json(await runReminders(env, String(b.endpoint || "")));
+      }
       if (p === "/api/login" && m === "POST") return await login(req, env);
       if (p === "/api/reset" && m === "POST") return await resetWithCode(req, env);
       const a = await auth(req, env);

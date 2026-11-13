@@ -35,6 +35,9 @@ function serve(url) {
 }
 
 export default {
+  scheduled(event, env, ctx) {
+    return server.scheduled(event, env, ctx);
+  },
   fetch(req, env, ctx) {
     const url = new URL(req.url);
     if (url.pathname.startsWith("/api/")) return server.fetch(req, env, ctx);

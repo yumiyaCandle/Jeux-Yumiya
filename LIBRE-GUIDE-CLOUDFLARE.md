@@ -42,7 +42,18 @@ Facultatif : `AI_MODEL` (Paramètres → Variables, type Texte) pour choisir un 
 ### Plus tard, si tu veux une IA encore meilleure (payante)
 Ajoute un secret **`ANTHROPIC_API_KEY`** (ta clé de console.anthropic.com) dans **Paramètres → Variables et secrets**. Sam utilisera alors Claude en priorité (environ 1 à 2 centimes par message) et l'IA gratuite restera en secours.
 
-## 4. Vérifier
+## 4. Activer les rappels quotidiens (1 min)
+
+Les rappels (« Comment ça va ? » le soir, engagement le matin, moment sensible) sont envoyés par le serveur. Il faut juste lui dire de se réveiller régulièrement :
+
+1. Dans ton Worker → **Paramètres** → **Déclencheurs** (« Triggers ») → **Déclencheurs Cron** → **Ajouter**.
+2. Choisis « Toutes les X minutes » avec **15**, ou colle l'expression : `*/15 * * * *` → **Ajouter**.
+
+Rien d'autre : les clés de notification se créent toutes seules dans la base D1.
+
+Côté iPhone, ta copine doit **installer Libre sur l'écran d'accueil** (Safari → Partager → « Sur l'écran d'accueil »), l'ouvrir depuis l'icône, puis **Réglages → Rappels quotidiens → Activer les rappels**. Apple n'autorise les notifications de sites web que dans ce cas (iOS 16.4 ou plus récent). Une notification test arrive tout de suite pour confirmer.
+
+## 5. Vérifier
 
 Ouvre `https://TON-SITE.workers.dev/api/status` :
 
@@ -55,12 +66,12 @@ Ouvre `https://TON-SITE.workers.dev/api/status` :
 - `"ai":false` → la liaison Workers AI nommée `AI` manque.
 - `"engine":"cloudflare"` = IA gratuite active, `"engine":"claude"` = Claude actif.
 
-## 5. Pour ta copine
+## 6. Pour ta copine
 
 1. Elle ouvre le lien dans **Safari**.
 2. Juste après « Commencer », l'app lui demande de **créer son compte** (identifiant + mot de passe) et lui donne un **code de secours** à garder.
 3. Ensuite tout est sauvegardé automatiquement. Nouveau téléphone ou Safari vidé : **« J'ai déjà un compte »** → elle retrouve tout.
-4. Conseillé : **Partager → Sur l'écran d'accueil** pour l'avoir comme une vraie app.
+4. **Partager → Sur l'écran d'accueil** pour l'avoir comme une vraie app, puis **Réglages → Rappels quotidiens** pour recevoir un petit mot chaque jour.
 
 ---
 
