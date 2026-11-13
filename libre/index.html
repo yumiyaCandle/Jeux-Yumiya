@@ -1903,7 +1903,8 @@ const Cloud={
   expired(){this.token=null;this.persist();undoToast("Ta session a expiré : reconnecte-toi pour continuer à sauvegarder.",null,7000)},
   async signIn(j){this.token=j.token;this.user=j.user;this.rev=0;this.persist()}
 };
-const SRV_OFF="Le serveur de Libre ne tourne pas sur ce site : il a été mis en ligne sans son fichier serveur. Suis l'étape 1 du guide (fichier libre-worker.js).";
+const PREVIEW=/claude\.ai|claudeusercontent|anthropic/.test(location.hostname);
+const SRV_OFF=PREVIEW?"Ceci est l'aperçu : les comptes ne marchent que sur ton site Cloudflare (…workers.dev). Touche « Continuer sans compte pour l'instant » pour visiter l'app.":"Le serveur de Libre ne tourne pas sur ce site. Dans Cloudflare, ouvre ton Worker → « Modifier le code », colle tout le fichier libre-worker.js, puis « Déployer ». Ensuite, recharge cette page.";
 const DB_OFF="La base de données n'est pas reliée : dans Cloudflare, ajoute une liaison D1 nommée DB (étape 2 du guide).";
 Cloud.load();
 function syncDot(){const d=$("#sync-st");if(d)d.innerHTML=syncText()}
