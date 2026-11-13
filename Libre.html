@@ -2371,7 +2371,11 @@ function localReply(text){
       stress:["Allez, 3 minutes pour ton système nerveux : respire avec le cercle, et dis-moi après comment tu te sens. [[respirer]]","Essaie l'ancrage 5-4-3-2-1 : ça ramène ton cerveau dans le présent en 2 minutes. [[ancrage]]"],
       soiree:["Top. Prépare ton plan pour la soirée ici, c'est rapide, et tu l'auras sous la main. [[plan]]"],
       ecart:["Ok. Regarde tes raisons une seconde, juste pour te reconnecter à pourquoi tu fais tout ça. [[raisons]]"],
-      triste:["Je t'écoute. Prends ton temps, écris comme ça vient, même en vrac."]}[last];
+      triste:["Je t'écoute. Prends ton temps, écris comme ça vient, même en vrac."],
+      soireeNow:["Top. Tu as un soft en main ? Si oui, deuxième étape : reste près de quelqu'un qui ne boit pas, et regarde l'heure : dans 20 minutes, on refait le point.","Bien. Prépare ta phrase, « Non merci, je fais une pause », et ton heure de départ. Je te propose aussi ton plan soirée complet ici. [[soiree]]"],
+      maisonNow:["Bien. Commence par t'éloigner de l'alcool et manger un truc. Ensuite, occupe tes mains : série, jeu, douche. Dans 20 minutes, dis-moi où tu en es."],
+      drinkNow:["Ok. Première chose : éloigne-toi de l'alcool et prends un soft. Deuxième : dis-moi où tu es, je t'aide à faire un plan précis."],
+      question:["Je t'écoute, pose ta question."]}[last];
     if(m)return set(null,fresh("yes-"+last,m))}
   if(/^(non|nan|pas vraiment|bof|pas envie|laisse)\b/.test(t)&&t.length<30&&last)return set(last,fresh("no",[`Pas de souci${nm}. On peut juste parler, sans rien faire de spécial. Qu'est-ce qui te passe par la tête ?`,"Ok, aucune pression. Dis-moi plutôt ce qui t'aiderait, toi, là maintenant ?",`D'accord. Je reste là quand même. Tu veux me raconter ta journée ?`]));
   // Rechute / écart
@@ -2380,6 +2384,27 @@ function localReply(text){
       `Ok, respire. Presque tout le monde passe par là en chemin. Ce qui compte c'est maintenant : on repart ensemble ? Raconte-moi la situation.`,
       `Je ne te juge pas une seconde. ${F.ok?"Tu as déjà surmonté "+F.ok+" envie"+(F.ok>1?"s":"")+", ce n'est pas un moment qui efface ça.":"Tu as déjà fait le plus dur : décider de changer."} C'était plutôt la fatigue, le stress, ou l'ambiance ?`,
       `Ne sois pas dure avec toi. Il y a un exercice de 3 minutes pour ça, utilisé par les psys : il aide à repartir sans se détester. [[compassion]]`,`Ça arrive. L'important c'est que tu en parles au lieu de lâcher. Si tu t'es trompé·e dans l'app, tu peux supprimer l'entrée dans le Journal. Et sinon : qu'est-ce qu'on retient pour la prochaine fois ?`]));
+  // « J'ai une question » : laisser la place à la question
+  if(has(/(j'?ai une question|je peux te demander|une question|je voulais te demander)/)&&t.length<60)return set("question",fresh("q",[`Vas-y${nm}, je t'écoute. C'est quoi ta question ?`,`Bien sûr, pose-la. Je suis là.`]));
+  // Alcool : envie de boire, avec le lieu (soirée, bar, maison) → actions concrètes, pas seulement respirer
+  const wantDrink=has(/(envie de (boire|une biere|un verre|picoler|me bourrer|un shot)|boire une biere|boire un verre|prendre un verre|veux boire|vais boire|craquer.*(biere|verre|alcool)|(biere|verre|alcool|vodka|vin).*(envie|craque|tente))/)||(F.h&&F.h.type==="alcohol"&&has(/(envie|craquer|tentation|tenir)/));
+  const atParty=has(/(soiree|fete|bar|boite|apero|anniv|chez des potes|chez un pote|avec des potes|avec mes potes|en ville|concert|festival)/);
+  const atHome=has(/(chez moi|a la maison|toute seule|tout seul|seule chez|dans ma chambre)/);
+  if(wantDrink&&atParty){OFF.last="soireeNow";
+    return fresh("partyNow",[`Ok${nm}, on agit maintenant, concrètement :\n1. **Prends une boisson sans alcool tout de suite** (soda, eau gazeuse, bière 0 %) et garde-la en main : on te proposera beaucoup moins.\n2. **Éloigne-toi du bar ou de la table** où sont les verres, va dehors ou aux toilettes 5 minutes.\n3. Décide **maintenant** de ton heure de départ.\nL'envie est la plus forte dans les 20 premières minutes, après elle baisse. Tu es où exactement, là ? [[soiree]]`,
+      `Bien joué de m'écrire au lieu de prendre la bière. Pour les 20 prochaines minutes :\n• **Un soft dans la main**, tout de suite.\n• **Mange un truc** (chips, pizza…) : l'envie de boire est plus forte le ventre vide.\n• Si quelqu'un insiste : « **Non merci, je fais une pause.** » Point.\nEst-ce qu'il y a quelqu'un à cette soirée qui sait que tu arrêtes ?`,
+      `Je sais que c'est dur quand tout le monde boit autour de toi. Une chose à la fois :\n1. **Sors 5 minutes** prendre l'air, loin des verres.\n2. **Écris à ton allié·e** : « Je suis en soirée, j'ai envie de boire, tu peux m'appeler ? »\n3. En revenant, **un soft en main**.\nEt si l'envie reste trop forte, tu as le droit de **rentrer plus tôt** : partir, c'est gagner, pas perdre. [[allie]]`,
+      `Pense à la suite du film : une bière, puis la deuxième vient toute seule, et demain matin ton compteur est à zéro et tu t'en veux. Ce n'est pas ce que tu veux. Là, maintenant : **un soft en main, et va parler à quelqu'un qui ne boit pas**. Qu'est-ce qui te donne le plus envie ce soir, l'ambiance ou les gens qui te proposent ? [[film]]`]);}
+  if(wantDrink&&atHome){OFF.last="maisonNow";
+    return fresh("homeNow",[`Ok${nm}. Chez soi, le plus efficace c'est de **mettre de la distance avec l'alcool** :\n1. S'il y en a à la maison, **ne reste pas dans la même pièce** (ou vide-le si tu peux).\n2. **Mange quelque chose** et bois un grand verre d'eau ou un soft.\n3. **Sors marcher 10 minutes**, même juste autour du bâtiment.\nL'envie redescend en 20 à 30 minutes. Tu es seule chez toi ?`,
+      `Quand on est seule à la maison, l'envie vient souvent de l'ennui ou de la solitude. Tu peux :\n• **Appeler ou écrire à quelqu'un** maintenant, même pour parler d'autre chose.\n• **Lancer une série / un jeu** avec un bon snack et un soft.\n• **Prendre une douche chaude** : ça coupe l'élan.\nC'est plutôt l'ennui, le stress ou la tristesse ce soir ? [[halt]]`]);}
+  if(wantDrink){OFF.last="drinkNow";
+    return fresh("drinkNow",[`Merci de me le dire${nm} au lieu de céder. Pour l'alcool, ce qui marche le mieux c'est **agir sur la situation** :\n1. **Pas d'alcool à portée** : éloigne-toi de l'endroit où il y en a.\n2. **Un soft ou de l'eau en main, et mange un truc.**\n3. **Repousse de 20 minutes** : « pas maintenant, on verra dans 20 min ». Souvent, après, l'envie est partie.\nTu es où là, et avec qui ?`,
+      `Ok. Une envie de boire, ce n'est pas un ordre. Dis-moi ce qui se passe : tu es en soirée, chez toi, ou ailleurs ? Selon l'endroit, je te donne un plan précis.`,
+      `Ton envie a souvent une raison cachée : faim, colère, solitude ou fatigue. On vérifie en 1 minute ? Ensuite on répond au vrai besoin, pas à l'alcool. [[halt]]`]);}
+  // Suite d'une conversation « soirée maintenant »
+  if(last==="soireeNow"&&has(/(bar|table|dehors|toilettes|salon|cuisine|avec|potes|amis|ils|elles|tout le monde|insiste|propose)/))
+    return set("soireeNow",fresh("partyFollow",[`Ok. Si on te propose encore : « **Non merci, je fais une pause.** » Tu n'as pas à te justifier, et les vrais potes respectent. Garde ton soft en main et reste près de quelqu'un qui ne boit pas. Tu tiens bon pour l'instant ?`,`Bien. Fixe-toi un objectif simple : **tenir jusqu'à ton heure de départ**, un soft à la fois. Si ça devient trop, sors 5 minutes ou rentre. Écris-moi quand tu veux, je reste là.`]));
   // Envie maintenant
   if(has(/(envie|craquer|besoin d[e']? ?(fumer|vaper|boire|une|un)|manque|tentation|je vais (fumer|boire|vaper|craquer)|tenir|tiens pas|j'en peux plus de pas)/))
     return set("envie",fresh("envie",[`Je suis là${nm}. Cette envie va monter, culminer, puis redescendre, en général en 3 à 5 minutes. On la surfe ensemble ? C'est une technique de psy, ça marche vraiment. [[surf]]`,`Si elle est très forte, essaie la technique TIPP : eau froide sur le visage, une minute de mouvement, respiration lente. En 3 minutes ton corps redescend. [[tipp]]`,`Ta tête te dit sûrement « juste un ». On déroule le film jusqu'au bout ? Dans 1 h, demain matin… [[film]]`,
