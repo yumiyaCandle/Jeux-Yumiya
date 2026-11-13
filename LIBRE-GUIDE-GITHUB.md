@@ -19,20 +19,19 @@ La version GitHub est dans le dossier **`docs/`** de ce dépôt. Elle est déjà
 3. Pour des rappels chaque jour : **Réglages → Rappels dans mon Calendrier** (de vraies notifications, sans serveur).
 4. Une fois par semaine ou deux : **Réglages → Exporter une copie** (l'app le lui rappelle). Si un jour ses données disparaissent, **Importer une copie** remet tout.
 
-## Brancher la vraie IA de Sam (gratuit, 5 minutes, une seule fois)
+## Activer les comptes, l'IA et les rappels (site sur GitHub + serveur gratuit Cloudflare)
 
-Sur GitHub, Sam marche en mode hors ligne. Pour qu'il devienne une vraie IA qui répond à tout :
+GitHub ne peut pas stocker de comptes : le site reste sur GitHub, mais il utilise ton Worker Cloudflare comme serveur.
 
-1. **dash.cloudflare.com** (compte gratuit) → **Workers & Pages** → **Créer** → **Commencer avec « Hello World »** → nom : `libre-ia` → **Déployer**.
-2. **Modifier le code** → efface tout → colle **tout** le fichier **`libre-ia-gratuite.js`** (petit fichier, ~11 Ko) → **Déployer**.
-3. Onglet **Liaisons** → **Ajouter une liaison** → **Workers AI** → nom de variable : **`AI`** → **Ajouter**.
-4. Note l'adresse du Worker, par ex. `https://libre-ia.ton-nom.workers.dev`. En l'ouvrant, tu dois voir `{"ok":true,"ai":true}`.
-5. Envoie à ta copine **ce lien spécial** (une seule fois), avec ton adresse à la fin :
-   `https://yumiyacandle.github.io/Libre-NJ/?ai=https://libre-ia.ton-nom.workers.dev`
-   Elle l'ouvre : l'IA est branchée automatiquement, elle n'a rien à taper.
-   (Ou : dans l'app → Réglages → **IA de Sam** → colle l'adresse → Tester et enregistrer.)
+1. **Cloudflare** : Workers & Pages → Créer → « Hello World » → **Modifier le code** → colle tout **`libre-worker.js`** → **Déployer**.
+2. **Liaisons** : ajoute **D1** (nom `DB`, crée la base `libre-db`) et **Workers AI** (nom `AI`).
+3. **Paramètres → Déclencheurs → Cron** : `*/15 * * * *` (rappels quotidiens).
+4. Ouvre `https://TON-WORKER.workers.dev/api/status` → tu dois voir `"ai":true` et `"accounts":true`.
+5. Sur **GitHub**, ouvre `index.html` → crayon ✏️ (Edit) → tout en haut, remplace
+   `var LIBRE_SERVEUR="";` par `var LIBRE_SERVEUR="https://TON-WORKER.workers.dev";` → **Commit changes**.
+   (Ou envoie l'adresse à Claude, il te renvoie le fichier prêt.)
 
-C'est gratuit (quota quotidien de Cloudflare). Si le quota est dépassé, Sam repasse en mode hors ligne jusqu'au lendemain.
+C'est tout : sur `https://yumiyacandle.github.io/Libre-NJ/`, créer un compte, se connecter, l'IA de Sam, les rappels et les mots des proches marchent.
 
 ## Ce qui marche sur GitHub
 
@@ -40,5 +39,5 @@ Tout ce qui se passe sur son téléphone : compteur et plan progressif, choix de
 
 ## Ce qui ne marche pas sur GitHub (il faut un serveur)
 
-Comptes et reconnexion sur un autre téléphone, les notifications envoyées par le serveur, les mots des proches. (La vraie IA de Sam marche si tu fais l'étape « Brancher la vraie IA » ci-dessus.)
+Sans l'étape ci-dessus : comptes, IA de Sam, notifications du serveur et mots des proches ne marchent pas (Sam reste en mode hors ligne).
 Pour avoir ça aussi, il faut la version Cloudflare (`libre-worker.js`, voir `LIBRE-GUIDE-CLOUDFLARE.md`).

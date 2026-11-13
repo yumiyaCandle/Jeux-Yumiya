@@ -579,17 +579,17 @@ async function wordDelete(env, a, id) {
 }
 
 /* ---------------- Routeur ---------------- */
-export default {
-  async scheduled(event, env, ctx) {
-    ctx.waitUntil(runReminders(env));
-  },
-  async fetch(req, env, ctx) {
+/* Le site peut aussi être hébergé ailleurs (ex. GitHub Pages) et appeler ce serveur. */
+const CORS_OK = [/^https:\/\/[a-z0-9-]+\.github\.io$/i, /^http:\/\/localhost(:\d+)?$/];
+function corsHeaders(origin) {
+  return { "Access-Control-Allow-Origin": origin, "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS", "Access-Control-Allow-Headers": "content-type, authorization", "Access-Control-Max-Age": "86400", Vary: "Origin" };
+}
+async function route(req, env, ctx) {
     const url = new URL(req.url);
-    if (!url.pathname.startsWith("/api/")) return env.ASSETS.fetch(req);
-    if (req.method === "OPTIONS") return new Response(null, { status: 204 });
-    // Même origine uniquement pour les écritures
+    if (!url.pathname.startsWith("/api/")) return env.ASSETS ? env.ASSETS.fetch(req) : new Response("Libre", { status: 404 });
+    // Écritures : même site, ou site autorisé (GitHub Pages)
     const origin = req.headers.get("origin");
-    if (req.method !== "GET" && origin && new URL(origin).host !== url.host) return err("origin", 403, "Origine refusée.");
+    if (req.method !== "GET" && origin && new URL(origin).host !== url.host && !CORS_OK.some((r) => r.test(origin))) return err("origin", 403, "Origine refusée.");
     try {
       const p = url.pathname.replace(/\/+$/, ""), m = req.method;
       if (p === "/api/status" && m === "GET") return json({ ok: true, ai: !!(env.ANTHROPIC_API_KEY || env.AI), engine: env.ANTHROPIC_API_KEY ? "claude" : env.AI ? "cloudflare" : "offline", accounts: !!env.DB });
@@ -630,5 +630,20 @@ export default {
       if (s === 500) console.error(e);
       return err(e.message || "error", s, s === 413 ? "Données trop volumineuses." : "Erreur serveur, réessaie.");
     }
+}
+
+export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runReminders(env));
+  },
+  async fetch(req, env, ctx) {
+    const origin = req.headers.get("origin") || "";
+    const cross = origin && CORS_OK.some((r) => r.test(origin)) && new URL(req.url).pathname.startsWith("/api/");
+    if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cross ? corsHeaders(origin) : {} });
+    const res = await route(req, env, ctx);
+    if (!cross) return res;
+    const h = new Headers(res.headers);
+    for (const [k, v] of Object.entries(corsHeaders(origin))) h.set(k, v);
+    return new Response(res.body, { status: res.status, headers: h });
   },
 };

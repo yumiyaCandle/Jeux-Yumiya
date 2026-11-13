@@ -1881,11 +1881,11 @@ function mergeState(a,b){
   if(r.chat&&r.chat.length>120)r.chat=r.chat.slice(-120);return r}
 const Cloud={
   ai:false,accounts:false,known:false,token:null,user:null,rev:0,busy:false,t:null,lastSync:0,err:null,
-  web(){return !window.LIBRE_STATIC&&/^https?:$/.test(location.protocol)},
+  web(){return !!window.LIBRE_API||(!window.LIBRE_STATIC&&/^https?:$/.test(location.protocol))},
   load(){try{const a=JSON.parse(localStorage.getItem("libre.account")||"null");if(a&&a.token){this.token=a.token;this.user=a.user;this.rev=a.rev||0;this.lastSync=a.ls||0}}catch(e){}},
   persist(){try{if(this.token)localStorage.setItem("libre.account",JSON.stringify({token:this.token,user:this.user,rev:this.rev,ls:this.lastSync}));else localStorage.removeItem("libre.account")}catch(e){}},
   async api(path,opt={}){if(!this.web())throw Object.assign(new Error("Ouvre Libre depuis son adresse internet pour utiliser ton compte."),{status:0});
-    let r;try{r=await fetch("/api"+path,{method:opt.method||"GET",headers:Object.assign({"content-type":"application/json"},this.token?{authorization:"Bearer "+this.token}:{}),body:opt.body?JSON.stringify(opt.body):undefined,keepalive:!!opt.keepalive,cache:"no-store"})}catch(e){throw Object.assign(new Error("Pas de connexion internet."),{status:0})}
+    let r;try{r=await fetch((window.LIBRE_API||"")+"/api"+path,{method:opt.method||"GET",headers:Object.assign({"content-type":"application/json"},this.token?{authorization:"Bearer "+this.token}:{}),body:opt.body?JSON.stringify(opt.body):undefined,keepalive:!!opt.keepalive,cache:"no-store"})}catch(e){throw Object.assign(new Error("Pas de connexion internet."),{status:0})}
     let j={};try{j=await r.json()}catch(e){}j._status=r.status;
     if(!r.ok&&r.status!==409){throw Object.assign(new Error(j.message||(r.status===404||r.status===405?SRV_OFF:r.status===503?DB_OFF:"Erreur "+r.status)),{status:r.status,code:j.error})}return j},
   async status(){if(!this.web())return;try{const j=await this.api("/status");this.accounts=!!j.accounts;this.ai=!!j.ai;this.engine=j.engine||"claude"}catch(e){}this.known=true},
@@ -2259,7 +2259,7 @@ const Coach={
     }
     if(this.native()){
       const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),90000);
-      try{const res=await fetch(Cloud.ai?"/api/chat":aiUrl()+"/chat",{method:"POST",signal:ctl.signal,headers:Object.assign({"content-type":"application/json"},Cloud.ai&&Cloud.token?{authorization:"Bearer "+Cloud.token}:{}),body:JSON.stringify({context:ctx,messages:msgs})});
+      try{const res=await fetch(Cloud.ai?(window.LIBRE_API||"")+"/api/chat":aiUrl()+"/chat",{method:"POST",signal:ctl.signal,headers:Object.assign({"content-type":"application/json"},Cloud.ai&&Cloud.token?{authorization:"Bearer "+Cloud.token}:{}),body:JSON.stringify({context:ctx,messages:msgs})});
         if(!res.ok){let j={};try{j=await res.json()}catch(e){}throw {code:j.error||"api",message:j.message||("coach "+res.status)}}
         const rd=res.body.getReader(),dec=new TextDecoder();let t="";
         for(;;){const {done,value}=await rd.read();if(done)break;t+=dec.decode(value,{stream:true});if(t.includes("\u0000ERR"))throw {code:"api",message:"coach"};onText(t)}
