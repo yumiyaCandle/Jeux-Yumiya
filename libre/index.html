@@ -376,6 +376,7 @@ svg{display:block}
 .perk{display:flex;gap:12px;align-items:center;margin-top:14px;font-size:16px}
 .perk i{width:28px;height:28px;border-radius:9px;background:color-mix(in srgb,var(--tint) 14%,transparent);color:var(--tint);display:grid;place-items:center;flex:none}
 .perk i svg{width:15px;height:15px}
+.perk i{font-style:normal;font-weight:700;font-size:14px}
 .plans{display:flex;flex-direction:column;gap:10px;margin:22px 0 16px}
 .plan{position:relative;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;border:2px solid var(--sep);background:var(--card2);text-align:left;width:100%;transition:border-color .2s}
 .plan.on{border-color:var(--tint)}
@@ -711,6 +712,8 @@ svg{display:block}
       <div class="sos-pane" data-p="care">
         <div class="sos-t" style="padding:0"><h2>Je suis là avec toi</h2><p>Ce que tu ressens est important. Tu n'as pas à traverser ça seul·e, et tu n'as pas besoin de crédit ni de rendez-vous pour être écouté·e.</p></div>
         <div class="reasons" style="margin-top:20px">
+          <a class="care-l tap" href="tel:147" style="background:rgba(80,200,255,.2)"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5c0 4.1-3.6 7.5-8 7.5-1.1 0-2.2-.2-3.1-.6L4 20l1.3-3.6C4.5 15.1 4 13.4 4 11.5 4 7.4 7.6 4 12 4s8 3.4 8 7.5Z"/></svg></i><div><b>147 · Pro Juventute</b><span>Pour les jeunes : appel, SMS ou chat, 24 h/24</span></div></a>
+          <a class="care-l tap" href="sms:147"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></i><div><b>Écrire un SMS au 147</b><span>Si tu n'as pas envie de parler</span></div></a>
           <a class="care-l tap" href="tel:143"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h3.5l2 5-2.5 1.5a11 11 0 0 0 6 6l1.5-2.5 5 2V19a2 2 0 0 1-2 2A17 17 0 0 1 3 5.5a2 2 0 0 1 2-2Z"/></svg></i><div><b>La Main Tendue · 143</b><span>Écoute anonyme et gratuite, 24 h/24</span></div></a>
           <a class="care-l tap" href="tel:144" style="background:rgba(255,80,80,.22)"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20Z"/></svg></i><div><b>Urgence · 144</b><span>Si tu es en danger, maintenant</span></div></a>
         </div>
@@ -1295,7 +1298,7 @@ function renderHome(){
   ${h.type==="alcohol"?alcStatsHTML(h):""}
   ${S.set.health?`<div class="card pad reveal" id="hk-card" style="margin-top:12px"><div class="foot">Chargement des données Santé…</div></div>`:""}
   <button class="sos-card tap reveal" data-sos><span class="sos-ic">${ic("wave",2.2)}</span><div><b>Une envie ?</b><span>Aide immédiate, en 3 minutes</span></div><svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1.5 1.5 6 6-6 6"/></svg></button>
-  ${S.alcoholRisk&&S.habits.alcohol?`<div class="card pad reveal" style="margin-top:12px;border:1px solid color-mix(in srgb,var(--orange) 40%,transparent)"><div class="tip"><i>${ic("shield",2)}</i><div><b>Ta sécurité d'abord</b><p>Arrêter l'alcool d'un coup peut être dangereux quand on boit beaucoup. Parles-en à un médecin pour un arrêt accompagné.</p></div></div></div>`:""}
+  ${S.habits.alcohol?`<button class="card pad tap reveal" id="alc-safe" style="margin-top:12px;width:calc(100% - 32px);text-align:left;${S.alcoholRisk?"border:1px solid color-mix(in srgb,var(--orange) 45%,transparent)":""}"><div class="tip"><i>${ic("shield",2)}</i><div><b>${S.alcoholRisk?"Ta sécurité d'abord":"Mon plan alcool"}</b><p>${S.alcoholRisk?"Arrêter d'un coup peut être dangereux quand on boit beaucoup. Prépare ton rendez-vous chez le médecin, c'est rapide.":"Signes à surveiller, préparer un rendez-vous, aide pour les jeunes (147)."}</p></div></div></button>`:""}
   <div class="sec"><h2>Ton corps</h2><button data-health>Tout voir</button></div>
   <div class="rail" id="ms-rail">${st.ms.map((m,i)=>{const done=i<st.idx,curr=i===st.idx;const p=done?1:curr?st.pct:0;return `<div class="ms reveal ${done?"done":curr?"cur":""}"><div class="top"><span class="badge">${m[1]}</span>${done?`<span style="color:var(--green)">${ic("check",2.6).replace('<svg','<svg width="18" height="18"')}</span>`:""}</div><b>${done?"Atteint":curr?"En cours":"À venir"}</b><p>${esc(m[2])}</p><div class="pbar"><i style="width:0" data-w="${p*100}"></i></div></div>`}).join("")}</div>
   ${whyHTML()}
@@ -1320,7 +1323,7 @@ function renderHome(){
   $$("[data-prep]").forEach(b=>b.onclick=()=>{S.prep=S.prep||{};const k=b.dataset.prep;S.prep[k]=!S.prep[k];save();haptic();b.querySelector(".pcheck").classList.toggle("on",!!S.prep[k]);if(k==="plan"&&S.prep[k])openPlan()});
   const sn=$("#start-now");if(sn)sn.onclick=()=>alertBox("Commencer maintenant ?","Ton compteur démarre tout de suite.","Commencer",()=>{h.quitAt=Date.now();save();haptic("success");confetti();renderHome()});
   if(S.set.health)healthCard();
-  bindRitual(h);const wa=$("#why-add");if(wa)wa.onclick=openWhy;const cc=$("#cal-card");if(cc)cc.onclick=openCal;const rc=$("#rem-card");if(rc)rc.onclick=openReminders;const acx=$("#acc-card");if(acx)acx.onclick=()=>openAccount("create");bindHomeExtras();bindRings();setTimeout(checkBadges,700);const wa2=$("#words-all");if(wa2)wa2.onclick=openWords;
+  bindRitual(h);const wa=$("#why-add");if(wa)wa.onclick=openWhy;const cc=$("#cal-card");if(cc)cc.onclick=openCal;const rc=$("#rem-card");if(rc)rc.onclick=openReminders;const acx=$("#acc-card");if(acx)acx.onclick=()=>openAccount("create");bindHomeExtras();bindRings();const as=$("#alc-safe");if(as)as.onclick=openAlcSafety;setTimeout(checkBadges,700);const wa2=$("#words-all");if(wa2)wa2.onclick=openWords;
   reveal(s);
   const f0=homeCounted;homeCounted=true;countTo($("#h-saved"),saved(h),v=>chf(v),f0?saved(h):0);countTo($("#h-avoid"),avoided(h),v=>nf0.format(v),f0?avoided(h):0);
 }
@@ -1404,6 +1407,41 @@ function openCheckin(){const hr=new Date().getHours();let mood=null;
   $$("[data-ci-a]").forEach(b=>b.onclick=()=>{const a=b.dataset.ciA;closeSheet(0,()=>{if(a==="sos")openSOS(false);else{go("coach");coachSub="chat";renderCoach();setTimeout(()=>$("#c-in").focus(),300)}})})}
 function handleGo(g){if(!S.onboarded||!g)return;if(g==="words"){fetchWords(true).then(()=>setTimeout(openWords,300));return}if(g==="checkin")setTimeout(openCheckin,500);else if(g==="sos")setTimeout(()=>openSOS(false),500)}
 try{navigator.serviceWorker&&navigator.serviceWorker.addEventListener("message",e=>{if(e.data&&e.data.go)handleGo(e.data.go)})}catch(e){}
+/* ===== Plan alcool : sécurité + préparer le rendez-vous médecin ===== */
+function alcSummary(){const h=S.habits.alcohol;if(!h)return "";const c=h.drinks&&h.drinks.length?alcCalc(h.drinks):null;
+  const lines=[(S.name?S.name+" — ":"")+"ce que je buvais avant d'arrêter :"];
+  if(h.drinks&&h.drinks.length)h.drinks.forEach(d=>lines.push("• "+DRINKS[d.k].n+" ("+fmtName(d)+") : "+d.n+" "+PL[d.p]));else lines.push("• environ "+h.q1+" verres "+PL[h.p1||"week"]);
+  if(c)lines.push("≈ "+Math.round(c.std)+" verres standard par semaine ("+Math.round(c.g)+" g d'alcool pur)");
+  lines.push("Je bois tous les jours ou j'ai déjà eu des signes de manque : "+(S.alcoholRisk?"oui":"non"));
+  const st=S.alcSym||{};const sy=Object.keys(st).filter(k=>st[k]).map(k=>ALC_SYM.find(x=>x[0]===k)[1]);if(sy.length)lines.push("Ce que je ressens quand je ne bois pas : "+sy.join(", "));
+  lines.push("Je voudrais de l'aide pour arrêter (ou réduire) l'alcool en toute sécurité.");return lines.join("\n")}
+const ALC_SYM=[["tremb","Tremblements des mains"],["sueur","Sueurs, cœur qui bat vite"],["naus","Nausées"],["anx","Grosse angoisse"],["som","Je ne dors pas"],["matin","Je bois le matin pour aller mieux"]];
+function openAlcSafety(){S.alcSym=S.alcSym||{};
+  openInfo("Mon plan alcool",`<div style="padding:0 20px"><h2 class="sh-big">Arrêter l'alcool, en sécurité</h2><p class="foot" style="margin-top:8px;line-height:1.5">La dépendance à l'alcool est une maladie, pas un manque de volonté. Elle se soigne, et tu n'as pas à le faire seul·e. Un médecin peut t'aider à arrêter sans danger.</p></div>
+  <div class="card pad" style="margin:16px 16px 0;border:1px solid color-mix(in srgb,var(--red) 35%,transparent)"><div class="tip"><i style="background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)">${ic("shield",2)}</i><div><b>Appelle le 144 tout de suite si</b><p>convulsions, confusion, hallucinations, ou tremblements très forts après avoir arrêté de boire.</p></div></div><a class="big-btn red tap" href="tel:144" style="width:100%;margin:12px 0 0;text-decoration:none">${ic("phone",2).replace("<svg",'<svg width="20" height="20"')}Appeler le 144</a></div>
+  <div class="grp-t">Quand tu ne bois pas, tu ressens…</div><div class="symgrid" style="padding-top:0">${ALC_SYM.map(s=>`<button class="sym tap ${S.alcSym[s[0]]?"on":""}" data-as="${s[0]}"><span>${s[1]}</span></button>`).join("")}</div>
+  <p class="hint" id="as-msg">${Object.values(S.alcSym).some(Boolean)?"<b style='color:var(--orange)'>Ces signes montrent que ton corps s'est habitué à l'alcool.</b> N'arrête pas d'un coup seul·e : vois un médecin, il t'aidera à réduire sans danger.":"Coche ce qui te concerne. C'est privé, et ça t'aide à préparer ton rendez-vous."}</p>
+  <div class="grp-t">Préparer ton rendez-vous</div><div style="padding:0 16px"><div class="card pad" style="margin:0;font-size:15px;line-height:1.5;white-space:pre-wrap" id="as-sum">${esc(alcSummary())}</div></div>
+  <p class="hint">Montre ce résumé à ton médecin de famille ou ton pédiatre, ou à l'infirmière scolaire. Tu peux aussi d'abord en parler, gratuitement et sans donner ton nom, au 147.</p>
+  <div style="height:12px"></div><button class="big-btn sec2 tap" id="as-copy">${ic("share",2).replace("<svg",'<svg width="20" height="20"')}Copier le résumé</button>
+  <div style="height:10px"></div><a class="big-btn tap" href="tel:147" style="text-decoration:none">${ic("phone",2).replace("<svg",'<svg width="20" height="20"')}Parler au 147 (jeunes, 24 h/24)</a>
+  <div class="grp-t">Ce qui aide vraiment</div><div class="card pad" style="margin:0 16px">${["Garde de l'eau ou une boisson sans alcool toujours à portée de main.","Dis à une personne de confiance que tu arrêtes, elle peut t'aider pendant les soirées.","Évite d'avoir de l'alcool chez toi les premières semaines.","Prévois quoi faire le vendredi et le samedi soir : c'est souvent là que c'est le plus dur.","Si tu craques, ce n'est pas un échec : note-le, et parles-en à Sam ou au 147."].map(x=>`<div class="perk" style="margin-top:8px;font-size:15px"><i>${ic("check",2.6)}</i>${x}</div>`).join("")}</div>`);
+  $$("[data-as]").forEach(b=>b.onclick=()=>{const k=b.dataset.as;S.alcSym[k]=!S.alcSym[k];if(S.alcSym[k])S.alcoholRisk=true;save();haptic();b.classList.toggle("on",!!S.alcSym[k]);$("#as-sum").textContent=alcSummary();
+    $("#as-msg").innerHTML=Object.values(S.alcSym).some(Boolean)?"<b style='color:var(--orange)'>Ces signes montrent que ton corps s'est habitué à l'alcool.</b> N'arrête pas d'un coup seul·e : vois un médecin, il t'aidera à réduire sans danger.":"Coche ce qui te concerne. C'est privé, et ça t'aide à préparer ton rendez-vous."});
+  $("#as-copy").onclick=async()=>{try{await navigator.clipboard.writeText(alcSummary());hud("Copié")}catch(e){hud("Copie impossible","x")}}}
+/* ===== Soirées et pression des potes ===== */
+function openParty(){const NO=["Non merci, je fais une pause.","Je conduis / je rentre tôt.","J'ai un truc important demain.","Je me sens mieux sans, en ce moment.","Non. (Tu n'as pas à te justifier.)","Je prends un soft, t'inquiète."];
+  const DR=[["🍋","Citronnade maison, glaçons et menthe"],["🍹","Virgin mojito (citron vert, menthe, eau gazeuse)"],["🍺","Bière sans alcool (0,0 %)"],["🫧","Kombucha ou thé glacé"],["🍊","Tonic + jus d'orange sanguine"],["🥤","Ton soda préféré dans un verre stylé"]];
+  openInfo("Soirées",`<div style="padding:0 20px"><h2 class="sh-big">Soirées, sans pression</h2><p class="foot" style="margin-top:8px;line-height:1.5">Les soirées et les potes, c'est souvent le moment le plus dur. Avec un plan prêt, tu gardes le contrôle et tu profites quand même.</p></div>
+  <div class="grp-t">Tes phrases pour dire non</div><div style="padding:0 16px" class="chips">${NO.map(x=>`<button class="chip tap" data-no="${esc(x)}">${esc(x)}</button>`).join("")}</div>
+  <p class="hint">Touche une phrase pour la garder : elle s'affichera dans ton plan « Soirée ». Personne n'a besoin d'une explication : « non merci » suffit.</p>
+  <div class="grp-t">À boire à la place</div><div class="list plain">${DR.map(d=>`<div class="row"><span style="font-size:24px">${d[0]}</span><div class="rt"><b style="font-size:16px">${d[1]}</b></div></div>`).join("")}</div>
+  <div class="grp-t">Ton plan en 4 points</div><div class="card pad" style="margin:0 16px">${["Arrive avec ta boisson en main : on te propose beaucoup moins.","Choisis un·e allié·e sur place qui sait que tu ne bois pas.","Décide à l'avance de ton heure de départ.","Si ça devient trop : sors 5 minutes, respire, écris à ton allié·e ou à Sam."].map((x,i)=>`<div class="perk" style="margin-top:${i?10:0}px;font-size:15px"><i>${i+1}</i>${x}</div>`).join("")}</div>
+  <div style="height:16px"></div><button class="big-btn tap" id="pt-ally">${S.ally&&S.ally.phone?"Prévenir "+esc(S.ally.name||"mon allié·e")+" que je sors":"Choisir mon allié·e"}</button>
+  <div style="height:10px"></div><button class="big-btn sec2 tap" id="pt-sam">Préparer ma soirée avec Sam</button>`);
+  $$("[data-no]").forEach(b=>b.onclick=()=>{S.plans=S.plans||{};S.plans["Soirée"]=b.dataset.no+" Et j'ai une boisson sans alcool en main.";save();haptic("success");$$("[data-no]").forEach(x=>x.classList.toggle("on",x===b));hud("Ajouté à ton plan","check")});
+  $("#pt-ally").onclick=()=>{if(S.ally&&S.ally.phone){location.href=smsLink(S.ally.phone,"Je sors ce soir et je ne bois pas. Si je t'écris, tu peux m'appeler ? 💙")}else closeSheet(0,()=>openAllyEdit(false))};
+  $("#pt-sam").onclick=()=>closeSheet(0,()=>{go("coach");coachSub="chat";renderCoach();setTimeout(()=>sendChat("Je vais à une soirée et je ne veux pas boire. Tu m'aides à préparer un plan ?"),350)})}
 /* ================= Program ================= */
 function progDay(){const start=S.programStart||S.created;return Math.min(30,Math.floor((Date.now()-new Date(dkey(start)).getTime())/DAY)+1)}
 function openLesson(i){if(!S.pro&&i>2)return openPaywall("Le programme complet de 30 jours fait partie de Libre Pro.");const l=LESSONS[i];
@@ -1619,6 +1657,7 @@ ${CONFIG.GIFT?"":`  <div class="grp-t">Connexions</div><div class="list"><button
     <div class="row"><span class="ri" style="background:var(--green)">${ic("phone",2)}</span><div class="rt"><b>Ligne stop-tabac</b><span>Conseil pour arrêter tabac et nicotine</span></div><span class="rv" style="font-size:15px">0848 000 181</span></div>
     <div class="row"><span class="ri" style="background:var(--purple)">${ic("people",2)}</span><div class="rt"><b>SafeZone.ch</b><span>Conseil en ligne gratuit et anonyme sur les addictions</span></div></div>
     <div class="row"><span class="ri" style="background:#30B67A">${ic("leaf",2)}</span><div class="rt"><b>stop-cannabis.ch</b><span>Aide pour arrêter ou réduire le cannabis</span></div></div>
+    <a class="row tap" href="tel:147" style="color:inherit;text-decoration:none"><span class="ri" style="background:#30B0C7">${ic("people",2)}</span><div class="rt"><b>147 · Pro Juventute</b><span>Pour les jeunes, appel, SMS ou chat, 24 h/24</span></div><span class="rv" style="font-size:15px">147</span></a>
     <div class="row"><span class="ri" style="background:var(--tint)">${ic("heart",2)}</span><div class="rt"><b>La Main Tendue</b><span>Écoute confidentielle, 24 h/24</span></div><span class="rv" style="font-size:15px">143</span></div>
     <div class="row"><span class="ri" style="background:var(--red)">${ic("heart",2)}</span><div class="rt"><b>Urgence médicale</b><span>En cas de malaise important</span></div><span class="rv" style="font-size:15px">144</span></div></div>
   <p class="hint">Libre ne remplace pas un avis médical. Pour arrêter l'alcool quand on boit beaucoup, consulte toujours un médecin.</p>
@@ -1879,7 +1918,7 @@ function bindDrinks(el,v,onChange){
   sync();draw();
 }
 function fmtQ(q,v){return (q.suffix?q.suffix+" ":"")+(q.step<1?Number(v).toFixed(2):nf0.format(v))}
-function riskMsg(){return `<div class="card pad" style="margin:10px 0 0;background:color-mix(in srgb,var(--orange) 12%,var(--card2));box-shadow:none"><div class="tip"><i>${ic("shield",2)}</i><div><b>Parle d'abord à un médecin</b><p>Quand on boit beaucoup, arrêter l'alcool d'un coup peut être dangereux. Un médecin peut t'accompagner pour arrêter en toute sécurité. Libre reste à tes côtés pour le reste.</p></div></div></div>`}
+function riskMsg(){return `<div class="card pad" style="margin:10px 0 0;background:color-mix(in srgb,var(--orange) 12%,var(--card2));box-shadow:none"><div class="tip"><i>${ic("shield",2)}</i><div><b>Parle d'abord à un médecin</b><p>Quand on boit beaucoup, arrêter l'alcool d'un coup peut être dangereux. Un médecin (médecin de famille, pédiatre) peut t'accompagner pour arrêter en toute sécurité. Tu peux aussi en parler d'abord au 147, gratuit et anonyme. Libre reste à tes côtés pour le reste, et t'aide à préparer ton rendez-vous.</p></div></div></div>`}
 function obBind(step,el){
   el.querySelectorAll("[data-ob-next]").forEach(b=>b.onclick=()=>{if(b.disabled)return;obCollect(step);obNext()});
   el.querySelectorAll("[data-ob-back]").forEach(b=>b.onclick=obBack);
@@ -2025,10 +2064,10 @@ Coach.init();
 let coachSub="chat",coachBusy=false;
 function usedToday(){return (S.chat||[]).filter(m=>m.r==="u"&&dkey(m.at)===dkey()).length}
 function bubbleHTML(m){
-  let t=esc(m.t);let act="";const mm=t.match(/\[\[(respirer|vague|raisons|symptomes|plan|ancrage|sons|allie)\]\]/);
+  let t=esc(m.t);let act="";const mm=t.match(/\[\[(respirer|vague|raisons|symptomes|plan|ancrage|sons|allie|alcool|soiree)\]\]/);
   if(mm){t=t.replace(mm[0],"").trim();act=mm[1]}
   t=t.replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/_\((.+?)\)_/g,'<span class="offnote">($1)</span>').replace(/\n/g,"<br>");
-  const lab={respirer:"Respirer avec moi",vague:"Laisser passer l'envie",raisons:"Mes raisons",symptomes:"Ce que je ressens",plan:"Mon plan anti-envies",ancrage:"Exercice 5-4-3-2-1",sons:"Sons apaisants",allie:"Écrire à mon allié·e"};
+  const lab={respirer:"Respirer avec moi",vague:"Laisser passer l'envie",raisons:"Mes raisons",symptomes:"Ce que je ressens",plan:"Mon plan anti-envies",ancrage:"Exercice 5-4-3-2-1",sons:"Sons apaisants",allie:"Écrire à mon allié·e",alcool:"Mon plan alcool",soiree:"Préparer ma soirée"};
   return `<div class="msg ${m.r}"><div class="bub">${t||'<span class="typing"><i></i><i></i><i></i></span>'}</div>${act?`<button class="msg-act tap" data-act="${act}">${lab[act]} ›</button>`:""}</div>`;
 }
 function renderCoach(){
@@ -2076,12 +2115,12 @@ function renderChat(pane){
   requestAnimationFrame(()=>{const s=$("#s-coach");s.scrollTop=s.scrollHeight});
   if(S.chat.length)setTimeout(samOpener,500);
 }
-function bindActs(root){root.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{const a=b.dataset.act;if(a==="respirer"){openSOS(false);setTimeout(sosBreathe,450)}else if(a==="vague"){openSOS(false);setTimeout(sosWave,450)}else if(a==="raisons"){openSOS(false);setTimeout(sosReasons,450)}else if(a==="symptomes")openSymptoms();else if(a==="plan")openPlan();else if(a==="ancrage"){openSOS(false);setTimeout(sosGround,450)}else if(a==="sons")openSounds();else if(a==="allie")openAlly()})}
+function bindActs(root){root.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{const a=b.dataset.act;if(a==="respirer"){openSOS(false);setTimeout(sosBreathe,450)}else if(a==="vague"){openSOS(false);setTimeout(sosWave,450)}else if(a==="raisons"){openSOS(false);setTimeout(sosReasons,450)}else if(a==="symptomes")openSymptoms();else if(a==="plan")openPlan();else if(a==="ancrage"){openSOS(false);setTimeout(sosGround,450)}else if(a==="sons")openSounds();else if(a==="allie")openAlly();else if(a==="alcool")openAlcSafety();else if(a==="soiree")openParty()})}
 /* ================= Sam hors ligne (filet de sécurité, sans IA ni internet) ================= */
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
 const CRISIS=/(suicid|me tuer|me suicider|en finir|mettre fin|plus envie de vivre|envie de mourir|veux mourir|me faire du mal|scarif|disparaitre pour toujours|plus la force de vivre)/;
 function crisisHTML(){return `<div class="msg a"><div class="bub crisis"><b>Je suis vraiment content que tu me le dises.</b><br>Ce que tu ressens compte, et tu n'as pas à traverser ça seul·e. Parle maintenant à quelqu'un qui peut t'écouter : c'est gratuit, anonyme et ouvert jour et nuit.</div>
-  <div class="crisis-btns"><a class="cbtn tap" href="tel:143">${ic("phone",2)}La Main Tendue · 143</a><a class="cbtn red tap" href="tel:144">${ic("heart",2)}Urgence · 144</a></div></div>`}
+  <div class="crisis-btns"><a class="cbtn tap" href="tel:147">${ic("phone",2)}147 · pour les jeunes (appel ou SMS)</a><a class="cbtn tap" href="tel:143">${ic("phone",2)}La Main Tendue · 143</a><a class="cbtn red tap" href="tel:144">${ic("heart",2)}Urgence · 144</a></div></div>`}
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 /* Sam hors ligne : un vrai petit moteur de conversation (intentions, mémoire courte, pas de répétitions, données de la personne) */
 const OFF={last:null,used:{},turn:0};
@@ -2121,6 +2160,9 @@ function localReply(text){
       `Change de pièce, ou sors 2 minutes, même juste sur le palier. Bouger casse l'automatisme. ${F.ally?"Et tu peux aussi écrire à "+F.ally.name+", c'est fait pour ça. [[allie]]":"Je reste là pendant ce temps."}`]));
   if(has(/(alcool|boire|bu).*(trembl|sueur|halluc|confus)|(trembl|halluc|convuls|delire).*(alcool|bu)|delirium/))
     return set(null,"Ça, c'est important : des tremblements forts, des sueurs, de la confusion ou des hallucinations après l'arrêt de l'alcool peuvent être dangereux. Appelle le 144 maintenant, ou demande à quelqu'un de le faire. Je reste là, mais ton corps a besoin d'un médecin.");
+  if(has(/(alcoolique|dependant|accro|addict|maladie|je bois trop|bois tous les jours|bois le matin|besoin de boire|medecin)/))
+    return set(null,fresh("alcmal",[`Merci de m'en parler${nm}, ça demande du courage. La dépendance, ce n'est pas un manque de volonté : c'est une maladie, et elle se soigne. Tu n'as pas à gérer ça seul·e. Tu veux qu'on prépare ensemble ce que tu pourrais dire à un médecin ? [[alcool]]`,
+      `Ce que tu ressens est sérieux, et tu as raison d'y faire attention. Si tu bois beaucoup ou tous les jours, n'arrête pas d'un coup seul·e : un médecin peut t'aider à le faire sans danger. Et le 147 est là pour en parler, gratuitement et sans donner ton nom. [[alcool]]`]));
   if(has(/(dormir|dors pas|insomni|nuit blanche|reveill|sommeil|cauchemar)/))
     return set("sommeil",fresh("sommeil",[`Les nuits agitées sont très fréquentes pendant le sevrage, et ça se stabilise en général en une à deux semaines. Qu'est-ce qui te tient éveillé·e : le corps agité ou les pensées qui tournent ?`,
       `${F.night?"Il est tard, je suis là. ":""}Essaie la respiration 4-7-8 allongé·e : inspire 4, retiens 7, expire 8. Trois ou quatre cycles suffisent souvent. On la fait ? [[respirer]]`,
@@ -2141,9 +2183,9 @@ function localReply(text){
       `Ok, ça bouillonne. Serre fort les poings 5 secondes, puis relâche d'un coup. Deux fois. Et ensuite raconte-moi.`,
       `Normal d'être à cran : ton cerveau se réajuste. Préviens ton entourage que tu es en mode sevrage, ça évite pas mal de clashs. Qu'est-ce qui s'est passé ?`]));
   if(has(/(soiree|fete|sortir|anniv|bar|boite|apero|potes|amis|week-?end|vacances|mariage)/))
-    return set("soiree",fresh("soiree",[`Les soirées, c'est souvent le moment le plus piège. On prépare un plan ? Par exemple : qu'est-ce que tu auras dans la main, et à quelle heure tu pars ? [[plan]]`,
+    return set("soiree",fresh("soiree",[`Les soirées, c'est souvent le moment le plus piège. On prépare un plan ? Par exemple : qu'est-ce que tu auras dans la main, et à quelle heure tu pars ? ${F.h&&F.h.type==="alcohol"?"[[soiree]]":"[[plan]]"}`,
       `Bonne idée d'anticiper. Qui sera là, et qui risque de te proposer de ${F.sub} ? Avoir sa phrase prête change tout : « Non merci, j'ai arrêté. »`,
-      F.h&&F.h.type==="alcohol"?`Astuce soirée : arrive avec ta propre boisson sans alcool (bière 0 %, kombucha, tonic citron). Avoir un verre en main, ça coupe 90 % des « tu bois quoi ? ».`:`Astuce : reste près des personnes qui ne ${F.h&&F.h.type==="alcohol"?"boivent":"fument"} pas, et garde de quoi occuper tes mains et ta bouche. Tu veux qu'on écrive ton plan ? [[plan]]`]));
+      F.h&&F.h.type==="alcohol"?`Astuce soirée : arrive avec ta propre boisson sans alcool (bière 0 %, kombucha, tonic citron). Avoir un verre en main, ça coupe 90 % des « tu bois quoi ? ».`:`Astuce : reste près des personnes qui ne ${F.h&&F.h.type==="alcohol"?"boivent":"fument"} pas, et garde de quoi occuper tes mains et ta bouche. Tu veux qu'on écrive ton plan ? ${F.h&&F.h.type==="alcohol"?"[[soiree]]":"[[plan]]"}`]));
   if(has(/(ennui|m'ennuie|rien a faire|j'sais pas quoi faire|je sais pas quoi faire|tourne en rond)/))
     return set(null,fresh("ennui",[`L'ennui, c'est le carburant préféré de l'habitude. Une idée de 10 minutes : marche rapide, douche, appeler quelqu'un, ranger un tiroir, une série de pompes. Laquelle te tente ?`,
       `Ok, défi : mets une musique que tu adores et fais un truc de tes mains pendant toute la chanson. Ça casse la boucle. C'est quoi ta chanson du moment ?`,
@@ -2246,10 +2288,10 @@ const SYMPTOM_TXT={
 function renderTools(pane){
   const hasNic=S.habits.vape||S.habits.smoke;
   const tools=[["symp","Ce que je ressens","Comprendre un symptôme et savoir quoi faire","heart","var(--red)"],["plan","Mon plan anti-envies","Une stratégie prête pour chaque situation à risque","shield","var(--tint)"],
-   ...(hasNic?[["nrt","Substituts nicotiniques","Patchs, gommes : comment ça marche","flame","var(--orange)"]]:[]),...(CONFIG.GIFT?[]:[["health","Connexion Santé","Sommeil, pouls, minutes de pleine conscience","heart","#FF2D55"]]),...(calAvailable()?[["cal","Rappels dans mon Calendrier","Engagement, moment sensible, bilan, étapes","calendar","var(--red)"]]:[]),["rem","Rappels quotidiens","Une notification chaque jour pour prendre de tes nouvelles","bell","var(--orange)"],["sounds","Sons apaisants","Pluie, vagues, feu : pour dormir ou se calmer","moon","#5E5CE6"],["ally","Mon allié·e","Prévenir une personne de confiance en un geste","people","var(--orange)"],["help","Aide et urgences","Numéros utiles, gratuits et confidentiels","phone","var(--green)"]];
+   ...(hasNic?[["nrt","Substituts nicotiniques","Patchs, gommes : comment ça marche","flame","var(--orange)"]]:[]),...(CONFIG.GIFT?[]:[["health","Connexion Santé","Sommeil, pouls, minutes de pleine conscience","heart","#FF2D55"]]),...(calAvailable()?[["cal","Rappels dans mon Calendrier","Engagement, moment sensible, bilan, étapes","calendar","var(--red)"]]:[]),...(S.habits.alcohol?[["alc","Mon plan alcool","Sécurité, rendez-vous médecin, signes à surveiller","shield","#AF52DE"]]:[]),["party","Soirées et pression des potes","Phrases pour dire non, boissons sans alcool, plan","people","#FF375F"],["rem","Rappels quotidiens","Une notification chaque jour pour prendre de tes nouvelles","bell","var(--orange)"],["sounds","Sons apaisants","Pluie, vagues, feu : pour dormir ou se calmer","moon","#5E5CE6"],["ally","Mon allié·e","Prévenir une personne de confiance en un geste","people","var(--orange)"],["help","Aide et urgences","Numéros utiles, gratuits et confidentiels","phone","var(--green)"]];
   pane.innerHTML=`<div class="list reveal" style="margin-top:4px">${tools.map(t=>`<button class="row tap" data-tool="${t[0]}"><span class="ri" style="background:${t[4]}">${ic(t[3],2)}</span><div class="rt"><b>${t[1]}</b><span>${t[2]}</span></div><svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 6 6-6 6"/></svg></button>`).join("")}</div>
   <div class="card insight reveal" style="margin-top:16px"><i>${ic("sparkle",2)}</i><p>Tu peux aussi tout demander au coach, à n'importe quelle heure.</p></div>`;
-  pane.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>({symp:openSymptoms,plan:openPlan,nrt:openNRT,health:openHealthConnect,help:openHelp,cal:openCal,sounds:openSounds,rem:openReminders,ally:()=>S.ally&&S.ally.phone?openAlly():openAllyEdit(false)}[b.dataset.tool])());
+  pane.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>({symp:openSymptoms,plan:openPlan,nrt:openNRT,health:openHealthConnect,help:openHelp,cal:openCal,sounds:openSounds,rem:openReminders,alc:openAlcSafety,party:openParty,ally:()=>S.ally&&S.ally.phone?openAlly():openAllyEdit(false)}[b.dataset.tool])());
   reveal(pane);
 }
 function openInfo(title,html){$("#if-t").textContent=title;$("#if-body").innerHTML=html;openSheet("sh-info")}
@@ -2277,7 +2319,9 @@ function openNRT(){openInfo("Substituts nicotiniques",`<div class="legal" style=
 function openHelp(){openInfo("Aide et urgences",`<div style="padding:0 20px"><h2 class="sh-big">Tu n'es pas seul·e</h2><p class="foot" style="margin-top:6px">Libre t'accompagne au quotidien. Si un jour tu as besoin de parler à quelqu'un, ces services sont gratuits et confidentiels.</p></div>
   <div class="list" style="margin-top:16px">
   <div class="row"><span class="ri" style="background:var(--red)">${ic("heart",2)}</span><div class="rt"><b>Urgence médicale</b><span>Malaise grave, tremblements forts après l'arrêt de l'alcool</span></div><span class="rv">144</span></div>
+  <a class="row tap" href="tel:147" style="color:inherit;text-decoration:none"><span class="ri" style="background:#30B0C7">${ic("people",2)}</span><div class="rt"><b>147 · Pro Juventute</b><span>Pour les jeunes : appel, SMS ou chat sur 147.ch, 24 h/24</span></div><span class="rv">147</span></a>
   <div class="row"><span class="ri" style="background:var(--tint)">${ic("people",2)}</span><div class="rt"><b>La Main Tendue</b><span>Écoute anonyme, 24 h/24</span></div><span class="rv">143</span></div>
+  <div class="row"><span class="ri" style="background:#AF52DE">${ic("glass",2)}</span><div class="rt"><b>Addiction Suisse</b><span>Infos fiables sur l'alcool, pour toi et tes proches (addictionsuisse.ch)</span></div></div>
   <div class="row"><span class="ri" style="background:var(--green)">${ic("phone",2)}</span><div class="rt"><b>Ligne stop-tabac</b><span>Conseil tabac et nicotine</span></div><span class="rv" style="font-size:15px">0848 000 181</span></div>
   <div class="row"><span class="ri" style="background:var(--purple)">${ic("people",2)}</span><div class="rt"><b>SafeZone.ch</b><span>Conseil en ligne, anonyme, sur toutes les addictions</span></div></div>
   <div class="row"><span class="ri" style="background:#30B67A">${ic("leaf",2)}</span><div class="rt"><b>stop-cannabis.ch</b><span>Arrêter ou réduire le cannabis</span></div></div></div>`)}
