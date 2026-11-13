@@ -1497,7 +1497,7 @@ const Cloud={
   async api(path,opt={}){if(!this.web())throw Object.assign(new Error("Ouvre Libre depuis son adresse internet pour utiliser ton compte."),{status:0});
     let r;try{r=await fetch("/api"+path,{method:opt.method||"GET",headers:Object.assign({"content-type":"application/json"},this.token?{authorization:"Bearer "+this.token}:{}),body:opt.body?JSON.stringify(opt.body):undefined,keepalive:!!opt.keepalive,cache:"no-store"})}catch(e){throw Object.assign(new Error("Pas de connexion internet."),{status:0})}
     let j={};try{j=await r.json()}catch(e){}j._status=r.status;
-    if(!r.ok&&r.status!==409){throw Object.assign(new Error(j.message||(r.status===404?"Le serveur Libre n'est pas configuré.":"Erreur "+r.status)),{status:r.status,code:j.error})}return j},
+    if(!r.ok&&r.status!==409){throw Object.assign(new Error(j.message||(r.status===404||r.status===405?SRV_OFF:r.status===503?DB_OFF:"Erreur "+r.status)),{status:r.status,code:j.error})}return j},
   async status(){if(!this.web())return;try{const j=await this.api("/status");this.accounts=!!j.accounts;this.ai=!!j.ai}catch(e){}this.known=true},
   queue(){if(!this.token)return;clearTimeout(this.t);this.t=setTimeout(()=>this.push(),2500)},
   async push(keepalive){if(!this.token)return;if(this.busy){this.queue();return}this.busy=true;clearTimeout(this.t);
@@ -1514,6 +1514,9 @@ const Cloud={
   expired(){this.token=null;this.persist();undoToast("Ta session a expiré : reconnecte-toi pour continuer à sauvegarder.",null,7000)},
   async signIn(j){this.token=j.token;this.user=j.user;this.rev=0;this.persist()}
 };
+const SRV_OFF="Le serveur de Libre ne tourne pas sur ce site : il a été mis en ligne sans son fichier serveur. Suis l'étape 1 du guide (fichier libre-worker.js).";
+const DB_OFF="La base de données n'est pas reliée : dans Cloudflare, ajoute une liaison D1 nommée DB (étape 2 du guide).";
+Cloud.load();
 function syncDot(){const d=$("#sync-st");if(d)d.innerHTML=syncText()}
 function ago(t){const s=(Date.now()-t)/1000;return s<45?"à l'instant":s<3600?"il y a "+Math.round(s/60)+" min":s<86400?"il y a "+Math.round(s/3600)+" h":"le "+new Date(t).toLocaleDateString("fr-CH")}
 function syncText(){if(!Cloud.token)return "Pas encore de compte";if(Cloud.err)return `<span style="color:var(--orange)">●</span> Pas sauvegardé (${esc(Cloud.err)})`;return `<span style="color:var(--green)">●</span> Sauvegardé ${Cloud.lastSync?ago(Cloud.lastSync):""}`}
@@ -1547,12 +1550,12 @@ function openAccount(mode){
         closeSheet();afterLogin(had)}}
     catch(e){er.textContent=e.message||"Erreur, réessaie.";haptic("heavy")}b.disabled=false;b.textContent=label}}
 function afterLogin(had){if(S.onboarded){$("#onb").classList.add("hidden");$("#onb").innerHTML="";tab="";go("home");setTimeout(()=>hud(had?"Données récupérées":"Connecté·e","check"),350)}else{hud("Connecté·e","check")}}
-function showRecovery(code,isNew){openInfo("Code de secours",`<div style="padding:0 20px;text-align:center"><div class="acc-ic">${ic("lock",2)}</div><h2 class="sh-big">${isNew?"Ton compte est prêt 🎉":"Ton nouveau code de secours"}</h2><p class="foot" style="margin-top:8px;line-height:1.5">Garde ce code précieusement (photo, note, message à toi-même). C'est le seul moyen de récupérer ton compte si tu oublies ton mot de passe.</p>
+function showRecovery(code,isNew,cb){openInfo("Code de secours",`<div style="padding:0 20px;text-align:center"><div class="acc-ic">${ic("lock",2)}</div><h2 class="sh-big">${isNew?"Ton compte est prêt 🎉":"Ton nouveau code de secours"}</h2><p class="foot" style="margin-top:8px;line-height:1.5">Garde ce code précieusement (photo, note, message à toi-même). C'est le seul moyen de récupérer ton compte si tu oublies ton mot de passe.</p>
   <div class="rec-code num" id="rec-c">${esc(code)}</div><button class="big-btn sec2 tap" id="rec-copy" style="width:100%;margin:0">${ic("share",2).replace("<svg",'<svg width="20" height="20"')}Copier le code</button></div>
   <div style="height:12px"></div><button class="big-btn tap" id="rec-ok">J'ai noté mon code</button>`);
   $("#if-body").closest(".sheet").dataset.lock="1";
   $("#rec-copy").onclick=async()=>{try{await navigator.clipboard.writeText("Libre · identifiant : "+Cloud.user+" · code de secours : "+code);hud("Copié")}catch(e){hud("Copie impossible","x")}};
-  $("#rec-ok").onclick=()=>{delete $("#if-body").closest(".sheet").dataset.lock;closeSheet();if(!isNew)afterLogin(true);else{render(tab);hud("Compte créé","check")}}}
+  $("#rec-ok").onclick=()=>{delete $("#if-body").closest(".sheet").dataset.lock;closeSheet();if(cb){setTimeout(cb,350);return}if(!isNew)afterLogin(true);else{render(tab);hud("Compte créé","check")}}}
 function accountHome(){openInfo("Compte",`<div style="display:flex;flex-direction:column;align-items:center;padding:6px 20px 0;text-align:center"><div class="acc-ic">${ic("shield",2)}</div><b style="font-size:22px">${esc(Cloud.user)}</b><span class="foot" id="sync-st" style="margin-top:4px">${syncText()}</span></div>
   <div class="list" style="margin-top:20px"><button class="row tap" id="ac-sync"><span class="ri" style="background:var(--green)">${ic("trend",2)}</span><div class="rt"><b>Sauvegarder maintenant</b><span>La sauvegarde est automatique à chaque changement</span></div></button>
   <button class="row tap" id="ac-pw"><span class="ri" style="background:var(--tint)">${ic("lock",2)}</span><div class="rt"><b>Changer le mot de passe</b></div></button>
@@ -1602,10 +1605,10 @@ async function scheduleReminder(){try{const C=window.Capacitor,LN=C&&C.isNativeP
 let OB=null;
 function startOnboarding(addMode){
   const existing=Object.keys(S.habits);
-  OB={i:0,add:!!addMode,sel:[],vals:{},reasons:S.reasons.slice(),mode:"stop",risk:null,name:S.name,quit:"now",qmode:"now"};
+  OB={i:0,acct:!addMode&&Cloud.web(),am:"create",add:!!addMode,sel:[],vals:{},reasons:S.reasons.slice(),mode:"stop",risk:null,name:S.name,quit:"now",qmode:"now"};
   $("#onb").classList.remove("hidden");obRender(addMode?1:0,0);
 }
-function obSteps(){const st=["welcome","pick"];OB.sel.forEach(k=>st.push("q-"+k));if(OB.sel.includes("alcohol"))st.push("risk");if(!OB.add)st.push("reasons");st.push("method");if(!OB.add)st.push("name");st.push("result");return st}
+function obSteps(){const st=["welcome"];if(OB.acct)st.push("account");st.push("pick");OB.sel.forEach(k=>st.push("q-"+k));if(OB.sel.includes("alcohol"))st.push("risk");if(!OB.add)st.push("reasons");st.push("method");if(!OB.add)st.push("name");st.push("result");return st}
 function obRender(i,dir){
   const steps=obSteps();OB.i=i;const step=steps[i];const old=$("#onb .ob");
   const el=document.createElement("div");el.className="ob"+(step==="welcome"?" ob-welcome":"");el.innerHTML=obHTML(step,i,steps.length);
@@ -1618,6 +1621,17 @@ function obHead(i,n){return `<div class="ob-top"><button class="ob-back tap" dat
 function obHTML(step,i,n){
   if(step==="welcome")return `<div class="ph"><img src="img/welcome.jpg" alt=""><div class="logo">${LOGO}Libre</div></div><div class="txt"><h1>Respire.<br>Tu es libre.</h1><p class="lead">Arrête la vape, la cigarette, le cannabis ou l'alcool, à ton rythme. Libre t'accompagne à chaque envie.</p>
     <div class="cta"><button class="big-btn tap" style="width:100%;margin:0" data-ob-next>Commencer</button>${Cloud.web()?`<button class="big-btn sec2 tap" style="width:100%;margin:10px 0 0" data-ob-login>J'ai déjà un compte</button>`:""}<p class="fine">En continuant, tu acceptes les <button data-legal-ob="terms" style="text-decoration:underline">conditions</button> et la <button data-legal-ob="privacy" style="text-decoration:underline">confidentialité</button>.</p></div></div>`;
+  if(step==="account"){
+    if(Cloud.token)return obHead(i,n)+`<h1>Ton compte est prêt</h1><p class="lead">Connecté·e en tant que <b>${esc(Cloud.user)}</b>. Tout ce que tu fais dans Libre est sauvegardé automatiquement.</p><div class="ob-body"></div><div class="ob-cta"><button class="big-btn tap" data-ob-next>Continuer</button></div>`;
+    const cr=OB.am==="create";
+    return obHead(i,n)+`<h1>${cr?"Crée ton compte":"Connecte-toi"}</h1><p class="lead">${cr?"Comme ça, tu ne perds jamais rien : tes progrès sont sauvegardés et tu les retrouves sur n'importe quel téléphone.":"Retrouve tout ton parcours là où tu l'avais laissé."}</p>
+    <div class="ob-body"><form id="ob-f" onsubmit="return false" autocomplete="on">
+      <span class="flabel">Identifiant</span><input class="field" id="ob-u" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="ex. lea.libre ou ton e-mail">
+      <span class="flabel">Mot de passe</span>${pwField("ob-p",cr?"new-password":"current-password","6 caractères minimum")}
+      <p class="acc-err" id="ob-err"></p>
+      <button class="big-btn tap" id="ob-acc" type="submit" style="width:100%;margin:4px 0 0">${cr?"Créer mon compte":"Me connecter"}</button></form>
+      <button class="linkbtn tap" id="ob-sw" style="margin-top:10px">${cr?"J'ai déjà un compte":"Je n'ai pas encore de compte"}</button>
+      <button class="linkbtn tap ${OB.fail?"":"hidden"}" id="ob-skip" style="margin-top:0;font-size:14px">Continuer sans compte pour l'instant</button></div>`}
   if(step==="pick")return obHead(i,n)+`<h1>${OB.add?"Quelle habitude ajouter ?":"De quoi veux-tu te libérer ?"}</h1><p class="lead">${OB.add?"":"Tu peux en choisir plusieurs."}</p><div class="ob-body">${ORDER.filter(k=>!(OB.add&&S.habits[k])).map(k=>`<button class="opt tap ${OB.sel.includes(k)?"on":""}" data-pick="${k}"><i style="color:${TYPES[k].color}">${ic(TICON[k],2)}</i><div><b>${{vape:"La vape",smoke:"La cigarette",weed:"Le cannabis",alcohol:"L'alcool"}[k]}</b><span>${{vape:"Puffs, pods, e-cigarette",smoke:"Cigarettes, tabac à rouler",weed:"Joints, weed, résine",alcohol:"Arrêter ou boire beaucoup moins"}[k]}</span></div><span class="rad"></span></button>`).join("")}</div><div class="ob-cta"><button class="big-btn tap" data-ob-next ${OB.sel.length?"":"disabled"}>Continuer</button></div>`;
   if(step.startsWith("q-")){const k=step.slice(2),T=TYPES[k];const v=OB.vals[k]||(OB.vals[k]={q1:T.q1.def,p1:T.q1.p,q2:T.q2.def,p2:T.q2.p});
     return obHead(i,n)+`<h1>${{vape:"Ta vape",smoke:"Ta cigarette",weed:"Ta consommation de cannabis",alcohol:"Ce que tu bois"}[k]}</h1><p class="lead">${k==="alcohol"?"Ajoute chaque boisson que tu prends d'habitude : le type, le verre ou la bouteille, et combien. Une estimation suffit.":"Ces chiffres servent à calculer ce que tu économises. Une estimation suffit."}</p><div class="ob-body">
@@ -1711,8 +1725,18 @@ function riskMsg(){return `<div class="card pad" style="margin:10px 0 0;backgrou
 function obBind(step,el){
   el.querySelectorAll("[data-ob-next]").forEach(b=>b.onclick=()=>{if(b.disabled)return;obCollect(step);obNext()});
   el.querySelectorAll("[data-ob-back]").forEach(b=>b.onclick=obBack);
-  el.querySelectorAll("[data-ob-login]").forEach(b=>b.onclick=()=>openAccount("login"));
+  el.querySelectorAll("[data-ob-login]").forEach(b=>b.onclick=()=>{if(OB.acct){OB.am="login";obNext()}else openAccount("login")});
   el.querySelectorAll("[data-legal-ob]").forEach(b=>b.onclick=()=>{$("#lg-body").innerHTML=`<div class="legal">${LEGAL[b.dataset.legalOb]}</div>`;openSheet("sh-legal")});
+  if(step==="account"&&!Cloud.token){bindEyes();
+    el.querySelector("#ob-sw").onclick=()=>{OB.am=OB.am==="create"?"login":"create";haptic();const o=el;obRender(OB.i,0)};
+    el.querySelector("#ob-skip").onclick=()=>{OB.acct=false;obRender(1,1)};
+    el.querySelector("#ob-acc").onclick=async()=>{const u=el.querySelector("#ob-u").value.trim(),pw=el.querySelector("#ob-p").value,er=el.querySelector("#ob-err"),b=el.querySelector("#ob-acc");er.textContent="";
+      if(u.length<3)return er.textContent="Choisis un identifiant d'au moins 3 caractères.";if(pw.length<6)return er.textContent="Le mot de passe doit faire au moins 6 caractères.";
+      const lab=b.textContent;b.disabled=true;b.textContent="Un instant…";
+      try{if(OB.am==="create"){const j=await Cloud.api("/register",{method:"POST",body:{username:u,password:pw}});await Cloud.signIn(j);Cloud.push();haptic("success");showRecovery(j.recovery,true,()=>obNext())}
+        else{const j=await Cloud.api("/login",{method:"POST",body:{username:u,password:pw}});await Cloud.signIn(j);await Cloud.pull();haptic("success");if(S.onboarded){$("#onb").classList.add("hidden");$("#onb").innerHTML="";tab="";go("home");setTimeout(()=>hud("Données récupérées","check"),350)}else obNext()}}
+      catch(e){er.textContent=e.message||"Erreur, réessaie.";haptic("heavy");if(!e.status||e.status===404||e.status===405||e.status===503||e.status>=500){OB.fail=1;el.querySelector("#ob-skip").classList.remove("hidden")}}
+      b.disabled=false;b.textContent=lab}}
   if(step==="pick")el.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{const k=b.dataset.pick;if(OB.add){OB.sel=[k];el.querySelectorAll("[data-pick]").forEach(x=>x.classList.toggle("on",x===b))}else{OB.sel=OB.sel.includes(k)?OB.sel.filter(x=>x!==k):[...OB.sel,k];b.classList.toggle("on")}OB.sel.sort((a,c)=>ORDER.indexOf(a)-ORDER.indexOf(c));el.querySelector("[data-ob-next]").disabled=!OB.sel.length;haptic()});
   if(step.startsWith("q-")){const k=step.slice(2);if(k==="alcohol"){const nb=el.querySelector("[data-ob-next]");bindDrinks(el,OB.vals[k],()=>{nb.disabled=!OB.vals[k].drinks.length})}else bindConso(el,k,OB.vals[k])}
   if(step==="risk")el.querySelectorAll("[data-risk]").forEach(b=>b.onclick=()=>{OB.risk=b.dataset.risk==="1";el.querySelectorAll("[data-risk]").forEach(x=>x.classList.toggle("on",x===b));el.querySelector("#riskmsg").innerHTML=OB.risk?riskMsg():"";el.querySelector("[data-ob-next]").disabled=false;haptic()});

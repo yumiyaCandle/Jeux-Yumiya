@@ -5,7 +5,9 @@
   "description": "Compile le serveur Cloudflare de Libre vers ../libre/_worker.js",
   "scripts": {
     "build": "esbuild worker.src.js --bundle --format=esm --platform=browser --conditions=worker --target=es2022 --minify --legal-comments=none --outfile=../libre/_worker.js",
-    "dev": "npm run build && wrangler pages dev ../libre --d1 DB --compatibility-date=2026-10-01"
+    "dev": "npm run build && wrangler pages dev ../libre --d1 DB --compatibility-date=2026-10-01",
+    "single": "node gen-assets.mjs && esbuild single.src.js --bundle --format=esm --platform=browser --conditions=worker --target=es2022 --minify --legal-comments=none --outfile=../libre-worker.js",
+    "all": "npm run build && npm run single"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "*",
