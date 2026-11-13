@@ -1835,7 +1835,7 @@ function openHealth(){const h=activeHabit();const st=msState(h);const T=TYPES[h.
 function openSettings(){const ks=Object.keys(S.habits);
   $("#st-body").innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;padding:6px 0 4px"><div class="avatar" style="width:72px;height:72px;font-size:30px">${esc((S.name||"L")[0].toUpperCase())}</div><b style="font-size:22px;margin-top:10px">${esc(S.name||"Mon profil")}</b><span class="foot">${CONFIG.GIFT?"100 % gratuit · tout est inclus":S.pro?"Libre Pro ✦":"Version gratuite"}</span></div>
   ${S.pro?"":`<button class="card tap" data-pay style="display:flex;align-items:center;gap:14px;padding:16px;margin-top:16px;width:calc(100% - 32px);background:linear-gradient(140deg,var(--hero1),var(--hero2));color:#fff"><span style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.2);display:grid;place-items:center">${ic("sparkle",2).replace('<svg','<svg width="22" height="22"')}</span><div style="text-align:left"><b style="display:block;font-size:17px">Essaie Libre Pro</b><span style="font-size:14px;opacity:.9">7 jours offerts</span></div></button>`}
-  ${window.LIBRE_STATIC?"":`<div class="list" style="margin-top:16px"><button class="row tap" id="st-acc"><span class="ri" style="background:linear-gradient(140deg,#34C759,#30B0C7)">${ic("shield",2)}</span><div class="rt"><b>${Cloud.token?"Compte : "+esc(Cloud.user):"Compte et sauvegarde"}</b><span id="sync-st">${Cloud.token?syncText():"Crée ton compte pour ne jamais rien perdre"}</span></div><svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 6 6-6 6"/></svg></button></div>`}
+  ${window.LIBRE_STATIC?`<div class="list" style="margin-top:16px"><button class="row tap" id="st-ai2"><span class="ri" style="background:linear-gradient(140deg,var(--hero1),var(--hero3))">${ic("sparkle",2)}</span><div class="rt"><b>IA de Sam</b><span>${aiUrl()?(Coach.extOk===false?"Injoignable · vérifier":"Activée (gratuite)"):"Mode hors ligne · brancher l'IA gratuite"}</span></div><svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 6 6-6 6"/></svg></button></div>`:`<div class="list" style="margin-top:16px"><button class="row tap" id="st-acc"><span class="ri" style="background:linear-gradient(140deg,#34C759,#30B0C7)">${ic("shield",2)}</span><div class="rt"><b>${Cloud.token?"Compte : "+esc(Cloud.user):"Compte et sauvegarde"}</b><span id="sync-st">${Cloud.token?syncText():"Crée ton compte pour ne jamais rien perdre"}</span></div><svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 6 6-6 6"/></svg></button></div>`}
   <div class="grp-t">Profil</div><div class="list plain"><label class="row"><span class="rt"><b>Prénom</b></span><input type="text" id="st-name" value="${esc(S.name)}" maxlength="20" placeholder="Facultatif"></label></div>
   <div class="list" style="margin-top:22px"><button class="row tap" id="st-why"><span class="ri" style="background:#FF3B5C">${ic("heart",2,"currentColor")}</span><div class="rt"><b>Mon pourquoi et les mots de mes proches</b><span>${allWords().length?plural(allWords().length,"mot reçu","mots reçus"):"Une phrase, une photo, et des mots de tes proches"}</span></div><svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 6 6-6 6"/></svg></button></div>
   <div class="list" style="margin-top:12px"><button class="row tap" id="st-ally"><span class="ri" style="background:var(--orange)">${ic("people",2)}</span><div class="rt"><b>Mon allié·e</b><span>${S.ally&&S.ally.phone?esc(S.ally.name||S.ally.phone):"Une personne de confiance à prévenir en cas d'envie"}</span></div><svg class="chev" viewBox="0 0 9 15" fill="none" stroke="currentColor" stroke-width="2"><path d="m1.5 1.5 6 6-6 6"/></svg></button></div>
@@ -1864,6 +1864,7 @@ ${CONFIG.GIFT?"":`  <div class="grp-t">Connexions</div><div class="list"><button
   $$("[data-ce]").forEach(b=>b.onclick=()=>closeSheet(0,()=>openConsoEdit(b.dataset.ce)));
   $("#st-rem").onclick=()=>closeSheet(0,openReminders);
   $("#st-ally").onclick=()=>closeSheet(0,()=>openAllyEdit(false));
+  const sai2=$("#st-ai2");if(sai2)sai2.onclick=()=>closeSheet(0,openAiSetup);
   const sacc=$("#st-acc");if(sacc)sacc.onclick=()=>closeSheet(0,()=>openAccount(Cloud.accounts?"create":"create"));bindBackup();
   $("#st-restore").onclick=doRestore;$("#st-why").onclick=()=>closeSheet(0,openWhy);const scal=$("#st-cal");if(scal)scal.onclick=()=>closeSheet(0,openCal);const sai=$("#st-ai");if(sai)sai.onclick=()=>closeSheet(0,openAIKey);const hk=$("#st-hk");if(hk)hk.onclick=()=>closeSheet(0,openHealthConnect);
   $("#st-reset").onclick=()=>alertBox("Effacer toutes tes données ?","Ton compteur, ton journal et tes réglages seront supprimés de ce téléphone.","Effacer",()=>{try{localStorage.removeItem(KEY)}catch(e){}location.reload()},true);
@@ -2219,10 +2220,25 @@ Si la personne t'apprend quelque chose d'important et durable sur elle (situatio
 - Si la personne parle de mourir, de se faire du mal ou de ne plus en pouvoir : reste chaleureux et présent, prends-la au sérieux, et encourage clairement à appeler La Main Tendue au 143 (gratuit, 24 h/24) ou le 144 en cas de danger immédiat.
 - Pas de diagnostic médical. Si un symptôme physique inquiétant dure, suggère simplement d'en parler à un pharmacien ou un médecin.`;
 
+/* IA de Sam pour la version GitHub : un petit Worker Cloudflare gratuit (libre-ia-gratuite.js) */
+const AI_DEFAULT="";/* ← tu peux mettre ici l'adresse de ton Worker IA, ex. "https://libre-ia.ton-nom.workers.dev" */
+function aiUrl(){let u="";try{u=localStorage.getItem("libre.ai")||""}catch(e){}return (u||AI_DEFAULT).replace(/\/+$/,"")}
+function setAiUrl(u){try{u?localStorage.setItem("libre.ai",u):localStorage.removeItem("libre.ai")}catch(e){}}
+async function checkAi(){const u=aiUrl();if(!u||Cloud.ai){Coach.extOk=null;return}try{const r=await fetch(u+"/",{cache:"no-store"});const j=await r.json();Coach.extOk=!!j.ai}catch(e){Coach.extOk=false}if(tab==="coach")renderCoach()}
+(()=>{try{const q=new URLSearchParams(location.search).get("ai");if(q&&/^https:\/\/[a-z0-9.-]+\.workers\.dev\/?$/i.test(q)){setAiUrl(q);history.replaceState(null,"",location.pathname)}}catch(e){}})();
+function openAiSetup(){const u=aiUrl();
+  openInfo("IA de Sam",`<div style="padding:0 20px"><h2 class="sh-big">Brancher la vraie IA de Sam</h2><p class="foot" style="margin-top:8px;line-height:1.5">Gratuit, sans clé. À faire une seule fois (par la personne qui a installé Libre) : créer un Worker Cloudflare avec le fichier <b>libre-ia-gratuite.js</b>, lui ajouter la liaison Workers AI nommée <b>AI</b>, puis coller son adresse ici.</p></div>
+  <div class="grp-t">Adresse du Worker IA</div><div style="padding:0 16px"><input class="field" id="ai-u" inputmode="url" autocapitalize="none" autocorrect="off" placeholder="https://libre-ia.ton-nom.workers.dev" value="${esc(u)}"></div>
+  <p class="acc-err" id="ai-err" style="margin:10px 24px 0"></p>
+  <div style="height:8px"></div><button class="big-btn tap" id="ai-save">Tester et enregistrer</button>${u?`<button class="linkbtn tap" id="ai-del">Retirer</button>`:""}`);
+  $("#ai-save").onclick=async()=>{const v=$("#ai-u").value.trim().replace(/\/+$/,""),er=$("#ai-err"),b=$("#ai-save");er.textContent="";if(!/^https:\/\/[a-z0-9.-]+\.workers\.dev$/i.test(v)){er.textContent="L'adresse doit ressembler à https://quelque-chose.workers.dev";return}
+    b.disabled=true;b.textContent="Test en cours…";try{const r=await fetch(v+"/",{cache:"no-store"});const j=await r.json();if(!j.ai)throw new Error("La liaison Workers AI nommée « AI » manque dans ce Worker.");setAiUrl(v);Coach.extOk=true;haptic("success");closeSheet();hud("IA activée","sparkle");render(tab)}
+    catch(e){er.textContent=e.message&&!/fetch|network|json/i.test(e.message)?e.message:"Impossible de joindre ce Worker. Vérifie l'adresse et que le code libre-ia-gratuite.js est bien déployé.";b.disabled=false;b.textContent="Tester et enregistrer"}};
+  const d=$("#ai-del");if(d)d.onclick=()=>{setAiUrl("");Coach.extOk=null;closeSheet();render(tab)}}
 const Coach={
   sample:null,ready:false,
   async init(){try{if(window.claude&&window.claude.use){const s=await window.claude.use("sample");if(s){this.sample=s;this.ready=true}}}catch(e){}},
-  native(){return Cloud.ai},
+  native(){return Cloud.ai||!!(aiUrl()&&this.extOk!==false)},extOk:null,
   direct(){return false},
   available(){return this.ready||this.native()},
   async reply(history,onText){
@@ -2243,7 +2259,7 @@ const Coach={
     }
     if(this.native()){
       const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),90000);
-      try{const res=await fetch("/api/chat",{method:"POST",signal:ctl.signal,headers:Object.assign({"content-type":"application/json"},Cloud.token?{authorization:"Bearer "+Cloud.token}:{}),body:JSON.stringify({context:ctx,messages:msgs})});
+      try{const res=await fetch(Cloud.ai?"/api/chat":aiUrl()+"/chat",{method:"POST",signal:ctl.signal,headers:Object.assign({"content-type":"application/json"},Cloud.ai&&Cloud.token?{authorization:"Bearer "+Cloud.token}:{}),body:JSON.stringify({context:ctx,messages:msgs})});
         if(!res.ok){let j={};try{j=await res.json()}catch(e){}throw {code:j.error||"api",message:j.message||("coach "+res.status)}}
         const rd=res.body.getReader(),dec=new TextDecoder();let t="";
         for(;;){const {done,value}=await rd.read();if(done)break;t+=dec.decode(value,{stream:true});if(t.includes("\u0000ERR"))throw {code:"api",message:"coach"};onText(t)}
@@ -2429,7 +2445,7 @@ async function sendChat(text){
   if(!S.pro&&usedToday()>=FREE_MSGS)return openPaywall("Discute sans limite avec ton coach grâce à Libre Pro.");
   if(CRISIS.test(norm(text))){const chat=$("#chat");if(chat){S.chat.push({r:"u",t:text,at:Date.now()});chat.insertAdjacentHTML("beforeend",bubbleHTML(S.chat[S.chat.length-1]));chat.insertAdjacentHTML("beforeend",crisisHTML());$("#c-in").value="";autosize();save();const sc=$("#s-coach");sc.scrollTop=sc.scrollHeight;haptic("heavy");if(!Coach.available()||(!S.pro&&usedToday()>FREE_MSGS))return;text=null}}
   if(text&&(!Coach.available())){return localTurn(text)}
-  if(!S.aiConsent){alertBox("Discuter avec Sam",(Cloud.engine==="claude"?"Sam utilise l'intelligence artificielle Claude (Anthropic).":"Sam utilise une intelligence artificielle hébergée par Cloudflare.")+" Pour te répondre, tes messages et un résumé de ton suivi (habitudes, jours sans, envies notées) lui sont envoyés de façon sécurisée. Ils ne servent qu'à te répondre.","J'accepte",()=>{S.aiConsent=Date.now();save();sendChat(text)},false,"Plus tard");return}
+  if(!S.aiConsent){alertBox("Discuter avec Sam",(Cloud.ai&&Cloud.engine==="claude"?"Sam utilise l'intelligence artificielle Claude (Anthropic).":"Sam utilise une intelligence artificielle hébergée par Cloudflare.")+" Pour te répondre, tes messages et un résumé de ton suivi (habitudes, jours sans, envies notées) lui sont envoyés de façon sécurisée. Ils ne servent qu'à te répondre.","J'accepte",()=>{S.aiConsent=Date.now();save();sendChat(text)},false,"Plus tard");return}
   coachBusy=true;const crisisDone=text===null;if(crisisDone)text=S.chat[S.chat.length-1].t;else S.chat.push({r:"u",t:text,at:Date.now()});const a={r:"a",t:"",at:Date.now()};
   const chat=$("#chat");if(!chat){coachBusy=false;return}
   if(!crisisDone)chat.insertAdjacentHTML("beforeend",bubbleHTML(S.chat[S.chat.length-1]));chat.insertAdjacentHTML("beforeend",bubbleHTML(a));
@@ -2563,7 +2579,7 @@ Object.values(S.habits).forEach(h=>{if(h.mode==="reduce"&&h.plan&&Date.now()>=h.
 /* ================= Boot ================= */
 Billing.init();document.addEventListener("visibilitychange",()=>{if(!document.hidden){Billing.refresh();render(tab);if(Cloud.token&&Date.now()-Cloud.lastSync>60000)Cloud.pull().then(ok=>{if(ok&&S.onboarded)render(tab);fetchWords()})}else if(Cloud.token&&Cloud.t){Cloud.push(true)}});
 addEventListener("pagehide",()=>{if(Cloud.token&&Cloud.t)Cloud.push(true)});
-Cloud.load();
+Cloud.load();checkAi();
 Cloud.status().then(async()=>{const wasOn=S.onboarded;if(Cloud.token){const had=await Cloud.pull();if(had&&S.onboarded&&!wasOn){afterLogin(true);return}}if(S.onboarded){render(tab);Push.refresh();fetchWords()}else{const w=$("#onb .ob-welcome");if(!w&&OB&&OB.i===0)obRender(0,0)}});
 const MOT=new URLSearchParams(location.search).get("mot");
 if(MOT){showMotPage(MOT)}
