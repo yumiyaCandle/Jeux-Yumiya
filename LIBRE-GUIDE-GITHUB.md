@@ -41,3 +41,12 @@ Tout ce qui se passe sur son téléphone : compteur et plan progressif, choix de
 
 Sans l'étape ci-dessus : comptes, IA de Sam, notifications du serveur et mots des proches ne marchent pas (Sam reste en mode hors ligne).
 Pour avoir ça aussi, il faut la version Cloudflare (`libre-worker.js`, voir `LIBRE-GUIDE-CLOUDFLARE.md`).
+
+## Mettre à jour le site sans perdre ses données
+
+Remplace simplement `index.html` sur GitHub (Add file → Upload files → Commit). Ses données ne bougent pas :
+elles sont enregistrées dans son téléphone, pas dans le fichier du site, sous la même clé pour toutes les versions.
+L'app garde aussi une copie de secours automatique dans le téléphone.
+
+À ne pas faire : changer le nom d'utilisateur GitHub (l'adresse du site changerait d'origine).
+Si tu renommes le dépôt, l'adresse change mais ses données restent (même domaine yumiyacandle.github.io) : envoie-lui juste le nouveau lien.
