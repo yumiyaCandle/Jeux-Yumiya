@@ -1014,7 +1014,9 @@ const P={
 };
 const ic=(n,w=1.8,fill)=>'<svg viewBox="0 0 24 24" fill="'+(fill||"none")+'" stroke="currentColor" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(P[n]||"")+'</svg>';
 const TICON={vape:"vape",smoke:"cig",weed:"leaf",alcohol:"glass"};
-const ORDER=["vape","smoke","weed","alcohol"];
+/* Version personnalisée : ce qu'elle arrête (pré-sélectionné, modifiable) et son allié·e (enregistré d'avance) */
+const PRESET={focus:["alcohol","vape","weed"],ally:window.LIBRE_ALLY||null};
+const ORDER=["alcohol","vape","weed","smoke"];
 
 /* ================= State ================= */
 const KEY="libre.v1";
@@ -2015,7 +2017,7 @@ async function scheduleReminder(){try{const C=window.Capacitor,LN=C&&C.isNativeP
 let OB=null;
 function startOnboarding(addMode){
   const existing=Object.keys(S.habits);
-  OB={i:0,acct:!addMode&&Cloud.web(),am:"create",add:!!addMode,sel:[],vals:{},reasons:S.reasons.slice(),mode:"stop",risk:null,name:S.name,quit:"now",qmode:"now"};
+  OB={i:0,acct:!addMode&&Cloud.web(),am:"create",add:!!addMode,sel:addMode?[]:PRESET.focus.slice(),vals:{},reasons:S.reasons.slice(),mode:"stop",risk:null,name:S.name,quit:"now",qmode:"now"};
   $("#onb").classList.remove("hidden");obRender(addMode?1:0,0);
 }
 function obSteps(){const st=["welcome"];if(OB.acct)st.push("account");st.push("pick");OB.sel.forEach(k=>st.push("q-"+k));if(OB.sel.includes("alcohol"))st.push("risk");if(!OB.add)st.push("reasons");st.push("method");if(!OB.add)st.push("name");st.push("result");return st}
@@ -2032,7 +2034,7 @@ function obRender(i,dir){
 const obNext=()=>{haptic();obRender(OB.i+1,1)},obBack=()=>{haptic();if(OB.i<=(OB.add?1:0)){if(OB.add){$("#onb").classList.add("hidden");$("#onb").innerHTML="";}return}obRender(OB.i-1,-1)};
 function obHead(i,n){return `<div class="ob-top"><button class="ob-back tap" data-ob-back aria-label="Retour">${ic("back",2.4)}</button><div class="ob-prog"><i style="width:${(i)/(n-1)*100}%"></i></div></div>`}
 function obHTML(step,i,n){
-  if(step==="welcome")return `<div class="ph"><img src="img/welcome.jpg" alt=""><div class="logo">${LOGO}Libre</div></div><div class="txt"><h1>Respire.<br>Tu es libre.</h1><p class="lead">Arrête la vape, la cigarette, le cannabis ou l'alcool, à ton rythme. Libre t'accompagne à chaque envie.</p>
+  if(step==="welcome")return `<div class="ph"><img src="img/welcome.jpg" alt=""><div class="logo">${LOGO}Libre</div></div><div class="txt"><h1>Respire.<br>Tu es libre.</h1><p class="lead">Arrête l'alcool, la vape ou le cannabis, à ton rythme. Libre t'accompagne à chaque envie, de jour comme de nuit.</p>
     <div class="cta"><button class="big-btn tap" style="width:100%;margin:0" data-ob-next>Commencer</button>${Cloud.web()?`<button class="big-btn sec2 tap" style="width:100%;margin:10px 0 0" data-ob-login>J'ai déjà un compte</button>`:""}${standalone()||!Cloud.web()?`<button class="linkbtn tap" data-ob-import style="margin-top:6px">J'ai déjà commencé dans Safari</button>`:""}<p class="fine">En continuant, tu acceptes les <button data-legal-ob="terms" style="text-decoration:underline">conditions</button> et la <button data-legal-ob="privacy" style="text-decoration:underline">confidentialité</button>.</p></div></div>`;
   if(step==="account"){
     if(Cloud.token)return obHead(i,n)+`<h1>Ton compte est prêt</h1><p class="lead">Connecté·e en tant que <b>${esc(Cloud.user)}</b>. Tout ce que tu fais dans Libre est sauvegardé automatiquement.</p><div class="ob-body"></div><div class="ob-cta"><button class="big-btn tap" data-ob-next>Continuer</button></div>`;
@@ -2169,7 +2171,7 @@ function obFinish(){
     if(OB.mode==="reduce"){h.plan={start:now,end:now+28*DAY};h.quitAt=h.plan.end}
     S.habits[k]=h});
   if(!OB.add){S.name=OB.name;S.reasons=OB.reasons;S.alcoholRisk=!!OB.risk;S.onboarded=true;S.programStart=now}else if(OB.risk!=null){S.alcoholRisk=S.alcoholRisk||OB.risk}
-  S.active=OB.sel[0];save();scheduleReminder();haptic("success");
+  S.active=OB.sel[0];if(!OB.add&&!S.ally&&PRESET.ally&&PRESET.ally.phone)S.ally={name:PRESET.ally.name||"",phone:PRESET.ally.phone};save();scheduleReminder();haptic("success");
   const wasAdd=OB.add;const onb=$("#onb");
   const ob=onb.querySelector(".ob");
   if(reduceMotion){onb.classList.add("hidden");onb.innerHTML=""}else spring({from:0,to:1,response:.5,damping:1,eps:.002,onUpdate:x=>{onb.style.opacity=1-x;onb.style.transform=`scale(${1+x*.06})`},onDone:()=>{onb.classList.add("hidden");onb.innerHTML="";onb.style.opacity="";onb.style.transform=""}});
