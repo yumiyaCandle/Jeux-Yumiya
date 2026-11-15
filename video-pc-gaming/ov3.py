@@ -81,8 +81,8 @@ def install(R):
 
         def draw(self, t):
             im, d = full()
-            x = 1000
-            s = kin_sprite(self.o["text"], F(70, "Black", True), t - 0.3, glow=RED, stagger=0.035, dur=0.45)
+            x = 1070
+            s = kin_sprite(self.o["text"], F(66, "Black", True), t - 0.3, glow=RED, stagger=0.035, dur=0.45)
             im.alpha_composite(s, (x - 36, 380 - 36))
             d.rectangle([x, 500, x + int(170 * ease((t - 0.6) / 0.8)), 507], fill=RED)
             s2 = kin_sprite(self.o["sub"], F(34, "Medium"), t - 1.0, fill=GREY, stagger=0.012)
@@ -513,6 +513,18 @@ def install(R):
         def offset(self, t):
             return (0, 0)
 
+    class OvTag(Ov):
+        def draw(self, t):
+            im, d = full()
+            f = F(18, "Bold")
+            tw = int(d.textlength(self.o["text"], font=f))
+            d.rounded_rectangle([1890 - tw - 40, 30, 1890, 74], 22, fill=(10, 8, 18, 190))
+            d.text((1890 - tw / 2 - 20, 40), self.o["text"], font=f, fill=(235, 235, 250), anchor="ma")
+            return im
+
+        def offset(self, t):
+            return (0, 0)
+
     # ================================================================ séquence de plans
     class ShotSeq:
         def __init__(self, specs, dur, k, sent):
@@ -565,4 +577,4 @@ def install(R):
 
     R.make_bg = make_bg
     R.OVS.update({"chapter": OvChapter, "gametitle": OvGameTitle, "title": OvTitle, "kicker": OvKicker, "chips": OvChips,
-                  "chart": OvChart, "hz": OvHz, "duel": OvDuel, "sourcetable": OvSourceTable, "fn_tag": OvFnTag})
+                  "chart": OvChart, "hz": OvHz, "duel": OvDuel, "sourcetable": OvSourceTable, "fn_tag": OvFnTag, "tag": OvTag})
