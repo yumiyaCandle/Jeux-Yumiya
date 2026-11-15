@@ -150,8 +150,8 @@ def photo_shot(name, t, dur, h, sweep=True):
     hh = int(h * z)
     r = hh / p.height
     ww = int(p.width * r)
-    if ww > 1700:
-        ww = 1700; hh = int(p.height * ww / p.width)
+    if ww > 1050:
+        ww = 1050; hh = int(p.height * ww / p.width)
     sp = p.resize((ww, hh), Image.BILINEAR)
     gl, pad = photo_glow(name, h)
     if z > 1.001:
@@ -869,6 +869,8 @@ OVS = {"kicker": OvKicker, "title": OvTitle, "gametitle": OvGameTitle, "chapter"
        "versus": OvVersus, "upgrade": OvUpgrade, "credits": OvCredits}
 import ov2  # noqa: E402  (overlays v2 : photos, schémas, écrans)
 ov2.install(sys.modules[__name__])
+import ov3  # noqa: E402  (v3 : plans multiples, gros plans photo, typographie animée, graphiques XL)
+ov3.install(sys.modules[__name__])
 
 
 # ------------------------------------------------------------- SOUS-TITRES
@@ -949,10 +951,11 @@ def render_scene(si):
             if bg is not None:
                 bg.close()
             spec = beats_spec[bi]; bt = sc["beats"][bi]
-            bg = make_bg(spec["bg"], bt["dur"], bi + si)
             sent_rel = [s["t"] - bt["start"] for s in bt["sent"]]
+            bg = make_bg(spec["bg"], bt["dur"], bi + si, sent_rel)
             ovs = [OVS[o["k"]](o, bt["dur"], sent_rel) for o in spec["ov"]]
-            dim = spec["dim"] if spec["dim"] is not None else (0.0 if spec["bg"] in ("dark", "gta", "fortnite") or spec["bg"].startswith("p:") else 0.35)
+            b0 = spec["bg"] if isinstance(spec["bg"], str) else spec["bg"][0]
+            dim = spec["dim"] if spec["dim"] is not None else (0.0 if b0 in ("dark", "gta") or b0[:2] in ("p:", "pz", "fn", "sp") else 0.35)
             xf = XF if cur >= 0 else 0
             cur = bi
         bt = sc["beats"][cur]

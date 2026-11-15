@@ -5,7 +5,7 @@ import numpy as np, json, sys, subprocess, wave
 from scipy.signal import lfilter, butter, sosfilt
 import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from script import SCENES
+from script import SCENES, shot_times, chip_times
 
 SR = 48000
 OUT = sys.argv[1]
@@ -120,6 +120,37 @@ for sc in tl["scenes"]:
             if len(t3):
                 imp[r0:a] += hp(rng.standard_normal(a - r0), 2500) * (t3 / t3[-1]) ** 2 * 0.12
 
+# effets sonores discrets : souffles aux changements de plan, « ticks » aux apparitions
+sfx = np.zeros(N)
+def whoosh(at, g):
+    n = int(0.7 * SR); a = int(at * SR)
+    if a < 0 or a + n >= N: return
+    tt_ = np.arange(n) / SR
+    env = np.minimum(1, tt_ / 0.28) ** 2 * np.exp(-np.maximum(0, tt_ - 0.28) * 9)
+    x = hp(lp(rng.standard_normal(n), 2600), 250) * env
+    sfx[a:a + n] += x * g
+def tick(at, g, f0=1400):
+    n = int(0.09 * SR); a = int(at * SR)
+    if a < 0 or a + n >= N: return
+    tt_ = np.arange(n) / SR
+    sfx[a:a + n] += np.sin(2 * np.pi * (f0 + 500 * tt_ / 0.09) * tt_) * np.exp(-tt_ * 45) * g
+for (name, beats), sc in zip(SCENES, tl["scenes"]):
+    for bi, (spec, b) in enumerate(zip(beats, sc["beats"])):
+        st = b["start"]; sent = [s["t"] - st for s in b["sent"]]
+        if bi > 0:
+            whoosh(st - 0.25, 0.22)
+        if isinstance(spec["bg"], list):
+            for tm in shot_times(len(spec["bg"]), sent, b["dur"])[1:]:
+                whoosh(st + tm - 0.2, 0.12)
+        for o in spec["ov"]:
+            if o["k"] == "chart":
+                for i in range(len(o["rows"])):
+                    tick(st + 0.5 + i * 0.35, 0.10, 1100 + 120 * i)
+            if o["k"] == "chips":
+                for tm in chip_times(len(o["items"]), sent, b["dur"]):
+                    tick(st + tm, 0.08, 1600)
+sfx = sfx / (np.abs(sfx).max() + 1e-9)
+
 # voix
 voice = np.zeros(N)
 active = np.zeros(N)
@@ -137,7 +168,7 @@ duck = lp(active, 3, order=1)
 mgain = 10 ** ((-25 + 6 * energy + (1 - duck) * 6) / 20)   # discrète sous la voix, plus présente sur les plans cinéma
 music = music / (np.abs(music).max() + 1e-9)
 voice = voice / (np.abs(voice).max() + 1e-9) * 0.89
-mix = voice + music * mgain + imp * 10 ** (-12 / 20)
+mix = voice + music * mgain + imp * 10 ** (-12 / 20) + sfx * 10 ** (-17 / 20) * (1 - 0.45 * duck)
 # fondu final
 fo = int(4 * SR); mix[-fo:] *= np.linspace(1, 0, fo)
 mix = np.tanh(mix * 1.1) / np.tanh(1.1)
