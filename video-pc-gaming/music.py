@@ -57,21 +57,29 @@ for b in range(nbars):
     # basse : croches
     for k in range(8):
         a = s0 + int(k * BEAT / 2 * SR); e = min(N, a + int(BEAT / 2 * SR * 0.9))
+        if e <= a:
+            continue
         tt = np.arange(e - a) / SR
         bass[a:e] += saw(hz(chord[0] - 24), tt) * np.exp(-tt * 5) * 0.35
     # arpège : doubles croches
     notes = [chord[0] + 12, chord[1] + 12, chord[2] + 12, chord[1] + 24]
     for k in range(16):
         a = s0 + int(k * BEAT / 4 * SR); e = min(N, a + int(0.25 * SR))
+        if e <= a:
+            continue
         tt = np.arange(e - a) / SR
         f = hz(notes[(k * 3) % 4])
         arp[a:e] += (np.sin(2 * np.pi * f * tt) + 0.3 * saw(f, tt)) * np.exp(-tt * 14) * 0.12
     # batterie
     for k in range(4):
         a = s0 + int(k * BEAT * SR); e = min(N, a + int(0.35 * SR))
+        if e <= a:
+            continue
         tt = np.arange(e - a) / SR
         kick[a:e] += np.sin(2 * np.pi * (45 + 90 * np.exp(-tt * 30)) * tt) * np.exp(-tt * 9) * 0.6
         a2 = s0 + int((k + 0.5) * BEAT * SR); e2 = min(N, a2 + int(0.06 * SR))
+        if e2 <= a2:
+            continue
         hat[a2:e2] += rng.standard_normal(e2 - a2) * np.exp(-np.arange(e2 - a2) / SR * 60) * 0.15
 
 pad = lp(pad, 1800); bass = lp(bass, 400); hat = hp(hat, 7000)
