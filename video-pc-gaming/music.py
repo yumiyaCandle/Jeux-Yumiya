@@ -3,6 +3,9 @@
 (aucun droit d'auteur tiers), + mixage final voix / musique / impacts."""
 import numpy as np, json, sys, subprocess, wave
 from scipy.signal import lfilter, butter, sosfilt
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from script import SCENES
 
 SR = 48000
 OUT = sys.argv[1]
@@ -77,11 +80,21 @@ d = int(BEAT * 0.75 * SR)
 arp_e = arp.copy(); arp_e[d:] += arp[:-d] * 0.35; arp_e[2 * d:] += arp[:-2 * d] * 0.15
 arp = lp(arp_e, 5000)
 
-# intensité : intro douce, montée, sections plus calmes autour des chapitres
+# intensité pilotée par le scénario : plans cinématographiques = musique plus présente
 tt = np.arange(N) / SR
-inten = np.clip(tt / 25, 0.25, 1.0)
-drums_on = (tt > 22).astype(float)
-drums_on = lp(drums_on, 2)
+energy = np.full(N, 0.45)
+for (name, beats), sc in zip(SCENES, tl["scenes"]):
+    for spec, b in zip(beats, sc["beats"]):
+        e = spec.get("energy")
+        if e is None:
+            kinds = {o["k"] for o in spec["ov"]}
+            cine = spec["bg"][:2] in ("c:", "i:", "p:") and not kinds & {"chart", "settings", "note", "photo", "monitor"}
+            e = 0.85 if cine else 0.42
+        a = int(b["start"] * SR); e_ = min(N, int((b["start"] + b["dur"]) * SR))
+        energy[a:e_] = e
+energy = lp(energy, 0.7, order=1)
+inten = np.clip(energy, 0.25, 1.0)
+drums_on = np.clip((energy - 0.4) / 0.5, 0, 1) ** 1.3
 music = pad * (0.8 + 0.2 * inten) + bass * inten + arp * (0.6 + 0.4 * inten) + (kick + hat) * drums_on * inten
 
 # impacts sur les cartes de chapitre
@@ -113,7 +126,7 @@ for sc in tl["scenes"]:
 
 # ducking : musique plus basse sous la voix
 duck = lp(active, 3, order=1)
-mgain = 10 ** ((-23 + (1 - duck) * 7) / 20)       # -23 dB sous la voix, -16 dB dans les pauses
+mgain = 10 ** ((-25 + 6 * energy + (1 - duck) * 6) / 20)   # discrète sous la voix, plus présente sur les plans cinéma
 music = music / (np.abs(music).max() + 1e-9)
 voice = voice / (np.abs(voice).max() + 1e-9) * 0.89
 mix = voice + music * mgain + imp * 10 ** (-12 / 20)

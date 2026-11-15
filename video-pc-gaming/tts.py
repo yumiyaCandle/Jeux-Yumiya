@@ -23,7 +23,7 @@ async def synth(t, sem):
     if os.path.exists(wav):
         return
     async with sem:
-        for attempt in range(5):
+        for attempt in range(10):
             try:
                 mp3 = f"{OUT}/voice/{k}.mp3"
                 await edge_tts.Communicate(spoken(t), VOICE, rate=RATE, proxy=os.environ.get("HTTPS_PROXY")).save(mp3)
@@ -34,7 +34,7 @@ async def synth(t, sem):
                 return
             except Exception as e:
                 print("retry", attempt, e, flush=True)
-                await asyncio.sleep(2 + attempt * 3)
+                await asyncio.sleep(4 + attempt * 5)
         raise RuntimeError("TTS failed: " + t)
 
 
@@ -43,7 +43,7 @@ def dur(wav):
 
 
 async def main():
-    sem = asyncio.Semaphore(5)
+    sem = asyncio.Semaphore(2)
     allt = [s for _, beats in SCENES for b in beats for s in b["s"]]
     await asyncio.gather(*(synth(t, sem) for t in allt))
     timeline = []

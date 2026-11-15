@@ -86,7 +86,7 @@ class DarkBG:
         elif self.kind == "fortnite":
             cols = [((60, 120, 255), 0.6), ((170, 60, 255), 0.6), ((0, 210, 255), 0.4)]
         else:
-            cols = [(RED, 0.42), ((255, 0, 170), 0.18), ((0, 190, 255), 0.14)]
+            cols = [((140, 60, 255), 0.40), ((40, 110, 255), 0.30), ((255, 50, 160), 0.16)]
         acc = np.zeros((H // 4, W // 4, 3), np.float32)
         for i, (c, s) in enumerate(cols):
             cx = (0.5 + 0.38 * math.sin(t * 0.13 + i * 2.1)) * W / 4
@@ -99,13 +99,77 @@ class DarkBG:
     def close(self): pass
 
 
+class PhotoBG:
+    """photo produit sur fond animé : léger travelling avant, halo, reflet lumineux"""
+    def __init__(self, name, dur, k):
+        self.dark = DarkBG("dark"); self.dur = dur; self.name = name
+
+    def frame(self, t):
+        base = Image.fromarray(self.dark.frame(t)).convert("RGBA")
+        sp = photo_shot(self.name, t, self.dur, 860)
+        base.alpha_composite(sp, (int(560 - sp.width / 2), int(540 - sp.height / 2)))
+        return np.asarray(base.convert("RGB"))
+
+    def close(self): pass
+
+
 def make_bg(spec, dur, k):
+    if spec.startswith("p:"):
+        return PhotoBG(spec[2:], dur, k)
     if spec.startswith("c:"):
         n, ss = spec[2:].split("@")
         return ClipBG(n, float(ss), dur, k)
     if spec.startswith("i:"):
         return ImgBG(spec[2:], dur, k)
     return DarkBG(spec if spec in ("gta", "fortnite") else "dark")
+
+
+@functools.lru_cache(16)
+def load_photo(name):
+    return Image.open(f"{DL}/photos/{name}.png").convert("RGBA")
+
+
+@functools.lru_cache(16)
+def photo_glow(name, h):
+    p = load_photo(name)
+    r = h / p.height
+    a = p.getchannel("A").resize((int(p.width * r), h))
+    pad = 140
+    g = Image.new("L", (a.width + 2 * pad, a.height + 2 * pad))
+    g.paste(a, (pad, pad))
+    g = g.filter(ImageFilter.GaussianBlur(45))
+    col = Image.new("RGBA", g.size, (130, 70, 255, 0))
+    col.putalpha(g.point(lambda v: int(v * 0.75)))
+    return col, pad
+
+
+def photo_shot(name, t, dur, h, sweep=True):
+    """photo avec travelling avant lent, halo violet et reflet lumineux qui balaie le produit"""
+    p = load_photo(name)
+    z = 1.0 + 0.05 * ease_io(t / max(dur, 0.1))
+    hh = int(h * z)
+    r = hh / p.height
+    ww = int(p.width * r)
+    if ww > 1700:
+        ww = 1700; hh = int(p.height * ww / p.width)
+    sp = p.resize((ww, hh), Image.BILINEAR)
+    gl, pad = photo_glow(name, h)
+    if z > 1.001:
+        gl = gl.resize((int(gl.width * z), int(gl.height * z)), Image.BILINEAR)
+    out = Image.new("RGBA", gl.size)
+    out.alpha_composite(gl)
+    ox, oy = (gl.width - ww) // 2, (gl.height - hh) // 2
+    out.alpha_composite(sp, (ox, oy))
+    if sweep:
+        ph = ((t * 0.22) % 1.4) - 0.2
+        xs = np.arange(ww)[None, :] / ww; ys = np.arange(hh)[:, None] / hh
+        band = np.exp(-((xs + ys * 0.5 - ph * 1.5) / 0.06) ** 2) * 70
+        a = np.asarray(sp.getchannel("A")).astype(np.float32) / 255
+        L = np.zeros((hh, ww, 4), np.uint8)
+        L[..., :3] = 255
+        L[..., 3] = (band * a).astype(np.uint8)
+        out.alpha_composite(Image.fromarray(L), (ox, oy))
+    return out
 
 
 _VIG = None
@@ -308,7 +372,7 @@ class OvChart(Ov):
         compact = o.get("compact")
         rh = 64 if compact else 92
         top = 250 if not compact else 285
-        ph = (140 if not compact else 175) + n * rh + (40 if compact else 70)
+        ph = (140 if not compact else 175) + n * rh + (70 if compact else 100)
         x0, y0, pw = 120, top - 140, 1680
         im.alpha_composite(panel(pw, ph, fill=(10, 10, 14, 228)), (x0, y0))
         d.text((x0 + 48, y0 + 34), o["title"], font=F(44 if not compact else 38, "Black", True), fill=WHITE)
@@ -320,16 +384,16 @@ class OvChart(Ov):
         for r in o.get("ref", []):
             if r <= mx:
                 xr = sx(r)
-                col = RED if r == 360 else (120, 124, 134)
+                col = PINK if r == 360 else (120, 124, 134)
                 for yy in range(top - 14, top + n * rh - 10, 14):
                     d.line([xr, yy, xr, yy + 7], fill=col, width=3)
                 lab = "360 Hz" if r == 360 else f"{r} FPS"
-                d.text((xr, top - 40), lab, font=F(20, "Bold"), fill=col, anchor="mm")
+                d.text((xr, top + n * rh + (4 if compact else 30)), lab, font=F(20, "Bold"), fill=col, anchor="ma")
         for i, (lab, v, rng, kind, src) in enumerate(rows):
             st = 0.5 + i * 0.22
             g = ease((t - st) / 1.3)
             y = top + i * rh
-            col = {"m": RED, "e": ORANGE, "fg": VIOLET}[kind]
+            col = {"m": GREEN, "e": ORANGE, "fg": VIOLET}[kind]
             d.text((lx, y + (8 if compact else 10)), lab, font=F(28 if compact else 30, "SemiBold"), fill=WHITE)
             bh = 30 if compact else 40
             d.rounded_rectangle([bx, y + 6, bx + bw, y + 6 + bh], 8, fill=(255, 255, 255, 12))
@@ -803,6 +867,8 @@ OVS = {"kicker": OvKicker, "title": OvTitle, "gametitle": OvGameTitle, "chapter"
        "vcache": OvVCache, "dlss": OvDLSS, "monitor": OvMonitor, "oled": OvOLED, "hz": OvHz, "res": OvRes,
        "legend": OvLegend, "presets": OvPresets, "fn_note": OvFnNote, "gta": OvGTA, "sourcetable": OvSourceTable,
        "versus": OvVersus, "upgrade": OvUpgrade, "credits": OvCredits}
+import ov2  # noqa: E402  (overlays v2 : photos, schémas, écrans)
+ov2.install(sys.modules[__name__])
 
 
 # ------------------------------------------------------------- SOUS-TITRES
@@ -886,9 +952,7 @@ def render_scene(si):
             bg = make_bg(spec["bg"], bt["dur"], bi + si)
             sent_rel = [s["t"] - bt["start"] for s in bt["sent"]]
             ovs = [OVS[o["k"]](o, bt["dur"], sent_rel) for o in spec["ov"]]
-            if spec["bg"] == "hero":
-                ovs.insert(0, OvHeroSprite({}, bt["dur"], sent_rel))
-            dim = spec["dim"] if spec["dim"] is not None else (0.0 if spec["bg"] in ("dark", "hero", "gta", "fortnite") else 0.35)
+            dim = spec["dim"] if spec["dim"] is not None else (0.0 if spec["bg"] in ("dark", "gta", "fortnite") or spec["bg"].startswith("p:") else 0.35)
             xf = XF if cur >= 0 else 0
             cur = bi
         bt = sc["beats"][cur]

@@ -8,14 +8,16 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
 W, H = 1920, 1080
 FD = "/usr/share/fonts/opentype/inter/"
 
-RED = (255, 30, 60)
-RED2 = (200, 10, 40)
+RED = (168, 85, 247)      # accent principal : violet
+RED2 = (120, 50, 200)
+BLUE = (59, 130, 246)
+PINK = (255, 62, 165)
 WHITE = (245, 246, 250)
 GREY = (150, 156, 168)
 DGREY = (70, 74, 84)
 GREEN = (40, 215, 120)
 ORANGE = (255, 158, 30)
-VIOLET = (170, 110, 255)
+VIOLET = (90, 160, 255)   # images générées (bleu)
 CYAN = (0, 220, 255)
 BG = (7, 7, 10)
 
