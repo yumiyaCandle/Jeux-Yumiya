@@ -1,6 +1,6 @@
 # Vidéo explicative : mon futur PC gaming
 
-Pipeline complet qui génère une vidéo 1080p (≈ 18 min 40 s) en français, avec narration,
+Pipeline complet qui génère une vidéo 1080p (≈ 15 min 45 s) en français, avec narration,
 musique, sous-titres, extraits de gameplay, illustrations des composants et graphiques FPS animés.
 
 **Configuration présentée :** Ryzen 7 9800X3D · MSI RTX 5070 Ventus 2X OC 12 Go · Patriot Viper Venom

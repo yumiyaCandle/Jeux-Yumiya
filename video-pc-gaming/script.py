@@ -152,7 +152,7 @@ SCENES.append(("fortnite", [
 # 6 — CALL OF DUTY / WARZONE
 SCENES.append(("cod", [
     chapter("05", "CALL OF DUTY · WARZONE", "Fluidité, réactivité, lisibilité", bg="i:wz_02"),
-    B("c:wz_0@30", [],
+    B("c:wz_0@48", [],
       "Place à Call of Duty et Warzone : de grandes cartes, des dizaines de joueurs, et des explosions partout.", dim=0.1, energy=1.0),
     B("c:wz_0@6", [],
       "Le processeur suit énormément de joueurs et d'objets : le cache 3D du 9800X3D garde l'image stable dans les combats chargés.",

@@ -14,7 +14,7 @@ subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", f"{OUT}/video.mp4", "-i", f"{OUT}/mix.wav",
                 "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ac", "2",
                 "-af", "loudnorm=I=-15:TP=-1.5:LRA=11", "-shortest", "-movflags", "+faststart",
-                f"{DEST}/PC_Gaming_9800X3D_RTX5070.mp4"], check=True)
+                f"{DEST}/PC_Gaming_Final.mp4"], check=True)
 
 
 def ts(x):
@@ -23,7 +23,7 @@ def ts(x):
 
 
 k = 1
-with open(f"{DEST}/PC_Gaming_9800X3D_RTX5070.srt", "w") as f:
+with open(f"{DEST}/PC_Gaming_Final.srt", "w") as f:
     for sc in tl["scenes"]:
         for a, b, txt in captions(sc):
             f.write(f"{k}\n{ts(a)} --> {ts(b)}\n{txt}\n\n"); k += 1
