@@ -354,3 +354,128 @@ def install(R):
 
     R.OVS.update({"dlss4": OvDLSS4, "fh6fps": OvFH6FPS, "storage": OvStorage, "thermo": OvThermo, "power": OvPower,
                   "airflow": OvAirflow, "rgb": OvRGB, "chapter": OvChapter})
+    install_rgbpc(R)
+
+
+# ================================================================ PC éclairé : couleurs changées selon la narration
+THEMES = [("Noir & violet", (140, 70, 255)), ("Bleu glacier", (125, 210, 255)), ("Blanc pur", (240, 244, 255)), ("Arc-en-ciel", None)]
+
+
+def install_rgbpc(R):
+    import numpy as np
+    Ov, full = R.Ov, R.full
+    cache = {}
+
+    def prep():
+        if cache:
+            return cache
+        im = R.load_photo("pc_rgb")
+        sc = 1000 / im.height
+        im = im.resize((int(im.width * sc), 1000), Image.LANCZOS)
+        a = im.getchannel("A").filter(ImageFilter.GaussianBlur(3))
+        arr = np.asarray(im).astype(np.float32)[..., :3] / 255
+        mx = arr.max(-1); mn = arr.min(-1); s = (mx - mn) / (mx + 1e-6); v = mx
+        m = np.clip((s - 0.2) / 0.35, 0, 1) * np.clip((v - 0.15) / 0.45, 0, 1)
+        # RAM Patriot sans RGB et ventilateur arrière (absent de la config) : éclairage éteint, bords adoucis
+        reg = Image.new("L", im.size)
+        rd = ImageDraw.Draw(reg)
+        for (x0, y0, x1, y1) in [(612, 325, 680, 610), (185, 295, 335, 550)]:
+            rd.rectangle([x0 * sc, y0 * sc, x1 * sc, y1 * sc], fill=255)
+        wreg = np.asarray(reg.filter(ImageFilter.GaussianBlur(7))).astype(np.float32) / 255
+        k = (wreg * np.maximum(m, np.clip((v - 0.25) / 0.4, 0, 1)))[..., None]
+        g = arr.mean(-1, keepdims=True)
+        arr = arr * (1 - k) + np.minimum(g * 0.6, 0.16) * k
+        m = m * (1 - wreg)
+        v = arr.max(-1)
+        # fondu des bords de l'image
+        aa = np.asarray(a).astype(np.float32) / 255
+        hh_, ww_ = aa.shape
+        ex = np.minimum(np.arange(ww_), np.arange(ww_)[::-1]) / 90.0
+        ey = np.minimum(np.arange(hh_), np.arange(hh_)[::-1]) / 90.0
+        aa = aa * np.clip(ey, 0, 1)[:, None] * np.clip(ex, 0, 1)[None, :]
+        hh, ww = v.shape
+        yy, xx = np.mgrid[0:hh, 0:ww]
+        cache.update(arr=arr, m=m[..., None], lum=v[..., None], a=aa[..., None],
+                     xx=xx / ww, yy=yy / hh, sc=sc, size=(ww, hh))
+        return cache
+
+    def colored(c, idx, t):
+        lum = c["lum"]
+        if idx < 0:
+            return c["arr"]
+        col = THEMES[idx][1]
+        if col is None:
+            h = (c["xx"] * 0.9 + c["yy"] * 0.4 + t * 0.12) % 1
+            cc = np.clip(np.stack([np.abs(h * 6 - 3) - 1, 2 - np.abs(h * 6 - 2), 2 - np.abs(h * 6 - 4)], -1), 0, 1)
+        else:
+            cc = np.array(col, np.float32) / 255
+        new = np.clip(cc * lum * 1.4 + lum ** 4 * 0.18, 0, 1)
+        return c["arr"] * (1 - c["m"]) + new * c["m"]
+
+    def theme_at(sent, t):
+        """-1 = photo d'origine, puis un thème par phrase (phrases 1 à 4)"""
+        idx, st = -1, 0.0
+        for i in range(4):
+            if i + 1 < len(sent) and t >= sent[i + 1] - 0.15:
+                idx, st = i, sent[i + 1] - 0.15
+        return idx, st
+
+    class RgbPC:
+        def __init__(self, dur, k, sent):
+            self.dark = R.DarkBG("dark"); self.dur = dur; self.sent = sent or []; self.prev = -1
+
+        def frame(self, t):
+            c = prep()
+            bg = self.dark.frame(t).astype(np.float32) / 255
+            idx, st = theme_at(self.sent, t)
+            img = colored(c, idx, t)
+            k = ease_io((t - st) / 0.5) if idx >= 0 else 1
+            if k < 1:
+                img = colored(c, idx - 1, t) * (1 - k) + img * k
+            ww, hh = c["size"]
+            x0, y0 = 120 + int(20 * math.sin(t * 0.3)), 40
+            reg = bg[y0:y0 + hh, x0:x0 + ww]
+            bg[y0:y0 + hh, x0:x0 + ww] = img * c["a"] + reg * (1 - c["a"])
+            return (np.clip(bg, 0, 1) * 255).astype(np.uint8)
+
+        def close(self):
+            pass
+
+    class OvRgbPC(Ov):
+        static = False
+
+        def draw(self, t):
+            im, d = full()
+            idx, st = theme_at(self.sent, t)
+            x0, y0 = 1300, 250
+            im.alpha_composite(panel(540, 470, fill=(12, 10, 22, 215)), (x0, y0))
+            d.text((x0 + 40, y0 + 32), "AMBIANCES LUMINEUSES", font=F(22, "Bold"), fill=PINK, spacing=3)
+            for j, (n_, c_) in enumerate(THEMES):
+                y = y0 + 96 + j * 74
+                on = j == idx
+                col = hue(t * 0.15) if c_ is None else c_
+                d.rounded_rectangle([x0 + 40, y + 4, x0 + 92, y + 42], 9, fill=col + (255 if on else 110,))
+                d.text((x0 + 116, y + 2), n_, font=F(34 if on else 30, "Black" if on else "Medium", on), fill=WHITE if on else GREY)
+            d.text((x0 + 40, y0 + 412), "Éclairage : ventilateurs du boîtier + watercooling", font=F(19, "Medium"), fill=(170, 175, 195))
+            a = ease((t - (self.sent[5] - 0.1 if len(self.sent) > 5 else self.D)) / 0.5)
+            if a > 0:
+                c = prep(); sc = c["sc"]
+                rx, ry = 120 + int(646 * sc), 40 + int(470 * sc)
+                A = int(255 * a)
+                d.ellipse([rx - 60, ry - 150, rx + 60, ry + 150], outline=(255, 255, 255, A), width=4)
+                d.line([rx + 60, ry, 1290, 820], fill=(255, 255, 255, A), width=3)
+                im.alpha_composite(fade(panel(540, 110, fill=(12, 10, 22, 230)), a), (1300, 770))
+                d.text((1340, 790), "RAM Patriot Viper Venom", font=F(28, "Black", True), fill=(255, 255, 255, A))
+                d.text((1340, 834), "sans RGB · éclairage éteint sur ce visuel", font=F(21, "Medium"), fill=GREY + (A,))
+            d.text((120, 1000), "VISUEL D'ILLUSTRATION · couleurs simulées", font=F(18, "Bold"), fill=(170, 175, 195))
+            return im
+
+    base = R.make_bg
+
+    def make_bg(spec, dur, k, sent=None):
+        if spec == "rgbpc":
+            return RgbPC(dur, k, sent)
+        return base(spec, dur, k, sent)
+
+    R.make_bg = make_bg
+    R.OVS["rgbpc"] = OvRgbPC

@@ -217,8 +217,13 @@ SCENES.append(("composants", [
       "Le boîtier Corsair FRAME 4000D complète l'ensemble. Il est livré avec trois ventilateurs de 120 millimètres en façade, qui aspirent l'air frais à travers la façade perforée.",
       "Si le radiateur est monté au sommet, comme c'est le plus courant, ses trois ventilateurs rejettent l'air chaud vers le haut. À l'arrière, pas de ventilateur fourni : la grille laisse simplement sortir le reste.",
       "Six ventilateurs en tout, et de la place : jusqu'à 405 millimètres pour une carte graphique."),
-    B([Z("case_front"), Z("case_glass"), Z("case_io")], [{"k": "rgb"}],
-      "Côté lumière, seuls les ventilateurs du boîtier et le watercooling s'illuminent : noir et violet, bleu glacier, blanc, ou arc-en-ciel, à toi de choisir. La mémoire, elle, reste sobre, sans RGB.", energy=0.9),
+    B("rgbpc", [{"k": "rgbpc"}],
+      "Côté lumière, seuls les ventilateurs du boîtier et le watercooling s'illuminent, et c'est toi qui choisis l'ambiance.",
+      "Noir et violet, pour une ambiance sombre.",
+      "Bleu glacier, plus froid.",
+      "Blanc pur, très épuré.",
+      "Ou arc-en-ciel, si tu veux du spectacle.",
+      "La mémoire, elle, reste sobre : sans RGB.", dim=0.0, energy=0.9),
 ]))
 
 # 3 bis — TEMPÉRATURES & DURABILITÉ
