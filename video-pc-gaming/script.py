@@ -14,8 +14,17 @@ Statut des chiffres : "m" mesuré (source citée) · "e" estimation · "fg" gén
 """
 
 
-def B(bg, ov=None, *s, dur=None, dim=None, energy=None):
-    return {"bg": bg, "ov": ov or [], "s": list(s), "dur": dur, "dim": dim, "energy": energy}
+def B(bg, ov=None, *s, dur=None, dim=None, energy=None, labels=None):
+    if labels is None and isinstance(bg, list):
+        labels = LABELS.get("|".join(bg))
+    return {"bg": bg, "ov": ov or [], "s": list(s), "dur": dur, "dim": dim, "energy": energy, "labels": labels}
+
+
+LABELS = {}
+
+
+def L(shots, labels):
+    LABELS["|".join(shots)] = labels
 
 
 def chapter(num, title, sub, bg="dark"):
@@ -40,6 +49,45 @@ def chip_times(n, sent, dur):
 def chips(title, sub, items):
     return {"k": "chips", "title": title, "sub": sub, "items": items}
 
+
+
+
+# ------------------------------------------------- légendes affichées à chaque changement de plan
+_F, _W, _B = "c:fh6_1@", "c:wz_0@", "c:bc_0@"
+L([_F + "0.2", _B + "36.2", _W + "28.4", _F + "43.2"], ["Forza Horizon 6 · champ de fleurs et mont Fuji", "Bodycam · réalisme Unreal Engine 5", "Warzone · parachutage sur la ville", "Forza Horizon 6 · Tokyo de nuit"])
+L([_F + "20.1", _W + "36.2", _B + "93.2", _F + "75.4"], ["Forza Horizon 6 · voitures japonaises", "Warzone · chute entre les immeubles", "Bodycam · vue caméra-piéton", "Forza Horizon 6 · rallye en forêt d'automne"])
+L(["p:cpu", "pz:cpu:0.52,0.68,0.92,0.88", "pz:cpu:0.0,0.12,0.42,0.42"], ["AMD Ryzen 7 9800X3D · boîte et processeur", "Gros plan · la puce Ryzen 7 9800X3D", "Gros plan · la technologie 3D V-Cache"])
+L(["p:gpu", "pz:gpu:0.44,0.45,1.0,0.88", "pz:gpu:0.0,0.25,0.25,0.5"], ["MSI GeForce RTX 5070 Ventus 2X OC", "Gros plan · le double ventilateur", "Gros plan · 12 Go de mémoire GDDR7"])
+L(["pz:gpu:0.0,0.0,0.62,0.62", "pz:gpu:0.38,0.7,0.62,1.0"], ["La boîte MSI Ventus 2X · 12 Go GDDR7", "Gros plan · la carte et son équerre de sortie"])
+L(["p:ram", "pz:ram:0.0,0.0,0.4,0.48", "pz:ram:0.55,0.0,1.0,0.48"], ["Patriot Viper Venom · 2 × 16 Go", "Gros plan · le dissipateur Viper", "Gros plan · DDR5 à 6000 MT/s"])
+L(["p:mobo", "pz:mobo:0.6,0.12,0.86,0.42", "pz:mobo:0.74,0.1,0.92,0.45", "pz:mobo:0.5,0.45,0.98,0.95"], ["Gigabyte B650 Gaming X AX V2", "Gros plan · le socket AM5 du processeur", "Gros plan · les emplacements de mémoire DDR5", "Gros plan · la zone PCIe et les SSD M.2"])
+L(["p:ssd", "pz:ssd:0.0,0.0,0.45,1.0", "pz:ssd:0.5,0.2,1.0,0.8"], ["Kioxia Exceria Plus G3 · 1 To", "Gros plan · l'étiquette Kioxia", "Gros plan · NVMe en PCIe 4.0"])
+L(["p:psu", "pz:psu:0.0,0.0,0.2,0.22", "pz:psu:0.44,0.38,0.92,1.0"], ["be quiet! Pure Power 13 M · 750 W", "Gros plan · la certification 80 PLUS Gold", "Gros plan · le ventilateur silencieux"])
+L(["p:aio", "pz:aio:0.0,0.0,0.25,1.0", "pz:aio:0.06,0.0,0.6,1.0", "pz:aio:0.6,0.0,0.92,1.0"], ["Arctic Liquid Freezer III Pro 360 A-RGB", "Gros plan · le radiateur de 38 mm", "Gros plan · les 3 ventilateurs P12 Pro A-RGB", "Gros plan · la pompe RGB posée sur le CPU"])
+L(["pz:case:0.45,0.06,0.95,0.86", "pz:case:0.03,0.04,0.52,0.72", "pz:case:0.55,0.84,0.95,1.0"], ["Gros plan · la façade et ses 3 ventilateurs ARGB", "Gros plan · le panneau vitré", "Gros plan · la connectique avant"])
+L(["p:mo27q3", "pz:mo27q3:0.0,0.0,1.0,0.64", "pz:mo27q3:0.0,0.38,0.6,0.64"], ["Gigabyte MO27Q3 · ton écran principal", "Gros plan · la dalle QD-OLED en 1440p", "Gros plan · 0,03 ms · 360 Hz · HDR True Black 400"])
+L(["p:aoc", "pz:aoc:0.0,0.0,1.0,0.48", "pz:aoc:0.1,0.45,0.9,1.0"], ["AOC C27G2ZU/BK · ton écran secondaire", "Gros plan · la dalle VA incurvée 1500R", "Gros plan · le pied réglable"])
+L(["fn:run", "fn:build", "fn:fight"], ["Illustration · déplacements rapides", "Illustration · construction", "Illustration · combat"])
+L(["fn:run", "fn:build"], ["Illustration · fluidité à 360 Hz", "Illustration · constructions bien nettes"])
+L([_W + "3.2", _W + "28.4", _W + "36.2"], ["Warzone · vue sur la ville", "Warzone · parachutage", "Warzone · chute entre les immeubles"])
+L([_W + "52.2", _W + "61.3", _W + "108.4"], ["Warzone · combat rapproché", "Warzone · véhicules", "Warzone · explosions"])
+L([_W + "15.2", _W + "19.2", _W + "69.2"], ["Warzone · rues étroites", "Warzone · combat au temple", "Warzone · engagement à distance"])
+L([_W + "77.2", _W + "88.2"], ["Warzone · visée à la lunette", "Warzone · lunette de précision"])
+L([_W + "119.2", _W + "54.2"], ["Warzone · saut en wingsuit", "Warzone · combat"])
+L([_B + "6.2", _B + "13.2", _B + "36.2", _B + "93.2"], ["Bodycam · objectif grand angle", "Bodycam · tranchées", "Bodycam · combat en intérieur", "Bodycam · bâtiment en ruine"])
+L([_B + "11.2", _B + "31.2", _B + "49.2"], ["Bodycam · tranchées", "Bodycam · combat en intérieur", "Bodycam · forêt dévastée"])
+L([_B + "38.2", _B + "90.2", _B + "111.2"], ["Bodycam · éclairage dynamique Lumen", "Bodycam · décors photoréalistes", "Bodycam · couloirs sombres"])
+L([_B + "55.2", _B + "88.2"], ["Bodycam · tunnel éclairé par le feu", "Bodycam · progression en intérieur"])
+L([_B + "114.2", _B + "117.2"], ["Bodycam · tranchées", "Bodycam · progression"])
+L([_F + "0.2", _F + "3.1", _F + "6.2", _F + "68.2"], ["Forza Horizon 6 · champ de fleurs et mont Fuji", "Forza Horizon 6 · cerisiers puis port de nuit", "Forza Horizon 6 · pagode et forêt", "Forza Horizon 6 · coucher de soleil sur le Fuji"])
+L([_F + "7.3", _F + "50.3"], ["Forza Horizon 6 · route de montagne", "Forza Horizon 6 · touge d'automne"])
+L(["i:fh6_05", _F + "43.1", _F + "74.1"], ["Forza Horizon 6 · Tokyo de nuit", "Forza Horizon 6 · rue aux néons", "Forza Horizon 6 · carrefour illuminé"])
+L([_F + "36.2", _F + "30.2", "i:fh6_07"], ["Forza Horizon 6 · drift en forêt", "Forza Horizon 6 · murs de neige", "Forza Horizon 6 · cerisiers et mont Fuji"])
+L(["i:fh6_00", _F + "12.1"], ["Forza Horizon 6 · reflets sur la carrosserie", "Forza Horizon 6 · port de nuit"])
+L([_F + "73.2", _F + "84.6"], ["Forza Horizon 6 · BMW en ville", "Forza Horizon 6 · festival de nuit"])
+L([_W + "105.2", _B + "36.2"], ["Warzone", "Bodycam"])
+L([_F + "75.1", _F + "36.1"], ["Forza Horizon 6 · rallye en forêt", "Forza Horizon 6 · drift"])
+L([_F + "0.2", _B + "93.2", _F + "84.2"], ["Forza Horizon 6", "Bodycam", "Forza Horizon 6 · festival de nuit"])
 
 FH = "c:fh6_1@"
 WZ = "c:wz_0@"

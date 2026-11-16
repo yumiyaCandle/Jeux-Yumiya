@@ -954,6 +954,9 @@ def render_scene(si):
             sent_rel = [s["t"] - bt["start"] for s in bt["sent"]]
             bg = make_bg(spec["bg"], bt["dur"], bi + si, sent_rel)
             ovs = [OVS[o["k"]](o, bt["dur"], sent_rel) for o in spec["ov"]]
+            if spec.get("labels"):
+                top = any(o["k"] in ("gametitle", "kicker") for o in spec["ov"])
+                ovs.append(OVS["shotlabels"]({"labels": spec["labels"], "top": top}, bt["dur"], sent_rel))
             b0 = spec["bg"] if isinstance(spec["bg"], str) else spec["bg"][0]
             dim = spec["dim"] if spec["dim"] is not None else (0.0 if b0 in ("dark", "gta") or b0[:2] in ("p:", "pz", "fn", "sp") else 0.35)
             xf = XF if cur >= 0 else 0

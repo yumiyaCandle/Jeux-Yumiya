@@ -345,7 +345,7 @@ def install(R):
             z = 0.9 + 0.1 * u
             cw, ch = int(c.width * z), int(c.height * z)
             sp = c.resize((cw, ch), Image.BILINEAR)
-            blur = 9 * (1 - ease(t / 0.9))
+            blur = float(9 * (1 - ease(t / 0.9)))
             if blur > 0.4:
                 sp = sp.filter(ImageFilter.GaussianBlur(blur))
             gs = g.resize((int(g.width * z), int(g.height * z)), Image.BILINEAR)
@@ -527,6 +527,47 @@ def install(R):
         def offset(self, t):
             return (0, 0)
 
+    class OvShotLabels(Ov):
+        """légende explicative à chaque changement de plan / zoom"""
+        static = False
+
+        def __init__(self, *a):
+            super().__init__(*a)
+            self.times = shot_times(len(self.o["labels"]), self.sent, self.D)
+
+        def draw(self, t):
+            im, d = full()
+            i = 0
+            while i + 1 < len(self.times) and t >= self.times[i + 1]:
+                i += 1
+            st = self.times[i]
+            en = self.times[i + 1] if i + 1 < len(self.times) else self.D
+            a = min(ease((t - st - 0.25) / 0.45), 1 - ease_io((t - (en - 0.35)) / 0.3))
+            if a <= 0:
+                return im
+            txt = self.o["labels"][i]
+            if "·" in txt:
+                head, body = [p.strip() for p in txt.split("·", 1)]
+            else:
+                head, body = txt, ""
+            f1, f2 = F(22, "Bold"), F(32, "Black", True)
+            w = int(max(d.textlength(head.upper(), font=f1) + 12, d.textlength(body, font=f2))) + 70
+            x0 = 80 + int(40 * (1 - a))
+            y0 = 170 if self.o.get("top") else (790 if body else 830)
+            h = 96 if body else 56
+            d.rounded_rectangle([x0, y0, x0 + w, y0 + h], 16, fill=(12, 8, 22, int(200 * a)))
+            d.rectangle([x0, y0 + 10, x0 + 6, y0 + h - 10], fill=PINK + (int(255 * a),))
+            d.text((x0 + 26, y0 + 12), head.upper(), font=f1, fill=PINK + (int(255 * a),), spacing=3)
+            if body:
+                d.text((x0 + 26, y0 + 42), body, font=f2, fill=(255, 255, 255, int(255 * a)))
+            return im
+
+        def alpha(self, t):
+            return 1.0
+
+        def offset(self, t):
+            return (0, 0)
+
     # ================================================================ séquence de plans
     class ShotSeq:
         def __init__(self, specs, dur, k, sent):
@@ -579,4 +620,4 @@ def install(R):
 
     R.make_bg = make_bg
     R.OVS.update({"chapter": OvChapter, "gametitle": OvGameTitle, "title": OvTitle, "kicker": OvKicker, "chips": OvChips,
-                  "chart": OvChart, "hz": OvHz, "duel": OvDuel, "sourcetable": OvSourceTable, "fn_tag": OvFnTag, "tag": OvTag})
+                  "chart": OvChart, "hz": OvHz, "duel": OvDuel, "sourcetable": OvSourceTable, "fn_tag": OvFnTag, "tag": OvTag, "shotlabels": OvShotLabels})
