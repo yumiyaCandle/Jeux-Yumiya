@@ -253,7 +253,7 @@ def install(R):
             head(d, "Consommation en jeu", "Composants mesurés par TechPowerUp sur d'autres machines · total et prise : ESTIMATIONS", y=70)
             parts = [("RTX 5070", 230, VIOLET, "≈ 230 W · mesuré sur une RTX 5070 FE (TechPowerUp)"),
                      ("Ryzen 7 9800X3D", 65, RED, "≈ 65 W · moyenne en jeu (TechPowerUp)"),
-                     ("Carte mère, RAM, SSD, 6 ventilateurs, pompe", 55, (120, 125, 140), "≈ 50 à 60 W · estimation")]
+                     ("Carte mère, RAM, SSD, 7 ventilateurs, pompe", 55, (120, 125, 140), "≈ 50 à 60 W · estimation")]
             x0, y0, wmax = 140, 250, 1640
             sc = wmax / 750
             x = x0
@@ -302,18 +302,18 @@ def install(R):
                 yy = 120 - ((t * 90 + j * 40) % 160)
                 for x in (360, 470, 580):
                     d.polygon([(x - 14, yy + 40), (x, yy), (x + 14, yy + 40)], fill=PINK + (190,))
-            for j in range(3):  # sortie arrière passive (pas de ventilateur)
-                x = 150 - ((t * 50 + j * 50) % 150)
-                d.polygon([(x + 30, 345), (x, 354), (x + 30, 363)], fill=PINK + (90,))
-            d.text((120, 390), "grille arrière\n(passive)", font=F(18, "SemiBold"), fill=(190, 200, 220), spacing=4)
+            for j in range(3):  # sortie arrière : ventilateur arrière
+                x = 150 - ((t * 90 + j * 50) % 150)
+                d.polygon([(x + 40, 340), (x, 354), (x + 40, 368)], fill=PINK + (190,))
+            d.text((110, 390), "ventilateur\narrière", font=F(18, "SemiBold"), fill=(190, 200, 220), spacing=4)
             x0, y0 = 1060, 170
             im.alpha_composite(panel(800, 640), (x0, y0))
             d.text((x0 + 44, y0 + 34), "CORSAIR FRAME 4000D RS ARGB", font=F(24, "Bold"), fill=PINK, spacing=2)
             d.text((x0 + 44, y0 + 70), "Flux d'air de ta config", font=F(44, "Black", True), fill=WHITE)
             items = [(BLUE, "Entrée : 3 ventilateurs RS120 ARGB en façade", "fournis avec le boîtier"),
                      (PINK, "Sortie : radiateur 360 mm au sommet*", "ses 3 ventilateurs Arctic rejettent l'air chaud"),
-                     (PINK, "Grille arrière : sortie passive", "aucun ventilateur arrière fourni, aucun ajouté"),
-                     (WHITE, "6 ventilateurs en tout : 3 + 3", "3 du boîtier + 3 du watercooling, tous ARGB"),
+                     (PINK, "Sortie : ventilateur arrière ARGB", "installé en plus des 3 fournis en façade"),
+                     (WHITE, "7 ventilateurs en tout : 4 + 3", "4 dans le boîtier + 3 sur le watercooling"),
                      (WHITE, "GPU jusqu'à 405 mm · radiateur 360 mm", "données constructeur Corsair")]
             for k, (c, s, s2) in enumerate(items):
                 y = y0 + 160 + k * 82
