@@ -473,7 +473,7 @@ SCENES.append(("bench", [
 # 12 — CONCLUSION
 SCENES.append(("outro", [
     chapter("11", "CONCLUSION", "Ton futur setup"),
-    B("p:case", [{"k": "bullets", "title": "Ce que tu vas recevoir",
+    B("p:pc_full", [{"k": "bullets", "title": "Ce que tu vas recevoir",
                   "items": ["Ryzen 7 9800X3D + RTX 5070 : un duo sans maillon faible", "Fortnite & Warzone : fluidité de niveau compétitif", "Bodycam & Forza Horizon 6 : réalisme et beauté en 1440p", "OLED 360 Hz + second écran 240 Hz"]}],
       "Alors, que retenir ?",
       "Une machine équilibrée, sans maillon faible : un processeur gaming de pointe, une carte taillée pour le 1440p, un refroidissement silencieux, et un écran OLED 360 hertz qui sublime chaque image.", energy=0.95),

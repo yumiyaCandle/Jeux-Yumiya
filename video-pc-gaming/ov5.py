@@ -479,3 +479,4 @@ def install_rgbpc(R):
 
     R.make_bg = make_bg
     R.OVS["rgbpc"] = OvRgbPC
+    R.rgbpc_prep = prep
