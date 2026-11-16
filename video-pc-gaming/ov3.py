@@ -191,7 +191,7 @@ def install(R):
                 st = 0.5 + i * 0.35
                 g = ease((t - st) / 1.1)
                 y = top + i * rh
-                col = {"m": GREEN, "e": ORANGE, "fg": VIOLET}[kind]
+                col = {"m": GREEN, "e": ORANGE, "fg": VIOLET, "na": GREY}[kind]
                 if compact:
                     d.text((lx, y + 4), lab, font=F(31, "SemiBold"), fill=WHITE)
                     by, bh = y + 4, 40
@@ -199,9 +199,11 @@ def install(R):
                     d.text((lx, y), lab, font=F(32, "SemiBold"), fill=WHITE)
                     by, bh = y + 44, 42
                 d.rounded_rectangle([bx, by, bx + bw, by + bh], 10, fill=(255, 255, 255, 14))
+                if kind == "na":
+                    d.text((bx + 20, by + bh // 2), "Aucun chiffre : version PC non annoncée", font=F(26, "SemiBold"), fill=GREY + (int(255 * g),), anchor="lm")
                 if rng and g > 0:
                     d.rounded_rectangle([sx(rng[0] * g), by, sx(rng[1] * g), by + bh], 10, fill=col + (70,))
-                if g > 0:
+                if g > 0 and kind != "na":
                     xe = max(bx + 12, sx(v * g))
                     d.rounded_rectangle([bx, by, xe, by + bh], 10, fill=col + (240,))
                     if kind == "fg":
@@ -214,7 +216,7 @@ def install(R):
                 ab = ease((t - st - 0.7) / 0.5)
                 if ab > 0:
                     f = F(21, "Bold")
-                    labb = {"m": "MESURÉ · " + src, "e": "ESTIMATION", "fg": "IMAGES GÉNÉRÉES"}[kind]
+                    labb = {"m": "MESURÉ · " + src, "e": "ESTIMATION", "fg": "IMAGES GÉNÉRÉES", "na": "AUCUNE DONNÉE"}[kind]
                     tw = int(d.textlength(labb, font=f))
                     xb = x0 + pw - tw - 80
                     yb = by + (bh - 38) // 2
