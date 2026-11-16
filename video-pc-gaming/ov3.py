@@ -546,6 +546,8 @@ def install(R):
             if a <= 0:
                 return im
             txt = self.o["labels"][i]
+            if not txt:
+                return im
             if "·" in txt:
                 head, body = [p.strip() for p in txt.split("·", 1)]
             else:

@@ -89,6 +89,21 @@ L([_W + "105.2", _B + "36.2"], ["Warzone", "Bodycam"])
 L([_F + "75.1", _F + "36.1"], ["Forza Horizon 6 · rallye en forêt", "Forza Horizon 6 · drift"])
 L([_F + "0.2", _B + "93.2", _F + "84.2"], ["Forza Horizon 6", "Bodycam", "Forza Horizon 6 · festival de nuit"])
 
+# Version allégée : une légende seulement quand elle apporte une information (None = pas de légende)
+for _k in list(LABELS):
+    LABELS[_k] = None
+L(["p:cpu", "pz:cpu:0.52,0.68,0.92,0.88", "pz:cpu:0.0,0.12,0.42,0.42"], [None, "Gros plan · la puce Ryzen 7 9800X3D", "Gros plan · la technologie 3D V-Cache"])
+L(["p:gpu", "pz:gpu:0.44,0.45,1.0,0.88", "pz:gpu:0.0,0.25,0.25,0.5"], [None, "Gros plan · le double ventilateur", "Gros plan · 12 Go de mémoire GDDR7"])
+L(["p:mobo", "pz:mobo:0.6,0.12,0.86,0.42", "pz:mobo:0.74,0.1,0.92,0.45", "pz:mobo:0.5,0.45,0.98,0.95"], [None, "Gros plan · le socket AM5 du processeur", "Gros plan · les emplacements de mémoire DDR5", "Gros plan · la zone PCIe et les SSD M.2"])
+L(["p:psu", "pz:psu:0.0,0.0,0.2,0.22", "pz:psu:0.44,0.38,0.92,1.0"], [None, "Gros plan · la certification 80 PLUS Gold", None])
+L(["p:aio", "pz:aio:0.0,0.0,0.25,1.0", "pz:aio:0.06,0.0,0.6,1.0", "pz:aio:0.6,0.0,0.92,1.0"], [None, "Gros plan · le radiateur de 38 mm", "Gros plan · les 3 ventilateurs P12 Pro A-RGB", "Gros plan · la pompe RGB posée sur le CPU"])
+L(["pz:case:0.45,0.06,0.95,0.86", "pz:case:0.03,0.04,0.52,0.72", "pz:case:0.55,0.84,0.95,1.0"], ["Gros plan · la façade et ses 3 ventilateurs ARGB", None, None])
+L(["p:mo27q3", "pz:mo27q3:0.0,0.0,1.0,0.64", "pz:mo27q3:0.0,0.38,0.6,0.64"], [None, None, "Gros plan · 0,03 ms · 360 Hz · HDR True Black 400"])
+L(["p:aoc", "pz:aoc:0.0,0.0,1.0,0.48", "pz:aoc:0.1,0.45,0.9,1.0"], [None, "Gros plan · la dalle VA incurvée 1500R", None])
+L([_W + "77.2", _W + "88.2"], ["Warzone · visée à la lunette", None])
+L([_B + "38.2", _B + "90.2", _B + "111.2"], ["Bodycam · éclairage dynamique Lumen", None, None])
+L(["i:fh6_00", _F + "12.1"], ["Forza Horizon 6 · reflets sur la carrosserie", None])
+
 FH = "c:fh6_1@"
 WZ = "c:wz_0@"
 BC = "c:bc_0@"
