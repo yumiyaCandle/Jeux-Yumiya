@@ -86,7 +86,7 @@ class DarkBG:
         elif self.kind == "fortnite":
             cols = [((60, 120, 255), 0.6), ((170, 60, 255), 0.6), ((0, 210, 255), 0.4)]
         else:
-            cols = [((140, 60, 255), 0.40), ((40, 110, 255), 0.30), ((255, 50, 160), 0.16)]
+            cols = [((130, 55, 255), 0.40), ((40, 110, 255), 0.30), ((120, 210, 255), 0.12)]
         acc = np.zeros((H // 4, W // 4, 3), np.float32)
         for i, (c, s) in enumerate(cols):
             cx = (0.5 + 0.38 * math.sin(t * 0.13 + i * 2.1)) * W / 4
@@ -871,6 +871,8 @@ import ov2  # noqa: E402  (overlays v2 : photos, schémas, écrans)
 ov2.install(sys.modules[__name__])
 import ov3  # noqa: E402  (v3 : plans multiples, gros plans photo, typographie animée, graphiques XL)
 ov3.install(sys.modules[__name__])
+import ov4  # noqa: E402  (v6 : températures, consommation, OLED, FPS, habillages des jeux)
+ov4.install(sys.modules[__name__])
 
 
 # ------------------------------------------------------------- SOUS-TITRES
@@ -954,6 +956,10 @@ def render_scene(si):
             sent_rel = [s["t"] - bt["start"] for s in bt["sent"]]
             bg = make_bg(spec["bg"], bt["dur"], bi + si, sent_rel)
             ovs = [OVS[o["k"]](o, bt["dur"], sent_rel) for o in spec["ov"]]
+            kinds = {o["k"] for o in spec["ov"]}
+            skin = {"cod": "skin_wz", "bodycam": "skin_bc", "fh6": "skin_fh"}.get(name)
+            if skin and not kinds & {"chart", "settings", "versus", "chapter"}:
+                ovs.insert(0, OVS[skin]({"t0": bt["start"]}, bt["dur"], sent_rel))
             if spec.get("labels"):
                 top = any(o["k"] in ("gametitle", "kicker") for o in spec["ov"])
                 ovs.append(OVS["shotlabels"]({"labels": spec["labels"], "top": top}, bt["dur"], sent_rel))

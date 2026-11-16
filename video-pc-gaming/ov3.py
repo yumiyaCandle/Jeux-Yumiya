@@ -191,7 +191,7 @@ def install(R):
                 st = 0.5 + i * 0.35
                 g = ease((t - st) / 1.1)
                 y = top + i * rh
-                col = {"m": GREEN, "e": ORANGE, "fg": VIOLET, "na": GREY}[kind]
+                col = {"m": GREEN, "e": ORANGE, "fg": VIOLET, "na": GREY, "ref": WHITE}[kind]
                 if compact:
                     d.text((lx, y + 4), lab, font=F(31, "SemiBold"), fill=WHITE)
                     by, bh = y + 4, 40
@@ -216,14 +216,14 @@ def install(R):
                 ab = ease((t - st - 0.7) / 0.5)
                 if ab > 0:
                     f = F(21, "Bold")
-                    labb = {"m": "MESURÉ · " + src, "e": "ESTIMATION", "fg": "IMAGES GÉNÉRÉES", "na": "AUCUNE DONNÉE"}[kind]
+                    labb = {"m": "MESURÉ · " + src, "e": "ESTIMATION", "fg": "IMAGES GÉNÉRÉES", "na": "AUCUNE DONNÉE", "ref": "RÉFÉRENCE"}[kind]
                     tw = int(d.textlength(labb, font=f))
                     xb = x0 + pw - tw - 80
                     yb = by + (bh - 38) // 2
                     d.rounded_rectangle([xb, yb, xb + tw + 40, yb + 38], 19, fill=col + (int(45 * ab),), outline=col + (int(230 * ab),), width=2)
                     d.text((xb + 20, yb + 8), labb, font=f, fill=col + (int(255 * ab),))
                     if cond and not compact:
-                        tx = cond + (f"  ·  fourchette {rng[0]}–{rng[1]} FPS" if rng else "")
+                        tx = cond + (f"  ·  fourchette {rng[0]}–{rng[1]} {o.get('unit', 'FPS')}" if rng else "")
                         d.text((lx, by + bh + 6), tx, font=F(21, "Medium"), fill=(185, 188, 205, int(255 * ab)))
             return im
 

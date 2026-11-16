@@ -148,16 +148,11 @@ SCENES.append(("intro", [
 SCENES.append(("config", [
     chapter("01", "LA CONFIGURATION", "Huit composants, une machine cohérente"),
     B("dark", [{"k": "grid"}],
-      "Voici ta configuration complète.",
-      "Le processeur AMD Ryzen 7 9800X3D, et la carte graphique MSI GeForce RTX 5070 Ventus, en version OC.",
-      "32 gigaoctets de Patriot Viper Venom en DDR5, et un watercooling Arctic Liquid Freezer 3 Pro de 360 millimètres.",
-      "La carte mère Gigabyte B650 Gaming X AX V2, un SSD Kioxia d'un téraoctet, et une alimentation be quiet! de 750 watts.",
-      "Le tout dans un boîtier Corsair FRAME 4000D RS ARGB, en noir.", energy=1.0),
+      "Voici ta configuration : huit composants choisis pour former un ensemble cohérent, du processeur jusqu'au boîtier.",
+      "Avant de les détailler un par un, voyons comment ils travaillent ensemble.", energy=1.0),
     B("dark", [{"k": "flow"}],
-      "Mais un PC, ce n'est pas une simple liste de pièces. C'est une équipe.",
       "Quand tu lances un jeu, le SSD charge les fichiers dans la mémoire vive. Le processeur calcule la partie, la physique, les joueurs, et prépare le travail de la carte graphique.",
-      "La carte graphique dessine chaque image et l'envoie à l'écran. L'alimentation fournit l'énergie, et le watercooling évacue la chaleur.",
-      "Si un maillon est trop faible, toute la chaîne ralentit. Et ta configuration est très bien équilibrée.", energy=0.8),
+      "La carte graphique dessine chaque image et l'envoie à l'écran. L'alimentation fournit l'énergie, et le watercooling évacue la chaleur.", energy=0.8),
 ]))
 
 # 3 — LES COMPOSANTS EN DÉTAIL (gros plans synchronisés)
@@ -186,14 +181,12 @@ SCENES.append(("composants", [
       "La génération d'images, elle, insère des images créées par l'IA entre les vraies : le compteur grimpe, mais la réactivité reste celle des vraies images.",
       "Ici, FPS réels et FPS générés sont donc toujours séparés. Quant au ray tracing, il simule le trajet de la lumière, pour des reflets et des éclairages réalistes."),
     B([Z("gpu_box"), Z("gpu_io")], [chips("12 Go de VRAM", "LE POINT DE VIGILANCE", ["Suffisant dans la grande majorité des jeux en 1440p", "Limite possible : textures max + ray tracing très poussé", "Constat TechSpot : Indiana Jones en path tracing", "Solution : baisser d'un cran les textures"])],
-      "Un mot honnête sur les 12 gigaoctets de mémoire vidéo.",
-      "C'est suffisant dans la grande majorité des jeux en 1440p. Mais avec textures maximales et ray tracing très poussé, elle peut devenir une limite, comme l'a constaté TechSpot dans Indiana Jones.",
+      "Un mot honnête sur les 12 gigaoctets de mémoire vidéo : c'est suffisant dans la grande majorité des jeux en 1440p. Mais avec textures maximales et ray tracing très poussé, elle peut devenir une limite, comme l'a constaté TechSpot dans Indiana Jones.",
       "Il suffit alors de baisser d'un cran les textures."),
     B("dark", [{"k": "duo"}],
       "Pourquoi ce duo est-il si intéressant ?",
       "En jeu compétitif, réglages bas, c'est le processeur qui fixe la limite. Et c'est là que le 9800X3D excelle.",
-      "Dans un jeu très beau, c'est l'inverse : la RTX 5070 et son DLSS prennent le relais.",
-      "Un processeur qui ne freine jamais, une carte efficace : l'idéal pour faire les deux."),
+      "Dans un jeu très beau, c'est l'inverse : la RTX 5070 et son DLSS prennent le relais."),
     B(["p:ram", Z("ram_logo"), Z("ram_viper")], [chips("Patriot Viper Venom", "MÉMOIRE VIVE · 32 GO", ["2 × 16 Go · double canal", "DDR5 · 6000 MT/s", "Profil EXPO dans le BIOS"])],
       "La mémoire vive : deux barrettes Patriot Viper Venom de 16 gigaoctets, en DDR5 à 6000 mégahertz.",
       "Trente-deux gigaoctets, c'est l'idéal aujourd'hui : les jeux récents dépassent souvent 16 avec Discord ouvert.",
@@ -214,16 +207,32 @@ SCENES.append(("composants", [
     B("dark", [{"k": "loop"}],
       "La pompe, posée sur le processeur, absorbe sa chaleur grâce à un liquide en boucle fermée.",
       "Le liquide chaud rejoint le radiateur, où les trois ventilateurs soufflent l'air à travers de fines ailettes et évacuent la chaleur.",
-      "Refroidi, il revient vers le processeur, en continu. Un petit ventilateur sur la pompe refroidit même l'alimentation de la carte mère."),
-    B("dark", [{"k": "temps"}],
-      "Le liquide absorbe beaucoup de chaleur : en longue session, la température monte lentement, puis se stabilise.",
-      "Pour un 9800X3D, ce watercooling est largement dimensionné : ventilateurs lents, PC silencieux, même après des heures."),
+      "Refroidi, il revient vers le processeur, en continu."),
     B("p:case", [{"k": "airflow"}],
       "Le boîtier Corsair complète l'ensemble.",
-      "Trois ventilateurs aspirent l'air frais par la façade perforée ; l'air chaud ressort par le haut et l'arrière.",
-      "L'espace est généreux : radiateurs de 360 millimètres, cartes graphiques jusqu'à 405 millimètres, et une structure modulaire."),
+      "Trois ventilateurs aspirent l'air frais par la façade perforée ; l'air chaud ressort par le haut et l'arrière. Et l'espace est généreux : jusqu'à 405 millimètres pour une carte graphique."),
     B([Z("case_front"), Z("case_glass"), Z("case_io")], [{"k": "rgb"}],
       "Et c'est une vraie vitrine : noir et violet, bleu glacier, rose néon, ou arc-en-ciel, à toi de choisir.", energy=0.9),
+]))
+
+# 3 bis — TEMPÉRATURES & DURABILITÉ
+SCENES.append(("temps", [
+    chapter("00", "TEMPÉRATURES & DURABILITÉ", "Des heures de jeu, sans souci"),
+    B("dark", [{"k": "thermo"}],
+      "Comment ton PC va-t-il se comporter après plusieurs heures de jeu ? Voici des valeurs indicatives, issues de tests publiés et de retours d'utilisateurs, pas des mesures faites sur ta machine.",
+      "Avec un watercooling de 360 millimètres, un 9800X3D tourne en général entre 55 et 70 degrés en jeu, avec des pointes possibles vers 80. Sa limite fixée par AMD est de 95 degrés.",
+      "Pour la RTX 5070, TechPowerUp relève 77 degrés sur la Founders Edition et 62 sur une MSI Gaming Trio. Ta Ventus 2X, plus simple, devrait se situer entre les deux.",
+      "Les ventilateurs n'accélèrent que lorsque c'est nécessaire : c'est pour ça qu'un bon refroidissement rend aussi le PC plus silencieux."),
+    B("dark", [{"k": "power"}],
+      "Côté consommation, TechPowerUp mesure environ 230 watts pour une RTX 5070 en jeu, et environ 65 watts en moyenne pour le 9800X3D.",
+      "Avec le reste des composants, ton PC devrait tourner autour de 350 watts en jeu : ton alimentation travaille à environ la moitié de sa capacité, là où elle est la plus efficace et la plus silencieuse."),
+    B("dark", [{"k": "care"}],
+      "Pour que tout reste frais pendant des années, l'entretien est simple.",
+      "Tous les un à deux mois, PC éteint, dépoussière les filtres, le radiateur et les ventilateurs avec une bombe d'air sec.",
+      "Le watercooling Arctic est un circuit fermé : il n'y a jamais de liquide à ajouter. Vérifie simplement, de temps en temps, que la pompe tourne normalement."),
+    B("dark", [{"k": "alerts"}],
+      "Les signes qui doivent t'alerter : un processeur souvent au-dessus de 90 degrés en jeu, des chutes de FPS soudaines, des ventilateurs bloqués à fond, ou un bruit inhabituel de la pompe.",
+      "Dans ce cas, un dépoussiérage ou un réglage de la courbe des ventilateurs dans le BIOS suffit souvent."),
 ]))
 
 # 4 — LES DEUX ÉCRANS
@@ -238,8 +247,14 @@ SCENES.append(("ecrans", [
     B("dark", [{"k": "hz"}],
       "Et puis il y a les 360 hertz : jusqu'à 360 images différentes par seconde.",
       "À 60 hertz, une image reste affichée 16,7 millisecondes. À 240 hertz, comme ton écran AOC, 4,2. Et à 360 hertz, seulement 2,8.",
-      "Dans Fortnite ou Warzone : des mouvements ultra fluides, des adversaires plus lisibles, et un affichage plus réactif.",
-      "Et si un jeu n'atteint pas 360 images par seconde, la synchronisation adaptative aligne l'écran sur la carte graphique : à 90 comme à 300, l'image reste fluide."),
+      "Dans Fortnite ou Warzone : des mouvements ultra fluides, des adversaires plus lisibles, et un affichage plus réactif."),
+    B("dark", [{"k": "vrr"}],
+      "Autre atout de l'OLED : un temps de réponse annoncé de 0,03 milliseconde. Les pixels changent presque instantanément, sans traînée derrière les objets en mouvement.",
+      "Et grâce au VRR, compatible G-Sync et FreeSync Premium Pro, l'écran suit la carte graphique en permanence : à 90 comme à 300 images par seconde, pas de déchirement ni de saccade."),
+    B("dark", [{"k": "burnin"}],
+      "Seul point à connaître avec l'OLED : le risque de marquage, qu'on appelle burn-in. Une même image fixe affichée pendant des centaines d'heures peut laisser une trace.",
+      "Gigabyte intègre des protections automatiques, et annonce une garantie de trois ans qui couvre le burn-in, selon les conditions de ton pays.",
+      "Les bonnes habitudes : masquer la barre des tâches, un fond d'écran sombre, une mise en veille rapide, et Discord ou la navigation plutôt sur ton écran AOC."),
     B("dark", [{"k": "res", "img": "fh6_06"}],
       "Côté définition, le 1440p affiche 3,7 millions de pixels, contre 2,1 millions en 1080p : 78 pour cent de pixels en plus.",
       "Pour les beaux jeux, c'est une image plus fine et des paysages lointains bien plus précis."),
@@ -254,6 +269,7 @@ SCENES.append(("ecrans", [
 # 5 — FORTNITE
 SCENES.append(("fortnite", [
     chapter("04", "FORTNITE", "Mode Performance · 360 Hz · réglages compétitifs", bg="fn:storm"),
+    B(["fn:storm", "fn:build", "fn:fight"], [{"k": "gametitle", "text": "FORTNITE", "sub": "Illustrations originales"}, {"k": "fn_tag"}], dur=6.0, energy=1.0),
     B(["fn:run", "fn:build", "fn:fight"], [{"k": "fn_tag"}],
       "Place aux jeux, et on commence par Fortnite, où la fluidité fait la différence.",
       "Son mode Performance simplifie l'affichage et soulage énormément la carte graphique.",
@@ -263,7 +279,7 @@ SCENES.append(("fortnite", [
       "À droite, le rendu Épique en DirectX 12, avec un éclairage dynamique, des ombres et des effets bien plus riches."),
     B(["fn:run", "fn:build"], [{"k": "fn_tag"}],
       "En mode Performance, tu peux t'approcher des 360 images par seconde : c'est exactement là que ton écran OLED 360 hertz prend tout son sens.",
-      "Chaque construction, chaque virage rapide reste parfaitement net, et ce que tu vois à l'écran suit tes gestes presque instantanément.", energy=0.9),
+      "Chaque construction, chaque virage rapide reste parfaitement net.", energy=0.9),
     B("fn:fight", [{"k": "chart", "title": "Fortnite · RTX 5070 + Ryzen 7 9800X3D", "sub": "FPS moyens · aucun benchmark exact publié pour cette configuration",
                     "rows": [("Mode Performance · réglages bas", 330, (280, 380), "e", "Estimation", "1440p · RT non · DLSS non · FG non"),
                              ("DirectX 12 · Épique", 120, (100, 140), "e", "Estimation", "1440p · Lumen · DLSS Qualité · FG non")],
@@ -275,12 +291,13 @@ SCENES.append(("fortnite", [
                     "rows": [("Mode de rendu", "Performance"), ("Distance d'affichage", "Épique"), ("Ombres · effets", "Désactivés / bas"),
                              ("Nvidia Reflex", "Activé (si proposé)"), ("Limite de FPS", "Illimitée ou 360")]}, {"k": "fn_tag"}],
       "En compétitif : mode Performance, distance d'affichage au maximum, le reste au minimum, et Reflex activé quand il est proposé.",
-      "Le processeur pousse les FPS, la carte garde de la réserve, et l'écran 360 hertz affiche chaque construction et chaque tir avec une netteté exceptionnelle.", dim=0.35),
+      "Le processeur pousse les FPS, la carte garde de la réserve, et l'écran fait le reste.", dim=0.35),
 ]))
 
 # 6 — CALL OF DUTY / WARZONE
 SCENES.append(("cod", [
     chapter("05", "CALL OF DUTY · WARZONE", "Fluidité, régularité, lisibilité", bg="i:wz_02"),
+    B([WZ + "10.1", WZ + "30.5", WZ + "112.2", WZ + "131.0"], [{"k": "gametitle", "text": "WARZONE", "sub": "Images officielles · Call of Duty"}], dur=7.0, dim=0.0, energy=1.0),
     B([WZ + "3.2", WZ + "28.4", WZ + "36.2"], [],
       "Place à Call of Duty et Warzone : de grandes cartes, des dizaines de joueurs, et des explosions partout.", dim=0.05, energy=1.0),
     B([WZ + "52.2", WZ + "61.3", WZ + "108.4"], [],
@@ -291,9 +308,9 @@ SCENES.append(("cod", [
       "Pour repérer un adversaire au loin, la définition 1440p de ton écran OLED aide vraiment : l'image est plus fine, et les détails lointains plus lisibles.", dim=0.05, energy=0.95),
     B([WZ + "77.2", WZ + "88.2"], [],
       "Et quand tu vises à travers une lunette, les 360 hertz rendent chaque mouvement de caméra plus net.",
-      "Avec plus de 200 images par seconde en compétitif, tu profites déjà largement de la fréquence élevée de ton écran.", dim=0.05, energy=0.95),
+      "Et avec plus de 200 images par seconde en compétitif, tu profites déjà largement de ton écran.", dim=0.05, energy=0.95),
     B("split:wz_0@90.2", [],
-      "Pour bien comprendre la différence entre réglages compétitifs et réglages élevés, voici une simulation du principe.",
+      "Réglages compétitifs ou élevés ? Voici une simulation du principe.",
       "Les réglages compétitifs suppriment ce qui gêne la vue, comme le flou ou certains effets, tandis que les réglages élevés privilégient l'ambiance et les détails.", dim=0.0),
     B(WZ + "96.2", [{"k": "chart", "title": "Call of Duty · RTX 5070", "sub": "FPS moyens · fourchettes issues de tests aux conditions variées",
                      "rows": [("Réglages maximum · natif", 125, (105, 150), "e", "Estimation", "1440p · tests Black Ops 6 · DLSS non · CPU variés"),
@@ -306,12 +323,13 @@ SCENES.append(("cod", [
                                             ("Textures", "Moyennes à élevées"), ("Effets & flou", "Désactivés")]}],
       "Mon conseil : garde des textures élevées, mais coupe les effets et le flou de mouvement.",
       "Résultat : une image propre et une réactivité de niveau compétitif.", dim=0.4),
+    B([WZ + "96.6", WZ + "131.0"], [], dur=5.0, dim=0.0, energy=1.0),
 ]))
 
 # 7 — BODYCAM
 SCENES.append(("bodycam", [
     chapter("06", "BODYCAM", "Le réalisme poussé à l'extrême", bg="i:bc_01"),
-    B([BC + "6.2", BC + "13.2", BC + "36.2", BC + "93.2"], [{"k": "gametitle", "text": "BODYCAM", "sub": "Images officielles · Reissad"}], dur=6.0, dim=0.0, energy=1.0),
+    B([BC + "6.2", BC + "13.2", BC + "36.2", BC + "93.2"], [{"k": "gametitle", "text": "BODYCAM", "sub": "Images officielles · Reissad"}], dur=8.0, dim=0.0, energy=1.0),
     B([BC + "11.2", BC + "31.2", BC + "49.2"], [],
       "Bodycam, c'est un FPS multijoueur tactique d'un réalisme saisissant, développé par Reissad sous Unreal Engine 5.",
       "Tout est filmé comme par une caméra-piéton : objectif grand angle, lumière brute, et des décors photoréalistes.", dim=0.0, energy=1.0),
@@ -330,13 +348,13 @@ SCENES.append(("bodycam", [
                                            ("Ombres", "Moyennes à élevées"), ("Flou de mouvement", "Désactivé")]}],
       "Mon conseil : réglages élevés, DLSS Qualité, et pas de génération d'images en multijoueur, pour garder la meilleure réactivité.",
       "Et ton écran OLED fera le reste : dans les bâtiments sombres et les tranchées, ses noirs profonds rendent l'ambiance encore plus saisissante.", dim=0.45),
-    B([BC + "114.2", BC + "117.2"], [], dur=4.0, dim=0.0, energy=1.0),
+    B([BC + "114.2", BC + "117.2"], [], dur=6.0, dim=0.0, energy=1.0),
 ]))
 
 # 8 — FORZA HORIZON 6
 SCENES.append(("fh6", [
     chapter("07", "FORZA HORIZON 6", "La beauté du Japon", bg="i:fh6_bg"),
-    B([FH + "0.2", FH + "3.1", FH + "6.2", FH + "68.2"], [{"k": "gametitle", "text": "FORZA HORIZON 6", "sub": "Images officielles · Playground Games"}], dur=6.0, dim=0.0, energy=1.0),
+    B([FH + "0.2", FH + "3.1", FH + "6.2", FH + "68.2"], [{"k": "gametitle", "text": "FORZA HORIZON 6", "sub": "Images officielles · Playground Games"}], dur=9.0, dim=0.0, energy=1.0),
     B([FH + "7.3", FH + "50.3"], [],
       "Changement d'ambiance avec Forza Horizon 6.",
       "Ici, on cherche la plus belle image possible, avec une excellente fluidité.", dim=0.0, energy=1.0),
@@ -358,6 +376,7 @@ SCENES.append(("fh6", [
       "TechSpot a testé 47 cartes : en 1440p natif, préréglage Extrême sans ray tracing, la RTX 5070 atteint 112 images par seconde. ComputerBase mesure 118 avec son propre protocole.",
       "Avec le ray tracing activé, toujours en natif, TechSpot relève 56 images par seconde.",
       "Avec le DLSS Qualité, j'estime qu'on remonte à 75 ou 85. La génération d'images peut dépasser 140, mais ce sont des images générées.", dim=0.75),
+    B([FH + "20.1", FH + "55.1", FH + "81.1"], [], dur=6.0, dim=0.0, energy=1.0),
     B(FH + "45.1", [{"k": "settings", "title": "Réglages conseillés · Forza Horizon 6",
                      "rows": [("Préréglage", "Extrême"), ("Ray tracing", "Activé"), ("Upscaling", "DLSS · Qualité"),
                               ("Génération d'images", "En balade / photo"), ("Course en ligne", "RT désactivé · >110 FPS")]}],
@@ -366,7 +385,7 @@ SCENES.append(("fh6", [
     B(FH + "50.1", [{"k": "versus"}],
       "Face à la Xbox Series X, Digital Foundry décrit un mode 60 images par seconde en 4K dynamique, et un mode 4K native à 30 images par seconde, avec un ray tracing limité.",
       "Ton PC, en 1440p, va bien au-delà des 60 images par seconde avec plus de ray tracing. La console garde ses atouts : un prix plus bas et aucun réglage.", dim=0.78),
-    B([FH + "73.2", FH + "84.6"], [], dur=4.0, dim=0.0, energy=1.0),
+    B([FH + "73.2", FH + "84.6"], [], dur=6.0, dim=0.0, energy=1.0),
 ]))
 
 # 9 — GTA VI
@@ -380,19 +399,23 @@ SCENES.append(("gta", [
     B("gta", [{"k": "gta"}],
       "Mais soyons clairs : GTA VI sort le 19 novembre 2026 sur PlayStation 5 et Xbox Series, et aucune version PC n'est officiellement annoncée.",
       "Des rumeurs parlent de début 2027, sans confirmation. Il n'existe ni configuration requise, ni benchmark.",
-      "En théorie, ta configuration est une très bonne base, avec un processeur de pointe pour une ville aussi dense.",
-      "Mais tout chiffre de FPS serait inventé : il faudra attendre les premiers tests."),
+      "En théorie, ta configuration est une très bonne base, mais tout chiffre de FPS serait inventé : il faudra attendre les premiers tests."),
 ]))
 
 # 10 — ÉVOLUTIONS
 SCENES.append(("upgrade", [
     chapter("09", "LES ÉVOLUTIONS POSSIBLES", "Rien d'indispensable, tout est possible"),
-    B("dark", [{"k": "upgrade"}],
+    B("dark", [{"k": "chart", "title": "RTX 5070 · 5070 Ti · 5080", "sub": "Performances relatives en 1440p · RTX 5070 = 100 · ordre de grandeur des tests publiés, projection", "unit": "%",
+                "rows": [("RTX 5070 (ta carte)", 100, None, "ref", "Base", "12 Go · 250 W · alimentation recommandée : 650 W"),
+                         ("RTX 5070 Ti", 122, (120, 125), "e", "Projection", "16 Go · 300 W · alimentation recommandée : 750 W"),
+                         ("RTX 5080", 140, (135, 145), "e", "Projection", "16 Go · 360 W · alimentation recommandée : 850 W")],
+                "max": 160}],
       "Et si GTA VI, ou un autre jeu futur, se montre très exigeant sur PC ? Ton PC pourra évoluer, sans que ce soit indispensable aujourd'hui.",
-      "Option un : la RTX 5070 Ti, environ 20 à 25 pour cent plus rapide en 1440p, avec 16 gigaoctets, pour 300 watts.",
-      "Nvidia recommande 750 watts : ton alimentation actuelle convient.",
-      "Option deux : la RTX 5080, environ 35 à 45 pour cent plus rapide selon mon estimation, avec 16 gigaoctets, mais 360 watts.",
-      "Nvidia recommande alors 850 watts : changer d'alimentation serait le choix prudent."),
+      "Option un : la RTX 5070 Ti, environ 20 à 25 pour cent plus rapide en 1440p.",
+      "Option deux : la RTX 5080, environ 35 à 45 pour cent plus rapide, selon mon estimation."),
+    B("dark", [{"k": "upgrade"}],
+      "La 5070 Ti apporte 16 gigaoctets de mémoire vidéo pour 300 watts, et Nvidia recommande 750 watts : ton alimentation actuelle convient.",
+      "La 5080 consomme 360 watts, et Nvidia recommande alors 850 watts : changer d'alimentation serait le choix prudent."),
     B("dark", [{"k": "fit"}],
       "Côté taille, la plupart des 5070 Ti et 5080 mesurent 30 à 34 centimètres, et ton boîtier accepte 405 millimètres. Il suffira de vérifier le modèle choisi.",
       "Et le 9800X3D a largement les épaules pour une carte plus puissante."),
@@ -403,12 +426,12 @@ SCENES.append(("bench", [
     chapter("10", "TES JEUX EN CHIFFRES", "Le récapitulatif"),
     B("dark", [{"k": "legend"}],
       "Quelques clés pour lire les chiffres.",
-      "Badge vert : une mesure réelle, publiée par un média spécialisé. Badge orange : une estimation."),
-    B("dark", [{"k": "concepts"}],
-      "Un : en 1440p, la carte calcule 78 pour cent de pixels en plus qu'en 1080p. Moins de FPS dans les jeux exigeants, mais une image bien plus fine.",
-      "Deux : le mode Performance maximise les FPS, la qualité élevée maximise la beauté. Ton PC sait faire les deux.",
-      "Trois : la moyenne ne dit pas tout. Les 1 pour cent les plus bas mesurent les moments lents : plus ils sont proches de la moyenne, plus c'est fluide.",
-      "Quatre : si baisser les graphismes ne fait plus monter les FPS, c'est le processeur qui limite. Avec ton 9800X3D, cette limite est très haute."),
+      "Badge vert : une mesure réelle, publiée par un média spécialisé. Badge orange : une estimation.",
+      "Et le badge lavande signale des FPS affichés avec génération d'images."),
+    B("dark", [{"k": "fpsfeel"}],
+      "Mais que signifie concrètement jouer à 100, 200 ou 300 images par seconde ?",
+      "À 100 FPS, une nouvelle image arrive toutes les 10 millisecondes. À 200 FPS, toutes les 5. Et à 300 FPS, toutes les 3,3.",
+      "Plus les images sont rapprochées, plus le mouvement est net et plus le jeu réagit vite à ta souris. Au-delà des 360 hertz de ton écran, le gain devient minime."),
     B("dark", [{"k": "chart", "title": "Récapitulatif · RTX 5070 + Ryzen 7 9800X3D · 1440p", "sub": "Réglage conseillé par jeu · FPS moyens réels, sans génération d'images",
                 "rows": [("Fortnite · Performance", 330, (280, 380), "e", "Estimation"),
                          ("Warzone · compétitif + DLSS Q", 225, (200, 250), "e", "Estimation"),
@@ -418,9 +441,8 @@ SCENES.append(("bench", [
                          ("FH6 · Extrême + RT + DLSS Q", 80, (75, 85), "e", "Estimation"),
                          ("GTA VI · version PC", 0, None, "na", "Non annoncée")],
                 "max": 420, "ref": [60, 360], "compact": True}],
-      "Le récapitulatif : en rose, les 360 hertz de ton écran ; en gris, les 60 images par seconde.",
-      "Fortnite s'approche des 360 hertz, Warzone est très confortable, et Bodycam comme Forza Horizon 6 restent bien au-dessus de 60 avec les réglages conseillés.",
-      "Pour GTA VI, pas de chiffre tant que la version PC n'existe pas."),
+      "Le récapitulatif : en bleu glacier, les 360 hertz de ton écran ; en gris, les 60 images par seconde.",
+      "Fortnite s'approche des 360 hertz, Warzone est très confortable, et Bodycam comme Forza Horizon 6 restent bien au-dessus de 60. Pour GTA VI, pas de chiffre tant que la version PC n'existe pas."),
     B("dark", [{"k": "sourcetable"}],
       "Voici le détail de chaque mesure : définition, réglages, DLSS, processeur, carte graphique et source.",
       "Les estimations, elles, varient selon la version du jeu et la scène."),
@@ -444,6 +466,15 @@ SCENES.append(("outro", [
       "Bon jeu !", energy=1.0),
     B("dark", [{"k": "credits"}], dur=12.0, dim=0.8),
 ]))
+
+# numérotation automatique des chapitres
+_n = 0
+for _name, _beats in SCENES:
+    for _b in _beats:
+        for _o in _b["ov"]:
+            if _o["k"] == "chapter":
+                _n += 1
+                _o["num"] = f"{_n:02d}"
 
 # ------------------------------------------------- prononciation (TTS)
 SPOKEN = [
@@ -490,6 +521,8 @@ CREDITS = [
     "ComputerBase — Forza Horizon 6 (WQHD, recommandations VRAM)  ·  CGMagazine — RTX 5070 / Cyberpunk 2077",
     "TechPowerUp — RTX 5070 Founders Edition  ·  Digital Foundry — Forza Horizon 6 PC / Xbox",
     "Rockstar Games — GTA VI  ·  NVIDIA — alimentations recommandées RTX 50  ·  Corsair — compatibilité FRAME 4000D",
+    "Températures & consommation : AMD (Tjmax 95 °C) · TechPowerUp (RTX 5070 FE / MSI, 9800X3D) · retours d'utilisateurs (valeurs indicatives)",
+    "Gigabyte — garantie MO27Q3 3 ans burn-in inclus, OLED Care · Patriot — Viper Venom PVV532G600C30K (sans RGB)",
     "Fiches constructeurs : AMD, NVIDIA, MSI, Gigabyte (MO27Q3 : zone d'affichage 590,42 × 333,72 mm), AOC, Kioxia, be quiet!, Arctic, Patriot",
     "Photos produits : fournies par le destinataire (visuels des fabricants / revendeurs) · page de titre : visuel d'illustration généré",
     "Images de jeu : bandes-annonces et captures officielles (Steam : Forza Horizon 6, Call of Duty Warzone, Bodycam) — propriété de leurs éditeurs",

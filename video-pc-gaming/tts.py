@@ -7,7 +7,7 @@ from script import SCENES, spoken
 
 OUT = sys.argv[1]
 VOICE = "fr-FR-RemyMultilingualNeural"
-RATE = "+4%"
+RATE = "+8%"
 os.makedirs(f"{OUT}/voice", exist_ok=True)
 
 LEAD, GAP, TAIL = 0.45, 0.34, 0.6   # secondes

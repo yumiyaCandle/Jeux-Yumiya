@@ -83,9 +83,7 @@ def install(R):
             cw, ch = 400, 330
             x0, y0 = 120, 120
             for k, (pid, lab, si) in enumerate(GRID):
-                st = (self.sent[si] if si < len(self.sent) else 0) + 0.35 * (k % 4 if si != 3 else k - 4)
-                if si == 3:
-                    st = self.sent[3] + 0.4 * (k - 4) if len(self.sent) > 3 else 0
+                st = 0.6 + k * 0.45
                 a = ease((t - st) / 0.6)
                 if a <= 0:
                     continue
@@ -127,7 +125,7 @@ def install(R):
                     px = x1 + (x2 - x1) * p_
                     d.ellipse([px - 7, y - 7, px + 7, y + 7], fill=PINK + (int(255 * a2),))
             # alimentation + refroidissement
-            a = ease((t - (self.sent[2] if len(self.sent) > 2 else 5)) / 0.6)
+            a = ease((t - (self.sent[-1] if self.sent else 5)) / 0.6)
             if a > 0:
                 for pid, lab, yy, col, txt in [("psu", "ALIMENTATION", 760, (255, 200, 60), "énergie pour tous les composants"), ("aio", "WATERCOOLING", 120, BLUE, "évacue la chaleur du processeur")]:
                     th = R.load_photo(pid).copy(); th.thumbnail((170, 110), Image.LANCZOS)
@@ -417,7 +415,7 @@ def install(R):
             x0 = 120
             for i, lab in enumerate(labels):
                 d.text((x0, 360 + i * 110), lab, font=F(27, "SemiBold"), fill=GREY)
-            starts = [0, self.sent[1] if len(self.sent) > 1 else 3, self.sent[3] if len(self.sent) > 3 else 8]
+            starts = [0, 0.6, self.sent[1] if len(self.sent) > 1 else 6]
             for j, (n_, tag, perf, ptxt, kind, vram, tgp, psu, ok, okc) in enumerate(cols):
                 a = ease((t - starts[j] - 0.2) / 0.6)
                 if a <= 0: continue
