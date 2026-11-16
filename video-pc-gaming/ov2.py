@@ -378,7 +378,7 @@ def install(R):
 
         def draw(self, t):
             im, d = full()
-            themes = [("Noir & violet", [(130, 60, 255)]), ("Bleu glacier", [(40, 170, 255)]), ("Rose néon", [(255, 50, 170)]), ("Arc-en-ciel", None)]
+            themes = [("Noir & violet", [(130, 60, 255)]), ("Bleu glacier", [(40, 170, 255)]), ("Blanc pur", [(235, 240, 255)]), ("Arc-en-ciel", None)]
             k = int(t / 2.6) % 4
             name, cols = themes[k]
             ph = t * 0.3

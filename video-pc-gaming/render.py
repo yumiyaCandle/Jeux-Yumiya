@@ -873,6 +873,8 @@ import ov3  # noqa: E402  (v3 : plans multiples, gros plans photo, typographie a
 ov3.install(sys.modules[__name__])
 import ov4  # noqa: E402  (v6 : températures, consommation, OLED, FPS, habillages des jeux)
 ov4.install(sys.modules[__name__])
+import ov5  # noqa: E402  (v7 : DLSS 4 modes, SSD, FPS calculés/affichés, corrections)
+ov5.install(sys.modules[__name__])
 
 
 # ------------------------------------------------------------- SOUS-TITRES

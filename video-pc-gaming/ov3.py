@@ -166,8 +166,8 @@ def install(R):
             x0, pw = 80, 1760
             y0 = 60
             top = y0 + 160
-            rh = 88 if compact else min(150, int(660 / n))
-            ph = 160 + n * rh + 60
+            rh = 88 if compact else min(150, int((610 if o.get("src") else 660) / n))
+            ph = 160 + n * rh + (96 if o.get("src") else 60)
             im.alpha_composite(panel(pw, ph, fill=(10, 8, 18, 232)), (x0, y0))
             d.text((x0 + 48, y0 + 30), o["title"], font=F(48 if not compact else 44, "Black", True), fill=WHITE)
             d.text((x0 + 50, y0 + 96), o["sub"], font=F(25, "Medium"), fill=GREY)
@@ -184,7 +184,7 @@ def install(R):
                     col = PINK if r_ == 360 else (130, 134, 146)
                     for yy in range(top - 10, top + n * rh - 20, 16):
                         d.line([xr, yy, xr, yy + 8], fill=col, width=3)
-                    d.text((xr, top + n * rh - 8), "360 Hz" if r_ == 360 else f"{r_} FPS", font=F(22, "Bold"), fill=col, anchor="ma")
+                    d.text((xr + 8, top - 34), "360 Hz" if r_ == 360 else f"{r_} FPS", font=F(20, "Bold"), fill=col)
             for i, row in enumerate(rows):
                 lab, v, rng, kind, src = row[:5]
                 cond = row[5] if len(row) > 5 else None
@@ -225,6 +225,8 @@ def install(R):
                     if cond and not compact:
                         tx = cond + (f"  ·  fourchette {rng[0]}–{rng[1]} {o.get('unit', 'FPS')}" if rng else "")
                         d.text((lx, by + bh + 6), tx, font=F(21, "Medium"), fill=(185, 188, 205, int(255 * ab)))
+            if o.get("src"):
+                d.text((x0 + 50, y0 + ph - 46), o["src"], font=F(20, "SemiBold"), fill=(150, 200, 255))
             return im
 
     # ================================================================ fréquences : 60 / 144 / 240 / 360 Hz
@@ -289,14 +291,14 @@ def install(R):
     class OvSourceTable(Ov):
         def draw(self, t):
             im, d = full()
-            hdr = ["Mesure", "Déf.", "Réglages", "RT", "DLSS", "FG", "Processeur", "Résultat", "Source"]
-            xs = [130, 470, 570, 820, 900, 1000, 1075, 1330, 1560]
-            rows = [("Forza Horizon 6", "1440p", "Extrême", "Non", "Non", "Non", "n. p.", "112 FPS", "TechSpot"),
-                    ("Forza Horizon 6", "1440p", "Extrême", "Oui", "Non", "Non", "n. p.", "56 FPS", "TechSpot"),
-                    ("Forza Horizon 6", "1440p", "Protocole CB", "n. p.", "n. p.", "Non", "n. p.", "118 FPS", "ComputerBase"),
-                    ("Cyberpunk 2077", "1440p", "Ultra", "Non", "Non", "Non", "n. p.", "102,6 FPS", "CGMagazine"),
-                    ("CS2 · test CPU*", "1080p", "—", "Non", "Non", "Non", "9800X3D / 7800X3D", "668 / 591", "TechSpot"),
-                    ("Moyenne 25 jeux", "1440p", "Raster", "Non", "Non", "Non", "Ryzen 7 9800X3D", "+22 % / 4070", "TechPowerUp")]
+            hdr = ["Mesure", "Déf.", "Réglages", "RT", "DLSS", "FG", "GPU", "Processeur", "Résultat", "Source"]
+            xs = [120, 400, 490, 670, 740, 860, 930, 1100, 1350, 1580]
+            rows = [("Forza Horizon 6", "1440p", "Extrême", "Non", "Non", "Non", "RTX 5070", "n. c.", "112 FPS", "TechSpot"),
+                    ("Forza Horizon 6", "1440p", "Extrême", "Oui", "Non", "Non", "RTX 5070", "n. c.", "56 FPS", "TechSpot"),
+                    ("Forza Horizon 6", "1440p", "Extrême", "Non", "Qualité", "Non", "RTX 5070", "n. c.", "118 FPS", "ComputerBase"),
+                    ("Cyberpunk 2077", "1440p", "Ultra", "Non", "Non", "Non", "RTX 5070", "n. c.", "102,6 FPS", "CGMagazine"),
+                    ("CS2 · test CPU", "1080p", "n. p.", "Non", "Non", "Non", "RTX 4090", "9800X3D / 7800X3D", "668 / 591", "TechSpot"),
+                    ("Moyenne 25 jeux", "1440p", "Raster", "Non", "Non", "Non", "RTX 5070", "Ryzen 7 9800X3D", "+22 % / 4070", "TechPowerUp")]
             im.alpha_composite(panel(1780, 150 + len(rows) * 92 + 90, fill=(10, 8, 18, 238)), (70, 60))
             d.text((120, 88), "Mesures réelles utilisées", font=F(46, "Black", True), fill=WHITE)
             legend_strip(im, 1250, 96)
@@ -307,11 +309,11 @@ def install(R):
                 d.line([110, y - 18, 1830, y - 18], fill=(255, 255, 255, 24))
                 d.ellipse([92, y + 10, 108, y + 26], fill=GREEN)
                 for k, v in enumerate(r_):
-                    f = F(26 if k != 6 else 23, "Bold" if k in (0, 7) else "Medium")
-                    c = GREEN if k == 8 else (WHITE if k in (0, 7) else (220, 222, 232))
+                    f = F(26 if k != 7 else 22, "Bold" if k in (0, 8) else "Medium")
+                    c = GREEN if k == 9 else (WHITE if k in (0, 8) else (220, 222, 232))
                     d.text((xs[k], y), v, font=f, fill=c)
             yb = 218 + len(rows) * 92
-            d.text((120, yb), "Carte : RTX 5070, sauf *CS2 (RTX 4090, test processeur) · n. p. = non précisé dans la source consultée · 1 % low : non relevés ici",
+            d.text((120, yb), "n. c. = processeur du test non confirmé dans les extraits consultés · n. p. = non précisé · ComputerBase : DLSS Qualité selon son protocole publié",
                    font=F(21, "Medium"), fill=GREY)
             d.text((120, yb + 34), "Toutes les autres valeurs de la vidéo sont des ESTIMATIONS (badge orange) · FG = génération d'images",
                    font=F(21, "SemiBold"), fill=ORANGE)
