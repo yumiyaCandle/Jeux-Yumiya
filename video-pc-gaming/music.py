@@ -114,11 +114,10 @@ for sc in tl["scenes"]:
             t2 = np.arange(e - a) / SR
             boom = np.sin(2 * np.pi * (38 + 60 * np.exp(-t2 * 6)) * t2) * np.exp(-t2 * 2.2)
             noise = lp(rng.standard_normal(e - a), 900) * np.exp(-t2 * 4) * 0.6
-            imp[a:e] += (boom + noise) * 0.55
+            imp[a:e] += boom * 0.25   # impact grave très discret, sans souffle
             # montée (riser) juste avant
             r0 = max(0, a - int(1.2 * SR)); t3 = np.arange(a - r0) / SR
-            if len(t3):
-                imp[r0:a] += hp(rng.standard_normal(a - r0), 2500) * (t3 / t3[-1]) ** 2 * 0.12
+            pass  # plus de montée (souffle) avant les chapitres
 
 # effets sonores discrets : souffles aux changements de plan, « ticks » aux apparitions
 sfx = np.zeros(N)
@@ -137,11 +136,6 @@ def tick(at, g, f0=1400):
 for (name, beats), sc in zip(SCENES, tl["scenes"]):
     for bi, (spec, b) in enumerate(zip(beats, sc["beats"])):
         st = b["start"]; sent = [s["t"] - st for s in b["sent"]]
-        if bi > 0:
-            whoosh(st - 0.25, 0.22)
-        if isinstance(spec["bg"], list):
-            for tm in shot_times(len(spec["bg"]), sent, b["dur"])[1:]:
-                whoosh(st + tm - 0.2, 0.12)
         for o in spec["ov"]:
             if o["k"] == "chart":
                 for i in range(len(o["rows"])):
