@@ -376,10 +376,10 @@ def install_rgbpc(R):
         arr = np.asarray(im).astype(np.float32)[..., :3] / 255
         mx = arr.max(-1); mn = arr.min(-1); s = (mx - mn) / (mx + 1e-6); v = mx
         m = np.clip((s - 0.2) / 0.35, 0, 1) * np.clip((v - 0.15) / 0.45, 0, 1)
-        # RAM Patriot sans RGB et ventilateur arrière (absent de la config) : éclairage éteint, bords adoucis
+        # RAM Patriot sans RGB : éclairage éteint, bords adoucis
         reg = Image.new("L", im.size)
         rd = ImageDraw.Draw(reg)
-        for (x0, y0, x1, y1) in [(612, 325, 680, 610), (185, 295, 335, 550)]:
+        for (x0, y0, x1, y1) in [(612, 325, 680, 610)]:
             rd.rectangle([x0 * sc, y0 * sc, x1 * sc, y1 * sc], fill=255)
         wreg = np.asarray(reg.filter(ImageFilter.GaussianBlur(7))).astype(np.float32) / 255
         k = (wreg * np.maximum(m, np.clip((v - 0.25) / 0.4, 0, 1)))[..., None]
