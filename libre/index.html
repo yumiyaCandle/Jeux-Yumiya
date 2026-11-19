@@ -1053,7 +1053,6 @@ h1,h2,h3{letter-spacing:-.015em}
 .large-title{font-size:2.05rem;letter-spacing:-.02em;margin-top:6px}
 .page-sub{color:var(--muted);margin-top:2px}
 canvas[data-scene],.scene-sm,.scene-hd,.scene-band,.story-scene{display:none!important}
-*{box-shadow:none!important}
 
 /* Boutons */
 .btn{border-radius:12px;font-weight:600;letter-spacing:-.005em;min-height:46px;transition:transform .12s ease,background .2s ease}
@@ -1509,7 +1508,7 @@ h1,h2,.large-title,.x-hello,.pg-t{line-height:1.15}
 .grab{position:relative;cursor:grab}.grab::before{content:"";position:absolute;inset:-12px -60px}
 .sheet-h{cursor:default}
 .exiting{position:fixed;inset:0;z-index:45;pointer-events:none}
-.exiting>.backdrop{animation:none}
+.exiting>.backdrop{animation:none;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 .toast{transition:transform .18s ease-in,opacity .18s ease-in}
 .toast.out{transform:translate(-50%,-18px);opacity:0}
 /* Matières : la barre du haut ne montre son filet que lorsque le contenu glisse dessous */
@@ -1523,6 +1522,142 @@ body.scrolled .top,body.scrolled .top.light{border-bottom-color:color-mix(in srg
 @media (prefers-contrast:more) and (prefers-color-scheme:dark){:root:not([data-theme="light"]){--muted:#CDD2DA;--line:#66728A}}
 :root[data-theme="dark"]{}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
+/* =====================================================================
+   LIBRE v6 — Profondeur, cartes, mouvement
+   Principes retenus d’apple.com : beaucoup d’espace, une idée par bloc,
+   titres forts, surfaces légèrement en relief, mouvement court et utile.
+   ===================================================================== */
+:root,:root[data-theme="light"]{
+  --sh-1:0 1px 2px rgba(19,35,58,.04),0 6px 18px rgba(19,35,58,.06);
+  --sh-2:0 2px 6px rgba(19,35,58,.06),0 16px 36px rgba(19,35,58,.11);
+  --sh-3:0 -10px 50px rgba(10,18,30,.22);
+  --edge:rgba(19,35,58,.05);--r-card:22px;--ease:cubic-bezier(.2,.8,.2,1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sh-1:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px rgba(0,0,0,.28);--sh-2:0 1px 0 rgba(255,255,255,.06) inset,0 18px 40px rgba(0,0,0,.4);--sh-3:0 -10px 50px rgba(0,0,0,.5);--edge:rgba(255,255,255,.06)}}
+:root[data-theme="dark"]{--sh-1:0 1px 0 rgba(255,255,255,.04) inset,0 8px 24px rgba(0,0,0,.28);--sh-2:0 1px 0 rgba(255,255,255,.06) inset,0 18px 40px rgba(0,0,0,.4);--sh-3:0 -10px 50px rgba(0,0,0,.5);--edge:rgba(255,255,255,.06)}
+/* Les anciens anneaux lumineux autour des choix sélectionnés restent éteints */
+.seg button[aria-pressed="true"],.chip[aria-pressed="true"],.choice[aria-pressed="true"],.opt[aria-pressed="true"]{box-shadow:none}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 25%,transparent)!important}
+
+/* ---------- Titres : plus d’assurance, plus d’air ---------- */
+.large-title{font-size:clamp(2.05rem,8vw,2.6rem);font-weight:700;letter-spacing:-.035em;margin-top:10px}
+.page-sub{font-size:1.1rem;margin:6px 0 22px}
+.sec-h h2,#app .card h2{font-size:1.3rem;font-weight:700;letter-spacing:-.025em}
+.x-hello{font-size:clamp(1.85rem,7vw,2.3rem);letter-spacing:-.035em}
+.eyebrow,.kicker,.x-k{color:var(--muted)}
+
+/* ---------- Cartes : surfaces en léger relief, plus de filets séparateurs ---------- */
+#app .card,#app [data-view] .card,#app article.card{background:var(--card)!important;border:0!important;border-radius:var(--r-card)!important;padding:20px!important;box-shadow:var(--sh-1),0 0 0 1px var(--edge)}
+#app .card .card{box-shadow:none;padding:0!important;background:none!important}
+#app .stack{gap:14px}
+#app .stack>.card+.card{margin-top:0}
+/* Accueil : le compteur respire en plein écran, le reste est rangé en cartes */
+#app .home>section:not(.x-hero):not(.x-empty):not(.x-intro),#app .home>.x-row{background:var(--card);border:0!important;border-radius:var(--r-card);padding:20px!important;margin:0 0 14px!important;box-shadow:var(--sh-1),0 0 0 1px var(--edge)}
+#app .home>.focus{background:linear-gradient(160deg,color-mix(in srgb,var(--beige) 100%,#fff 0%),color-mix(in srgb,var(--beige) 82%,var(--card)))!important}
+#app .home>.focus.f-goal{background:linear-gradient(160deg,var(--sky-soft),color-mix(in srgb,var(--sky-soft) 70%,var(--card)))!important}
+#app .home>.focus.f-safe{background:var(--sos-soft)!important}
+#app .home>.x-intro{padding:18px 4px!important;border:0!important}
+#app .home>.x-log{padding:18px 20px!important}
+.home>.x-hero{padding:26px 0 22px!important}
+.home .x-photo .ph{border-radius:var(--r-card);box-shadow:var(--sh-1)}
+/* Listes groupées (Profil, Outils, Bibliothèque) façon réglages */
+#app .hub,#app .trows,#app .arts{background:var(--card);border:0;border-radius:var(--r-card);padding:0 18px;box-shadow:var(--sh-1),0 0 0 1px var(--edge);margin-bottom:22px}
+#app .hub-i:last-child,#app .tool-row:last-child,#app .arts>.art:last-child{border-bottom:0}
+#app .rec{background:var(--card);box-shadow:var(--sh-1),0 0 0 1px var(--edge);border-radius:18px}
+#app .plan-goal{box-shadow:var(--sh-1);background:linear-gradient(160deg,var(--beige),color-mix(in srgb,var(--beige) 80%,var(--card)))}
+#app .plan-sec{background:var(--card);border:0;border-radius:var(--r-card);padding:20px;margin-top:14px;box-shadow:var(--sh-1),0 0 0 1px var(--edge)}
+#app .ins-box{background:var(--card);border:0;border-radius:var(--r-card);padding:20px;box-shadow:var(--sh-1),0 0 0 1px var(--edge)}
+#app .jbook{border:0;box-shadow:var(--sh-1),0 0 0 1px var(--edge);border-radius:var(--r-card)}
+#app .qa-row>*{border:0;box-shadow:var(--sh-1),0 0 0 1px var(--edge);border-radius:18px}
+.kpis{border:0!important}
+
+/* ---------- Boutons : pilules, couleurs sobres, dégradé à peine perceptible ---------- */
+.btn,.btn.sm{border-radius:999px}
+.btn.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--navy) 88%,#fff),var(--navy));box-shadow:0 1px 2px rgba(19,35,58,.18),0 6px 16px rgba(19,35,58,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--green) 90%,#fff),var(--green));box-shadow:0 6px 18px rgba(0,0,0,.35)}}
+:root[data-theme="dark"] .btn.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--green) 90%,#fff),var(--green))}
+.full .btn.primary,.welcome .btn.primary{background:#EDEAE3;box-shadow:none}
+.qa-main{background:linear-gradient(150deg,color-mix(in srgb,var(--navy) 82%,#4F6C8C),var(--navy));box-shadow:0 2px 6px rgba(19,35,58,.15),0 14px 34px rgba(19,35,58,.2);border-radius:var(--r-card)}
+
+/* ---------- Matières : barres translucides, fenêtres en relief au-dessus d’un fond flouté ---------- */
+.backdrop{-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.sheet{box-shadow:var(--sh-3)}
+.toast{background:color-mix(in srgb,var(--navy) 86%,transparent);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);border:1px solid rgba(255,255,255,.1);border-radius:18px;box-shadow:0 12px 40px rgba(10,18,30,.3)}
+.tok{width:26px;height:26px;flex:none}
+.tok svg{width:26px;height:26px;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tok circle{stroke:#9CC5A8;stroke-width:2;stroke-dasharray:63;stroke-dashoffset:63;animation:tdraw .45s var(--ease) forwards}
+.tok path{stroke:#fff;stroke-width:2.2;stroke-dasharray:16;stroke-dashoffset:16;animation:tdraw .3s .25s var(--ease) forwards}
+@keyframes tdraw{to{stroke-dashoffset:0}}
+
+/* ---------- Accueil : anneau de progression ---------- */
+.x-hero.has-ring{position:relative}
+.x-hero.has-ring>.x-k,.x-hero.has-ring>.x-big{margin-inline-end:118px}
+.hring{position:absolute;top:22px;inset-inline-end:0;width:108px;height:108px}
+.hring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.hr-bg{fill:none;stroke:var(--field);stroke-width:9}
+.hr-fg{fill:none;stroke:var(--green);stroke-width:9;stroke-linecap:round;animation:ringin 1.2s var(--ease) both}
+@keyframes ringin{from{stroke-dashoffset:var(--c)}}
+.hr-t{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1.1;padding:0 14px}
+.hr-t b{font-size:1.45rem;font-weight:700;letter-spacing:-.04em}
+.hr-t b small{font-size:.8rem;font-weight:600;margin-inline-start:1px}
+.hr-t>small{font-size:.66rem;color:var(--muted);font-weight:600;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:76px}
+.x-hero.has-ring .x-next .track{display:none}
+.x-hero.has-ring .x-next{margin-top:10px}
+@media (max-width:359px){.hring{position:static;margin:4px 0 8px;width:96px;height:96px}.x-hero.has-ring>.x-k,.x-hero.has-ring>.x-big{margin-inline-end:0}}
+
+/* ---------- Indicateurs qui se dessinent ---------- */
+.chart .gbar{transform-box:fill-box;transform-origin:50% 100%;animation:gbar .7s var(--ease) both;animation-delay:calc(var(--i) * 28ms)}
+@keyframes gbar{from{transform:scaleY(0)}}
+.track>i,.bar>i,.mini>i,.tbar i,.sb i{transform-origin:0 50%;animation:gx .9s var(--ease) both}
+[dir="rtl"] .track>i,[dir="rtl"] .bar>i,[dir="rtl"] .tbar i{transform-origin:100% 50%}
+.sb i{transform-origin:50% 100%;animation-name:gy}
+@keyframes gx{from{transform:scaleX(0)}}@keyframes gy{from{transform:scaleY(0)}}
+
+/* ---------- Apparitions au défilement ---------- */
+.rv-pre{opacity:0;transform:translateY(18px) scale(.985);transition:opacity .55s var(--ease),transform .7s var(--ease);transition-delay:var(--rd,0ms)}
+.rv-pre.in{opacity:1;transform:none}
+
+/* ---------- Photo d’accueil : légère profondeur au défilement (navigateurs compatibles) ---------- */
+@supports (animation-timeline:view()){
+  .x-photo .ph img{animation:parax linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+  @keyframes parax{from{transform:scale(1.1) translateY(-4%)}to{transform:scale(1.1) translateY(4%)}}}
+
+/* ---------- Transitions entre les pages ---------- */
+.nav{view-transition-name:libre-nav}
+::view-transition-group(libre-nav){animation:none}
+::view-transition-old(root){animation:vt-out .2s ease-in both}
+::view-transition-new(root){animation:vt-in .34s var(--ease) both}
+html[data-dir="fwd"]::view-transition-new(root){animation-name:vt-in-f}
+html[data-dir="back"]::view-transition-new(root){animation-name:vt-in-b}
+@keyframes vt-out{to{opacity:0}}
+@keyframes vt-in{from{opacity:0;transform:translateY(10px)}}
+@keyframes vt-in-f{from{opacity:0;transform:translateX(18px)}}
+@keyframes vt-in-b{from{opacity:0;transform:translateX(-18px)}}
+
+/* ---------- Survol (souris et pavé tactile uniquement) ---------- */
+@media (hover:hover) and (pointer:fine){
+  .qa-main,.qa-row>*,.rec,button.x-row,#app .home>.x-row,.hub-i,.tool-row,.art,.trow,.plan-goal,.lib-cover .ph{transition:transform .25s var(--ease),box-shadow .25s var(--ease),background .2s,opacity .2s}
+  .qa-main:hover,.qa-row>*:hover,.rec:hover,#app .home>.x-row:hover{transform:translateY(-2px);box-shadow:var(--sh-2)}
+  .hub-i:hover,.tool-row:hover,.art:hover,.trow:hover{opacity:1;background:color-mix(in srgb,var(--field) 55%,transparent)}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.quiet:hover,.btn.ghost:hover{background:var(--field)}
+  .link:hover{text-decoration:underline;text-underline-offset:3px}
+  .x-photo .ph:hover img{transform:scale(1.02)}
+  .x-photo .ph img{transition:opacity .7s ease,transform .8s var(--ease)}}
+
+/* ---------- Ordinateur : deux colonnes sur l’accueil pour les cartes secondaires ---------- */
+@media (min-width:1024px){.x-photo .ph{max-height:none}}
+@media (min-width:1180px){
+  .app{max-width:760px}
+}
+
+/* ---------- Animations réduites : rien n’est caché, rien ne bouge ---------- */
+@media (prefers-reduced-motion:reduce){
+  .rv-pre{opacity:1;transform:none;transition:none}
+  .hr-fg,.chart .gbar,.track>i,.bar>i,.mini>i,.tbar i,.sb i{animation:none!important}
+  .tok circle,.tok path{animation:none!important;stroke-dashoffset:0}
+  ::view-transition-old(root),::view-transition-new(root){animation:none!important}
+  .x-photo .ph img{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -1832,7 +1967,8 @@ function toast(title,body,act){
   if(ui.locked)return;
   const old=$('.toast');if(old)old.remove();
   const el=document.createElement('div');el.className='toast';el.setAttribute('role','status');
-  el.innerHTML=`${logoMark(26)}<div><b>${esc(title)}</b>${body?`<span class="small" style="opacity:.85">${esc(body)}</span>`:''}</div>${act?`<button class="tact">${esc(act.label)}</button>`:''}`;
+  const ok=SUCCESS_T().has(title);if(ok)el.classList.add('ok');
+  el.innerHTML=`${ok?`<span class="tok" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg></span>`:logoMark(26)}<div><b>${esc(title)}</b>${body?`<span class="small" style="opacity:.85">${esc(body)}</span>`:''}</div>${act?`<button class="tact">${esc(act.label)}</button>`:''}`;
   document.body.appendChild(el);clearTimeout(toastT);toastT=setTimeout(()=>toastOut(el),act?7000:4200);
   el.onclick=e=>{const isAct=e.target.closest('.tact');toastOut(el);if(isAct&&act)act.fn()};
 }
@@ -1897,7 +2033,7 @@ function render(){
   app.innerHTML=html;app.dataset.view=v;document.body.classList.add('lightbar');paintScenes();document.querySelectorAll('.ltabs,.htabs').forEach(r=>{const b=r.querySelector('[aria-pressed="true"]');if(b&&b.offsetLeft+b.offsetWidth>r.clientWidth)r.scrollLeft=b.offsetLeft-r.clientWidth/2+b.offsetWidth/2});
   ensureChrome();updateLive();syncSegs();
   if(ui.view!==ui.lastView){ui.lastView=ui.view;
-    document.querySelectorAll('#app > .stack > *').forEach((el,i)=>{el.classList.add('rise');el.style.animationDelay=Math.min(i,8)*45+'ms'});
+    reveal();
     const d=document.querySelector('[data-live="days"]');
     if(d&&!matchMedia('(prefers-reduced-motion: reduce)').matches){const end=Math.floor((now()-curStart(S.habits.find(x=>x.id===d.dataset.h)))/DAY);if(end>1){d.dataset.anim='1';const t0=performance.now();const st=x=>{const p=Math.min(1,(x-t0)/900),e=1-Math.pow(1-p,3);d.textContent=nf(Math.round(end*e),0);if(p<1)requestAnimationFrame(st);else delete d.dataset.anim};requestAnimationFrame(st)}}}
 }
@@ -1978,7 +2114,8 @@ function viewHome(){
   return homeHead(p)+`<div class="home fade-in">
   ${A0.length>1?segc('home',A0.map(x=>`<button role="radio" data-a="homeHabit" data-id="${x.id}" aria-checked="${x.id===h.id}" tabindex="${x.id===h.id?0:-1}">${esc(hName(x))}</button>`),t('Habitude affichée')):''}
 
-  <section class="x-hero" aria-label="${esc(t('Compteur'))}">
+  <section class="x-hero ${nx&&!reduce?'has-ring':''}" aria-label="${esc(t('Compteur'))}">
+    ${nx&&!reduce?heroRing(pct,t(nx.t)):''}
     <p class="x-k">${esc(reduce?t('Réduction'):t('Arrêt'))} · ${esc(hName(h))}</p>
     <p class="x-big"><span class="num" data-live="days" data-h="${h.id}">${nf(dd,0)}</span> <span class="x-big-u">${esc(tn(dd,'jour sans {habit}','jours sans {habit}',{habit:hLow(h)}))}</span></p>
     <p class="x-since">${esc(reduce?t('Depuis la dernière consommation :'):t('Depuis le dernier arrêt :'))} <span class="num" data-live="since" data-h="${h.id}">${esc(sinceLong(el))}</span></p>
@@ -2375,7 +2512,7 @@ function bars(vals,labels,opts){
   let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||t('Graphique'))}" direction="ltr">`;
   [0,.5,1].forEach(f=>{const v=max*f,yy=y(v);s+=`<line class="grid" x1="${L}" x2="${W}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${nf(v,max<5?1:0)}</text>`});
   vals.forEach((v,i)=>{const x=L+cw*i+(cw-bw)/2,yy=y(v),h=Math.max(v>0?2:0,H-B-yy);const last=i===n-1;
-    s+=`<rect x="${x}" y="${H-B-h}" width="${bw}" height="${h}" rx="4" style="fill:${last?'var(--green)':opts.color||'var(--bar)'};opacity:${last?1:.82}"><title>${esc(labels[i])} : ${nf(v)}</title></rect>`;
+    s+=`<rect class="gbar" x="${x}" y="${H-B-h}" width="${bw}" height="${h}" rx="4" style="--i:${i};fill:${last?'var(--green)':opts.color||'var(--bar)'};opacity:${last?1:.82}"><title>${esc(labels[i])} : ${nf(v)}</title></rect>`;
     if(v>0&&(last||n<=8))s+=`<text x="${x+bw/2}" y="${H-B-h-4}" text-anchor="middle" style="fill:var(--ink);font-weight:700">${nf(v)}</text>`;
     s+=`<text x="${x+bw/2}" y="${H-6}" text-anchor="middle">${esc(labels[i])}</text>`});
   if(opts.ref){const yy=y(opts.ref);s+=`<line class="ref" x1="${L}" x2="${W}" y1="${yy}" y2="${yy}"/><text x="${W-2}" y="${yy-4}" text-anchor="end" style="fill:var(--amber);font-weight:700">${esc(opts.refLabel||'')}</text>`}
@@ -4354,12 +4491,34 @@ function updateLive(){
   });
 }
 const views=['accueil','habitudes','stats','calendrier','bilans','profil','journal','corps','outils','biblio','envies','plan'];
-function route(){const h=location.hash.replace('#','');ui.view=views.includes(h)?h:'accueil';if(!$('#layer .full'))closeSheet();render();scrollTo(0,0)}
+function route(){const h=location.hash.replace('#','');const prev=ui.view;ui.view=views.includes(h)?h:'accueil';if(!$('#layer .full'))closeSheet();
+  const go=()=>{render();scrollTo(0,0)};
+  if(document.startViewTransition&&!RM()&&S.profile&&!ui.locked&&prev&&prev!==ui.view){document.documentElement.dataset.dir=navDir(prev,ui.view);document.startViewTransition(go)}else go()}
 window.addEventListener('hashchange',route);
 window.addEventListener('languagechange',()=>{if(S.prefs.langAuto){S.prefs.lang=detectLang();applyLocale();render()}});
 setInterval(()=>{if(!S.profile)return;updateLive()},1000);
 setInterval(()=>{if(!S.profile)return;checkBadges(false);runSchedules()},30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.profile){checkBadges(false);runSchedules();render()}});
+
+/* =====================================================================
+   LIBRE v6 — mise en scène (inspirée des principes d’apple.com, sans les copier)
+   Tout respecte « réduire les animations » : rien n’est masqué ni animé dans ce cas.
+   ===================================================================== */
+const SUCCESS_T=()=>new Set(['Entrée enregistrée','Consommation enregistrée','Plan enregistré','Plan mis à jour','Objectif mis à jour','Objectif atteint','Données restaurées','Données récupérées','Fichier de sauvegarde créé','Verrouillage activé','Merci d’avoir pris ce temps','C’est noté','Sauvegarde copiée','Bien joué','Enregistré','Suivi repris','Consommation retirée'].map(x=>t(x)));
+/* Sens de la transition : vers la droite quand on avance dans les onglets, vers la gauche quand on revient */
+const NAV_ORDER=['accueil','habitudes','stats','calendrier','bilans','outils','plan','journal','envies','biblio','corps','profil'];
+function navDir(a,b){const i=NAV_ORDER.indexOf(a),j=NAV_ORDER.indexOf(b);return i<0||j<0||i===j?'none':(j>i)!==isRTL()?'fwd':'back'}
+/* Apparition au défilement : seulement les éléments encore hors de l’écran à l’arrivée sur la page */
+let REV=null;
+function reveal(){if(REV){REV.disconnect();REV=null}
+  if(RM()||!('IntersectionObserver' in window))return;
+  REV=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');REV&&REV.unobserve(e.target)}}),{rootMargin:'0px 0px -6% 0px',threshold:.04});
+  const sel='#app .card,#app .home>section,#app .home>nav,#app .home>button,#app .plan-sec,#app .plan-goal,#app .arts>.art,#app .hub,#app .trows,#app .recs,#app .ins-box,#app .jbook,#app .rv,#app .tline>li,#app .kpis,#app section.sec,#app .lib-cover';
+  let k=0;document.querySelectorAll(sel).forEach(el=>{if(el.closest('.rv-pre'))return;const r=el.getBoundingClientRect();if(r.top<innerHeight-20)return;
+    el.classList.add('rv-pre');el.style.setProperty('--rd',(k++%3)*50+'ms');REV.observe(el)})}
+/* Anneau de progression vers la prochaine étape */
+function heroRing(p,label){const r=50,c=2*Math.PI*r,pc=Math.round(Math.max(0,Math.min(1,p))*100);
+  return `<div class="hring" role="img" aria-label="${esc(t('Progression vers la prochaine étape'))} : ${pc} %"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="hr-bg" cx="60" cy="60" r="${r}"/><circle class="hr-fg" cx="60" cy="60" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c*(1-pc/100)).toFixed(1)}" style="--c:${c.toFixed(1)}"/></svg><span class="hr-t"><b class="num">${nf(pc,0)}<small>%</small></b><small>${esc(label)}</small></span></div>`}
 
 /* =====================================================================
    Mouvement et toucher — d’après le skill « apple-design »
