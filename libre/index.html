@@ -1492,6 +1492,37 @@ button,input,select,textarea,.chart text{font-family:inherit}
 .privacy ul{margin:10px 0 0;padding-inline-start:18px;display:grid;gap:8px;font-size:.88rem;color:var(--ink)}
 /* Très petits téléphones */
 @media (max-width:360px){.qa-row{grid-template-columns:repeat(2,minmax(0,1fr))}.x-big .num{font-size:3.8rem}.large-title{font-size:1.7rem}.segc>a,.segc>button{padding:8px 10px;font-size:.82rem}.rv-row{grid-template-columns:1fr auto 54px;gap:8px}}
+/* =====================================================================
+   LIBRE v5.1 — d’après le skill « apple-design »
+   ===================================================================== */
+/* Réponse : retour visuel dès l’appui, sans délai de toucher */
+html{touch-action:manipulation;-webkit-text-size-adjust:100%}
+:where(.btn,.qa-main,.qa-row>*,.hub-i,.tool-row,.trow,.art,.x-row,.rec,.opt,.opt2,.chip,.seg button,.x-step button,.iconbtn,.qs-grid>*,.qs-breath,.qs-help,.em-btn,.ck-moods button,.mood button,.choice,.segc>*,.nav a,.link):active{transform:scale(.97);transition:transform 100ms ease-out}
+/* Typographie : la taille de texte choisie par l’utilisateur est respectée ;
+   interlettrage selon la taille (resserré en grand, neutre en texte courant, légèrement ouvert en petit) */
+body{font-size:1rem;letter-spacing:0;line-height:1.5}
+p,li,dd{line-height:1.5}
+h1,h2,.large-title,.x-hello,.pg-t{line-height:1.15}
+.small,.hint,.ins-note,.ph-cap,.srcl,.why,.cnote,.disc,.lvl-t{letter-spacing:.01em}
+.x-big .num{line-height:1;letter-spacing:-.05em}
+/* Fenêtres : poignée plus facile à saisir à la souris, sortie animée, notification qui repart vers le haut */
+.grab{position:relative;cursor:grab}.grab::before{content:"";position:absolute;inset:-12px -60px}
+.sheet-h{cursor:default}
+.exiting{position:fixed;inset:0;z-index:45;pointer-events:none}
+.exiting>.backdrop{animation:none}
+.toast{transition:transform .18s ease-in,opacity .18s ease-in}
+.toast.out{transform:translate(-50%,-18px);opacity:0}
+/* Matières : la barre du haut ne montre son filet que lorsque le contenu glisse dessous */
+.top,.top.light{border-bottom-color:transparent;transition:border-color .2s ease}
+body.scrolled .top,body.scrolled .top.light{border-bottom-color:color-mix(in srgb,var(--line) 80%,transparent)}
+/* Accessibilité visuelle : transparence réduite, contraste élevé */
+@media (prefers-reduced-transparency:reduce){.top,.top.light,.nav,.lang-pill,.s-card{background:var(--bg)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}}
+@media (prefers-contrast:more){
+  :root:not([data-theme="dark"]){--muted:#454B55;--line:#8C929B}
+  .card,.btn.quiet,.btn.ghost,.qa-row>*,.segc,.field input,.field textarea,select{border:1px solid var(--ink)!important}}
+@media (prefers-contrast:more) and (prefers-color-scheme:dark){:root:not([data-theme="light"]){--muted:#CDD2DA;--line:#66728A}}
+:root[data-theme="dark"]{}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 </head>
 <body>
@@ -1802,8 +1833,8 @@ function toast(title,body,act){
   const old=$('.toast');if(old)old.remove();
   const el=document.createElement('div');el.className='toast';el.setAttribute('role','status');
   el.innerHTML=`${logoMark(26)}<div><b>${esc(title)}</b>${body?`<span class="small" style="opacity:.85">${esc(body)}</span>`:''}</div>${act?`<button class="tact">${esc(act.label)}</button>`:''}`;
-  document.body.appendChild(el);clearTimeout(toastT);toastT=setTimeout(()=>el.remove(),act?7000:4200);
-  el.onclick=e=>{const isAct=e.target.closest('.tact');el.remove();if(isAct&&act)act.fn()};
+  document.body.appendChild(el);clearTimeout(toastT);toastT=setTimeout(()=>toastOut(el),act?7000:4200);
+  el.onclick=e=>{const isAct=e.target.closest('.tact');toastOut(el);if(isAct&&act)act.fn()};
 }
 function haptic(){try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}}
 function checkBadges(silent){
@@ -2846,12 +2877,9 @@ function sheet(title,html,onMount){
   if(onMount)onMount(L);
   const sh=L.querySelector('.sheet');
   if(!ui.sheetPrev||!document.contains(ui.sheetPrev))ui.sheetPrev=document.activeElement&&document.activeElement!==document.body?document.activeElement:null;
-  if(!L.contains(document.activeElement))setTimeout(()=>{const h2=sh.querySelector('.sheet-h h2');if(h2&&!L.contains(document.activeElement)){h2.setAttribute('tabindex','-1');h2.focus({preventScroll:true})}},40);let y0=null,dy=0;
-  sh.addEventListener('touchstart',e=>{y0=sh.scrollTop<=0?e.touches[0].clientY:null;dy=0;sh.style.transition='none'},{passive:true});
-  sh.addEventListener('touchmove',e=>{if(y0==null)return;dy=e.touches[0].clientY-y0;if(dy>0)sh.style.transform=`translateY(${dy}px)`},{passive:true});
-  sh.addEventListener('touchend',()=>{sh.style.transition='';if(y0!=null&&dy>110)closeSheet();else sh.style.transform='';y0=null});
+  if(!L.contains(document.activeElement))setTimeout(()=>{const h2=sh.querySelector('.sheet-h h2');if(h2&&!L.contains(document.activeElement)){h2.setAttribute('tabindex','-1');h2.focus({preventScroll:true})}},40);sheetGesture(sh);
 }
-function closeSheet(){$('#layer').innerHTML='';stopSos();if(typeof stopTool==='function')stopTool();const p=ui.sheetPrev;ui.sheetPrev=null;if(p&&document.contains(p))try{p.focus({preventScroll:true})}catch(e){}}
+function closeSheet(){sheetExit();$('#layer').innerHTML='';stopSos();if(typeof stopTool==='function')stopTool();const p=ui.sheetPrev;ui.sheetPrev=null;if(p&&document.contains(p))try{p.focus({preventScroll:true})}catch(e){}}
 function confirmBox(title,text,okLabel,onOk,danger){
   sheet(title,`<p class="muted">${esc(text)}</p><div class="actions" style="margin-top:16px"><button class="btn ghost" data-a="close">${esc(t('Annuler'))}</button><button class="btn ${danger?'danger':'primary'}" id="cfOk">${esc(okLabel)}</button></div>`,L=>{L.querySelector('#cfOk').onclick=()=>{closeSheet();onOk()}});
 }
@@ -2977,6 +3005,7 @@ function notifCenter(){
 function celebrate(x){
   /* Ne jamais remplacer une fenêtre ouverte (article, exercice, SOS…) : on attend qu’elle se ferme */
   if($('#layer')&&$('#layer').innerHTML.trim()){setTimeout(()=>celebrate(x),1500);return}
+  try{navigator.vibrate&&navigator.vibrate([12,60,12])}catch(e){}
   sheet(t('Étape franchie'),`<div class="celebrate">${photo('sommet','cel-ph',{deco:1})}<div class="medal">${esc(msShort(x.m))}</div><h1>${esc(t(x.m.t))}</h1><p class="muted">${esc(t('{habit} : {days} sans consommer.',{habit:hName(x.h),days:tn(x.m.d,'{n} jour','{n} jours')}))}</p><button class="btn primary block" data-a="close">${esc(t('Continuer'))}</button></div>`);
 }
 function confetti(){
@@ -4295,7 +4324,7 @@ const A10={
   qsJournal:()=>{S.sos.push({ts:now(),ok:false,intensity:ui.sosq?ui.sosq.intensity:null});save();closeSheet();journalForm({craving:ui.sosq?ui.sosq.intensity:5})}
 };
 Object.assign(A,A6,A7,A8,A9,A10);
-document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(!f)return;if(el.dataset.a!=='closeBg')haptic();
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(!f)return;if(HAPTIC_ON.has(el.dataset.a))haptic();
   if(el.tagName==='INPUT')return; f(el,e)});
 document.addEventListener('change',e=>{const el=e.target;
   if(el.matches('input[data-a="pref"]'))A.pref(el);
@@ -4331,6 +4360,71 @@ window.addEventListener('languagechange',()=>{if(S.prefs.langAuto){S.prefs.lang=
 setInterval(()=>{if(!S.profile)return;updateLive()},1000);
 setInterval(()=>{if(!S.profile)return;checkBadges(false);runSchedules()},30000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.profile){checkBadges(false);runSchedules();render()}});
+
+/* =====================================================================
+   Mouvement et toucher — d’après le skill « apple-design »
+   (WWDC 2018 « Designing Fluid Interfaces ») :
+   - le mouvement part toujours de la valeur affichée et peut être repris à tout instant ;
+   - au lâcher, la vitesse du doigt est transmise au ressort et l’élan est projeté ;
+   - les fenêtres repartent par où elles sont entrées ;
+   - le retour haptique est réservé aux moments qui comptent.
+   ===================================================================== */
+const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
+/* Ressort défini comme chez Apple : « response » (s) et taux d’amortissement (1 = sans rebond) */
+function spring(from,to,o){const response=o.response||.35,damping=o.damping==null?1:o.damping;
+  const k=Math.pow(2*Math.PI/response,2),c=4*Math.PI*damping/response;let x=from,v=o.velocity||0,last=performance.now(),id=0,dead=false;
+  const step=now=>{if(dead)return;const dt=Math.min(.034,(now-last)/1000);last=now;for(let i=0;i<4;i++){const h=dt/4,a=-k*(x-to)-c*v;v+=a*h;x+=v*h}
+    o.onUpdate(x);if(Math.abs(x-to)<.4&&Math.abs(v)<8){o.onUpdate(to);o.onDone&&o.onDone();return}id=requestAnimationFrame(step)};
+  if(RM()){o.onUpdate(to);o.onDone&&o.onDone();return {stop(){},value:()=>to}}
+  id=requestAnimationFrame(step);return {stop(){dead=true;cancelAnimationFrame(id)},value:()=>x}}
+/* Projection de l’élan (fonction publiée par Apple, décélération 0,998 comme le défilement) */
+const project=(v,d=.998)=>(v/1000)*d/(1-d);
+/* Résistance progressive au-delà d’une limite */
+const rubber=(o,dim,c=.55)=>(o*dim*c)/(dim+c*Math.abs(o));
+
+function sheetGesture(sh){
+  const bd=sh.parentNode;let y=0,anim=null,drag=null;
+  const set=v=>{y=v;sh.style.transform=v?`translate3d(0,${v}px,0)`:'';const h=sh.offsetHeight||1;bd.style.backgroundColor=`rgba(4,10,20,${(.55*Math.max(0,1-Math.max(0,v)/h)).toFixed(3)})`};
+  sh.dataset.y='0';
+  const start=(cy,id,ptr)=>{if(anim){anim.stop();anim=null}sh.style.animation='none';sh.style.transition='none';
+    drag={y0:cy-y,hist:[{t:performance.now(),y}],id,ptr,started:false}};
+  const move=cy=>{if(!drag)return false;let d=cy-drag.y0;
+    if(!drag.started){if(Math.abs(d-y)<8)return false;drag.started=true}
+    if(d<0)d=rubber(d,sh.offsetHeight);set(d);sh.dataset.y=String(d);
+    drag.hist.push({t:performance.now(),y:d});if(drag.hist.length>6)drag.hist.shift();return true};
+  const end=()=>{if(!drag)return;const h=drag.hist,a=h[0],b=h[h.length-1],dt=Math.max(16,b.t-a.t),vel=(b.y-a.y)/dt*1000;const started=drag.started;drag=null;
+    if(!started){if(y)settle(0,0);return}
+    const goal=y+project(vel),H=sh.offsetHeight;
+    if(goal>Math.min(H*.45,260)||vel>1100){sh.dataset.v=String(Math.max(0,vel));closeSheet()}else settle(0,vel)};
+  const settle=(to,vel)=>{anim=spring(y,to,{response:.3,damping:1,velocity:vel,onUpdate:v=>{set(v);sh.dataset.y=String(v)},onDone:()=>{anim=null}})};
+  /* Doigt : on ne capte le geste que si le contenu est en haut, pour laisser défiler sinon */
+  sh.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;const top=sh.scrollTop<=0;if(!top&&!e.target.closest('.grab,.sheet-h'))return;start(e.touches[0].clientY,null,false)},{passive:true});
+  sh.addEventListener('touchmove',e=>{if(!drag||drag.ptr)return;const d=e.touches[0].clientY-drag.y0;if(!drag.started&&d<0&&sh.scrollHeight>sh.clientHeight){drag=null;return}if(move(e.touches[0].clientY)&&e.cancelable)e.preventDefault()},{passive:false});
+  sh.addEventListener('touchend',()=>{if(drag&&!drag.ptr)end()},{passive:true});
+  sh.addEventListener('touchcancel',()=>{if(drag&&!drag.ptr){drag=null;settle(0,0)}},{passive:true});
+  /* Souris et stylet : poignée et en-tête, avec capture du pointeur */
+  sh.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.button!==0)return;const hd=e.target.closest('.grab,.sheet-h');if(!hd||e.target.closest('button,a,input'))return;
+    hd.setPointerCapture(e.pointerId);start(e.clientY,e.pointerId,true);
+    const mv=ev=>move(ev.clientY),up=()=>{hd.removeEventListener('pointermove',mv);hd.removeEventListener('pointerup',up);hd.removeEventListener('pointercancel',up);end()};
+    hd.addEventListener('pointermove',mv);hd.addEventListener('pointerup',up);hd.addEventListener('pointercancel',up)})}
+
+/* Sortie des fenêtres : une copie inerte repart vers le bas depuis sa position actuelle,
+   pendant que la couche réelle est vidée tout de suite (le code qui ouvre la fenêtre suivante n’attend rien). */
+function sheetExit(){const L=$('#layer');if(!L||!L.firstElementChild||RM())return;
+  const src=L.firstElementChild,isSheet=src.querySelector&&src.querySelector('.sheet');
+  const c=src.cloneNode(true);c.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));c.removeAttribute('id');
+  const ex=document.createElement('div');ex.className='exiting';ex.setAttribute('aria-hidden','true');ex.appendChild(c);document.body.appendChild(ex);
+  if(isSheet){const os=src.querySelector('.sheet'),sh=c.querySelector('.sheet'),y0=+(os.dataset.y||0),v=+(os.dataset.v||0),H=os.offsetHeight||600;sh.scrollTop=os.scrollTop;
+    sh.style.animation='none';c.style.animation='none';
+    spring(y0,H+40,{response:.32,damping:1,velocity:v,onUpdate:y=>{sh.style.transform=`translate3d(0,${y}px,0)`;c.style.backgroundColor=`rgba(4,10,20,${(.55*Math.max(0,1-y/H)).toFixed(3)})`},onDone:()=>ex.remove()})}
+  else{c.style.transition='opacity .18s ease-out';requestAnimationFrame(()=>{c.style.opacity='0'});setTimeout(()=>ex.remove(),220)}
+  setTimeout(()=>ex.remove(),900)}
+function toastOut(el){if(!el||!el.isConnected||el.classList.contains('out'))return;if(RM())return el.remove();el.classList.add('out');setTimeout(()=>el.remove(),200)}
+const HAPTIC_ON=new Set(['quickPlus','quickMinus','saveLog','saveJournal','lapseSave','planSave','goalDone','plDone','checkin','tlOutcome','sosOk','qsGo','qsBreath','tlStart','habitSave','goalAdjust']);
+/* iOS n’applique :active qu’avec un écouteur tactile : retour visuel dès l’appui */
+document.addEventListener('touchstart',()=>{},{passive:true});
+/* Bordure de la barre du haut seulement quand le contenu passe dessous */
+let scrT=0;window.addEventListener('scroll',()=>{if(scrT)return;scrT=requestAnimationFrame(()=>{scrT=0;document.body.classList.toggle('scrolled',scrollY>4)})},{passive:true});
 
 /* ---------- Contrôle segmenté (porté de Halaska UI, MIT) ----------
    Le rendu de LIBRE reconstruit le HTML : on mémorise la position du curseur
