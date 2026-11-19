@@ -9,9 +9,6 @@ Modifications : images redimensionnées et recadrées (3:2), converties en AVIF 
 | Fichier | Photographe | Licence | Page de la photo |
 |---|---|---|---|
 | `aube-*.avif/webp` | Anna Shvets | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 4672717](https://www.pexels.com/fr-fr/photo/4672717/) |
-| `matin-*.avif/webp` | Harun | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 25810976](https://www.pexels.com/fr-fr/photo/25810976/) |
-| `jour-*.avif/webp` | Plann | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 4565774](https://www.pexels.com/fr-fr/photo/4565774/) |
-| `soir-*.avif/webp` | Vlada Karpovich | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 9969149](https://www.pexels.com/fr-fr/photo/9969149/) |
 | `sommet-*.avif/webp` | Reza Yudhistira | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 35370605](https://www.pexels.com/fr-fr/photo/35370605/) |
 | `biblio-*.avif/webp` | Olia Danilevich | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 5490059](https://www.pexels.com/fr-fr/photo/5490059/) |
 | `journal-*.avif/webp` | Taiye Salawu | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 36598106](https://www.pexels.com/fr-fr/photo/36598106/) |
