@@ -46,4 +46,4 @@ Si des photos sont ajoutées ou renommées, mettre aussi à jour la liste `CORE`
 
 Une PWA installée affiche les rappels seulement quand LIBRE est ouverte (iPhone comme Android : il n’y a pas de serveur d’envoi). Santé Apple n’est jamais accessible depuis une page web.
 
-Pour ces deux fonctions, le dossier `libre-ios/` contient un projet Capacitor (iPhone et Android) qui reprend exactement ce site, avec le module natif HealthKit. Les étapes Xcode et Apple Developer sont dans `libre-ios/README.md`.
+Pour ces deux fonctions, le dossier `libre-app/` contient un projet Capacitor (iPhone et Android) qui reprend exactement ce site, avec le module natif HealthKit. Les étapes Xcode et Apple Developer sont dans `libre-app/README.md`.

@@ -2,11 +2,12 @@
    Rôle : rendre l’app utilisable hors ligne après une première visite, et proposer les mises à jour.
    Aucune donnée personnelle ne passe par ici : elles restent dans le stockage local du navigateur.
    À chaque nouvelle version publiée, changer VERSION : l’app propose alors « Mettre à jour ». */
-const VERSION='libre-2026-11-20b';
+const VERSION='libre-2026-11-21-store';
 const CORE=[
  "./",
  "./index.html",
  "./manifest.webmanifest",
+ "./privacy.html",
  "./fonts/inter-latin.woff2",
  "./fonts/inter-latin-ext.woff2",
  "./fonts/inter-cyrillic.woff2",

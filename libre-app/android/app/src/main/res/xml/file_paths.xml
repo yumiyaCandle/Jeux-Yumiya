@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Seul le dossier cache est partageable : LIBRE y écrit le fichier de sauvegarde ou le bilan juste avant la feuille de partage. -->
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <cache-path name="libre_share" path="." />
+</paths>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LIBRE – Politique de confidentialité</title>
+<meta name="color-scheme" content="light dark">
+<style>
+:root{--bg:#F7F5F0;--fg:#13233A;--muted:#55627A;--line:#E3DED3;--accent:#0E7A4F;--card:#FFFFFF}
+@media (prefers-color-scheme:dark){:root{--bg:#0B1626;--fg:#EEF2F7;--muted:#A6B2C4;--line:#22324A;--accent:#3DD68C;--card:#101F35}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  padding:max(20px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))}
+main{max-width:720px;margin:0 auto}
+h1{font-size:1.6rem;line-height:1.25;margin:.2em 0 .3em;text-wrap:balance}
+h2{font-size:1.1rem;margin:1.8em 0 .4em}
+p,li{color:var(--fg)}
+.muted{color:var(--muted);font-size:.92rem}
+.lang{display:flex;gap:8px;margin:0 0 18px}
+.lang a{color:var(--accent);font-weight:600;text-decoration:none;padding:6px 12px;border:1px solid var(--line);border-radius:999px}
+.lang a[aria-current="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+td,th{text-align:left;vertical-align:top;padding:8px 6px;border-bottom:1px solid var(--line)}
+a{color:var(--accent)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<nav class="lang" aria-label="Langue / Language"><a href="#fr" id="lfr">Français</a><a href="#en" id="len">English</a></nav>
+
+<article id="fr" lang="fr">
+<h1>Politique de confidentialité de LIBRE</h1>
+<p class="muted">Version du 20 novembre 2026. S’applique à l’application LIBRE pour iPhone et Android, et à la version web.</p>
+
+<div class="box"><b>En bref.</b> LIBRE n’a ni serveur, ni compte, ni publicité, ni outil de mesure d’audience.
+Tout ce que tu enregistres reste sur ton appareil. Personne, pas même l’éditeur de LIBRE, n’y a accès.</div>
+
+<h2>1. Qui est responsable ?</h2>
+<p>Éditeur : <b>[NOM OU SOCIÉTÉ À COMPLÉTER]</b>, [ADRESSE À COMPLÉTER].
+Contact pour toute question sur cette politique : <b>[ADRESSE E-MAIL À COMPLÉTER]</b>.</p>
+
+<h2>2. Quelles données LIBRE enregistre</h2>
+<p>Uniquement ce que tu saisis ou choisis d’activer :</p>
+<ul>
+<li>ton prénom ou pseudonyme et, si tu les indiques, ton âge, ta taille et ton poids ;</li>
+<li>les habitudes que tu suis, tes objectifs, tes consommations, tes envies, leurs déclencheurs et tes reprises ;</li>
+<li>ton journal personnel, ton humeur, tes raisons d’arrêter, ton plan et les exercices réalisés ;</li>
+<li>les contacts de confiance que tu ajoutes toi-même (nom et numéro). LIBRE n’accède pas au carnet d’adresses du téléphone ;</li>
+<li>tes réglages (langue, pays, devise, rappels, verrouillage). Le code de verrouillage n’est jamais enregistré : seule une empreinte calculée (PBKDF2) est conservée ;</li>
+<li>si tu l’autorises, des résumés quotidiens lus dans Santé Apple (voir point 5).</li>
+</ul>
+<p>Ces informations peuvent révéler des données de santé. Elles servent uniquement à t’afficher ton suivi, tes statistiques et tes rappels.</p>
+
+<h2>3. Où elles sont enregistrées</h2>
+<ul>
+<li><b>Application iPhone et Android</b> : dans un fichier chiffré (AES-256-GCM) propre à LIBRE, sur ton téléphone. La clé de chiffrement est conservée par le système (trousseau iOS ou Keystore Android) et ne quitte pas l’appareil.</li>
+<li><b>Version web</b> : dans le stockage local de ton navigateur, <b>sans chiffrement</b>. Une personne qui a accès à ton ordinateur ou à ton navigateur pourrait les lire.</li>
+</ul>
+<p>Le verrouillage par code cache l’application aux regards ; ce n’est pas un chiffrement.</p>
+
+<h2>4. Transmission à des tiers</h2>
+<p>LIBRE ne transmet aucune donnée personnelle, ni à l’éditeur, ni à un serveur, ni à un partenaire. LIBRE ne contient aucun service tiers :
+pas de publicité, pas de mesure d’audience, pas de rapport de plantage, pas de réseau social. La police et les photos sont incluses dans l’application.</p>
+<p>Seules des actions que tu fais toi-même peuvent faire sortir des informations de ton appareil : ouvrir un lien vers une source ou un site d’aide (le site visité reçoit alors ta visite comme n’importe quelle page web),
+appeler un numéro d’aide, ou partager un fichier de sauvegarde ou un bilan.</p>
+
+<h2>5. Santé Apple (iPhone uniquement, facultatif)</h2>
+<p>Si tu l’actives, LIBRE lit, en lecture seule, les données que tu coches : pas, minutes d’exercice, distance, énergie active, sommeil, fréquence cardiaque, fréquence cardiaque au repos, variabilité de la fréquence cardiaque et fréquence respiratoire.
+Elles sont résumées par jour et enregistrées avec tes autres données LIBRE, sur ton téléphone. Elles ne sont jamais envoyées, ni utilisées pour de la publicité, ni partagées.
+LIBRE n’écrit rien dans Santé. Tu peux arrêter à tout moment : Profil › Santé Apple › Déconnecter (efface les copies dans LIBRE), et retirer l’autorisation dans Réglages › Santé › Accès aux données et appareils › LIBRE.</p>
+
+<h2>6. Notifications</h2>
+<p>Les rappels sont programmés sur ton téléphone ; aucun serveur d’envoi n’est utilisé. Par défaut, leurs textes sont neutres et ne mentionnent ni substance ni chiffre, pour rester discrets sur l’écran verrouillé.
+Tu peux les désactiver dans LIBRE ou dans les réglages du téléphone.</p>
+
+<h2>7. Sauvegardes</h2>
+<p>LIBRE ne fait aucune sauvegarde en ligne. Tu peux exporter un fichier de sauvegarde : il est chiffré avec un mot de passe que tu choisis (AES-256-GCM, PBKDF2), sauf si tu choisis expressément de l’exporter sans mot de passe.
+Ce fichier t’appartient : tu décides où le ranger. LIBRE ne conserve pas son mot de passe.</p>
+<p>Sur Android, la sauvegarde automatique du système est désactivée pour LIBRE, car le fichier chiffré serait illisible sur un autre appareil. Pour changer de téléphone, exporte une sauvegarde puis restaure-la.</p>
+
+<h2>8. Durée de conservation et suppression</h2>
+<p>Tes données restent sur ton appareil tant que tu ne les supprimes pas. Pour tout effacer : Profil › Tes données › Effacer toutes mes données. Désinstaller l’application supprime aussi ses données du téléphone.
+Les fichiers de sauvegarde que tu as exportés ne sont pas supprimés automatiquement : supprime-les toi-même si tu le souhaites.</p>
+
+<h2>9. Autorisations demandées</h2>
+<table>
+<tr><th>Autorisation</th><th>Pourquoi</th><th>Comment la retirer</th></tr>
+<tr><td>Notifications</td><td>Afficher les rappels que tu as activés.</td><td>Réglages du téléphone › LIBRE › Notifications.</td></tr>
+<tr><td>Santé Apple (lecture)</td><td>Afficher ton activité et ton sommeil à côté de ton suivi, si tu le demandes.</td><td>Réglages › Santé › Accès aux données et appareils › LIBRE.</td></tr>
+</table>
+<p>LIBRE ne demande ni la localisation, ni les contacts, ni l’appareil photo, ni le micro.</p>
+
+<h2>10. Tes droits</h2>
+<p>Comme l’éditeur ne reçoit aucune donnée, il ne peut ni les consulter, ni les corriger, ni les supprimer à ta place : tu en as le contrôle complet dans l’application (consultation, export, correction, suppression).
+Pour toute question, écris à l’adresse indiquée au point 1. Selon ton pays, tu peux aussi contacter l’autorité de protection des données (en Suisse : PFPDT ; en France : CNIL).</p>
+
+<h2>11. Mineurs</h2>
+<p>LIBRE s’adresse aux adultes. Elle ne collecte aucune donnée et ne vérifie pas l’âge.</p>
+
+<h2>12. Avertissement santé</h2>
+<p>LIBRE est une application d’accompagnement et d’information. Elle ne pose pas de diagnostic et ne remplace pas un médecin. En cas d’urgence, appelle les secours.</p>
+
+<h2>13. Modifications</h2>
+<p>Si cette politique change, la nouvelle version sera publiée à cette adresse avec sa date, et signalée dans l’application.</p>
+</article>
+
+<article id="en" lang="en" hidden>
+<h1>LIBRE Privacy Policy</h1>
+<p class="muted">Version of 20 November 2026. Applies to the LIBRE app for iPhone and Android, and to the web version.</p>
+
+<div class="box"><b>In short.</b> LIBRE has no server, no account, no advertising and no analytics.
+Everything you record stays on your device. Nobody, not even LIBRE’s publisher, can access it.</div>
+
+<h2>1. Who is responsible?</h2>
+<p>Publisher: <b>[NAME OR COMPANY – TO BE COMPLETED]</b>, [ADDRESS – TO BE COMPLETED].
+Contact for any question about this policy: <b>[E-MAIL ADDRESS – TO BE COMPLETED]</b>.</p>
+
+<h2>2. What LIBRE stores</h2>
+<p>Only what you enter or choose to turn on:</p>
+<ul>
+<li>your first name or nickname and, if you provide them, your age, height and weight;</li>
+<li>the habits you track, your goals, uses, cravings, their triggers and any slips;</li>
+<li>your personal journal, mood, reasons for stopping, your plan and the exercises you did;</li>
+<li>trusted contacts you add yourself (name and number). LIBRE does not access the phone’s address book;</li>
+<li>your settings (language, country, currency, reminders, lock). The lock code is never stored: only a derived fingerprint (PBKDF2) is kept;</li>
+<li>if you allow it, daily summaries read from Apple Health (see section 5).</li>
+</ul>
+<p>This information may reveal health data. It is used only to show you your tracking, statistics and reminders.</p>
+
+<h2>3. Where it is stored</h2>
+<ul>
+<li><b>iPhone and Android app</b>: in an encrypted file (AES-256-GCM) belonging to LIBRE, on your phone. The encryption key is kept by the system (iOS Keychain or Android Keystore) and never leaves the device.</li>
+<li><b>Web version</b>: in your browser’s local storage, <b>not encrypted</b>. Someone with access to your computer or browser could read it.</li>
+</ul>
+<p>The lock code hides the app from view; it is not encryption.</p>
+
+<h2>4. Sharing with third parties</h2>
+<p>LIBRE does not transmit any personal data, to the publisher, to a server or to any partner. LIBRE contains no third-party service:
+no advertising, no analytics, no crash reporting, no social network. The font and photos are bundled with the app.</p>
+<p>Information can only leave your device through actions you take yourself: opening a link to a source or help website (that site then receives your visit like any web page),
+calling a helpline, or sharing a backup file or a report.</p>
+
+<h2>5. Apple Health (iPhone only, optional)</h2>
+<p>If you turn it on, LIBRE reads, read-only, the data you tick: steps, exercise minutes, distance, active energy, sleep, heart rate, resting heart rate, heart rate variability and respiratory rate.
+They are summarised per day and stored with your other LIBRE data, on your phone. They are never sent, never used for advertising and never shared.
+LIBRE writes nothing to Health. You can stop at any time: Profile › Apple Health › Disconnect (erases the copies in LIBRE), and remove the permission in Settings › Health › Data Access & Devices › LIBRE.</p>
+
+<h2>6. Notifications</h2>
+<p>Reminders are scheduled on your phone; no push server is used. By default, their texts are neutral and mention no substance or figure, to stay discreet on the lock screen.
+You can turn them off in LIBRE or in the phone settings.</p>
+
+<h2>7. Backups</h2>
+<p>LIBRE makes no online backup. You can export a backup file: it is encrypted with a password you choose (AES-256-GCM, PBKDF2), unless you explicitly choose to export it without a password.
+The file is yours: you decide where to keep it. LIBRE does not keep its password.</p>
+<p>On Android, automatic system backup is turned off for LIBRE, because the encrypted file would be unreadable on another device. To change phones, export a backup and restore it.</p>
+
+<h2>8. Retention and deletion</h2>
+<p>Your data stays on your device until you delete it. To erase everything: Profile › Your data › Erase all my data. Uninstalling the app also deletes its data from the phone.
+Backup files you exported are not deleted automatically: delete them yourself if you wish.</p>
+
+<h2>9. Permissions requested</h2>
+<table>
+<tr><th>Permission</th><th>Why</th><th>How to remove it</th></tr>
+<tr><td>Notifications</td><td>Show the reminders you turned on.</td><td>Phone settings › LIBRE › Notifications.</td></tr>
+<tr><td>Apple Health (read)</td><td>Show your activity and sleep alongside your tracking, if you ask for it.</td><td>Settings › Health › Data Access & Devices › LIBRE.</td></tr>
+</table>
+<p>LIBRE does not ask for location, contacts, camera or microphone.</p>
+
+<h2>10. Your rights</h2>
+<p>Since the publisher receives no data, it cannot view, correct or delete it on your behalf: you have full control in the app (view, export, correct, delete).
+For any question, write to the address in section 1. Depending on your country, you can also contact your data protection authority.</p>
+
+<h2>11. Minors</h2>
+<p>LIBRE is intended for adults. It collects no data and does not verify age.</p>
+
+<h2>12. Health disclaimer</h2>
+<p>LIBRE is a support and information app. It does not diagnose and does not replace a doctor. In an emergency, call emergency services.</p>
+
+<h2>13. Changes</h2>
+<p>If this policy changes, the new version will be published at this address with its date, and announced in the app.</p>
+</article>
+</main>
+<script>
+(function(){function show(l){var fr=document.getElementById('fr'),en=document.getElementById('en');fr.hidden=l!=='fr';en.hidden=l!=='en';
+document.documentElement.lang=l;document.getElementById('lfr').setAttribute('aria-current',l==='fr');document.getElementById('len').setAttribute('aria-current',l==='en')}
+function pick(){var h=location.hash.replace('#','');if(h==='fr'||h==='en')return h;var n=(navigator.language||'fr').slice(0,2);return n==='fr'?'fr':'en'}
+show(pick());window.addEventListener('hashchange',function(){show(pick())})})();
+</script>
+</body>
+</html>

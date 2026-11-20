@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icône de notification (barre d'état) : silhouette blanche du logo LIBRE, exigée par Android. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="64" android:viewportHeight="64">
+    <path android:pathData="M33,9.5A17,17 0 1,0 41,24"
+        android:strokeColor="#FFFFFFFF" android:strokeWidth="4.5" android:strokeLineCap="round" android:fillColor="#00000000"/>
+    <path android:pathData="M24,30c0,-8 5,-14 15,-17c-1,9 -6,15 -15,17z" android:fillColor="#FFFFFFFF"/>
+</vector>

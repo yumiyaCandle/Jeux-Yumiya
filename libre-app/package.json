@@ -1,0 +1,27 @@
+{
+  "name": "libre-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LIBRE – application iPhone et Android (Capacitor 8)",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "web": "node scripts/sync-web.mjs",
+    "sync": "node scripts/sync-web.mjs && npx cap sync",
+    "ios": "node scripts/sync-web.mjs && npx cap sync ios && npx cap open ios",
+    "android": "node scripts/sync-web.mjs && npx cap sync android && npx cap open android",
+    "android:debug": "node scripts/sync-web.mjs && npx cap sync android && cd android && ./gradlew assembleDebug",
+    "android:release": "node scripts/sync-web.mjs && npx cap sync android && cd android && ./gradlew bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.6.2",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.6.2",
+    "@capacitor/filesystem": "8.1.5",
+    "@capacitor/ios": "8.6.2",
+    "@capacitor/local-notifications": "8.3.1",
+    "@capacitor/share": "8.0.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.2"
+  }
+}

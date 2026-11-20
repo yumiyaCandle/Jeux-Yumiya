@@ -1,0 +1,12 @@
+{
+  "appId": "ch.libre.app",
+  "appName": "LIBRE",
+  "webDir": "www",
+  "backgroundColor": "#0E2747",
+  "loggingBehavior": "debug",
+  "ios": { "contentInset": "never", "limitsNavigationsToAppBoundDomains": false, "scrollEnabled": true },
+  "android": { "allowMixedContent": false, "captureInput": false, "webContentsDebuggingEnabled": false },
+  "plugins": {
+    "LocalNotifications": { "smallIcon": "ic_stat_libre", "iconColor": "#14A86B" }
+  }
+}

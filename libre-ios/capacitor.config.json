@@ -1,9 +1,0 @@
-{
-  "appId": "ch.libre.app",
-  "appName": "LIBRE",
-  "webDir": "www",
-  "ios": { "contentInset": "never" },
-  "plugins": {
-    "LocalNotifications": { "iconColor": "#2F8A62" }
-  }
-}

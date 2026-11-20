@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Manifeste de confidentialité de LIBRE (exigé par Apple).
+  - Aucun suivi (tracking), aucun domaine de suivi.
+  - Aucune donnée « collectée » au sens d’Apple : tout reste sur l’appareil, rien n’est transmis à l’éditeur ni à un tiers.
+  - API à justification utilisées par le code de l’app : aucune (les bibliothèques Capacitor fournissent leur propre manifeste).
+-->
+<plist version="1.0">
+<dict>
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array/>
+</dict>
+</plist>
