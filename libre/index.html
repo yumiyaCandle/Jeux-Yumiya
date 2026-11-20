@@ -1569,6 +1569,25 @@ html[data-dir="back"]::view-transition-new(root){animation-name:vt-in-b}
 .tp-g:first-child{margin-top:4px}
 .tp-note{margin:8px 2px 0}
 .p-main{background:var(--green-soft);color:var(--green-ink)}
+/* Notifications et rappels */
+.nt .li input[type=time]{width:auto;flex:none;min-height:36px;padding:4px 8px;margin-inline-end:8px;font-size:.9rem}
+.nt .li{display:flex;align-items:center;gap:8px}
+.nt .li .switch{flex:none}
+.nt-status{display:grid;gap:8px}
+.nt-badge{display:inline-flex;align-items:center;gap:8px}.nt-badge span{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.nt-ok span{background:var(--green)}.nt-bad span{background:var(--sos)}.nt-wait span{background:var(--amber)}
+.nt-h{font-size:.98rem;font-weight:650;margin-top:6px}
+.nt-list{display:grid;gap:2px}
+.nt-it{border-bottom:1px solid var(--line)}.nt-it:last-child{border-bottom:0}
+.nt-it .li{border:0!important}
+.nt-more{padding:0 0 12px}.nt-more summary{cursor:pointer;color:var(--green-strong);font-weight:600;font-size:.86rem;padding:2px 0 8px}
+.nt-days{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.nt-days button{width:36px;height:36px;border-radius:50%;background:var(--field);color:var(--muted);font-weight:600;font-size:.82rem}
+.nt-days button[aria-pressed=true]{background:var(--navy);color:#F7F5F0}
+:root[data-theme=dark] .nt-days button[aria-pressed=true]{background:var(--green);color:#0F1724}
+.nt-more input[type=text]{width:100%}
+.nt-pause{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{padding:6px 12px;border-radius:99px;background:var(--field);font-size:.84rem;font-weight:600;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -1895,7 +1914,7 @@ function nText(k,v){return k?t(k,v):''}
 function notify(tk,bk,v,kind,silent){
   S.notifs.unshift({id:uid(),ts:now(),tk,bk,v:v||{},kind:kind||'info',read:false});
   S.notifs=S.notifs.slice(0,80);save();if(!silent)toast(nText(tk,v),nText(bk,v));
-  if(S.prefs.system){try{if('Notification' in window&&Notification.permission==='granted')new Notification('LIBRE · '+nText(tk,v),{body:nText(bk,v),lang:LANG,dir:isRTL()?'rtl':'ltr'})}catch(e){}}
+  {const nk=kind==='badge'?'milestones':kind;ntShowSystem(NT_BY[nk]?ntText(nk):t('Un petit rappel de LIBRE.'),nText(tk,v)+(bk?' · '+nText(bk,v):''));}
   refreshBell();
 }
 let toastT=null;
@@ -1918,29 +1937,30 @@ function checkBadges(silent){
   }
   if(fresh.length){save();
     if(!silent){const top=fresh[fresh.length-1];
-      if(S.prefs.congrats)notify(N_('Étape franchie : {badge}'),N_('{habit} : {days} sans consommer.'),{badge:t(top.m.t),habit:hName(top.h),days:tn(top.m.d,'{n} jour','{n} jours')},'badge');
+      if(ntCfg().items.milestones.on&&!ntPaused())notify(N_('Étape franchie : {badge}'),N_('{habit} : {days} sans consommer.'),{badge:t(top.m.t),habit:hName(top.h),days:tn(top.m.d,'{n} jour','{n} jours')},'badge');
       celebrate(top);}
   }
 }
 function runSchedules(){
   if(!S.profile)return;
   const tt=now(),today=dkey(tt),d=new Date(tt),hm=d.getHours()*60+d.getMinutes(),p=S.prefs,sent=S.sent;
-  const [th,tm]=(p.dailyTime||'20:30').split(':').map(Number);
-  if(p.daily&&hm>=th*60+tm&&sent.daily!==today){sent.daily=today;notify(N_('Ton point du jour'),N_('Comment s’est passée ta journée ? Une minute dans ton journal suffit.'),{},'daily',true)}
-  if(p.motivation&&hm>=9*60&&sent.motivation!==today){sent.motivation=today;const m=dailyMessage();notify(N_('Message du jour'),m.k,m.v,'motivation',true)}
-  if(p.goals&&hm>=12*60&&sent.goals!==today&&S.habits.length){
-    sent.goals=today;
-    let best=null;for(const h of act()){const n=nextMilestone(h);if(!n)continue;const left=n.d*DAY-(tt-curStart(h));if(!best||left<best.left)best={h,n,left}}
-    if(best)notify(N_('Ton prochain objectif'),N_('{habit} : plus que {left} avant le badge « {badge} ».'),{habit:hName(best.h),left:durText(best.left,true),badge:t(best.n.t)},'goal',true);
-  }
+  const c=ntCfg(),wd=d.getDay();
+  if(!ntPaused())for(const [k] of NT_ITEMS){const it=c.items[k];if(!it.on||!it.time||k==='milestones'||k==='weekly')continue;
+    if(!it.days.includes(wd)||hm<hm2m(it.time)||sent['nt_'+k]===today||ntQuiet(tt))continue;
+    sent['nt_'+k]=today;
+    if(k==='motivation'){const m=dailyMessage();notify(N_('Message du jour'),m.k,m.v,'motivation',true);continue}
+    if(k==='goals'&&S.habits.length){let best=null;for(const h of act()){const n=nextMilestone(h);if(!n)continue;const left=n.d*DAY-(tt-curStart(h));if(!best||left<best.left)best={h,n,left}}
+      if(best){notify(N_('Ton prochain objectif'),N_('{habit} : plus que {left} avant le badge « {badge} ».'),{habit:hName(best.h),left:durText(best.left,true),badge:t(best.n.t)},'goals',true);continue}}
+    notify(NT_BY[k][1],it.text&&it.text.trim()?it.text.trim():NT_BY[k][4]||N_('Un petit rappel de LIBRE.'),{},k,true)}
   const rw=recapWeek();
-  if(p.weekly&&rw&&!rw.current&&sent.weekly!==rw.key){
+  const wk=c.items.weekly;
+  if(wk.on&&!ntPaused()&&rw&&!rw.current&&sent.weekly!==rw.key&&wd===(wk.day??1)&&hm>=hm2m(wk.time)){
     sent.weekly=rw.key;const r=recapData(rw.a,rw.b);
     notify(N_('Ton bilan de la semaine est prêt'),N_('{clean} sans consommation, {count}, {money} économisés. Touche pour le voir.'),{clean:tn(r.clean,'{n} jour','{n} jours'),count:tn(r.cur,'{n} consommation','{n} consommations'),money:money(r.saved)},'weekly',true);
   }
   if(!S.profile.demo&&S.habits.length){const ref=S.lastBackup||Math.min(...S.habits.map(h=>h.trackStart)),mk=dkey(tt).slice(0,7);
     if(tt-ref>30*DAY&&sent.backup!==mk){sent.backup=mk;notify(N_('Pense à sauvegarder'),N_('Ta dernière sauvegarde date de plus d’un mois. Un fichier d’export protège ton historique si tu changes d’appareil.'),{},'backup',true)}}
-  if(p.weekly&&S.habits.length){const [ma]=monthRange(-1),mk=dkey(ma).slice(0,7);
+  if(wk.on&&S.habits.length){const [ma]=monthRange(-1),mk=dkey(ma).slice(0,7);
     if(Math.min(...S.habits.map(h=>h.trackStart))<ma&&sent.monthly!==mk){sent.monthly=mk;notify(N_('Ton bilan du mois est prêt'),N_('Retrouve-le dans Progrès › Bilans.'),{},'monthly',true)}}
   save();
 }
@@ -1968,7 +1988,7 @@ function render(){
   else if(v==='sante')html=viewHealth();
   else html=viewHome();
   app.innerHTML=html;app.dataset.view=v;document.body.classList.add('lightbar');document.querySelectorAll('.ltabs,.htabs').forEach(r=>{const b=r.querySelector('[aria-pressed="true"]');if(b&&b.offsetLeft+b.offsetWidth>r.clientWidth)r.scrollLeft=b.offsetLeft-r.clientWidth/2+b.offsetWidth/2});
-  ensureChrome();updateLive();syncSegs();
+  ensureChrome();updateLive();syncSegs();if($('#ntStatus'))ntRefreshStatus();
   if(ui.view!==ui.lastView){ui.lastView=ui.view;
     reveal();
     const d=document.querySelector('[data-live="days"]');
@@ -2678,17 +2698,7 @@ function viewProfile(){
         <div class="li"><label class="grow" for="pf-std"><b>${esc(t('Verre standard'))}</b><span class="small muted" style="display:block">${esc(t('Varie selon les pays'))}</span></label>${sel('pf-std',String(stdG()),[['10',t('10 g (OMS, France, Australie…)')],['14',t('14 g (États-Unis)')],['8',t('8 g (Royaume-Uni)')],['20',t('20 g (Japon)')]])}</div>
       </div>
       <p class="small muted">${esc(t('Exemple : {date} · {time} · {num} · {money}',{date:fdate(now(),{weekday:'long',day:'numeric',month:'long',year:'numeric'}),time:ftime(now()),num:nf(1234.5),money:money(1234.5)}))}</p></div>`;
-  const PF_notif=`<div class="card stack">
-      <div class="list">
-        ${sw('congrats',t('Félicitations'),t('Quand tu atteins un objectif ou débloques un badge'))}
-        ${sw('daily',t('Rappel quotidien'),t('Un rappel pour faire le point dans ton journal'))}
-        ${pr.daily?`<div class="li"><label class="grow" for="dailyTime"><b>${esc(t('Heure du rappel'))}</b></label><input type="time" id="dailyTime" value="${esc(pr.dailyTime)}" style="width:auto"></div>`:''}
-        ${sw('motivation',t('Message de motivation'),t('Une pensée personnalisée chaque matin'))}
-        ${sw('goals',t('Rappel des objectifs'),t('Le temps restant avant ton prochain badge'))}
-        ${sw('weekly',t('Bilan de la semaine'),t('Au début de chaque semaine, le résumé de la précédente'))}
-        ${sw('system',t('Notifications du téléphone'),t('Afficher aussi les alertes hors de l’app si ton navigateur l’autorise'))}
-      </div>
-      <p class="small muted">${esc(t('Les notifications sont générées à partir de tes données quand LIBRE est ouverte, et regroupées dans la cloche en haut de l’écran.'))}</p></div>`;
+  const PF_notif=ntSection();
   const PF_data=`<div class="card stack" id="data">
       <p class="small">${esc(t('Tes données sont enregistrées uniquement dans ce navigateur, sur cet appareil. LIBRE n’a ni serveur ni compte : rien n’est envoyé ni partagé.'))}</p>
       <p class="small muted">${esc(t('Sans sauvegarde, elles sont perdues si tu effaces les données du navigateur ou si tu changes d’appareil. Sur iPhone, Safari peut effacer les données d’un site resté plusieurs jours sans être ouvert : ajoute LIBRE à l’écran d’accueil et fais des sauvegardes régulières.'))}</p>
@@ -2713,7 +2723,7 @@ function viewProfile(){
       <div class="h-tools"><button class="link danger" data-a="wipe" data-k="journal">${esc(t('Effacer mon journal'))}</button><button class="link danger" data-a="wipe" data-k="cravings">${esc(t('Effacer l’historique des envies'))}</button></div>
       <button class="btn danger sm" data-a="resetAsk">${ic('trash','sm')}${esc(t('Effacer toutes mes données'))}</button></div>`;
   const PF_photo=`<div class="card stack"><p class="small muted">${esc(t('Les photographies de LIBRE sont de vraies photos, prises par des photographes et publiées sur Pexels, une banque d’images libres de droits.'))+' '+esc(t('Elles sont incluses dans l’application : afficher une photo n’envoie aucune requête à Pexels ni à un autre site.'))}</p><button class="link" style="justify-self:start;text-align:start" data-a="photoCredits">${esc(t('Voir les crédits'))}</button></div>`;
-  const nOn=['congrats','daily','motivation','goals','weekly','system'].filter(k=>pr[k]).length;
+  const ntc=ntCfg(),nOn=NT_ITEMS.filter(([k])=>ntc.items[k].on).length;
   return topbar(t('Profil'))+`<div class="stack fade-in" style="margin-top:16px">
     <div class="card row"><div class="hico navy" style="width:56px;height:56px;border-radius:18px;font-family:var(--font-display);font-weight:800;font-size:1.3rem">${esc((p.name||'?').slice(0,1).toUpperCase())}</div>
       <div class="grow"><h2>${esc(p.name)}</h2><p class="small muted">${[p.age?tn(p.age,'{n} an','{n} ans'):'',p.sex&&p.sex!=='nr'?sexL:'',fmtHeight(p.height),fmtWeight(p.weight)].filter(Boolean).map(esc).join(' · ')}</p></div>
@@ -2724,7 +2734,7 @@ function viewProfile(){
       ${S.contacts.length?`<div class="list">${S.contacts.map((c,i)=>`<div class="li"><div class="hico">${ic('phone','sm')}</div><div class="grow"><b dir="auto">${esc(c.name)}</b><p class="small muted num" dir="ltr" style="text-align:start">${esc(c.phone)}</p></div><button class="iconbtn" style="color:var(--ink)" data-a="delContact" data-i="${i}" aria-label="${esc(t('Supprimer'))}">${ic('trash','sm')}</button></div>`).join('')}</div>`:`<p class="small muted">${esc(t('Ajoute une ou deux personnes de confiance à contacter quand une envie est forte.'))}</p>`}</div>
     <h2 class="tl-h">${esc(t('Réglages'))}</h2>
     ${fold('p-lang',t('Langue et région'),langLabel(LANG)+' · '+cur(),PF_lang)}
-    ${fold('p-notif',t('Notifications'),nf(nOn,0)+' / 6',PF_notif)}
+    ${fold('p-notif',t('Notifications et rappels'),ntc.enabled?(ntc.pauseUntil>now()?t('En pause'):t('{n} rappels actifs',{n:nf(nOn,0)})):t('Désactivées'),PF_notif)}
     ${fold('p-data',t('Tes données'),S.lastBackup?t('Dernière sauvegarde : {date}',{date:fdate(S.lastBackup,{day:'numeric',month:'long',year:'numeric'})}):t('Aucune sauvegarde pour l’instant.'),PF_data)}
     ${fold('p-install',t('Installer sur ton téléphone'),isInstalled()?t('Installée'):t('Écran d’accueil, hors ligne'),`<div class="card stack">${installHtml()}</div>`)}
     ${fold('p-safe',t('Aide et sécurité'),countryName(helpCountry()),safetyCard(1))}
@@ -4261,6 +4271,117 @@ const A_S5={
   s5Help:()=>{stopS5();if(ui.s5)ui.s5.run=false;ui.sosq=ui.sosq||{step:0,intensity:ui.s5?ui.s5.before:6,habit:ui.s5?ui.s5.habit:''};ui.sosq.step=2;$('#layer').innerHTML='';drawQuickSos()},
   s5Close:()=>{const s=ui.s5;stopS5();if(s&&s.step==='run'&&s.el>20){logCraving({habitId:s.habit||null,before:s.before,after:null,tool:'sos5',outcome:null});logSession('sos5',s.el)}ui.s5=null;closeSheet();render()}
 };
+/* =====================================================================
+   NOTIFICATIONS ET RAPPELS
+   Trois modes, annoncés honnêtement à l’utilisateur :
+   - application iOS/Android (Capacitor + LocalNotifications) : rappels réellement
+     programmés sur l’appareil, reçus même app fermée ;
+   - navigateur / PWA : rappels affichés quand LIBRE est ouverte (ou vient de l’être),
+     les rappels manqués sont rangés dans la cloche ;
+   - sans autorisation : uniquement dans l’app (cloche).
+   Écran verrouillé : texte neutre par défaut (aucun nom de substance ni chiffre).
+   ===================================================================== */
+const NT_ITEMS=[
+ ['daily',N_('Rappel quotidien'),N_('Pour compléter ton suivi du jour'),'20:30',N_('Prends une minute pour faire le point sur ta journée.')],
+ ['mood',N_('Humeur'),N_('Pour noter comment tu te sens'),'18:00',N_('Comment te sens-tu aujourd’hui ?')],
+ ['cravings',N_('Envies'),N_('Pour noter une envie et ce qui l’a déclenchée'),'21:00',N_('Une envie arrive ? Tes outils SOS sont là pour t’aider.')],
+ ['motivation',N_('Message de motivation'),N_('Une phrase positive chaque jour'),'09:00',N_('Tu avances à ton rythme. Continue tes efforts.')],
+ ['goals',N_('Objectifs'),N_('Pour jeter un œil à tes objectifs'),'12:00',N_('Un coup d’œil à tes objectifs ? Chaque pas compte.')],
+ ['exercise',N_('Exercice'),N_('Quelques minutes pour toi'),'17:00',N_('Trois minutes pour respirer ? Tes exercices t’attendent.')],
+ ['weekly',N_('Bilan de la semaine'),N_('Le résumé de ta semaine, une fois par semaine'),'10:00',N_('Ton bilan de la semaine est prêt.')],
+ ['milestones',N_('Étapes franchies'),N_('Quand tu atteins une étape ou un objectif'),'',N_('Une nouvelle étape est franchie. Bravo !')],
+ ['custom',N_('Rappel personnalisé'),N_('Ton propre message, à l’heure de ton choix'),'19:00','']];
+const NT_BY=Object.fromEntries(NT_ITEMS.map(x=>[x[0],x]));
+function ntCfg(){const p=S.prefs;if(isObj(p.nt)&&isObj(p.nt.items))return p.nt;
+  const all=[0,1,2,3,4,5,6],it={};
+  NT_ITEMS.forEach(([k,,,tm])=>{it[k]={on:false,time:tm,days:all.slice(),text:''}});
+  it.daily.on=p.daily!==false;it.daily.time=p.dailyTime||'20:30';it.motivation.on=p.motivation!==false;it.goals.on=p.goals!==false;it.weekly.on=p.weekly!==false;it.weekly.day=1;it.milestones.on=p.congrats!==false;
+  p.nt={enabled:true,system:!!p.system,discreet:true,pauseUntil:0,quiet:{on:false,from:'22:00',to:'08:00'},items:it};if(S.profile)setTimeout(save,0);return p.nt}
+const hm2m=s=>{const [h,m]=String(s||'0:0').split(':').map(Number);return (h||0)*60+(m||0)};
+function ntQuiet(ts){const q=ntCfg().quiet;if(!q.on)return false;const d=new Date(ts),m=d.getHours()*60+d.getMinutes(),a=hm2m(q.from),b=hm2m(q.to);return a<=b?(m>=a&&m<b):(m>=a||m<b)}
+function ntPaused(ts){const c=ntCfg();return !c.enabled||(c.pauseUntil&&(ts||now())<c.pauseUntil)}
+/* Texte d’un rappel : personnalisé si l’utilisateur l’a écrit, sinon le texte neutre par défaut */
+function ntText(k){const c=ntCfg().items[k];return (c&&c.text&&c.text.trim())||(NT_BY[k][4]?t(NT_BY[k][4]):t('Un petit rappel de LIBRE.'))}
+/* Plateforme : native (Capacitor) ou web */
+const LN=()=>{try{const C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.LocalNotifications||null}catch(e){return null}};
+async function ntPerm(){const ln=LN();
+  if(ln){try{const r=await ln.checkPermissions();return r.display==='granted'?'granted':r.display==='denied'?'denied':'default'}catch(e){return 'unsupported'}}
+  if(!('Notification' in window))return 'unsupported';return Notification.permission}
+async function ntAsk(){const ln=LN();
+  if(ln){try{const r=await ln.requestPermissions();return r.display==='granted'}catch(e){return false}}
+  if(!('Notification' in window))return false;try{return (await Notification.requestPermission())==='granted'}catch(e){return false}}
+/* Affichage hors de l’app (web) : par le service worker si possible, sinon l’API Notification */
+async function ntShowSystem(body,detail,force){const c=ntCfg();if(!force&&(!c.system||ntPaused()||ntQuiet(now())))return false;
+  if(LN())return false; // en natif, les rappels sont programmés à l’avance
+  if(!('Notification' in window)||Notification.permission!=='granted')return false;
+  const txt=c.discreet?body:(detail||body),opt={body:txt,icon:'icons/icon-192.png',badge:'icons/icon-192.png',tag:'libre',lang:LANG,dir:isRTL()?'rtl':'ltr'};
+  try{const r=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration();if(r&&r.showNotification){await r.showNotification('LIBRE',opt);return true}}catch(e){}
+  try{new Notification('LIBRE',opt);return true}catch(e){return false}}
+/* Natif : programme les 14 prochains jours (limite iOS : 64 rappels en attente) */
+async function ntReschedule(){const ln=LN();if(!ln)return {ok:false,why:'web'};
+  try{const pend=await ln.getPending();if(pend.notifications&&pend.notifications.length)await ln.cancel({notifications:pend.notifications.map(n=>({id:n.id}))});
+    const c=ntCfg();if(!c.enabled||!c.system)return {ok:true,n:0};
+    if((await ntPerm())!=='granted')return {ok:false,why:'perm'};
+    const list=[],t0=now(),base=sod(t0);
+    NT_ITEMS.forEach(([k],ki)=>{const it=c.items[k];if(!it.on||!it.time||k==='milestones')return;
+      for(let d=0;d<14;d++){const day=addDays(base,d),wd=new Date(day).getDay();
+        if(k==='weekly'?wd!==(it.day??1):!it.days.includes(wd))continue;
+        const at=day+hm2m(it.time)*60e3;if(at<=t0+30e3||ntPaused(at)||ntQuiet(at))continue;
+        list.push({id:(ki+1)*100+d,title:'LIBRE',body:ntText(k),schedule:{at:new Date(at),allowWhileIdle:true},extra:{kind:k}})}});
+    if(c.items.milestones.on)act().forEach((h,hi)=>{if(h.goal==='diminuer')return;const n=nextMilestone(h);if(!n)return;const at=curStart(h)+n.d*DAY;
+      if(at>t0&&at-t0<30*DAY&&!ntPaused(at)&&!ntQuiet(at))list.push({id:5000+hi,title:'LIBRE',body:c.discreet?ntText('milestones'):t('{habit} : {days} sans consommer.',{habit:hName(h),days:tn(n.d,'{n} jour','{n} jours')}),schedule:{at:new Date(at),allowWhileIdle:true},extra:{kind:'milestones'}})});
+    list.sort((a,b)=>a.schedule.at-b.schedule.at);const keep=list.slice(0,60);
+    if(keep.length)await ln.schedule({notifications:keep});ui.ntScheduled={n:keep.length,at:now()};return {ok:true,n:keep.length}}
+  catch(e){return {ok:false,why:'error'}}}
+async function ntTest(){const c=ntCfg(),msg=t('Ceci est un test : tes rappels LIBRE fonctionnent.'),ln=LN();
+  if(ln){if((await ntPerm())!=='granted'&&!(await ntAsk())){toast(t('Autorisation refusée'),t('Active les notifications de LIBRE dans les réglages de ton téléphone.'));render();return}
+    try{await ln.schedule({notifications:[{id:9999,title:'LIBRE',body:msg,schedule:{at:new Date(now()+5000)}}]});toast(t('Notification de test programmée'),t('Elle arrivera dans 5 secondes, même si tu quittes LIBRE.'))}catch(e){toast(t('Échec de la programmation'),t('Le système n’a pas accepté la notification.'))}return}
+  const shown=(await ntPerm())==='granted'&&await ntShowSystem(msg,msg,true);
+  toast(shown?t('Notification affichée'):t('Notification affichée dans l’app uniquement'),shown?t('Regarde le haut de ton écran ou le centre de notifications.'):t('Ton navigateur n’a pas donné l’autorisation, ou ne permet pas les notifications ici.'))}
+/* --- Rubrique « Notifications et rappels » --- */
+function ntSection(){const c=ntCfg(),native=!!LN(),dn=dowLabels('narrow'),ws=new Date(weekStart(now())).getDay();
+  const order=[0,1,2,3,4,5,6].map(i=>(ws+i)%7);
+  const sw=(path,on,label)=>`<label class="switch"><input type="checkbox" data-nt="${path}" ${on?'checked':''} aria-label="${esc(label)}"><span></span></label>`;
+  const items=NT_ITEMS.map(([k,n,d,tm,def])=>{const it=c.items[k];
+    return `<div class="nt-it ${it.on?'on':''}"><div class="li"><div class="grow"><b>${esc(t(n))}</b><p class="small muted">${esc(t(d))}</p></div>${it.on&&tm?`<input type="time" data-nt="items.${k}.time" value="${esc(it.time)}" aria-label="${esc(t('Heure'))}">`:''}${sw('items.'+k+'.on',it.on,t(n))}</div>
+      ${it.on&&k!=='milestones'?`<details class="nt-more"><summary>${esc(t('Personnaliser'))}</summary>
+        ${k==='weekly'?`<div class="nt-days" role="group" aria-label="${esc(t('Jour'))}">${order.map((w,i)=>`<button type="button" data-a="ntWeekDay" data-k="${k}" data-v="${w}" aria-pressed="${(it.day??1)===w}">${esc(dn[i])}</button>`).join('')}</div>`
+          :`<div class="nt-days" role="group" aria-label="${esc(t('Jours'))}">${order.map((w,i)=>`<button type="button" data-a="ntDay" data-k="${k}" data-v="${w}" aria-pressed="${it.days.includes(w)}">${esc(dn[i])}</button>`).join('')}</div>`}
+        <input type="text" data-nt="items.${k}.text" maxlength="120" dir="auto" value="${esc(it.text||'')}" placeholder="${esc(def?t(def):t('Écris ton message'))}" aria-label="${esc(t('Texte du rappel'))}"></details>`:''}</div>`}).join('');
+  const pauseTxt=c.pauseUntil&&c.pauseUntil>now()?t('En pause jusqu’au {date}',{date:fdate(c.pauseUntil,{weekday:'long',day:'numeric',month:'long'})+' · '+ftime(c.pauseUntil)}):'';
+  return `<div class="card stack nt">
+    <div class="nt-status" id="ntStatus"><p class="small muted">${esc(t('Vérification des autorisations…'))}</p></div>
+    <div class="list">
+      <div class="li"><div class="grow"><b>${esc(t('Notifications'))}</b><p class="small muted">${esc(t('Tous les rappels de LIBRE'))}</p></div>${sw('enabled',c.enabled,t('Notifications'))}</div>
+      <div class="li"><div class="grow"><b>${esc(t('Hors de l’app'))}</b><p class="small muted">${esc(native?t('Rappels programmés sur ton téléphone, reçus même quand LIBRE est fermée'):t('Afficher les rappels dans le système, quand ton navigateur l’autorise'))}</p></div>${sw('system',c.system,t('Hors de l’app'))}</div>
+      <div class="li"><div class="grow"><b>${esc(t('Écran verrouillé discret'))}</b><p class="small muted">${esc(t('Aucun nom de substance ni chiffre : seulement un message neutre'))}</p></div>${sw('discreet',c.discreet,t('Écran verrouillé discret'))}</div>
+      <div class="li"><div class="grow"><b>${esc(t('Période calme'))}</b><p class="small muted">${esc(t('Aucun rappel pendant ces heures'))}</p></div>${c.quiet.on?`<input type="time" data-nt="quiet.from" value="${esc(c.quiet.from)}" aria-label="${esc(t('Début'))}"><input type="time" data-nt="quiet.to" value="${esc(c.quiet.to)}" aria-label="${esc(t('Fin'))}">`:''}${sw('quiet.on',c.quiet.on,t('Période calme'))}</div>
+    </div>
+    <div class="nt-pause">${pauseTxt?`<p class="small"><b>${esc(pauseTxt)}</b> <button class="link" data-a="ntPause" data-v="0">${esc(t('Reprendre'))}</button></p>`:`<span class="small muted">${esc(t('Pause temporaire :'))}</span> <button class="chip" data-a="ntPause" data-v="1">${esc(t('24 heures'))}</button><button class="chip" data-a="ntPause" data-v="7">${esc(t('7 jours'))}</button>`}</div>
+    <h3 class="nt-h">${esc(t('Rappels'))}</h3>
+    <div class="nt-list list">${items}</div>
+    <button class="btn quiet sm" data-a="ntTest" style="justify-self:start">${ic('bell','sm')}${esc(t('Tester une notification'))}</button>
+    <p class="small muted">${esc(native?t('Les rappels sont programmés pour les 14 prochains jours et mis à jour à chaque ouverture de LIBRE.'):t('Dans un navigateur, LIBRE ne peut afficher un rappel que lorsqu’elle est ouverte. Les rappels manqués t’attendent dans la cloche. Pour recevoir des rappels quand l’app est fermée, il faut l’application iPhone ou Android.'))}</p></div>`}
+async function ntRefreshStatus(){const el=$('#ntStatus');if(!el)return;const p=await ntPerm(),native=!!LN();
+  const st={granted:['ok',t('Autorisées'),native?t('Ton téléphone affichera les rappels de LIBRE.'):t('Ton navigateur peut afficher les rappels de LIBRE.')],
+    denied:['bad',t('Refusées'),native?t('Pour les activer, ouvre les Réglages du téléphone › LIBRE › Notifications.'):t('Pour les activer, modifie l’autorisation du site dans les réglages de ton navigateur.')],
+    default:['wait',t('Pas encore demandées'),t('LIBRE te demandera l’autorisation seulement si tu appuies sur le bouton.')],
+    unsupported:['off',t('Non disponibles ici'),t('Ce navigateur ne gère pas les notifications. Tes rappels restent dans la cloche.')]}[p]||['off','',''];
+  const sch=native&&ui.ntScheduled?` ${t('{n} rappels programmés.',{n:nf(ui.ntScheduled.n,0)})}`:'';
+  el.innerHTML=`<div class="nt-badge nt-${st[0]}"><span></span><b>${esc(t('Autorisations'))} : ${esc(st[1])}</b></div><p class="small muted">${esc(st[2]+sch)}</p>${p==='default'?`<button class="btn primary sm" data-a="ntAsk">${esc(t('Autoriser les notifications'))}</button>`:''}`}
+let ntT=null;function ntChanged(){clearTimeout(ntT);ntT=setTimeout(()=>ntReschedule().then(()=>ntRefreshStatus()),400)}
+const A_NT={
+  ntAsk:async()=>{const ok=await ntAsk();const c=ntCfg();if(ok){c.system=true;save();ntChanged();toast(t('Notifications autorisées'),t('Tu peux choisir chaque rappel ci-dessous.'))}else toast(t('Autorisation refusée'),t('Tu peux changer d’avis plus tard dans les réglages. Tes rappels restent dans la cloche.'));render()},
+  ntTest:()=>ntTest(),
+  ntPause:el=>{const c=ntCfg(),d=+el.dataset.v;c.pauseUntil=d?now()+d*DAY:0;save();ntChanged();render()},
+  ntDay:el=>{const it=ntCfg().items[el.dataset.k],w=+el.dataset.v;it.days=it.days.includes(w)?it.days.filter(x=>x!==w):it.days.concat(w);if(!it.days.length)it.days=[w];el.setAttribute('aria-pressed',it.days.includes(w));save();ntChanged()},
+  ntWeekDay:el=>{const it=ntCfg().items[el.dataset.k];it.day=+el.dataset.v;el.parentNode.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===el));save();ntChanged()}
+};
+function ntInput(el){const c=ntCfg(),path=el.dataset.nt.split('.');let o=c;for(let i=0;i<path.length-1;i++)o=o[path[i]];const k=path[path.length-1];
+  o[k]=el.type==='checkbox'?el.checked:el.value;
+  if(path[0]==='items'&&k==='time'){const kk=path[1];if(S.sent)S.sent['nt_'+kk]=''}
+  if(el.dataset.nt==='system'&&el.checked){ntPerm().then(p=>{if(p==='default')ntAsk().then(ok=>{if(!ok){c.system=false;save();render()}else ntChanged()});else if(p!=='granted'){c.system=false;save();render();toast(t('Autorisation refusée'),t('Tes rappels restent dans la cloche.'))}})}
+  save();ntChanged();if(el.type==='checkbox')render()}
 /* Choix de l’exercice selon l’intensité et le déclencheur habituel */
 function sosPick(intensity){const top=(trigCounts(60)[0]||[])[0];
   if(intensity>=8)return 'breath';if(top==='Stress'&&intensity>=5)return 'breath';if(intensity>=5)return 'urge';return 'delay'}
@@ -4504,10 +4625,11 @@ const A10={
   qsCall:()=>{openSosPanel();ui.sos.tab='proches';drawSos()},
   qsJournal:()=>{S.sos.push({ts:now(),ok:false,intensity:ui.sosq?ui.sosq.intensity:null});save();closeSheet();journalForm({craving:ui.sosq?ui.sosq.intensity:5})}
 };
-Object.assign(A,A6,A7,A8,A9,A10,A_S5);
+Object.assign(A,A6,A7,A8,A9,A10,A_S5,A_NT);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(!f)return;if(HAPTIC_ON.has(el.dataset.a))haptic();
   if(el.tagName==='INPUT')return; f(el,e)});
 document.addEventListener('change',e=>{const el=e.target;
+  if(el.dataset&&el.dataset.nt){ntInput(el);return}
   if(el.matches('input[data-a="pref"]'))A.pref(el);
   if(el.matches('input[data-a="lockToggle"]'))A.lockToggle(el);
   if(el.id==='dailyTime'){S.prefs.dailyTime=el.value||'20:30';S.sent.daily='';save()}
@@ -4542,7 +4664,7 @@ window.addEventListener('hashchange',route);
 window.addEventListener('languagechange',()=>{if(S.prefs.langAuto){S.prefs.lang=detectLang();applyLocale();render()}});
 setInterval(()=>{if(!S.profile)return;updateLive()},1000);
 setInterval(()=>{if(!S.profile)return;checkBadges(false);runSchedules()},30000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.profile){checkBadges(false);runSchedules();render()}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.profile){checkBadges(false);runSchedules();ntReschedule();render()}});
 
 /* =====================================================================
    LIBRE v6 — mise en scène (inspirée des principes d’apple.com, sans les copier)
@@ -5108,7 +5230,7 @@ A.pwaInstall=()=>{if(!installEvt)return;installEvt.prompt();installEvt.userChoic
 applyLocale();route();
 (()=>{const s=$('#splash');if(!s)return;if(!isInstalled()){s.remove();return}s.classList.add('on');setTimeout(()=>{s.classList.add('out');setTimeout(()=>s.remove(),RM()?0:420)},RM()?150:650)})();
 if(LOAD_ISSUE)setTimeout(()=>{const raw=(()=>{try{return localStorage.getItem(LOAD_ISSUE)}catch(e){return null}})();toast(t('Données illisibles'),t('Les données enregistrées sur cet appareil étaient endommagées. Une copie brute a été conservée.'),raw?{label:t('Télécharger'),fn:()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([raw],{type:'text/plain'}));a.download='libre-donnees-brutes.txt';a.click()}}:null)},800);
-if(S.profile){setTimeout(()=>{checkBadges(false);runSchedules()},1200)}
+if(S.profile){setTimeout(()=>{checkBadges(false);runSchedules();ntReschedule()},1200)}
 
 // Accès de test (lecture seule) pour la vérification automatique des traductions
 window.__libreI18n={MSGIDS,coverage,langs:()=>LANGS.slice(),current:()=>LANG,tr:s=>t(s)};
