@@ -12,9 +12,9 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 | **Identifiant de l’app** | `ch.libre.app` suppose que tu contrôles libre.ch ; sinon choisis un identifiant à toi (ex. `ch.tonnom.libre`), identique sur iOS et Android, **définitif** après la première publication | `capacitor.config.json`, `android/app/build.gradle`, Xcode |
 | **Nom, adresse et e-mail de l’éditeur** | Politique de confidentialité, fiches des stores, contact de support | `libre/privacy.html` (champs « À COMPLÉTER »), stores |
 | **Adresse publique de la politique de confidentialité** | Exigée par Apple, Google et HealthKit | Activer GitHub Pages (Settings › Pages › branche, dossier racine) : `https://yumiyacandle.github.io/Jeux-Yumiya/libre/privacy.html`, ou un autre hébergement ; mettre à jour `PRIVACY_URL` dans `libre/index.html` si l’adresse change |
-| **Adresse de support** (site ou e-mail) | Obligatoire dans les deux stores | Stores |
+| **Adresse de support** (site ou e-mail) | Obligatoire dans les deux stores. Page de présentation prête : `libre/site/` (fr/en), publiée avec GitHub Pages à `…/libre/site/` ; compléter l’e-mail de support dans son pied de page | Stores |
 | **Relecture médicale** par un professionnel de santé qualifié (addictologue de préférence) | Contenus sur le sevrage, les opioïdes, les médicaments ; je ne peux pas la remplacer | Garder une trace écrite (nom, date, version relue) |
-| **Captures d’écran** | iPhone 6,9" (1320×2868 ou 1290×2796) obligatoires ; iPad 13" si l’iPad est gardé ; Android : 2 à 8 captures téléphone | Faites sur appareils ou simulateurs, **sans données réelles** |
+| **Captures d’écran** | **Prêtes** : `libre-app/store/out/{fr,en}/ios` (1320×2868, iPhone 6,9") et `…/android` (1080×1920), 6 par langue, régénérables avec `node libre-app/store/make-screenshots.js`. À fournir toi-même : iPad 13" si l’iPad est gardé | Profil d’exemple, étiquette « Démo » masquée ; à relire avant envoi |
 | **Clé de signature Android** (clé d’upload) et ses mots de passe | Signer le fichier .aab | À garder hors du dépôt |
 | **Décision iPad** | L’app fonctionne sur iPad (mise en page large testée) ; si tu ne veux pas fournir de captures iPad, passer `TARGETED_DEVICE_FAMILY` à `1` | Xcode |
 | **Pays de distribution** | Les numéros d’aide intégrés couvrent certains pays ; vérifier ceux de chaque pays choisi | Stores |

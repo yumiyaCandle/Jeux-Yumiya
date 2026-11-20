@@ -346,4 +346,16 @@ test('Apparence', 'Carte principale (couleur et sombre) : texte blanc lisible (�
   }
 }, { slow: true });
 
+/* ---------- Page de présentation (libre/site) ---------- */
+test('Distribution', 'Page de présentation : sans erreur, sans requête externe, sans débordement, FR et EN', async (b, base) => {
+  for (const [w, h] of [[360, 780], [1280, 800]]) {
+    const p = await page(b, base, { viewport: { width: w, height: h } }); const failed = []; p.on('requestfailed', r => failed.push(r.url()));
+    await p.goto(base + 'site/'); await p.waitForTimeout(500);
+    assert.equal(await p.evaluate(() => document.documentElement.scrollWidth - innerWidth), 0, w + ' px : débordement');
+    assert.ok((await p.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.ch .num')).fontSize))) > 80, 'chiffres géants');
+    await p.click('#l-en'); assert.match(await p.textContent('h1'), /Quit/); assert.match(await p.getAttribute('[data-img="02-sos"]', 'src'), /en-02-sos/);
+    assert.deepEqual(failed, []); assert.deepEqual(p.external, []); noErr(p); await p.ctx.close();
+  }
+});
+
 module.exports = { T };
