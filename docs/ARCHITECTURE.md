@@ -69,6 +69,10 @@ Inspirée d’une vidéo de présentation fournie par l’éditeur, adaptée aux
   verre aux valeurs de la vidéo (blanc 62 % → 24 %, flou 40 px, saturation 1,5 ; plus opaque sans flou), carte principale pleine couleur
   (texte blanc ≥ 4,5:1 mesuré sur les pixels par un test), mot clé en italique serif, anneau blanc avec pastilles en orbite (étapes franchies),
   boutons et onglet actif en pilule.
+- Troisième passe (références : tableau de bord santé de type Apple Santé / Oura / Whoop) : date en petites capitales, prénom en italique,
+  pastille d’initiale ; carte principale « Sombre » (défaut) avec anneau en dégradé chaud lumineux, ou « Couleur » (Profil › Apparence) ;
+  barres colorées sous les mesures ; anneaux de la semaine (jours sans, envies traversées, bilans du jour) ; carte objectif lavande ;
+  barre d’onglets flottante en pilule sur téléphone, onglet actif dans un rond sombre.
 - Tout est coupé si le système demande moins d’animations (`prefers-reduced-motion`) ; le verre devient opaque si le système demande moins de transparence.
 
 ## Langues

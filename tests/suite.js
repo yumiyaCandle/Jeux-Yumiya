@@ -330,10 +330,10 @@ test('Apparence', 'Animations actives : ouverture, entrée des blocs, barres qui
   assert.deepEqual(errs, []); await ctx.close();
 });
 
-test('Apparence', 'Carte principale pleine couleur : texte blanc lisible (≥ 4,5:1 mesuré sur les pixels), 4 couleurs, clair et sombre', async (b, base) => {
+test('Apparence', 'Carte principale (couleur et sombre) : texte blanc lisible (≥ 4,5:1 mesuré sur les pixels), 4 couleurs, clair et sombre', async (b, base) => {
   const lum = ([r, g, b]) => [r, g, b].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((s, v, i) => s + v * [.2126, .7152, .0722][i], 0);
-  for (const cs of ['light', 'dark']) for (const acc of ['vert', 'lagon', 'indigo', 'corail']) {
-    const st = profileState({ days: 27 }); st.prefs.accent = acc;
+  for (const cs of ['light', 'dark']) for (const acc of ['vert', 'lagon', 'indigo', 'corail', 'sombre']) {
+    const st = profileState({ days: 27 }); if (acc === 'sombre') st.prefs.hero = 'sombre'; else { st.prefs.accent = acc; st.prefs.hero = 'couleur'; }
     const p = await page(b, base, { colorScheme: cs, init: seed(st) }); await p.goto(base); await p.settle();
     const pts = await p.evaluate(() => { const h = document.querySelector('.hm-hero'); h.scrollIntoView({ block: 'center' }); const out = [];
       h.querySelectorAll('dt,.hm-since,.hm-k,.hm-sub,.hm-step').forEach(e => { const r = e.getBoundingClientRect(); if (r.width) out.push([r.left + 4, r.top + r.height / 2], [r.right - 6, r.top + r.height / 2]); });
