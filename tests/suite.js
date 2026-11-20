@@ -330,4 +330,20 @@ test('Apparence', 'Animations actives : ouverture, entrée des blocs, barres qui
   assert.deepEqual(errs, []); await ctx.close();
 });
 
+test('Apparence', 'Carte principale pleine couleur : texte blanc lisible (≥ 4,5:1 mesuré sur les pixels), 4 couleurs, clair et sombre', async (b, base) => {
+  const lum = ([r, g, b]) => [r, g, b].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((s, v, i) => s + v * [.2126, .7152, .0722][i], 0);
+  for (const cs of ['light', 'dark']) for (const acc of ['vert', 'lagon', 'indigo', 'corail']) {
+    const st = profileState({ days: 27 }); st.prefs.accent = acc;
+    const p = await page(b, base, { colorScheme: cs, init: seed(st) }); await p.goto(base); await p.settle();
+    const pts = await p.evaluate(() => { const h = document.querySelector('.hm-hero'); h.scrollIntoView({ block: 'center' }); const out = [];
+      h.querySelectorAll('dt,.hm-since,.hm-k,.hm-sub,.hm-step').forEach(e => { const r = e.getBoundingClientRect(); if (r.width) out.push([r.left + 4, r.top + r.height / 2], [r.right - 6, r.top + r.height / 2]); });
+      h.querySelectorAll('*').forEach(e => e.style.setProperty('color', 'transparent', 'important')); h.querySelectorAll('svg,.hm-orbs,.hm-pill,.hm-rec').forEach(e => e.style.visibility = 'hidden'); return out; });
+    await p.waitForTimeout(120); const buf = await p.screenshot();
+    const px = await p.evaluate(async ([b64, pts]) => { const img = new Image(); img.src = 'data:image/png;base64,' + b64; await img.decode(); const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+      const x = c.getContext('2d'); x.drawImage(img, 0, 0); return pts.map(([a, b]) => [...x.getImageData(Math.round(a), Math.round(b), 1, 1).data].slice(0, 3)); }, [buf.toString('base64'), pts]);
+    const min = Math.min(...px.map(c => 1.05 / (lum(c) + .05)));
+    assert.ok(min >= 4.5, `${cs} ${acc} : contraste ${min.toFixed(2)}`); await p.ctx.close();
+  }
+}, { slow: true });
+
 module.exports = { T };

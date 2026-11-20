@@ -1663,6 +1663,83 @@ html.fx.fx-blur .sheet{background:linear-gradient(170deg,var(--glass-a),var(--gl
 .acc-pick button i{width:30px;height:30px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
 .acc-pick button[aria-pressed="true"]{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
 .acc-pick button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+/* ---------- Deuxième passe « comme la vidéo » ----------
+   Photo de lumière de fin de journée très floutée derrière toute l’app, verre plus transparent et plus flou
+   (valeurs de la vidéo : dégradé 155°, blanc 62 % → 24 %, flou 40 px, saturation 1,5), carte principale pleine couleur
+   avec anneau blanc et pastilles en orbite, mot clé en italique serif, boutons et onglet actif en pilule. */
+html.fx #amb{inset:-8%;background:none;animation:amb 30s ease-in-out infinite alternate}
+html.fx #amb::before,html.fx #amb::after{content:"";position:absolute;inset:0}
+html.fx #amb::before{background:var(--amb-img,none) center/cover no-repeat;filter:blur(44px) saturate(1.35) brightness(var(--amb-bright));transform:scale(1.15)}
+html.fx #amb::after{background:
+  radial-gradient(60% 45% at 85% 4%,rgba(255,196,140,var(--amb-sun)),transparent 70%),
+  radial-gradient(55% 45% at 0% 35%,var(--amb-warm),transparent 72%),
+  radial-gradient(50% 40% at 100% 60%,color-mix(in srgb,var(--green) var(--amb-acc),transparent),transparent 72%),
+  linear-gradient(180deg,var(--amb-veil-a),var(--amb-veil-b))}
+:root{--amb-bright:1.02;--amb-sun:.55;--amb-veil-a:rgba(255,236,220,.18);--amb-veil-b:rgba(244,232,222,.42)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--amb-bright:.42;--amb-sun:.16;--amb-veil-a:rgba(10,16,28,.35);--amb-veil-b:rgba(6,12,24,.62)}}
+:root[data-theme="dark"]{--amb-bright:.42;--amb-sun:.16;--amb-veil-a:rgba(10,16,28,.35);--amb-veil-b:rgba(6,12,24,.62)}
+html.fx body{background:transparent}
+html.fx{background:var(--bg)}
+
+/* Verre de la vidéo */
+:root{--glass-a:rgba(255,255,255,.62);--glass-b:rgba(255,255,255,.24)}
+html.fx.fx-blur #app .card:not(.card .card):not(.fold-b .card):not(.full .card),html.fx.fx-blur #app .hm-p,html.fx.fx-blur #app .fold,html.fx.fx-blur #app .body-hero,html.fx.fx-blur #app .jbook,html.fx.fx-blur .sheet{
+  -webkit-backdrop-filter:blur(40px) saturate(1.5)!important;backdrop-filter:blur(40px) saturate(1.5)!important}
+/* Sans flou (appareil modeste), le verre doit rester lisible : un peu plus opaque */
+html.fx:not(.fx-blur){--glass-a:rgba(255,255,255,.84);--glass-b:rgba(255,255,255,.66)}
+@media (prefers-color-scheme: dark){html.fx:not(.fx-blur):not([data-theme="light"]){--glass-a:rgba(30,50,86,.92);--glass-b:rgba(14,28,51,.86)}}
+html.fx[data-theme="dark"]:not(.fx-blur){--glass-a:rgba(30,50,86,.92);--glass-b:rgba(14,28,51,.86)}
+
+/* En-tête et barre d’onglets en verre, onglet actif en pilule */
+html.fx #app .hm-head,html.fx #app .top{background:transparent}
+html.fx .nav a[aria-current="page"]{position:relative}
+html.fx .nav a[aria-current="page"]::before{content:"";position:absolute;inset:4px 8px;border-radius:14px;background:rgba(255,255,255,.72);box-shadow:inset 0 1px 0 #fff,0 4px 14px -6px rgba(14,39,71,.25);z-index:-1}
+@media (prefers-color-scheme: dark){html.fx:not([data-theme="light"]) .nav a[aria-current="page"]::before{background:rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}}
+html.fx[data-theme="dark"] .nav a[aria-current="page"]::before{background:rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+html.fx .nav a{isolation:isolate}
+html.fx #app .btn{border-radius:999px}
+
+/* Carte principale pleine couleur (« Votre studio tourne à plein régime ») */
+html.fx #app .hm-p.hm-hero{
+  background:radial-gradient(38% 55% at 100% 0%,color-mix(in srgb,var(--green) 38%,transparent),transparent 70%),
+             radial-gradient(70% 70% at 0% 100%,color-mix(in srgb,var(--hero-base) 70%,#000),transparent 70%),
+             linear-gradient(140deg,var(--hero-base),color-mix(in srgb,var(--hero-base) 80%,#000))!important;
+  border:1px solid rgba(255,255,255,.28)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 22px 48px -18px color-mix(in srgb,var(--green-strong) 70%,transparent)!important;
+  color:#fff}
+html.fx #app .hm-hero *{color:inherit}
+/* Base de la carte : assez foncée pour que les petits textes blancs restent lisibles (≥ 4,5:1) */
+:root{--hero-base:color-mix(in srgb,var(--green-strong) 86%,#000)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--hero-base:color-mix(in srgb,var(--green-strong) 58%,#000)}}
+:root[data-theme="dark"]{--hero-base:color-mix(in srgb,var(--green-strong) 58%,#000)}
+html.fx #app .hm-hero .hm-k,html.fx #app .hm-hero .hm-since,html.fx #app .hm-hero .hm-sub,html.fx #app .hm-hero dt{color:rgba(255,255,255,.86)!important}
+html.fx #app .hm-hero .hm-pill{background:rgba(255,255,255,.2)!important;color:#fff!important;border:1px solid rgba(255,255,255,.35)}
+html.fx #app .hm-hero .hm-u{font-family:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;font-style:italic;font-weight:500;letter-spacing:0}
+html.fx #app .hm-hero .hm-rec{background:rgba(255,255,255,.16)!important;color:#fff!important;border:1px solid rgba(255,255,255,.28)}
+html.fx #app .hm-hero .hm-facts{border-color:rgba(255,255,255,.25)!important}
+html.fx #app .hm-hero .hm-facts>div{border-color:rgba(255,255,255,.22)!important}
+html.fx #app .hm-hero .hr-bg{stroke:rgba(255,255,255,.26)!important}
+html.fx #app .hm-hero .hr-fg{stroke:#fff!important;filter:drop-shadow(0 0 6px rgba(255,255,255,.55))}
+html.fx #app .hm-hero .hm-ring{position:relative}
+/* Pastilles en orbite : les étapes déjà franchies */
+.hm-orbs{display:none}
+html.fx .hm-orbs{display:block;position:absolute;inset:0;container-type:size;pointer-events:none;animation:orbit 60s linear infinite}
+html.fx .hm-orbs i{--a:calc(var(--k) * 72deg - 50deg);position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px;border-radius:50%;
+  display:grid;place-items:center;font:800 9px/1 var(--font-body,system-ui);font-style:normal;color:#0E2240!important;white-space:nowrap;letter-spacing:-.02em;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.75),rgba(255,255,255,.18) 55%),var(--c);
+  border:1px solid rgba(255,255,255,.6);box-shadow:0 4px 12px rgba(0,0,0,.18);
+  transform:rotate(var(--a)) translate(calc(50cqw + 3px)) rotate(calc(-1 * var(--a))) }
+html.fx .hm-orbs i>b{animation:orbit 60s linear infinite reverse;display:block}
+@keyframes orbit{to{transform:rotate(360deg)}}
+
+/* Pastilles d’icônes en verre (accès rapide, comme les tuiles de la vidéo) */
+html.fx #app .hm-tools a,html.fx #app .hm-tools button{background:linear-gradient(155deg,rgba(255,255,255,.7),rgba(255,255,255,.32));border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 #fff}
+@media (prefers-color-scheme: dark){html.fx:not([data-theme="light"]) #app .hm-tools a,html.fx:not([data-theme="light"]) #app .hm-tools button{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);box-shadow:none}}
+html.fx[data-theme="dark"] #app .hm-tools a,html.fx[data-theme="dark"] #app .hm-tools button{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);box-shadow:none}
+
+@media (prefers-reduced-motion: reduce){html.fx .hm-orbs,html.fx .hm-orbs i>b{animation:none}}
+@media (prefers-reduced-transparency: reduce){html.fx #amb::before{display:none}}
 </style>
 </head>
 <body>
@@ -2173,7 +2250,7 @@ function viewHome(){
     const over=L.per==='jour'?t('Tu as dépassé ta limite aujourd’hui. Ce n’est pas un échec : demain est un nouveau jour.'):t('Tu as dépassé ta limite pour cette période. Ce n’est pas un échec : chaque jour reste une nouvelle occasion de réduire.');
     side=`<p class="hm-k">${esc(title)}</p>${hmRing(L.max?L.used/L.max:1,`${nf(L.used)}<small> / ${nf(L.max)}</small>`,t(T(h).u2),`${title} : ${nf(L.used)} / ${unitN(h,L.max)}`,L.over?'over':'')}
       <p class="hm-step">${esc(perTxt)}</p><p class="hm-sub">${esc(L.over?over:t('Avant : {q} par jour en moyenne. Limite visée : {max}.',{q:unitN(h,Math.round(perDay(h)*10)/10),max:perTxt}))}</p>`}
-  else if(nx){side=`<p class="hm-k">${esc(t('Prochaine étape'))}</p>${hmRing(pct,`${nf(Math.round(pct*100),0)}<small>%</small>`,t(nx.t),`${t('Progression vers la prochaine étape')} : ${Math.round(pct*100)} %`)}
+  else if(nx){side=`<p class="hm-k">${esc(t('Prochaine étape'))}</p>${hmRing(pct,`${nf(Math.round(pct*100),0)}<small>%</small>`,t(nx.t),`${t('Progression vers la prochaine étape')} : ${Math.round(pct*100)} %`,'',orbsHtml(dd))}
       <p class="hm-step">${esc(t(nx.t))}</p><p class="hm-sub">${esc(t('dans {left}',{left:durText(nx.d*DAY-el,true)}))}${pv?` · ${esc(t('Dernière étape'))} : ${esc(t(pv.t))}`:''}</p>`}
   else side=`<p class="hm-k">${esc(t('Prochaine étape'))}</p>${hmRing(1,'✓','',t('Toutes les étapes franchies'))}<p class="hm-step">${esc(t('Toutes les étapes franchies'))}</p>`;
   const tools=[['tool','breath','heart',t('Respirer')],['tool','triggers','target',t('Déclencheur')],['journalForm','','book',t('Journal')],['#plan','','check',t('Mon plan')]];
@@ -2238,8 +2315,11 @@ function homeHead(p,line,cta,seg){
   </header>`;
 }
 /* Anneau de progression : valeur au centre, libellé dessous */
-function hmRing(p,big,label,aria,cls){const r=52,c=2*Math.PI*r,v=Math.max(0,Math.min(1,p));
-  return `<div class="hm-ring ${cls||''}" role="img" aria-label="${esc(aria)}"><svg viewBox="0 0 128 128" aria-hidden="true"><circle class="hr-bg" cx="64" cy="64" r="${r}"/><circle class="hr-fg" cx="64" cy="64" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c*(1-v)).toFixed(1)}" style="--c:${c.toFixed(1)}"/></svg><span class="hm-ring-t"><b class="num">${big}</b>${label?`<small>${esc(label)}</small>`:''}</span></div>`}
+function hmRing(p,big,label,aria,cls,orbs){const r=52,c=2*Math.PI*r,v=Math.max(0,Math.min(1,p));
+  return `<div class="hm-ring ${cls||''}" role="img" aria-label="${esc(aria)}"><svg viewBox="0 0 128 128" aria-hidden="true"><circle class="hr-bg" cx="64" cy="64" r="${r}"/><circle class="hr-fg" cx="64" cy="64" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${(c*(1-v)).toFixed(1)}" style="--c:${c.toFixed(1)}"/></svg><span class="hm-ring-t"><b class="num">${big}</b>${label?`<small>${esc(label)}</small>`:''}</span>${orbs||''}</div>`}
+/* Pastilles en orbite autour de l’anneau (effets visuels) : les dernières étapes franchies */
+function orbsHtml(dd){const C=['#F6B44C','#7FD3C4','#9AA7FF','#F28CA8','#8FD96B'];const got=MILESTONES.filter(m=>m.d<=dd).slice(-5);
+  return got.length?`<span class="hm-orbs" aria-hidden="true">${got.map((m,i)=>`<i style="--k:${i};--c:${C[i%5]}"><b>${esc(msShort(m))}</b></i>`).join('')}</span>`:''}
 /* Semaine en cours : jours sans consommation, aujourd’hui mis en avant */
 function hmWeek(h){
   const ws=weekStart(now()),today=sod(now()),labels=dowLabels('narrow');let clean=0,count=0;
@@ -4961,7 +5041,9 @@ function applyFx(){const r=document.documentElement;r.classList.toggle('fx',FX()
   let strong=true;try{strong=(navigator.hardwareConcurrency||4)>=4&&(navigator.deviceMemory||4)>=3&&CSS.supports('(backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))')}catch(e){}
   r.classList.toggle('fx-blur',FX()&&strong);
   const a=ACCENTS.some(x=>x[0]===S.prefs.accent)?S.prefs.accent:'vert';if(a==='vert')delete r.dataset.accent;else r.dataset.accent=a;
-  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content','#0E2747')}
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content','#0E2747');
+  /* Photo de lumière (incluse dans l’app, jamais chargée depuis Internet) derrière le verre */
+  const src=(typeof PH_DATA!=='undefined'&&PH_DATA.sommeil)||PH_DIR+'sommeil-720.webp';if(FX())r.style.setProperty('--amb-img',`url("${src}")`);else r.style.removeProperty('--amb-img')}
 function fxReveal(){const a=$('#app');if(!FXM()||!a)return;
   a.animate([{clipPath:'circle(0% at 50% 38%)',filter:'blur(22px)',opacity:.6},{clipPath:'circle(150% at 50% 38%)',filter:'blur(0px)',opacity:1}],{duration:900,easing:'cubic-bezier(.22,.8,.2,1)'})}
 function fxBlocks(){if(!FXM())return;const a=$('#app');if(!a)return;
