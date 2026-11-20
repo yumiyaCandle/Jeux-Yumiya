@@ -127,7 +127,7 @@ test('Sauvegarde', 'Fichier d’une version future, fichier corrompu, fichier ho
 });
 
 test('Sauvegarde', 'Revenir à l’état d’avant une restauration', async (b, base) => {
-  const p = await page(b, base, { init: seed(profileState({ name: 'Avant' })) }); await p.goto(base);
+  const p = await page(b, base, { init: seed(profileState({ name: 'Avant' })) }); await p.goto(base); await p.settle();
   await importFile(p, JSON.stringify(profileState({ name: 'Après' }))); await p.click('#cfOk'); await p.waitForTimeout(300);
   assert.equal((await p.state()).profile.name, 'Après'); await p.go('profil'); await p.closeLayer(); await p.openFold('p-data');
   await p.click('[data-a="snapRestore"]'); await p.click('#cfOk'); await p.waitForTimeout(300); assert.equal((await p.state()).profile.name, 'Avant'); noErr(p);
@@ -280,6 +280,54 @@ test('Distribution', 'PWA : service worker actif et fonctionnement hors ligne', 
   const p = await page(b, base); await p.goto(base); await p.waitForFunction(() => navigator.serviceWorker && navigator.serviceWorker.controller, null, { timeout: 15000 }).catch(() => {});
   await p.waitForTimeout(500); await p.goto(base).catch(() => {}); await p.waitForFunction(() => navigator.serviceWorker.controller, null, { timeout: 15000 });
   await p.ctx.setOffline(true); await p.reload(); await p.waitForSelector('[data-a="obNext"]'); await p.ctx.setOffline(false); noErr(p);
+});
+
+/* ---------- Apparence (verre, lumière, animations, couleur d’accent) ---------- */
+test('Apparence', 'Couleurs d’accent : contraste des boutons ≥ 4,5:1 en clair et en sombre', async (b, base) => {
+  for (const cs of ['light', 'dark']) for (const acc of ['vert', 'lagon', 'indigo', 'corail']) {
+    const st = profileState(); st.prefs.accent = acc;
+    const p = await page(b, base, { colorScheme: cs, init: seed(st) }); await p.goto(base); await p.settle(); await p.go('habitudes'); await p.closeLayer();
+    const r = await p.evaluate(() => { const b = document.querySelector('#app .btn.primary'); if (!b) return null; const cs = getComputedStyle(b);
+      const rgb = c => c.match(/[\d.]+/g).slice(0, 3).map(Number), lum = c => { const [r, g, b] = rgb(c).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }); return .2126 * r + .7152 * g + .0722 * b; };
+      /* fond : couleur unie, sinon la couleur la plus claire / la plus foncée du dégradé (cas le moins favorable) */
+      let bgs = [cs.backgroundColor]; if (/rgba\(0, 0, 0, 0\)/.test(cs.backgroundColor) && cs.backgroundImage !== 'none') {
+        bgs = [...cs.backgroundImage.matchAll(/color\(srgb ([\d.]+) ([\d.]+) ([\d.]+)[^)]*\)|rgba?\(([\d.]+), ([\d.]+), ([\d.]+)/g)].map(m => m[1] != null ? `rgb(${m[1] * 255},${m[2] * 255},${m[3] * 255})` : `rgb(${m[4]},${m[5]},${m[6]})`); }
+      const a = lum(cs.color); const ratios = bgs.map(x => { const c = lum(x); return (Math.max(a, c) + .05) / (Math.min(a, c) + .05); });
+      return { ratio: Math.min(...ratios), fg: cs.color, bg: bgs.join(' → ') }; const c = 0; return { ratio: (Math.max(a, c) + .05) / (Math.min(a, c) + .05), fg: cs.color, bg: cs.backgroundColor }; });
+    assert.ok(r, 'bouton principal introuvable'); assert.ok(r.ratio >= 4.5, `${cs} ${acc} : contraste ${r.ratio.toFixed(2)} (${r.fg} sur ${r.bg})`);
+    noErr(p); await p.ctx.close();
+  }
+}, { slow: true });
+
+test('Apparence', 'Réglage : changer la couleur et couper les effets, conservé après rechargement', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
+  assert.ok(await p.evaluate(() => document.documentElement.classList.contains('fx')), 'effets actifs par défaut');
+  await p.go('profil'); await p.closeLayer(); await p.openFold('p-look'); await p.click('[data-a="setAccent"][data-v="indigo"]');
+  await p.click('label.switch:has([data-a="fxToggle"])'); await p.waitForTimeout(200);
+  await p.reload(); await p.waitForSelector('#app[data-view]');
+  const r = await p.evaluate(() => [document.documentElement.dataset.accent, document.documentElement.classList.contains('fx'), getComputedStyle(document.getElementById('amb')).display]);
+  assert.deepEqual(r, ['indigo', false, 'none'], JSON.stringify(r) + ' ' + JSON.stringify((await p.state()).prefs.accent)); const pr = (await p.state()).prefs; assert.equal(pr.accent, 'indigo'); assert.equal(pr.fx, false); noErr(p);
+});
+
+test('Apparence', 'Moins d’animations demandé par le système : aucune animation d’écran', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();   /* le contexte de test demande « reduce » */
+  await p.go('stats'); const n = await p.evaluate(() => document.getAnimations().filter(a => a.effect && a.effect.target && a.effect.target.closest && a.effect.target.closest('#app')).length);
+  assert.equal(n, 0, 'animations : ' + n); noErr(p);
+});
+
+test('Apparence', 'Animations actives : ouverture, entrée des blocs, barres qui se transforment', async (b, base) => {
+  const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'fr-CH' }); const st = profileState();
+  st.logs = Array.from({ length: 40 }, (_, i) => ({ id: 'l' + i, habitId: 'h0', type: 'cigarette', ts: Date.now() - i * 15 * 36e5, qty: 1 }));
+  await ctx.addInitScript(([s]) => { if (!sessionStorage.getItem('__seeded')) { localStorage.setItem('libre.v1', JSON.stringify(s)); sessionStorage.setItem('__seeded', '1'); } }, [st]);
+  const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
+  await p.goto(base); await p.waitForTimeout(150);
+  assert.ok(await p.evaluate(() => document.getAnimations().some(a => a.effect && a.effect.target && a.effect.target.id === 'app')), 'ouverture animée');
+  await p.waitForTimeout(1800); await p.evaluate(() => document.querySelectorAll('#layer').forEach(x => x.innerHTML = ''));
+  await p.evaluate(() => { location.hash = 'stats'; }); await p.waitForTimeout(60);
+  assert.ok(await p.evaluate(() => document.getAnimations().filter(a => a.effect && a.effect.target && a.effect.target.closest && a.effect.target.closest('#app')).length) >= 3, 'blocs animés');
+  await p.waitForTimeout(1200); await p.click('text=30 jours'); await p.waitForTimeout(50);
+  assert.ok(await p.evaluate(() => document.getAnimations().some(a => a.effect && a.effect.target && a.effect.target.matches && a.effect.target.matches('rect.gbar'))), 'barres animées');
+  assert.deepEqual(errs, []); await ctx.close();
 });
 
 module.exports = { T };

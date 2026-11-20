@@ -57,6 +57,16 @@ heure locale recalculée pour chaque jour (changements d’heure et de fuseau pr
 période calme et pause appliquées avant programmation. Android : alarmes inexactes autorisées en veille (pas de permission
 « alarmes exactes »), reprogrammation après redémarrage par le plugin. Navigateur : rappels seulement app ouverte, les autres dans la cloche.
 
+## Apparence (verre et lumière)
+
+Inspirée d’une vidéo de présentation fournie par l’éditeur, adaptée aux couleurs de LIBRE. Réglable dans Profil › Apparence (`prefs.fx`, `prefs.accent`).
+- `html.fx` : lumière d’ambiance (`#amb`, dégradés radiaux fixes, dérive lente), surfaces en verre dépoli (dégradé translucide + bordure claire).
+- `html.fx-blur` : flou d’arrière-plan ajouté seulement si l’appareil a au moins 4 cœurs et 3 Go de mémoire (sinon : verre sans flou, plus économe).
+- Ouverture : `#app` apparaît en cercle avec un flou qui se dissipe (`fxReveal`). Changement d’écran : les 8 premiers blocs entrent en cascade (`fxBlocks`).
+  Graphiques : les barres se transforment d’une période à l’autre (`fxBarsBefore/After`, mise à l’échelle depuis le bas).
+- Couleur d’accent : vert LIBRE (défaut), lagon, indigo, corail ; transition douce grâce à `@property`. Contraste des boutons vérifié par test (≥ 4,5:1, clair et sombre).
+- Tout est coupé si le système demande moins d’animations (`prefers-reduced-motion`) ; le verre devient opaque si le système demande moins de transparence.
+
 ## Langues
 
 Catalogues pour 19 langues + compléments `EXTRA`. Interface complète : fr, en, de, it, es, pt. Les 14 autres sont signalées « Partielle »
