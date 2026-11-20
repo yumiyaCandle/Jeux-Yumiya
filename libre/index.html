@@ -1588,6 +1588,10 @@ html[data-dir="back"]::view-transition-new(root){animation-name:vt-in-b}
 .nt-more input[type=text]{width:100%}
 .nt-pause{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .chip{padding:6px 12px;border-radius:99px;background:var(--field);font-size:.84rem;font-weight:600;color:var(--ink)}
+/* Santé Apple */
+.hk-pick{display:grid;gap:6px;margin:4px 0}
+.hk-opt{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--field);font-size:.92rem}
+.hk-opt input{width:18px;height:18px;accent-color:var(--green-strong)}
 </style>
 </head>
 <body>
@@ -1986,9 +1990,10 @@ function render(){
   else if(v==='bilans')html=viewReview();
   else if(v==='plan')html=viewPlan();
   else if(v==='sante')html=viewHealth();
+  else if(v==='activite')html=viewActivity();
   else html=viewHome();
   app.innerHTML=html;app.dataset.view=v;document.body.classList.add('lightbar');document.querySelectorAll('.ltabs,.htabs').forEach(r=>{const b=r.querySelector('[aria-pressed="true"]');if(b&&b.offsetLeft+b.offsetWidth>r.clientWidth)r.scrollLeft=b.offsetLeft-r.clientWidth/2+b.offsetWidth/2});
-  ensureChrome();updateLive();syncSegs();if($('#ntStatus'))ntRefreshStatus();
+  ensureChrome();updateLive();syncSegs();if($('#ntStatus'))ntRefreshStatus();if($('#hkBox'))hkRender();
   if(ui.view!==ui.lastView){ui.lastView=ui.view;
     reveal();
     const d=document.querySelector('[data-live="days"]');
@@ -2014,7 +2019,7 @@ function ensureChrome(){
   $('.sosfab')?.remove();
   $('#navWrap').setAttribute('aria-label',t('Navigation principale'));
   const tabs=[['accueil','home',t('Accueil')],['habitudes','target',t('Habitudes')],['stats','stats',t('Progrès')],['outils','spark',t('Outils')],['profil','user',t('Profil')]];
-  const c=['journal','outils','biblio','envies','plan','sante'].includes(ui.view)?'outils':['calendrier','bilans'].includes(ui.view)?'stats':ui.view==='corps'?'accueil':ui.view;
+  const c=['journal','outils','biblio','envies','plan','sante'].includes(ui.view)?'outils':['calendrier','bilans'].includes(ui.view)?'stats':ui.view==='corps'?'accueil':ui.view==='activite'?'profil':ui.view;
   $('#navWrap').innerHTML=`<div class="in"><div class="nav-brand">${logoMark(24,'currentColor')}<span>LIBRE</span></div>${tabs.map(x=>`<a href="#${x[0]}" ${c===x[0]?'aria-current="page"':''}>${ic(x[1])}${esc(x[2])}</a>`).join('')}</div>`;
 }
 
@@ -2737,6 +2742,7 @@ function viewProfile(){
     ${fold('p-notif',t('Notifications et rappels'),ntc.enabled?(ntc.pauseUntil>now()?t('En pause'):t('{n} rappels actifs',{n:nf(nOn,0)})):t('Désactivées'),PF_notif)}
     ${fold('p-data',t('Tes données'),S.lastBackup?t('Dernière sauvegarde : {date}',{date:fdate(S.lastBackup,{day:'numeric',month:'long',year:'numeric'})}):t('Aucune sauvegarde pour l’instant.'),PF_data)}
     ${fold('p-install',t('Installer sur ton téléphone'),isInstalled()?t('Installée'):t('Écran d’accueil, hors ligne'),`<div class="card stack">${installHtml()}</div>`)}
+    ${fold('p-hk',t('Santé Apple'),hkData().enabled?t('Connecté'):t('Non connecté'),hkSection())}
     ${fold('p-safe',t('Aide et sécurité'),countryName(helpCountry()),safetyCard(1))}
     ${fold('p-photo',t('Photographies'),'Pexels',PF_photo)}
     <p class="small muted" style="text-align:center">${esc(t('LIBRE · Chaque jour, un pas vers ta liberté.'))}</p>
@@ -4382,6 +4388,78 @@ function ntInput(el){const c=ntCfg(),path=el.dataset.nt.split('.');let o=c;for(l
   if(path[0]==='items'&&k==='time'){const kk=path[1];if(S.sent)S.sent['nt_'+kk]=''}
   if(el.dataset.nt==='system'&&el.checked){ntPerm().then(p=>{if(p==='default')ntAsk().then(ok=>{if(!ok){c.system=false;save();render()}else ntChanged()});else if(p!=='granted'){c.system=false;save();render();toast(t('Autorisation refusée'),t('Tes rappels restent dans la cloche.'))}})}
   save();ntChanged();if(el.type==='checkbox')render()}
+/* =====================================================================
+   SANTÉ APPLE (HealthKit) — lecture seule, facultative, révocable
+   - Disponible uniquement dans l’application iPhone LIBRE (Capacitor + plugin
+     natif « LibreHealth », voir le dossier libre-ios). Une page web ou une PWA
+     ne peut pas accéder à Santé : la rubrique l’indique sans faux bouton.
+   - Seules les données cochées sont demandées. Les valeurs sont agrégées par
+     jour et gardées sur l’appareil, dans les données de LIBRE (jamais envoyées).
+   - iOS ne dit pas à une app si la lecture a été refusée : sans donnée reçue,
+     LIBRE explique où vérifier l’autorisation.
+   ===================================================================== */
+const HK_TYPES=[
+ ['steps',N_('Pas'),'',1],['exercise',N_('Minutes d’exercice'),'min',1],['sleep',N_('Sommeil'),'h',1],['hrRest',N_('Fréquence cardiaque au repos'),'bpm',1],['hrv',N_('Variabilité de la fréquence cardiaque (VFC)'),'ms',1],
+ ['distance',N_('Distance parcourue'),'km',0],['energy',N_('Énergie active'),'kcal',0],['hr',N_('Fréquence cardiaque moyenne'),'bpm',0],['resp',N_('Fréquence respiratoire'),'/min',0]];
+const HK=()=>{try{const C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.getPlatform&&C.getPlatform()==='ios'&&C.Plugins&&C.Plugins.LibreHealth||null}catch(e){return null}};
+function hkData(){if(!isObj(S.health))S.health={enabled:false,read:HK_TYPES.filter(x=>x[3]).map(x=>x[0]),days:{},lastSync:0,connectedAt:0};if(!isObj(S.health.days))S.health.days={};if(!Array.isArray(S.health.read))S.health.read=[];return S.health}
+/* État : unsupported (pas l’app iPhone) · unavailable (Santé absent, ex. iPad) · off · on */
+async function hkState(){const p=HK();if(!p)return 'unsupported';try{const r=await p.isAvailable();if(!r.available)return 'unavailable'}catch(e){return 'unavailable'}return hkData().enabled?'on':'off'}
+function hkMerge(list){const H=hkData();let n=0;(list||[]).forEach(d=>{if(!d||!/^\d{4}-\d\d-\d\d$/.test(d.date))return;const x={};
+  HK_TYPES.forEach(([k])=>{if(H.read.includes(k)&&d[k]!=null&&isFinite(+d[k]))x[k]=Math.round(+d[k]*10)/10});
+  if(Object.keys(x).length){H.days[d.date]=x;n++}});return n}
+async function hkSync(full){const p=HK(),H=hkData();if(!p||!H.enabled)return {ok:false};
+  const to=now(),from=full||!H.lastSync?addDays(sod(to),-90):addDays(sod(H.lastSync),-2);
+  try{const r=await p.queryDaily({from:new Date(from).toISOString(),to:new Date(to).toISOString(),read:H.read});
+    const n=hkMerge(r.days);H.lastSync=now();save();return {ok:true,n}}catch(e){return {ok:false,err:String(e&&e.message||e)}}}
+function hkSection(){const H=hkData();return `<div class="card stack hk" id="hkBox"><p class="small muted">${esc(t('Vérification…'))}</p></div>`}
+async function hkRender(){const box=$('#hkBox');if(!box)return;const st=await hkState(),H=hkData();
+  const priv=`<p class="small muted">${esc(t('Lecture seule : LIBRE n’écrit rien dans Santé. Les valeurs sont résumées par jour et restent sur cet appareil, dans tes données LIBRE. Elles ne sont jamais envoyées à un serveur.'))}</p>`;
+  const pick=`<div class="hk-pick">${HK_TYPES.map(([k,n])=>`<label class="hk-opt"><input type="checkbox" data-hk="${k}" ${H.read.includes(k)?'checked':''}><span>${esc(t(n))}</span></label>`).join('')}</div>`;
+  if(st==='unsupported'){box.innerHTML=`<div class="nt-badge nt-off"><span></span><b>${esc(t('Indisponible ici'))}</b></div>
+    <p class="small">${esc(t('Apple ne permet pas à une page web d’accéder à Santé. La connexion fonctionne seulement dans l’application LIBRE pour iPhone.'))}</p>${priv}`;return}
+  if(st==='unavailable'){box.innerHTML=`<div class="nt-badge nt-off"><span></span><b>${esc(t('Non disponible sur cet appareil'))}</b></div><p class="small muted">${esc(t('L’app Santé n’est pas présente sur cet appareil.'))}</p>`;return}
+  if(st==='off'){box.innerHTML=`<div class="nt-badge nt-wait"><span></span><b>${esc(t('Non connecté'))}</b></div>
+    <p class="small">${esc(t('Choisis les données que LIBRE pourra lire. Tu peux changer d’avis à tout moment.'))}</p>${pick}${priv}
+    <button class="btn primary sm" data-a="hkConnect">${ic('heart','sm')}${esc(t('Connecter Santé Apple'))}</button>`;return}
+  const nd=Object.keys(H.days).length;
+  box.innerHTML=`<div class="nt-badge ${nd?'nt-ok':'nt-wait'}"><span></span><b>${esc(nd?t('Connecté'):t('Connecté, aucune donnée reçue'))}</b></div>
+    <p class="small muted">${esc(H.lastSync?t('Dernière synchronisation : {date}',{date:fdate(H.lastSync,{day:'numeric',month:'long'})+' · '+ftime(H.lastSync)}):'')} ${esc(t('{n} jours de données.',{n:nf(nd,0)}))}</p>
+    ${nd?'':`<p class="small">${esc(t('Si rien n’arrive, vérifie l’accès dans Réglages › Santé › Accès aux données et appareils › LIBRE. iOS n’indique pas aux apps si la lecture a été refusée.'))}</p>`}
+    <div class="actions"><a class="btn primary sm" href="#activite">${esc(t('Voir mon suivi santé'))}</a><button class="btn quiet sm" data-a="hkSync">${esc(t('Synchroniser'))}</button></div>
+    <details class="nt-more"><summary>${esc(t('Données lues'))}</summary>${pick}</details>${priv}
+    <button class="link danger" data-a="hkOff">${esc(t('Déconnecter et effacer ces données de LIBRE'))}</button>`}
+const A_HK={
+  hkConnect:async()=>{const p=HK(),H=hkData();if(!p)return;if(!H.read.length)return toast(t('Aucune donnée choisie'),t('Coche au moins une donnée à lire.'));
+    try{await p.requestAuthorization({read:H.read});H.enabled=true;H.connectedAt=now();save();toast(t('Santé Apple connecté'),t('Synchronisation en cours…'));const r=await hkSync(true);
+      toast(r.ok?t('Synchronisation terminée'):t('Synchronisation impossible'),r.ok?t('{n} jours de données.',{n:nf(r.n,0)}):t('Réessaie plus tard.'))}catch(e){toast(t('Connexion impossible'),t('L’autorisation n’a pas pu être demandée.'))}render()},
+  hkSync:async()=>{const r=await hkSync(false);toast(r.ok?t('Synchronisation terminée'):t('Synchronisation impossible'),r.ok?t('{n} jours de données.',{n:nf(r.n,0)}):t('Réessaie plus tard.'));render()},
+  hkOff:()=>confirmBox(t('Déconnecter Santé Apple ?'),t('LIBRE arrêtera de lire Santé et effacera les données de santé copiées dans l’app. Pour retirer aussi l’autorisation, ouvre Réglages › Santé › Accès aux données et appareils › LIBRE.'),t('Déconnecter'),()=>{const H=hkData();H.enabled=false;H.days={};H.lastSync=0;save();render();toast(t('Santé Apple déconnecté'),t('Les données de santé ont été effacées de LIBRE.'))},true)
+};
+/* --- Espace de suivi santé --- */
+function hkSeries(k,n){const out=[],lbl=[],H=hkData();for(let i=n-1;i>=0;i--){const d=addDays(sod(now()),-i),v=(H.days[dkey(d)]||{})[k];out.push(v==null?0:v);lbl.push(i%7===0?fdate(d,{day:'numeric',month:'numeric'}):'')}return {v:out,l:lbl}}
+function hkAvg(k,a,b){const H=hkData(),xs=[];for(let d=a;d<b;d=addDays(d,1)){const v=(H.days[dkey(d)]||{})[k];if(v!=null)xs.push(v)}return xs.length?xs.reduce((s,x)=>s+x,0)/xs.length:null}
+function hkLinks(){/* Comparaisons simples entre données (jamais présentées comme une cause) */
+  const H=hkData(),out=[],hist0=hist();const days=Object.keys(H.days).filter(k=>H.days[k].sleep!=null);
+  if(days.length>=10){const good=[],short=[];days.forEach(k=>{const a=new Date(k+'T00:00').getTime(),b=addDays(a,1),c=hist0.filter(e=>e.ts>=a&&e.ts<b).length;(H.days[k].sleep>=7?good:short).push(c)});
+    if(good.length>=4&&short.length>=4){const m=x=>x.reduce((s,v)=>s+v,0)/x.length;out.push(t('Après les nuits de 7 h ou plus, tu as noté en moyenne {a} envie(s) par jour, contre {b} après des nuits plus courtes.',{a:nf(m(good)),b:nf(m(short))}))}}
+  const ck=TS().checkins||{},sd=Object.keys(H.days).filter(k=>H.days[k].steps!=null&&ck[k]);
+  if(sd.length>=10){const hi=sd.filter(k=>H.days[k].steps>=7000),lo=sd.filter(k=>H.days[k].steps<7000);const m=a=>a.reduce((s,k)=>s+(+ck[k].mood||0),0)/a.length;
+    if(hi.length>=4&&lo.length>=4)out.push(t('Les jours à 7 000 pas ou plus, ton humeur notée était en moyenne de {a}/5, contre {b}/5 les autres jours.',{a:nf(m(hi)),b:nf(m(lo))}))}
+  return out}
+function viewActivity(){const H=hkData(),nd=Object.keys(H.days).length;
+  if(!H.enabled||!nd)return topbar(t('Suivi santé'),'profil')+`<div class="stack fade-in" style="margin-top:16px"><div class="card stack"><p>${esc(t('Aucune donnée de santé pour l’instant.'))}</p><p class="small muted">${esc(t('Connecte Santé Apple dans Profil › Santé Apple, depuis l’application LIBRE pour iPhone.'))}</p><a class="btn quiet sm" href="#profil" style="justify-self:start">${esc(t('Ouvrir le profil'))}</a></div></div>`;
+  const start=Math.min(...S.habits.map(h=>h.trackStart).concat([now()]));
+  const card=(k,title,unit,dec)=>{if(!H.read.includes(k))return '';const s=hkSeries(k,30);if(!s.v.some(x=>x))return '';
+    const a7=hkAvg(k,addDays(sod(now()),-6),addDays(sod(now()),1)),before=hkAvg(k,addDays(sod(start),-30),sod(start)),since=hkAvg(k,sod(start),addDays(sod(now()),1));
+    return `<section class="card stack"><div><p class="eyebrow">${esc(t('30 derniers jours'))}</p><h2>${esc(title)}</h2></div>${bars(s.v,s.l,{aria:title,tips:s.l.map((x,i)=>fdate(addDays(sod(now()),-(29-i)),{day:'numeric',month:'short'}))})}
+      <div class="rv-rows">${a7!=null?`<div class="rv-row"><span>${esc(t('Moyenne sur 7 jours'))}</span><b class="num">${nf(a7,dec)} ${esc(unit)}</b><span></span></div>`:''}${before!=null&&since!=null?`<div class="rv-row"><span>${esc(t('Avant le début du suivi → depuis'))}</span><b class="num">${nf(before,dec)} → ${nf(since,dec)}</b><span></span></div>`:''}</div></section>`};
+  const L=hkLinks();
+  return topbar(t('Suivi santé'),'profil')+`<div class="stack fade-in" style="margin-top:16px">
+    <p class="lede">${esc(t('Ce que Santé Apple a enregistré pendant ton parcours. Ces données varient pour beaucoup de raisons : elles ne prouvent ni un effet de l’arrêt, ni une guérison.'))}</p>
+    ${card('steps',t('Pas'),'',0)}${card('sleep',t('Sommeil'),'h',1)}${card('exercise',t('Minutes d’exercice'),'min',0)}${card('hrRest',t('Fréquence cardiaque au repos'),'bpm',0)}${card('hrv',t('Variabilité de la fréquence cardiaque (VFC)'),'ms',0)}${card('distance',t('Distance parcourue'),'km',1)}${card('energy',t('Énergie active'),'kcal',0)}${card('hr',t('Fréquence cardiaque moyenne'),'bpm',0)}${card('resp',t('Fréquence respiratoire'),'/min',1)}
+    ${L.length?`<section class="card stack"><div><p class="eyebrow">${esc(t('Observations'))}</p><h2>${esc(t('Sommeil, activité, humeur et envies'))}</h2></div><ul class="ins">${L.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="ins-note">${esc(t('Simples comparaisons entre tes données : elles ne montrent pas de lien de cause à effet. Ce n’est pas un avis médical.'))}</p></section>`:''}
+    <p class="disc">${esc(t('Les mesures des montres et des téléphones sont des estimations. Pour toute inquiétude sur ton cœur ou ton sommeil, parles-en à un médecin.'))}</p></div>`}
 /* Choix de l’exercice selon l’intensité et le déclencheur habituel */
 function sosPick(intensity){const top=(trigCounts(60)[0]||[])[0];
   if(intensity>=8)return 'breath';if(top==='Stress'&&intensity>=5)return 'breath';if(intensity>=5)return 'urge';return 'delay'}
@@ -4625,11 +4703,15 @@ const A10={
   qsCall:()=>{openSosPanel();ui.sos.tab='proches';drawSos()},
   qsJournal:()=>{S.sos.push({ts:now(),ok:false,intensity:ui.sosq?ui.sosq.intensity:null});save();closeSheet();journalForm({craving:ui.sosq?ui.sosq.intensity:5})}
 };
-Object.assign(A,A6,A7,A8,A9,A10,A_S5,A_NT);
+Object.assign(A,A6,A7,A8,A9,A10,A_S5,A_NT,A_HK);
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(!f)return;if(HAPTIC_ON.has(el.dataset.a))haptic();
   if(el.tagName==='INPUT')return; f(el,e)});
 document.addEventListener('change',e=>{const el=e.target;
   if(el.dataset&&el.dataset.nt){ntInput(el);return}
+  if(el.dataset&&el.dataset.hk){const H=hkData(),k=el.dataset.hk;H.read=el.checked?[...new Set(H.read.concat(k))]:H.read.filter(x=>x!==k);
+    if(!el.checked)Object.values(H.days).forEach(d=>delete d[k]);save();
+    /* Déjà connecté : une nouvelle donnée cochée demande l’autorisation à iOS, puis relit 90 jours */
+    if(el.checked&&H.enabled&&HK())HK().requestAuthorization({read:H.read}).then(()=>hkSync(true)).then(()=>render()).catch(()=>{});return}
   if(el.matches('input[data-a="pref"]'))A.pref(el);
   if(el.matches('input[data-a="lockToggle"]'))A.lockToggle(el);
   if(el.id==='dailyTime'){S.prefs.dailyTime=el.value||'20:30';S.sent.daily='';save()}
@@ -4656,7 +4738,7 @@ function updateLive(){
     else if(k==='short')el.textContent=durText(ms,true);
   });
 }
-const views=['accueil','habitudes','stats','calendrier','bilans','profil','journal','corps','outils','biblio','envies','plan','sante'];
+const views=['accueil','habitudes','stats','calendrier','bilans','profil','journal','corps','outils','biblio','envies','plan','sante','activite'];
 function route(){const h=location.hash.replace('#','');const prev=ui.view;ui.view=views.includes(h)?h:'accueil';if(!$('#layer .full'))closeSheet();
   const go=()=>{render();scrollTo(0,0)};
   if(document.startViewTransition&&!RM()&&S.profile&&!ui.locked&&prev&&prev!==ui.view){document.documentElement.dataset.dir=navDir(prev,ui.view);document.startViewTransition(go)}else go()}
@@ -4664,7 +4746,7 @@ window.addEventListener('hashchange',route);
 window.addEventListener('languagechange',()=>{if(S.prefs.langAuto){S.prefs.lang=detectLang();applyLocale();render()}});
 setInterval(()=>{if(!S.profile)return;updateLive()},1000);
 setInterval(()=>{if(!S.profile)return;checkBadges(false);runSchedules()},30000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.profile){checkBadges(false);runSchedules();ntReschedule();render()}});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.profile){checkBadges(false);runSchedules();ntReschedule();if(hkData().enabled&&now()-hkData().lastSync>6*36e5)hkSync(false);render()}});
 
 /* =====================================================================
    LIBRE v6 — mise en scène (inspirée des principes d’apple.com, sans les copier)
@@ -4672,7 +4754,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.profile
    ===================================================================== */
 const SUCCESS_T=()=>new Set(['Entrée enregistrée','Consommation enregistrée','Plan enregistré','Plan mis à jour','Objectif mis à jour','Objectif atteint','Données restaurées','Données récupérées','Fichier de sauvegarde créé','Verrouillage activé','Merci d’avoir pris ce temps','C’est noté','Sauvegarde copiée','Bien joué','Enregistré','Suivi repris','Consommation retirée'].map(x=>t(x)));
 /* Sens de la transition : vers la droite quand on avance dans les onglets, vers la gauche quand on revient */
-const NAV_ORDER=['accueil','habitudes','stats','calendrier','bilans','outils','plan','journal','envies','biblio','corps','sante','profil'];
+const NAV_ORDER=['accueil','habitudes','stats','calendrier','bilans','outils','plan','journal','envies','biblio','corps','sante','profil','activite'];
 function navDir(a,b){const i=NAV_ORDER.indexOf(a),j=NAV_ORDER.indexOf(b);return i<0||j<0||i===j?'none':(j>i)!==isRTL()?'fwd':'back'}
 /* Apparition au défilement : seulement les éléments encore hors de l’écran à l’arrivée sur la page */
 let REV=null;

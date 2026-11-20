@@ -1,0 +1,20 @@
+{
+  "name": "libre-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LIBRE – application iOS/Android (Capacitor) : rappels programmés et Santé Apple",
+  "scripts": {
+    "web": "node scripts/sync-web.mjs",
+    "ios": "node scripts/sync-web.mjs && npx cap sync ios && npx cap open ios",
+    "android": "node scripts/sync-web.mjs && npx cap sync android && npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/local-notifications": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0"
+  }
+}
