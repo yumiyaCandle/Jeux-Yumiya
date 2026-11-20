@@ -4616,7 +4616,9 @@ const CRAVE_TIPS={
 function tipKey(type){return ['cigarette','vape','puff'].includes(type)?'tabac':CRAVE_TIPS[type]?type:'autre'}
 function sosPersonal(hid){const h=S.habits.find(x=>x.id===hid)||S.habits[0];const P=planData();
   const st=P.strategies.slice(0,3),tips=h?LC(CRAVE_TIPS[tipKey(h.type)]):[];
-  return `${st.length?`<div class="qs-box"><p class="qs-k">${esc(t('Ce qui t’aide, d’après ton plan'))}</p><ul>${st.map(x=>`<li dir="auto">${esc(x)}</li>`).join('')}</ul></div>`:''}
+  // plans « si… alors… » : ceux de cette habitude d’abord, puis les plans généraux
+  const ifs=TS().plans.filter(p=>!p.habitId||!h||p.habitId===h.id).sort((x,y)=>(y.habitId?1:0)-(x.habitId?1:0)).slice(0,2);
+  return `${ifs.length?`<div class="qs-box"><p class="qs-k">${esc(t('Tes plans « si… alors… »'))}</p><ul>${ifs.map(p=>`<li dir="auto"><b>${esc(t('Si'))}</b> ${esc(p.if)} → ${esc(p.then)}${p.who?` · ${esc(p.who)}`:''}</li>`).join('')}</ul></div>`:''}${st.length?`<div class="qs-box"><p class="qs-k">${esc(t('Ce qui t’aide, d’après ton plan'))}</p><ul>${st.map(x=>`<li dir="auto">${esc(x)}</li>`).join('')}</ul></div>`:''}
   ${tips.length?`<div class="qs-box"><p class="qs-k">${esc(h?t('Conseils pour {habit}',{habit:hLow(h)}):t('Conseils'))}</p><ul${h?FBo(CRAVE_TIPS[tipKey(h.type)]):FB()}>${tips.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}`}
 
 /* ---------- Déclencheurs : lieux, entourage, observations ---------- */
