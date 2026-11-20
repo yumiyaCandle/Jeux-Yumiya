@@ -41,3 +41,9 @@ Si des photos sont ajoutées ou renommées, mettre aussi à jour la liste `CORE`
 - Le site d’hébergement voit seulement les demandes de fichiers (comme pour tout site web), jamais les données saisies dans LIBRE.
 - Les photos, la police et les icônes sont servies depuis le même site : aucune requête vers Pexels ou un autre service.
 - Changer d’appareil : Profil › Tes données › « Exporter un fichier », puis « Restaurer un fichier » sur le nouvel appareil.
+
+## Rappels hors de l’app et Santé Apple : l’application native
+
+Une PWA installée affiche les rappels seulement quand LIBRE est ouverte (iPhone comme Android : il n’y a pas de serveur d’envoi). Santé Apple n’est jamais accessible depuis une page web.
+
+Pour ces deux fonctions, le dossier `libre-ios/` contient un projet Capacitor (iPhone et Android) qui reprend exactement ce site, avec le module natif HealthKit. Les étapes Xcode et Apple Developer sont dans `libre-ios/README.md`.
