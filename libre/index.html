@@ -1565,6 +1565,10 @@ html[data-dir="back"]::view-transition-new(root){animation-name:vt-in-b}
 @keyframes splashIn{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#splash.on svg{animation:none}#splash.on{transition:none}}
 .steps-i{margin:4px 0 0;padding-inline-start:20px;display:grid;gap:6px}
+.tp-g{font-size:.74rem;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 2px 8px}
+.tp-g:first-child{margin-top:4px}
+.tp-note{margin:8px 2px 0}
+.p-main{background:var(--green-soft);color:var(--green-ink)}
 </style>
 </head>
 <body>
@@ -1669,10 +1673,32 @@ const TYPES={
   cigarette:{label:N_('Cigarettes'),low:N_('low|cigarettes'),u1:'cigarette',u2:'cigarettes',ic:'cig'},
   puff:{label:N_('Puff'),low:N_('low|puff'),u1:'puff',u2:'puffs',ic:'puff'},
   vape:{label:N_('Vape'),low:N_('low|vape'),u1:'session',u2:'sessions',ic:'vape'},
-  autre:{label:N_('Autre'),low:N_('low|cette substance'),u1:'prise',u2:'prises',ic:'other'}
+  chicha:{label:N_('Chicha'),low:N_('low|chicha'),u1:'session',u2:'sessions',ic:'vape'},
+  cocaine:{label:N_('Cocaïne'),low:N_('low|cocaïne'),u1:'prise',u2:'prises',ic:'other',hint:N_('Cocaïne, crack')},
+  opioides:{label:N_('Opioïdes'),low:N_('low|opioïdes'),u1:'prise',u2:'prises',ic:'other',hint:N_('Héroïne et autres opioïdes'),med:1},
+  mdma:{label:N_('MDMA / ecstasy'),low:N_('low|MDMA'),u1:'prise',u2:'prises',ic:'other'},
+  amphet:{label:N_('Amphétamines'),low:N_('low|amphétamines'),u1:'prise',u2:'prises',ic:'other',hint:N_('Speed')},
+  meth:{label:N_('Méthamphétamine'),low:N_('low|méthamphétamine'),u1:'prise',u2:'prises',ic:'other',hint:N_('Crystal meth')},
+  halluc:{label:N_('Hallucinogènes'),low:N_('low|hallucinogènes'),u1:'prise',u2:'prises',ic:'other',hint:N_('LSD, champignons et autres')},
+  medic:{label:N_('Médicaments'),low:N_('low|ces médicaments'),u1:'comprimé',u2:'comprimés',ic:'shield',hint:N_('Somnifères, benzodiazépines, anxiolytiques, antidouleurs opioïdes…'),named:1,med:1},
+  jeux_video:{label:N_('Jeux vidéo'),low:N_('low|jeux vidéo'),u1:'heure',u2:'heures',ic:'spark',g:'beh',mode:'time'},
+  jeux_argent:{label:N_('Jeux d’argent'),low:N_('low|jeux d’argent'),u1:'',u2:'',ic:'coin',g:'beh',mode:'money',hint:N_('Casino, loteries, paris sportifs')},
+  reseaux:{label:N_('Réseaux sociaux'),low:N_('low|réseaux sociaux'),u1:'heure',u2:'heures',ic:'user',g:'beh',mode:'time'},
+  achats:{label:N_('Achats compulsifs'),low:N_('low|achats compulsifs'),u1:'',u2:'',ic:'coin',g:'beh',mode:'money'},
+  porno:{label:N_('Pornographie'),low:N_('low|pornographie'),u1:'session',u2:'sessions',ic:'heart',g:'beh'},
+  internet:{label:N_('Internet'),low:N_('low|Internet'),u1:'heure',u2:'heures',ic:'globe',g:'beh',mode:'time',hint:N_('Usage excessif')},
+  autre:{label:N_('Autre'),low:N_('low|cette substance'),u1:'prise',u2:'prises',ic:'other',named:1}
 };
+/* Groupes affichés dans les sélecteurs (substances, puis comportements) */
+const TYPE_GROUPS=[[N_('Nicotine'),['cigarette','puff','vape','chicha']],[N_('Alcool'),['alcool']],[N_('Cannabis'),['cannabis']],[N_('Autres substances'),['cocaine','opioides','mdma','amphet','meth','halluc']],[N_('Médicaments'),['medic']],[N_('Comportements'),['jeux_video','jeux_argent','reseaux','achats','porno','internet']],[N_('Autre'),['autre']]];
+const TYPE_HINT={alcool:N_('Bière, vin, spiritueux'),cannabis:N_('Herbe, haschich'),cigarette:N_('Cigarettes et tabac')};
+const tMode=k=>(TYPES[k]||TYPES.autre).mode||'count';
+function typeLabel(k){return k==='autre'?t('Autre substance'):k==='vape'?t('Vape / cigarette électronique'):t((TYPES[k]||TYPES.autre).label)}
+function typeHint(k){const x=TYPES[k]||{};return x.hint?t(x.hint):TYPE_HINT[k]?t(TYPE_HINT[k]):''}
+/* Sélecteur groupé : opt(a, attrs, label, hint, pressed, icon) par type */
+function typePicker(a,isOn,extra){return TYPE_GROUPS.map(([g,ks])=>`<p class="tp-g">${esc(t(g))}</p><div class="opts">${ks.map(k=>opt(a,`data-k="${k}"`,typeLabel(k),typeHint(k),isOn(k),TYPES[k].ic)).join('')}</div>${g==='Comportements'?`<p class="small muted tp-note">${esc(t('Ces comportements ne sont pas tous des troubles reconnus par la médecine. LIBRE t’aide simplement à suivre ce que tu veux changer.'))}</p>`:''}`).join('')+(extra||'')}
 const _UNITS=[NP_('verre','unit|verres'),NP_('joint','unit|joints'),NP_('cigarette','unit|cigarettes'),NP_('puff','unit|puffs'),NP_('session','unit|sessions'),NP_('prise','unit|prises'),NP_('{n} verre','{n} verres'),NP_('{n} joint','{n} joints'),NP_('{n} cigarette','{n} cigarettes'),NP_('{n} puff','{n} puffs'),NP_('{n} session','{n} sessions'),NP_('{n} prise','{n} prises')];
-const LEGACY_UNITS=['verre','joint','cigarette','puff','session','prise'];
+const LEGACY_UNITS=['verre','joint','cigarette','puff','session','prise','comprimé','heure'];
 const DRINKS={
   biere:{label:N_('Bière'),ml:250,abv:5},vin:{label:N_('Vin'),ml:125,abv:12},vodka:{label:N_('Vodka'),ml:40,abv:40},
   whisky:{label:N_('Whisky'),ml:40,abv:40},fort:{label:N_('Alcool fort'),ml:40,abv:40},cocktail:{label:N_('Cocktail'),ml:200,abv:10},autre:{label:N_('Autre boisson'),ml:100,abv:10}
@@ -1807,8 +1833,8 @@ function stdG(){return +S.prefs.stdDrink||10}
 
 /* ============ Modèle ============ */
 const T=h=>TYPES[h.type]||TYPES.autre;
-function hName(h){return h.type==='autre'&&h.label?h.label:t(T(h).label)}
-function hLow(h){return h.type==='autre'&&h.label?h.label:t(T(h).low)}
+function hName(h){return T(h).named&&h.label?h.label:t(T(h).label)}
+function hLow(h){return T(h).named&&h.label?h.label:t(T(h).low)}
 function customUnit(h){return h.unit&&!LEGACY_UNITS.includes(h.unit)?h.unit:''}
 function contOf(h){return h&&h.type==='alcool'&&!customUnit(h)&&CONTW[h.cont]?h.cont:null}
 function contWord(c,n){const w=CONTW[c]||CONTW.verre;return tn(n,w[0],w[1]).replace(/^[\d\s.,  ]+/,'')}
@@ -1817,8 +1843,8 @@ function fmtCont(ml){if(IMP())return nf(Math.round(ml/29.5735*10)/10)+' '+t('fl 
 function alcStdPerUnit(h){return h&&h.ml?grams(h.ml,h.abv,1)/stdG():1}
 /* prix estimé par verre standard : au bar/servi ≈ 3, en magasin (bouteille, canette) ≈ 1,2 */
 function alcPriceFactor(h){return h&&(h.cont==='bouteille'||h.cont==='canette')?0.4:1}
-function hUnit(h,n){const c=customUnit(h);if(c)return c;const k=contOf(h);if(k)return contWord(k,n);const x=T(h);return tn(n,x.u1,'unit|'+x.u2).replace(/^[\d\s.,  ]+/,'')}
-function unitN(h,n){const c=customUnit(h);if(c)return nf(n)+' '+c;const k=contOf(h);if(k)return contN(k,n);const x=T(h);return tn(n,'{n} '+x.u1,'{n} '+x.u2)}
+function hUnit(h,n){if(tMode(h.type)==='money')return curSym();const c=customUnit(h);if(c)return c;const k=contOf(h);if(k)return contWord(k,n);const x=T(h);return tn(n,x.u1,'unit|'+x.u2).replace(/^[\d\s.,  ]+/,'')}
+function unitN(h,n){if(tMode(h.type)==='money')return money(n);const c=customUnit(h);if(c)return nf(n)+' '+c;const k=contOf(h);if(k)return contN(k,n);const x=T(h);return tn(n,'{n} '+x.u1,'{n} '+x.u2)}
 /* Périodes : consommation habituelle et limite maximum par jour, semaine ou mois */
 const PER_DAYS={jour:1,semaine:7,mois:30.44};
 function perDay(h){return (+h.qty||0)/(PER_DAYS[h.qtyPer]||1)}
@@ -1827,10 +1853,11 @@ function limDaily(h){return h.limit===''||h.limit==null?null:(+h.limit||0)/PER_D
 function periodBounds(per,ts){const a0=sod(ts==null?now():ts);if(per==='semaine'){const a=weekStart(a0);return [a,addDays(a,7)]}if(per==='mois'){const d=new Date(a0);return [new Date(d.getFullYear(),d.getMonth(),1).getTime(),new Date(d.getFullYear(),d.getMonth()+1,1).getTime()]}return [a0,addDays(a0,1)]}
 function limPeriod(h,ts){const per=limPer(h),[a,b]=periodBounds(per,ts);const used=logsOf(h.id).filter(l=>l.ts>=a&&l.ts<b).reduce((s,l)=>s+(+l.qty||0),0);return {per,used,max:+h.limit||0,a,b,over:used>(+h.limit||0)}}
 function limLabel(h){const p=limPeriod(h);return p.per==='semaine'?t('Cette semaine : {q} / {max}',{q:nf(p.used),max:nf(p.max)}):p.per==='mois'?t('Ce mois-ci : {q} / {max}',{q:nf(p.used),max:nf(p.max)}):t('Aujourd’hui : {q} / {max}',{q:nf(p.used),max:nf(p.max)})}
-function budgetDay(h){return (+h.budget||0)/(h.budgetPer==='mois'?30.44:7)}
-function unitCost(h){const p=perDay(h);return p>0?budgetDay(h)/p:0}
+function budgetDay(h){if(tMode(h.type)==='money')return perDay(h);return (+h.budget||0)/(h.budgetPer==='mois'?30.44:7)}
+function unitCost(h){if(tMode(h.type)==='money')return 1;const p=perDay(h);return p>0?budgetDay(h)/p:0}
 function logsOf(id){return S.logs.filter(l=>l.habitId===id)}
-function act(){return S.habits.filter(h=>!h.paused)}
+function act(){const a=S.habits.filter(h=>!h.paused),m=S.prefs.mainHabit;return m?a.filter(h=>h.id===m).concat(a.filter(h=>h.id!==m)):a}
+const isMain=h=>S.prefs.mainHabit?S.prefs.mainHabit===h.id:S.habits[0]===h;
 function sinceLong(ms){const x=dur(ms);if(x.d>0)return tn(x.d,'{n} jour','{n} jours')+', '+tn(x.h,'{n} heure','{n} heures');if(x.h>0)return tn(x.h,'{n} heure','{n} heures')+', '+tn(x.m,'{n} minute','{n} minutes');return tn(x.m,'{n} minute','{n} minutes')}
 function segments(h){
   const tt=now();
@@ -2041,7 +2068,7 @@ function viewHome(){
       ${isRec?`<p class="hm-rec">${ic('trophy','sm')}${esc(t('C’est actuellement ta plus longue période.'))}</p>`:''}
       <dl class="hm-facts">
         <div><dt>${esc(t('Record personnel'))}</dt><dd class="num">${esc(durText(best,true))}</dd></div>
-        <div><dt>${esc(t('Économies estimées'))}</dt><dd class="num" data-live="savedh" data-h="${h.id}">${esc(money(savedOf(h)))}</dd></div>
+        ${tMode(h.type)==='time'?`<div><dt>${esc(t('Temps libéré'))}</dt><dd class="num">${esc(unitN(h,Math.round(avoided(h)*10)/10))}</dd></div>`:`<div><dt>${esc(t('Économies estimées'))}</dt><dd class="num" data-live="savedh" data-h="${h.id}">${esc(money(savedOf(h)))}</dd></div>`}
         <div><dt>${esc(t('Jours sans consommation'))}</dt><dd class="num">${nf(cd.clean,0)}<small> / ${nf(cd.tracked,0)}</small></dd></div>
       </dl>
     </div>
@@ -2367,7 +2394,7 @@ function habitCard(h){
   const recent=logsOf(h.id).slice().sort((a,b)=>b.ts-a.ts).slice(0,12);
   const rl=relapses(h);
   return `<article class="card stack">
-    <div class="row"><div class="hico navy">${ic(T(h).ic)}</div><div class="grow"><h2>${esc(hName(h))}${h.paused?` <span class="pill p-pause">${esc(t('En pause'))}</span>`:''}</h2><p class="small muted">${esc(goalTxt(h))} · ${esc(t('suivi depuis le {date}',{date:fdate(h.trackStart)}))}</p>${h.paused?`<p class="small muted">${esc(t('En pause depuis le {date}. Le suivi n’apparaît plus sur l’accueil ; rien n’est effacé.',{date:fdate(h.paused)}))}</p>`:''}</div>
+    <div class="row"><div class="hico navy">${ic(T(h).ic)}</div><div class="grow"><h2>${esc(hName(h))}${S.habits.length>1&&isMain(h)?` <span class="pill p-main">${esc(t('Principale'))}</span>`:''}${h.paused?` <span class="pill p-pause">${esc(t('En pause'))}</span>`:''}</h2><p class="small muted">${esc(goalTxt(h))} · ${esc(t('suivi depuis le {date}',{date:fdate(h.trackStart)}))}</p>${h.paused?`<p class="small muted">${esc(t('En pause depuis le {date}. Le suivi n’apparaît plus sur l’accueil ; rien n’est effacé.',{date:fdate(h.paused)}))}</p>`:''}</div>
     <button class="iconbtn" data-a="habitForm" data-id="${h.id}" aria-label="${esc(t('Modifier'))}">${ic('edit','sm')}</button></div>
     <div class="tiles">
       <div class="tile"><div class="k">${esc(t('Série actuelle'))}</div><div class="v num" data-live="short" data-h="${h.id}">${durText(now()-cs,true)}</div></div>
@@ -2376,7 +2403,7 @@ function habitCard(h){
     </div>
     <p class="small muted">${esc(t('Début de la série : {date} à {time}',{date:fdate(cs,{weekday:'long',day:'numeric',month:'long'}),time:ftime(cs)}))}</p>
     <div class="actions">${h.paused?'':`<button class="btn ghost sm" data-a="logForm" data-h="${h.id}">${ic('plus','sm')}${esc(t('Consommation'))}</button>`}<button class="btn ghost sm" data-a="habitDetail" data-id="${h.id}">${esc(t('Historique et étapes'))}</button></div>
-    <div class="h-tools"><button class="link" data-a="habitPause" data-id="${h.id}">${esc(h.paused?t('Reprendre le suivi'):t('Mettre en pause'))}</button><button class="link" data-a="habitForm" data-id="${h.id}">${esc(t('Modifier'))}</button><button class="link danger" data-a="delHabit" data-id="${h.id}">${esc(t('Supprimer'))}</button></div>
+    <div class="h-tools">${S.habits.length>1&&!isMain(h)?`<button class="link" data-a="setMain" data-id="${h.id}">${esc(t('Définir comme principale'))}</button>`:''}<button class="link" data-a="habitPause" data-id="${h.id}">${esc(h.paused?t('Reprendre le suivi'):t('Mettre en pause'))}</button><button class="link" data-a="habitForm" data-id="${h.id}">${esc(t('Modifier'))}</button><button class="link danger" data-a="delHabit" data-id="${h.id}">${esc(t('Supprimer'))}</button></div>
     <div data-detail="${h.id}" hidden class="stack">
       <h3>${esc(t('Étapes'))}</h3><div class="badges">${badges}</div>
       <h3>${esc(t('Historique des séries'))}</h3>
@@ -2764,21 +2791,21 @@ const GOALQ={alcool:N_('Pour l’alcool, quel est ton objectif ?'),cannabis:N_('
 const COSTQ={alcool:N_('En moyenne, pour l’alcool. On s’en sert pour calculer tes économies.'),cannabis:N_('En moyenne, pour le cannabis. On s’en sert pour calculer tes économies.'),cigarette:N_('En moyenne, pour la cigarette. On s’en sert pour calculer tes économies.'),puff:N_('En moyenne, pour la puff. On s’en sert pour calculer tes économies.'),vape:N_('En moyenne, pour la vape. On s’en sert pour calculer tes économies.'),autre:N_('En moyenne, pour {what}. On s’en sert pour calculer tes économies.')};
 const LAST={alcool:N_('Ton dernier verre, c’était quand ?'),cannabis:N_('Ton dernier joint, c’était quand ?'),cigarette:N_('Ta dernière cigarette, c’était quand ?'),puff:N_('Ta dernière puff, c’était quand ?'),vape:N_('Ta dernière vape, c’était quand ?'),autre:N_('Ta dernière prise, c’était quand ?')};
 const PRICE={cigarette:.62,cannabis:3,alcool:3,puff:10,vape:.8,autre:0};
-const DEF_QTY={cigarette:10,cannabis:2,alcool:2,puff:1,vape:5,autre:1};
+const DEF_QTY={cigarette:10,cannabis:2,alcool:2,puff:1,vape:5,chicha:1,medic:1,jeux_video:2,reseaux:2,internet:3,jeux_argent:50,achats:50,porno:1,autre:1};
 const SINCE=[['a',N_('Moins d’un an'),6,'mois'],['b',N_('1 à 3 ans'),2,'ans'],['c',N_('3 à 5 ans'),4,'ans'],['d',N_('5 à 10 ans'),7,'ans'],['e',N_('Plus de 10 ans'),12,'ans']];
 const REASONS=[N_('Ma santé'),N_('Mieux respirer'),N_('Économiser'),N_('Ma famille'),N_('Mieux dormir'),N_('Faire du sport'),N_('Être plus concentré·e'),N_('Me sentir libre'),N_('Mon apparence'),N_('Ne plus dépendre de rien')];
-function what(k){const o=ui.ob;return o.h.autre?.label||t('low|cette substance')}
+function what(k){const o=ui.ob,h=o.h[k];return (h&&h.label)||t((TYPES[k]||TYPES.autre).low)}
 function getP(p){return p.split('.').reduce((o,k)=>o==null?o:o[k],ui.ob)}
 function setP(p,v){const ks=p.split('.');let o=ui.ob;for(let i=0;i<ks.length-1;i++)o=o[ks[i]];o[ks[ks.length-1]]=v}
 function obSteps(){const o=ui.ob,s=['name','age','sex','body','habits'];
-  o.types.forEach(k=>{if(k==='autre')s.push('label:'+k);s.push('goal:'+k,'since:'+k,'qty:'+k,'budget:'+k);if(o.h[k]&&o.h[k].goal==='diminuer')s.push('limit:'+k);s.push('last:'+k)});
+  o.types.forEach(k=>{if(TYPES[k]&&TYPES[k].named)s.push('label:'+k);s.push('goal:'+k,'since:'+k,'qty:'+k);if(tMode(k)!=='money')s.push('budget:'+k);if(o.h[k]&&o.h[k].goal==='diminuer')s.push('limit:'+k);s.push('last:'+k)});
   s.push('reasons','ready');return s}
 function obHeightCm(){const o=ui.ob;return IMP()?((+o.ft||0)*12+(+o.inch||0))*2.54:+o.height}
 function obWeightKg(){const o=ui.ob;if(!o.weight)return null;return IMP()?(+o.weight)*0.45359237:+o.weight}
 function obValid(id){const o=ui.ob;const [ty,k]=id.split(':');const h=k?o.h[k]:null;
   switch(ty){case 'name':return !!String(o.name).trim();case 'age':return +o.age>=12&&+o.age<=110;case 'sex':return !!o.sex;
   case 'body':{const c=obHeightCm(),w=obWeightKg();return c>=100&&c<=250&&(w==null||(w>=25&&w<=350))}
-  case 'habits':return o.types.length>0;case 'label':return !!String(h.label||'').trim();case 'goal':return !!h.goal;case 'since':return !!h.sinceOpt;
+  case 'habits':return o.types.length>0;case 'label':return k!=='autre'||!!String(h.label||'').trim();case 'goal':return !!h.goal;case 'since':return !!h.sinceOpt;
   case 'qty':return +h.qty>0;case 'budget':return h.budget!==''&&+h.budget>=0;case 'limit':return h.limit!==''&&+h.limit>=0;
   case 'last':return !!h.lastOpt&&fromLocalInput(h.last)<=now()+MIN;default:return true}}
 function opt(a,attrs,label,small,pressed,icon){return `<button type="button" class="opt" data-a="${a}" ${attrs} aria-pressed="${!!pressed}">${icon?`<span class="opt-ic">${ic(icon)}</span>`:''}<span class="grow">${esc(label)}${small?`<small>${esc(small)}</small>`:''}</span><span class="ck" aria-hidden="true"></span></button>`}
@@ -2802,14 +2829,14 @@ function renderQ(){
     body=`<div class="seg center">${[['metric',t('cm / kg')],['imperial',t('ft / lb')]].map(([v,n])=>`<button type="button" data-a="obUnits" data-v="${v}" aria-pressed="${S.prefs.units===v}">${esc(n)}</button>`).join('')}</div>`+
     (IMP()?`<div class="tiles two"><div class="unit-in"><input type="number" class="big-in" data-ob="ft" inputmode="numeric" placeholder="${esc(t('Taille'))}" value="${esc(o.ft||'')}"><span>ft</span></div><div class="unit-in"><input type="number" class="big-in" data-ob="inch" inputmode="numeric" placeholder="0" value="${esc(o.inch||'')}"><span>in</span></div></div><div class="unit-in"><input type="number" class="big-in" data-ob="weight" inputmode="decimal" placeholder="${esc(t('Poids (facultatif)'))}" value="${esc(o.weight)}"><span>lb</span></div>`
     :`<div class="unit-in"><input type="number" class="big-in" data-ob="height" inputmode="numeric" placeholder="${esc(t('Taille'))}" value="${esc(o.height)}"><span>cm</span></div><div class="unit-in"><input type="number" class="big-in" data-ob="weight" inputmode="decimal" placeholder="${esc(t('Poids (facultatif)'))}" value="${esc(o.weight)}"><span>kg</span></div>`)}
-  else if(ty==='habits'){q=t('Qu’est-ce que tu veux changer ?');sub=t('Choisis-en une ou plusieurs. Chacune aura son propre compteur.');body=`<div class="opts">${Object.entries(TYPES).map(([v,x])=>opt('obToggleType',`data-k="${v}"`,v==='autre'?t('Autre substance'):v==='vape'?t('Vape / cigarette électronique'):t(x.label),'',o.types.includes(v),x.ic)).join('')}</div>`}
-  else if(ty==='label'){q=t('De quelle substance s’agit-il ?');sub=t('Elle restera privée, comme tout le reste.');body=`<input type="text" class="big-in" data-ob="h.autre.label" maxlength="30" dir="auto" placeholder="${esc(t('Ex. : sucre, jeux, café…'))}" value="${esc(h.label)}">`}
-  else if(ty==='goal'){q=t(GOALQ[k],{what:what(k)});sub=t('Tu pourras changer d’objectif à tout moment.');body=`<div class="opts">${opt('obPick',`data-p="h.${k}.goal" data-v="arreter" data-auto="1"`,t('Arrêter complètement'),t('Un compteur de jours sans consommer'),h.goal==='arreter','target')}${opt('obPick',`data-p="h.${k}.goal" data-v="diminuer" data-auto="1"`,t('Diminuer petit à petit'),t('Une limite maximum, à ton rythme'),h.goal==='diminuer','stats')}</div>`}
-  else if(ty==='since'){q=t(VERB[k],{what:what(k)});sub=t('Il n’y a pas de mauvaise réponse : cela aide à mieux comprendre ce que tu traverses.');body=`<div class="opts">${SINCE.map(([v,n])=>opt('obSince',`data-k="${k}" data-o="${v}"`,t(n),'',h.sinceOpt===v)).join('')}</div>`}
-  else if(ty==='qty'){const isA=k==='alcool';if(isA)ensureDrink(h);const u=unitsWord(k,2);q=t('Combien de {unit} en moyenne ?',{unit:u});sub=t('Une estimation suffit. Elle sert à calculer ce que tu évites et à te proposer un objectif réaliste.');
+  else if(ty==='habits'){q=t('Qu’est-ce que tu veux changer ?');sub=t('Choisis-en une ou plusieurs. Chacune aura son propre compteur.');body=typePicker('obToggleType',v=>o.types.includes(v))+(o.types.length>1?`<p class="small muted tp-note">${esc(t('La première choisie sera ton addiction principale. Tu pourras la changer dans « Habitudes ».'))}</p>`:'')}
+  else if(ty==='label'){q=k==='medic'?t('De quel médicament s’agit-il ? (facultatif)'):t('De quelle substance s’agit-il ?');sub=t('Elle restera privée, comme tout le reste.');body=`<input type="text" class="big-in" data-ob="h.${k}.label" maxlength="30" dir="auto" placeholder="${esc(t('Ex. : sucre, jeux, café…'))}" value="${esc(h.label)}">`}
+  else if(ty==='goal'){q=t((GOALQ[k]||(k==='autre'?GOALQ.autre:N_('Quel est ton objectif ?'))),{what:what(k)});sub=t('Tu pourras changer d’objectif à tout moment.');body=`<div class="opts">${opt('obPick',`data-p="h.${k}.goal" data-v="arreter" data-auto="1"`,t('Arrêter complètement'),t('Un compteur de jours sans consommer'),h.goal==='arreter','target')}${opt('obPick',`data-p="h.${k}.goal" data-v="diminuer" data-auto="1"`,t('Diminuer petit à petit'),t('Une limite maximum, à ton rythme'),h.goal==='diminuer','stats')}</div>`}
+  else if(ty==='since'){q=t((VERB[k]||(k==='autre'?VERB.autre:N_('Depuis combien de temps ?'))),{what:what(k)});sub=t('Il n’y a pas de mauvaise réponse : cela aide à mieux comprendre ce que tu traverses.');body=`<div class="opts">${SINCE.map(([v,n])=>opt('obSince',`data-k="${k}" data-o="${v}"`,t(n),'',h.sinceOpt===v)).join('')}</div>`}
+  else if(ty==='qty'){const isA=k==='alcool';if(isA)ensureDrink(h);const u=unitsWord(k,2);q=tMode(k)==='money'?t('Combien dépenses-tu en moyenne ?'):t('Combien de {unit} en moyenne ?',{unit:u});sub=t('Une estimation suffit. Elle sert à calculer ce que tu évites et à te proposer un objectif réaliste.');
     body=`${isA?drinkPicker(h,'obDrink'):''}${stepper(`h.${k}.qty`,h.qtyPer==='mois'?t('{unit} par mois',{unit:u}):h.qtyPer==='semaine'?t('{unit} par semaine',{unit:u}):t('{unit} par jour',{unit:u}),0)}<div class="seg center">${[['jour',t('Par jour')],['semaine',t('Par semaine')],['mois',t('Par mois')]].map(([v,n])=>`<button type="button" data-a="obPick" data-p="h.${k}.qtyPer" data-v="${v}" aria-pressed="${h.qtyPer===v}">${esc(n)}</button>`).join('')}</div>${isA?`<p class="ob-sum" id="ob-alc-sum" aria-live="polite">${esc(alcSumTxt(h))}</p>`:''}`}
-  else if(ty==='budget'){const pd=(+h.qty||0)/(PER_DAYS[h.qtyPer]||1)*(k==='alcool'?alcStdPerUnit(h)*alcPriceFactor(h):1);const chCig=cur()==='CHF'&&k==='cigarette';const est=Math.round(pd*(chCig?0.45:PRICE[k])*(h.budgetPer==='mois'?30.44:7));
-    q=t('Et combien ça te coûte ?');sub=t(COSTQ[k],{what:what(k)});
+  else if(ty==='budget'){const pd=(+h.qty||0)/(PER_DAYS[h.qtyPer]||1)*(k==='alcool'?alcStdPerUnit(h)*alcPriceFactor(h):1);const chCig=cur()==='CHF'&&k==='cigarette';const est=Math.round(pd*(chCig?0.45:(PRICE[k]||0))*(h.budgetPer==='mois'?30.44:7));
+    q=t('Et combien ça te coûte ?');sub=t(COSTQ[k]||(k==='autre'?COSTQ.autre:N_('En moyenne. On s’en sert pour calculer tes économies.')),{what:what(k)});
     body=`<div class="unit-in"><input type="number" class="big-in" data-ob="h.${k}.budget" inputmode="decimal" min="0" placeholder="${esc(t('Montant'))}" value="${esc(h.budget)}"><span>${esc(curSym())}</span></div>
     <div class="seg center">${[['semaine',t('Par semaine')],['mois',t('Par mois')]].map(([v,n])=>`<button type="button" data-a="obPick" data-p="h.${k}.budgetPer" data-v="${v}" aria-pressed="${h.budgetPer===v}">${esc(n)}</button>`).join('')}</div>
     ${est>0&&chCig?`<button type="button" class="est" data-a="obEst" data-k="${k}" data-v="${est}">${ic('spark','sm')}${esc(h.budgetPer==='mois'?t('Je ne sais pas : utiliser l’estimation de {v} par mois (prix indicatif en Suisse, environ 9 CHF le paquet de 20)',{v:money(est)}):t('Je ne sais pas : utiliser l’estimation de {v} par semaine (prix indicatif en Suisse, environ 9 CHF le paquet de 20)',{v:money(est)}))}</button>`:''}
@@ -2819,7 +2846,7 @@ function renderQ(){
     if(h.limit===''||h.limit==null)h.limit=String(Math.max(0,Math.floor(usual/2)));
     q=t('Combien veux-tu en consommer au maximum ?');sub=t('Avant : environ {n} par jour. Un objectif réaliste aide à tenir, tu pourras l’ajuster.',{n:nf(perDay(h))});
     body=`${stepper(`h.${k}.limit`,lp==='mois'?t('{unit} maximum par mois',{unit:unitsWord(k,2)}):lp==='semaine'?t('{unit} maximum par semaine',{unit:unitsWord(k,2)}):t('{unit} maximum par jour',{unit:unitsWord(k,2)}),0)}<div class="seg center">${[['jour',t('Par jour')],['semaine',t('Par semaine')],['mois',t('Par mois')]].map(([v,n])=>`<button type="button" data-a="obLimPer" data-k="${k}" data-v="${v}" aria-pressed="${lp===v}">${esc(n)}</button>`).join('')}</div><p class="hint-q">${esc(t('Avant, cela représentait environ {n} sur cette période.',{n:nf(Math.round(usual*10)/10)}))}</p>`}
-  else if(ty==='last'){q=t(LAST[k]);sub=t('Ton compteur démarre à partir de là.');
+  else if(ty==='last'){q=t(LAST[k]||(k==='autre'?LAST.autre:N_('La dernière fois, c’était quand ?')));sub=t('Ton compteur démarre à partir de là.');
     body=`<div class="opts">${[['now',t('À l’instant')],['h3',t('Il y a quelques heures')],['y',t('Hier soir')],['d2',t('Avant-hier')],['custom',t('Choisir la date et l’heure')]].map(([v,n])=>opt('obLast',`data-k="${k}" data-o="${v}"`,n,'',h.lastOpt===v)).join('')}</div>
     ${h.lastOpt==='custom'?`<input type="datetime-local" data-ob="h.${k}.last" value="${esc(h.last)}" max="${toLocalInput(now())}">`:''}`}
   else if(ty==='reasons'){q=t('Pourquoi tu fais ça ?');sub=t('Choisis ce qui compte pour toi. On te le rappellera dans les moments difficiles.');
@@ -2828,11 +2855,11 @@ function renderQ(){
     <div class="inline"><input type="text" id="ob-reason" maxlength="60" dir="auto" placeholder="${esc(t('Une autre raison…'))}"><button type="button" class="btn ghost sm" data-a="obReasonAdd">${esc(t('Ajouter'))}</button></div>`;cta=o.reasons.length?t('Continuer'):t('Passer cette étape')}
   else if(ty==='ready'){
     const day=o.types.reduce((s,x)=>s+(+o.h[x].budget||0)/(o.h[x].budgetPer==='mois'?30.44:7),0);
-    const risky=o.types.includes('alcool')||o.types.includes('autre');
+    const risky=o.types.some(x=>x==='alcool'||x==='autre'||(TYPES[x]&&TYPES[x].med));
     q=t('Ton plan est prêt, {name}.',{name:o.name});cta=t('C’est parti');
     body=`<div class="ready"><p>${esc(t('Dans un an, tu pourrais économiser'))}</p><b class="num" data-count="${Math.round(day*365)}">${money(0)}</b><p>${esc(t('si tu tiens ton objectif'))}</p></div>
     <div class="tiles two">${[[t('Par jour'),day],[t('Par semaine'),day*7],[t('Par mois'),day*30.44],[t('Par an'),day*365]].map(([n,v],i)=>`<div class="tile ${['t-sky','t-green','t-sun','t-green'][i]}"><div class="k">${esc(n)}</div><div class="v num">${money(v)}</div></div>`).join('')}</div>
-    <div class="opts">${o.types.map(x=>{const hh=o.h[x];return `<div class="opt" style="cursor:default"><span class="opt-ic">${ic(TYPES[x].ic)}</span><span class="grow">${esc(x==='autre'?hh.label:t(TYPES[x].label))}<small>${esc(hh.goal==='diminuer'?(hh.limitPer==='mois'?t('Diminuer · {n} maximum par mois',{n:nf(hh.limit)}):hh.limitPer==='semaine'?t('Diminuer · {n} maximum par semaine',{n:nf(hh.limit)}):t('Diminuer · {n} maximum par jour',{n:nf(hh.limit)})):t('Arrêter complètement'))} · ${esc(hh.lastOpt==='now'?t('compteur lancé maintenant'):t('compteur depuis le {date}',{date:fdate(fromLocalInput(hh.last),{day:'numeric',month:'short'})+' '+ftime(fromLocalInput(hh.last))}))}</small></span><button type="button" class="link" data-a="obJump" data-to="goal:${x}">${esc(t('Modifier'))}</button></div>`}).join('')}</div>
+    <div class="opts">${o.types.map(x=>{const hh=o.h[x];return `<div class="opt" style="cursor:default"><span class="opt-ic">${ic(TYPES[x].ic)}</span><span class="grow">${esc(TYPES[x].named&&hh.label?hh.label:typeLabel(x))}<small>${esc(hh.goal==='diminuer'?(hh.limitPer==='mois'?t('Diminuer · {n} maximum par mois',{n:nf(hh.limit)}):hh.limitPer==='semaine'?t('Diminuer · {n} maximum par semaine',{n:nf(hh.limit)}):t('Diminuer · {n} maximum par jour',{n:nf(hh.limit)})):t('Arrêter complètement'))} · ${esc(hh.lastOpt==='now'?t('compteur lancé maintenant'):t('compteur depuis le {date}',{date:fdate(fromLocalInput(hh.last),{day:'numeric',month:'short'})+' '+ftime(fromLocalInput(hh.last))}))}</small></span><button type="button" class="link" data-a="obJump" data-to="goal:${x}">${esc(t('Modifier'))}</button></div>`}).join('')}</div>
     ${risky?`<div class="notice">${ic('info')}<span>${esc(t('Si tu bois beaucoup chaque jour, ou si tu prends des médicaments ou drogues avec dépendance physique, parle à un médecin avant d’arrêter : le sevrage peut être dangereux.'))}</span></div>`:''}
     <p class="small muted" style="display:flex;gap:8px;align-items:center">${ic('shield','sm')}${esc(t('Tout reste privé sur ton téléphone. Si tu consommes, ton compteur repart, mais tes records restent.'))}</p>`}
   /* Sections lisibles : Toi · Tes habitudes · Ta motivation · Ton plan */
@@ -2842,7 +2869,7 @@ function renderQ(){
   const hIdx=k?o.types.indexOf(k):-1;
   return `<div class="q" data-step="${id}"><div class="q-top"><button class="iconbtn" data-a="obBack" aria-label="${esc(t('Retour'))}">${ic('left')}</button><div class="q-secs" role="progressbar" aria-valuemin="1" aria-valuemax="${steps.length}" aria-valuenow="${ui.obStep}" aria-label="${esc(t('Étape {n} sur {total}',{n:nf(ui.obStep,0),total:nf(steps.length,0)}))}">${segs}</div><button class="iconbtn" data-a="langPicker" aria-label="${esc(t('Langue de l’application'))}">${ic('globe','sm')}</button></div>
     <p class="q-step"><b>${esc(si>=0?SEC[si][0]:'')}</b> · ${esc(t('Étape {n} sur {total}',{n:nf(ui.obStep,0),total:nf(steps.length,0)}))}</p>
-    <div class="q-body fade-in">${h&&ty!=='label'?`<span class="q-tag">${ic(TYPES[k].ic,'sm')}${esc(k==='autre'?(h.label||t('Autre')):t(TYPES[k].label))}${o.types.length>1?` · ${esc(t('{n} sur {total}',{n:nf(hIdx+1,0),total:nf(o.types.length,0)}))}`:''}</span>`:''}<h1>${esc(q)}</h1>${sub?`<p class="sub">${esc(sub)}</p>`:''}${body}</div>
+    <div class="q-body fade-in">${h&&ty!=='label'?`<span class="q-tag">${ic(TYPES[k].ic,'sm')}${esc(TYPES[k].named&&h.label?h.label:typeLabel(k))}${o.types.length>1?` · ${esc(t('{n} sur {total}',{n:nf(hIdx+1,0),total:nf(o.types.length,0)}))}`:''}</span>`:''}<h1>${esc(q)}</h1>${sub?`<p class="sub">${esc(sub)}</p>`:''}${body}</div>
     <div class="ob-cta"><button class="btn primary block" id="obCta" data-a="obNext" ${obValid(id)?'':'disabled'}>${esc(cta)}</button></div></div>`;
 }
 function obAfterRender(){
@@ -2874,14 +2901,14 @@ function habitFields(h,px){
   const ty=TYPES[h.type];
   const sel=(id,cur,opts)=>`<select id="${px}-${id}">${opts.map(([v,n])=>`<option value="${v}" ${cur===v?'selected':''}>${esc(n)}</option>`).join('')}</select>`;
   return `<fieldset class="card stack" style="border:1px solid var(--line);margin:0" data-hf="${px}">
-    <div class="row"><div class="hico navy">${ic(ty.ic)}</div><h2>${esc(h.type==='autre'?t('Autre substance'):t(ty.label))}</h2></div>
-    ${h.type==='autre'?`<div class="field"><label for="${px}-label">${esc(t('Nom de la substance ou de l’habitude'))}</label><input type="text" id="${px}-label" maxlength="30" dir="auto" value="${esc(h.label)}"></div>`:''}
+    <div class="row"><div class="hico navy">${ic(ty.ic)}</div><h2>${esc(typeLabel(h.type))}</h2></div>
+    ${ty.named?`<div class="field"><label for="${px}-label">${esc(h.type==='medic'?t('Nom du médicament (facultatif)'):t('Nom de la substance ou de l’habitude'))}</label><input type="text" id="${px}-label" maxlength="30" dir="auto" value="${esc(h.label)}"></div>`:''}
     <div class="field"><span class="flabel">${esc(t('Ton objectif'))}</span><div class="goal-grid" role="group">${[['arreter',t('Arrêter'),t('Compteur de jours sans consommer')],['diminuer',t('Diminuer'),t('Avec une limite par jour')]].map(([k,n,d])=>`<button type="button" class="choice" data-a="hfGoal" data-px="${px}" data-k="${k}" aria-pressed="${h.goal===k}" style="padding:14px 10px"><span style="font-size:1rem">${esc(n)}</span><span class="cd">${esc(d)}</span></button>`).join('')}</div><input type="hidden" id="${px}-goal" value="${h.goal}"></div>
     <div class="field"><label for="${px}-sinceN">${esc(t('Depuis combien de temps consommes-tu ?'))}</label><div class="inline"><input type="number" id="${px}-sinceN" min="0" inputmode="decimal" placeholder="3" value="${esc(h.sinceN)}">${sel('sinceU',h.sinceU,[['mois',t('mois')],['ans',t('ans')]])}</div></div>
     ${h.type==='alcool'?(ensureDrink(h),drinkPicker(h,'hfDrink')):''}
-    <div class="field"><label for="${px}-qty">${esc(t('Combien en consommes-tu en moyenne ?'))}</label><div class="inline"><input type="number" id="${px}-qty" min="0" step="0.5" inputmode="decimal" placeholder="${h.type==='cigarette'?'10':h.type==='alcool'?'3':'2'}" value="${esc(h.qty)}">${sel('qtyPer',h.qtyPer,[['jour',t('par jour')],['semaine',t('par semaine')],['mois',t('par mois')]])}</div>
-      <div class="inline" style="grid-template-columns:auto 1fr;align-items:center"><span class="hint">${esc(t('Unité personnalisée :'))}</span><input type="text" id="${px}-unit" maxlength="16" dir="auto" placeholder="${esc(hUnit({type:h.type},2))}" value="${esc(customUnit(h))}" style="min-height:38px;padding:6px 10px"></div></div>
-    <div class="field"><label for="${px}-budget">${esc(t('Combien dépenses-tu ? ({c})',{c:curSym()}))}</label><div class="inline"><input type="number" id="${px}-budget" min="0" step="1" inputmode="decimal" placeholder="40" value="${esc(h.budget)}">${sel('budgetPer',h.budgetPer,[['semaine',t('par semaine')],['mois',t('par mois')]])}</div></div>
+    <div class="field"><label for="${px}-qty">${esc(tMode(h.type)==='money'?t('Combien dépenses-tu en moyenne ? ({c})',{c:curSym()}):tMode(h.type)==='time'?t('Combien d’heures en moyenne ?'):t('Combien en consommes-tu en moyenne ?'))}</label><div class="inline"><input type="number" id="${px}-qty" min="0" step="0.5" inputmode="decimal" placeholder="${h.type==='cigarette'?'10':h.type==='alcool'?'3':'2'}" value="${esc(h.qty)}">${sel('qtyPer',h.qtyPer,[['jour',t('par jour')],['semaine',t('par semaine')],['mois',t('par mois')]])}</div>
+      <div class="inline" style="grid-template-columns:auto 1fr;align-items:center"><span class="hint" ${tMode(h.type)==='money'?'hidden':''}>${esc(t('Unité personnalisée :'))}</span><input type="text" id="${px}-unit" ${tMode(h.type)==='money'?'hidden':''} maxlength="16" dir="auto" placeholder="${esc(hUnit({type:h.type},2))}" value="${esc(customUnit(h))}" style="min-height:38px;padding:6px 10px"></div></div>
+    <div class="field" ${tMode(h.type)==='money'?'hidden':''}><label for="${px}-budget">${esc(t('Combien dépenses-tu ? ({c})',{c:curSym()}))}</label><div class="inline"><input type="number" id="${px}-budget" min="0" step="1" inputmode="decimal" placeholder="40" value="${esc(h.budget)}">${sel('budgetPer',h.budgetPer,[['semaine',t('par semaine')],['mois',t('par mois')]])}</div></div>
     <div class="field" ${h.goal==='diminuer'?'':'hidden'} data-limit="${px}"><label for="${px}-limit">${esc(t('Ta limite maximum'))}</label><div class="inline"><input type="number" id="${px}-limit" min="0" step="0.5" inputmode="decimal" placeholder="1" value="${esc(h.limit)}">${sel('limitPer',PER_DAYS[h.limitPer]?h.limitPer:'jour',[['jour',t('par jour')],['semaine',t('par semaine')],['mois',t('par mois')]])}</div></div>
     ${h.edit?'':`<div class="field"><label for="${px}-last">${esc(t('Dernière consommation'))}</label><input type="datetime-local" id="${px}-last" value="${esc(h.last)}" max="${toLocalInput(now())}"><span class="hint">${esc(t('Ton compteur démarre à partir de cette date. Laisse « maintenant » si tu commences aujourd’hui.'))}</span></div>`}
   </fieldset>`;
@@ -2902,7 +2929,7 @@ function finishOnboarding(){
   const o=ui.ob,keep=S.prefs;
   S=blank();S.prefs=Object.assign(S.prefs,keep);
   S.profile={name:o.name,age:+o.age,sex:o.sex,height:Math.round(obHeightCm()),weight:obWeightKg()?Math.round(obWeightKg()*10)/10:null,created:now()};
-  S.habits=o.types.map(k=>habitFromDraft(o.h[k]));S.reasons=o.reasons.slice();
+  S.habits=o.types.map(k=>habitFromDraft(o.h[k]));S.prefs.mainHabit=S.habits[0]?S.habits[0].id:null;S.reasons=o.reasons.slice();
   ui.ob=null;ui.obStep=0;ui.view='accueil';
   checkBadges(true);save();location.hash='accueil';render();
   toast(t('Bienvenue, {name}',{name:S.profile.name}),t('Ton compteur est lancé. Chaque jour, un pas vers ta liberté.'));
@@ -2936,16 +2963,17 @@ function confirmBox(title,text,okLabel,onOk,danger){
 
 /* --- Consommation --- */
 let logDraft=null;
-function logForm(hid){
+function logForm(hid){ui.logAll=false;
   const h0=S.habits.find(h=>h.id===hid)||null;
   const hd=(h0&&h0.drink)?h0:(S.habits.find(h=>h.type==='alcool'&&h.drink)||{});
-  logDraft={type:h0?h0.type:null,habitId:h0?h0.id:null,qty:1,drink:hd.drink||'biere',cont:hd.cont||'verre',ml:hd.ml||250,abv:hd.abv||5,ts:toLocalInput(now()),comment:'',trigger:''};
+  logDraft={type:h0?h0.type:null,habitId:h0?h0.id:null,qty:h0&&tMode(h0.type)==='money'?'':1,drink:hd.drink||'biere',cont:hd.cont||'verre',ml:hd.ml||250,abv:hd.abv||5,ts:toLocalInput(now()),comment:'',trigger:''};
   drawLog();
 }
 function gramsNote(g){return t('Soit {n} verres standard ({g} g). Calcul : volume × degré × 0,8.',{n:nf(g/stdG()),g:nf(stdG())})}
 function drawLog(){
   const d=logDraft;
-  const typeGrid=`<div class="choice-grid">${Object.entries(TYPES).map(([k,x])=>`<button type="button" class="choice" data-a="logType" data-k="${k}" aria-pressed="${d.type===k}">${ic(x.ic)}${esc(t(x.label))}</button>`).join('')}</div>`;
+  const mine=[...new Set(S.habits.map(h=>h.type))],showAll=ui.logAll||!mine.length,keys=showAll?Object.keys(TYPES):mine.concat(d.type&&!mine.includes(d.type)?[d.type]:[]);
+  const typeGrid=`<div class="choice-grid">${keys.map(k=>`<button type="button" class="choice" data-a="logType" data-k="${k}" aria-pressed="${d.type===k}">${ic(TYPES[k].ic)}${esc(typeLabel(k))}</button>`).join('')}</div>${showAll?'':`<button type="button" class="link" data-a="logAll" style="margin-top:6px">${esc(t('Autre type…'))}</button>`}`;
   let body='';
   if(d.type){
     const matches=S.habits.filter(h=>h.type===d.type);
@@ -2957,7 +2985,7 @@ function drawLog(){
     ${!h?`<div class="notice">${ic('info')}<span>${esc(t('Tu ne suis pas encore cette habitude : la consommation sera enregistrée dans tes statistiques, sans compteur dédié. Tu peux l’ajouter dans « Mes habitudes ».'))}</span></div>`:''}
     ${isAlc?`${drinkPicker(d,'drink',t('Boisson'))}
       <div class="tiles two"><div class="field"><label for="lg-ml">${esc(t('Volume ({u})',{u:volUnit()}))}</label><input type="number" id="lg-ml" min="0.1" step="0.1" inputmode="decimal" value="${volIn(d.ml)}" data-live-in></div><div class="field"><label for="lg-abv">${esc(t('Degré d’alcool (%)'))}</label><input type="number" id="lg-abv" min="0" max="100" step="0.1" inputmode="decimal" value="${d.abv}" data-live-in></div></div>`:''}
-    <div class="field"><label for="lg-qty">${esc(isAlc?(d.cont&&d.cont!=='verre'?t('Nombre de {unit}',{unit:contWord(d.cont,2)}):t('Nombre de verres')):h?t('Quantité ({unit})',{unit:hUnit(h,2)}):t('Quantité'))}</label><div class="row" dir="ltr"><button type="button" class="btn ghost sm" data-a="qty" data-d="-1" aria-label="${esc(t('Moins'))}">−</button><input type="number" id="lg-qty" min="0.5" step="0.5" value="${d.qty}" inputmode="decimal" style="text-align:center" data-live-in><button type="button" class="btn ghost sm" data-a="qty" data-d="1" aria-label="${esc(t('Plus'))}">+</button></div></div>
+    <div class="field"><label for="lg-qty">${esc(isAlc?(d.cont&&d.cont!=='verre'?t('Nombre de {unit}',{unit:contWord(d.cont,2)}):t('Nombre de verres')):tMode(d.type)==='money'?t('Montant ({c})',{c:curSym()}):tMode(d.type)==='time'?t('Durée (heures)'):h?t('Quantité ({unit})',{unit:hUnit(h,2)}):t('Quantité'))}</label><div class="row" dir="ltr"><button type="button" class="btn ghost sm" data-a="qty" data-d="-1" aria-label="${esc(t('Moins'))}">−</button><input type="number" id="lg-qty" min="${tMode(d.type)==='time'?0.25:0.5}" step="${tMode(d.type)==='money'?1:tMode(d.type)==='time'?0.25:0.5}" value="${d.qty}" inputmode="decimal" style="text-align:center" data-live-in><button type="button" class="btn ghost sm" data-a="qty" data-d="1" aria-label="${esc(t('Plus'))}">+</button></div></div>
     ${isAlc?`<div class="card flat stack" style="gap:6px;background:var(--field)"><div class="row between"><b>${esc(t('Alcool pur'))}</b><b class="num" id="lg-g" style="font-size:1.2rem">${esc(t('{g} g',{g:nf(g)}))}</b></div><p class="small muted" id="lg-gs">${esc(gramsNote(g))}</p>
       <p class="small muted">${esc(t('LIBRE n’affiche pas de taux d’alcoolémie : il dépend du sexe, du poids, de l’alimentation, de la vitesse de consommation et du métabolisme, et ne peut pas être déterminé de façon fiable à partir du nombre de verres, du poids et de la taille. Seul un éthylotest ou une prise de sang le mesure.'))}</p></div>`:''}
     <div class="field"><label for="lg-ts">${esc(t('Heure'))}</label><input type="datetime-local" id="lg-ts" value="${d.ts}" max="${toLocalInput(now()+MIN)}"></div>
@@ -3000,7 +3028,7 @@ function habitForm(id){
 }
 function drawHabitForm(){
   const d=habitDraft;
-  if(!d){sheet(t('Nouvelle habitude'),`<p class="muted" style="margin-bottom:12px">${esc(t('Que veux-tu suivre ?'))}</p><div class="choice-grid">${Object.entries(TYPES).map(([k,x])=>`<button class="choice" data-a="newHabitType" data-k="${k}">${ic(x.ic)}${esc(t(x.label))}</button>`).join('')}</div>`);return}
+  if(!d){sheet(t('Nouvelle habitude'),`<p class="muted" style="margin-bottom:4px">${esc(t('Que veux-tu suivre ?'))}</p>${typePicker('newHabitType',()=>false)}`);return}
   sheet(d.edit?t('Modifier l’habitude'):t('Nouvelle habitude'),`<div class="stack">${habitFields(d,'hf')}
     <button class="btn primary block" data-a="saveHabit">${ic('check')}${esc(t('Enregistrer'))}</button>
     ${d.edit?`<button class="btn danger block" data-a="delHabit" data-id="${d.id}">${ic('trash')}${esc(t('Supprimer cette habitude'))}</button>`:''}</div>`);
@@ -3751,6 +3779,9 @@ function focusFor(h){
   const ck=T.checkins[dayKey()];const nx=nextMilestone(h);
   const reason=S.reasons[0]?t(S.reasons[0]):null;
   const F=(k,title,text,why,act,act2)=>({k,title,text,why,act,act2});
+  // 0. Sécurité : médicaments (benzodiazépines, somnifères, antidouleurs) et opioïdes : accompagnement médical
+  if((TYPES[h.type]||{}).med&&days<14)
+    return F('safe',h.type==='opioides'?t('Opioïdes : ne reste pas seul·e'):t('Médicaments : avec un médecin'),h.type==='opioides'?t('Arrêter ou réduire les opioïdes se fait avec un accompagnement médical. Après une pause, la tolérance baisse : reprendre la même dose expose à une overdose.'):t('Certains médicaments ne doivent pas être arrêtés d’un coup. Le médecin ou le pharmacien adapte la diminution à ta situation.'),t('Parce que cette addiction demande un suivi médical pour arrêter ou réduire en sécurité.'),['go','sante',t('Lire : quand consulter')],['sos','',t('Numéros d’aide')]);
   // 1. Sécurité : premiers jours d’arrêt de l’alcool chez une personne qui buvait chaque jour
   if(h.type==='alcool'&&!reduce&&days<4&&perDay(h)>=1)
     return F('safe',t('Les premiers jours sans alcool'),t('Si tu buvais tous les jours, un arrêt brutal peut provoquer un sevrage dangereux. Lis ceci et, en cas de doute, appelle un médecin.'),t('Parce que tu as arrêté l’alcool il y a moins de 4 jours avec environ {n} verres par jour avant.',{n:nf(perDay(h))}),['article','sevAlcool',t('Lire l’essentiel')],['sos','',t('Numéros d’aide')]);
@@ -3789,6 +3820,7 @@ function focusCard(h){
   const f=focusFor(h);if(!f)return '';
   const b=(a,primary)=>{if(!a)return '';const [act,id,label]=a;
     if(act==='tools')return `<a class="btn ${primary?'primary':'quiet'}" href="#outils">${esc(label)}</a>`;
+    if(act==='go')return `<a class="btn ${primary?'primary':'quiet'}" href="#${id}">${esc(label)}</a>`;
     return `<button class="btn ${primary?'primary':'quiet'}" data-a="${act}" ${act==='body'?`data-k="${id}"`:id?`data-id="${esc(id)}"`:''}>${esc(label)}</button>`};
   return `<section class="focus f-${f.k}"><span class="kicker">${esc(t('Pour toi, maintenant'))}</span><h2 class="serif">${esc(f.title)}</h2><p>${esc(f.text)}</p><div class="acts">${b(f.act,true)}${b(f.act2,false)}</div><p class="why">${esc(f.why)}</p></section>`;
 }
@@ -4359,6 +4391,8 @@ const A={
   photoCredits:()=>photoCredits(),
   notifs:()=>notifCenter(),
   printMonth:el=>printMonth(+el.dataset.off),
+  setMain:el=>{S.prefs.mainHabit=el.dataset.id;ui.homeHabit=el.dataset.id;save();render();toast(t('Addiction principale mise à jour'),t('Elle s’affiche en premier sur l’accueil.'))},
+  logAll:()=>{ui.logAll=true;drawLog()},
   libAll:el=>{ui.libAll=el.dataset.k;render()},
   homeHabit:el=>{ui.homeHabit=el.dataset.id;render();if(el.classList.contains('li'))scrollTo({top:0,behavior:'smooth'})},
   recap:()=>openRecap(),
@@ -4388,7 +4422,7 @@ const A={
   newHabitType:el=>{habitDraft=newHabitDraft(el.dataset.k);drawHabitForm()},
   hfGoal:el=>{const px=el.dataset.px;document.getElementById(px+'-goal').value=el.dataset.k;el.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===el));const lim=document.querySelector(`[data-limit="${px}"]`);if(lim)lim.hidden=el.dataset.k!=='diminuer'},
   saveHabit:()=>saveHabit(),
-  delHabit:el=>{const h=S.habits.find(x=>x.id===el.dataset.id);confirmBox(t('Supprimer « {habit} » ?',{habit:hName(h)}),t('Le compteur, les badges et les consommations liées à cette habitude seront effacés. Cette action est définitive.'),t('Supprimer'),()=>{S.habits=S.habits.filter(x=>x.id!==h.id);S.logs=S.logs.filter(l=>l.habitId!==h.id);Object.keys(S.unlocked).forEach(k=>{if(k.startsWith(h.id+':'))delete S.unlocked[k]});save();render()},true)},
+  delHabit:el=>{const h=S.habits.find(x=>x.id===el.dataset.id);confirmBox(t('Supprimer « {habit} » ?',{habit:hName(h)}),t('Le compteur, les badges et les consommations liées à cette habitude seront effacés. Cette action est définitive.'),t('Supprimer'),()=>{if(S.prefs.mainHabit===h.id)S.prefs.mainHabit=null;S.habits=S.habits.filter(x=>x.id!==h.id);S.logs=S.logs.filter(l=>l.habitId!==h.id);Object.keys(S.unlocked).forEach(k=>{if(k.startsWith(h.id+':'))delete S.unlocked[k]});save();render()},true)},
   habitDetail:el=>{const d=document.querySelector(`[data-detail="${el.dataset.id}"]`);if(d)d.hidden=!d.hidden},
   filter:el=>{ui.filter=el.dataset.k;render()},
   calNav:el=>{const d=new Date(ui.cal);const dir=(+el.dataset.d);ui.cal=new Date(d.getFullYear(),d.getMonth()+dir,1).getTime();ui.calSel=null;render()},
@@ -4450,7 +4484,7 @@ const A={
   sosLog:()=>{ui.sos=null;closeSheet();logForm(ui.homeHabit)}
 };
 const A10={
-  quickPlus:el=>{const h=S.habits.find(x=>x.id===el.dataset.h);if(!h)return;const before=now()-curStart(h),best=bestMs(h);
+  quickPlus:el=>{const h=S.habits.find(x=>x.id===el.dataset.h);if(!h)return;if(tMode(h.type)!=='count'){logForm(h.id);return}const before=now()-curStart(h),best=bestMs(h);
     const l={id:uid(),habitId:h.id,type:h.type,ts:now(),qty:1,comment:'',trigger:'',quick:true};
     if(h.type==='alcool'&&h.ml)Object.assign(l,{drink:h.drink||'autre',cont:h.cont||'verre',ml:h.ml,abv:h.abv,grams:Math.round(grams(h.ml,h.abv,1)*10)/10});
     S.logs.push(l);save();render();
@@ -4612,8 +4646,17 @@ const CRAVE_TIPS={
   tabac:{fr:['Occupe tes mains et ta bouche : un verre d’eau, un chewing-gum sans sucre, un cure-dent.','Change de pièce ou sors quelques minutes : l’envie de fumer est souvent liée à un lieu.','Les substituts nicotiniques (patch, gomme, pastille) réduisent le manque : un pharmacien peut te conseiller.'],en:['Keep your hands and mouth busy: a glass of water, sugar-free gum, a toothpick.','Change rooms or step outside for a few minutes: the urge to smoke is often tied to a place.','Nicotine replacement (patch, gum, lozenge) reduces withdrawal: a pharmacist can advise you.']},
   alcool:{fr:['Prends une boisson sans alcool que tu aimes, et mange quelque chose.','Éloigne-toi de l’endroit où l’alcool est disponible, même dix minutes.','Tremblements, sueurs ou confusion ne sont pas une simple envie : appelle un médecin ou les urgences.'],en:['Have an alcohol-free drink you like, and eat something.','Move away from where alcohol is available, even for ten minutes.','Shaking, sweating or confusion are not just a craving: call a doctor or emergency services.']},
   cannabis:{fr:['Une douche, une marche ou une activité physique courte aident à faire baisser la tension.','Éloigne ce qui rappelle la consommation (matériel, lieux, contacts).','Le soir est souvent difficile : prépare une activité et une routine de sommeil.'],en:['A shower, a walk or a short burst of exercise help ease the tension.','Put away reminders of using (equipment, places, contacts).','Evenings are often hard: plan an activity and a sleep routine.']},
-  autre:{fr:['Change d’environnement quelques minutes.','Bois un grand verre d’eau et respire lentement.','Appelle ou écris à quelqu’un, même pour parler d’autre chose.'],en:['Change your surroundings for a few minutes.','Drink a large glass of water and breathe slowly.','Call or message someone, even to talk about something else.']}};
-function tipKey(type){return ['cigarette','vape','puff'].includes(type)?'tabac':CRAVE_TIPS[type]?type:'autre'}
+  autre:{fr:['Change d’environnement quelques minutes.','Bois un grand verre d’eau et respire lentement.','Appelle ou écris à quelqu’un, même pour parler d’autre chose.'],en:['Change your surroundings for a few minutes.','Drink a large glass of water and breathe slowly.','Call or message someone, even to talk about something else.']},
+  stim:{"fr": ["L’envie de stimulants est souvent liée à des lieux, des personnes ou de l’argent disponible : éloigne-toi-en maintenant.", "Mange, bois de l’eau et repose-toi : la fatigue et la faim renforcent les envies.", "Douleur dans la poitrine, malaise, forte chaleur ou confusion : appelle les urgences."], "en": ["Cravings for stimulants are often tied to places, people or cash at hand: move away from them now.", "Eat, drink water and rest: tiredness and hunger make cravings stronger.", "Chest pain, feeling faint, overheating or confusion: call emergency services."], "de": ["Das Verlangen nach Stimulanzien hängt oft an Orten, Personen oder verfügbarem Geld: Entferne dich jetzt davon.", "Iss, trink Wasser und ruh dich aus: Müdigkeit und Hunger verstärken das Verlangen.", "Schmerzen in der Brust, Unwohlsein, starke Überhitzung oder Verwirrtheit: Ruf den Notruf an."], "it": ["La voglia di stimolanti è spesso legata a luoghi, persone o soldi a disposizione: allontanatene adesso.", "Mangia, bevi acqua e riposati: stanchezza e fame rafforzano le voglie.", "Dolore al petto, malore, forte calore o confusione: chiama i soccorsi."], "es": ["Las ganas de estimulantes suelen estar ligadas a lugares, personas o dinero disponible: aléjate de ellos ahora.", "Come, bebe agua y descansa: el cansancio y el hambre aumentan las ganas.", "Dolor en el pecho, malestar, mucho calor o confusión: llama a emergencias."], "pt": ["A vontade de estimulantes está muitas vezes ligada a lugares, pessoas ou dinheiro disponível: afasta-te deles agora.", "Come, bebe água e descansa: o cansaço e a fome reforçam as vontades.", "Dor no peito, mal-estar, calor intenso ou confusão: liga para a emergência."]},
+  opio:{"fr": ["Ne reste pas seul·e : appelle maintenant une personne de confiance ou une ligne d’aide.", "Si tu as un traitement de substitution, parles-en à l’équipe qui te suit avant de changer quoi que ce soit.", "Après une pause, la tolérance baisse : la même dose peut provoquer une overdose. Ne consomme jamais seul·e et garde de la naloxone si possible."], "en": ["Don’t stay alone: call someone you trust or a helpline now.", "If you are on substitution treatment, talk to your care team before changing anything.", "After a break, tolerance drops: the same dose can cause an overdose. Never use alone and keep naloxone if you can."], "de": ["Bleib nicht allein: Ruf jetzt eine Vertrauensperson oder eine Hilfelinie an.", "Wenn du eine Substitutionsbehandlung hast, sprich mit deinem Behandlungsteam, bevor du etwas änderst.", "Nach einer Pause sinkt die Toleranz: Dieselbe Dosis kann eine Überdosis auslösen. Konsumiere nie allein und halte wenn möglich Naloxon bereit."], "it": ["Non restare solo/a: chiama adesso una persona di fiducia o una linea di aiuto.", "Se segui una terapia sostitutiva, parlane con l’équipe che ti segue prima di cambiare qualsiasi cosa.", "Dopo una pausa la tolleranza cala: la stessa dose può provocare un’overdose. Non consumare mai da solo/a e tieni con te il naloxone se possibile."], "es": ["No te quedes solo/a: llama ahora a alguien de confianza o a una línea de ayuda.", "Si sigues un tratamiento de sustitución, habla con tu equipo antes de cambiar nada.", "Tras una pausa la tolerancia baja: la misma dosis puede provocar una sobredosis. No consumas nunca solo/a y ten naloxona si es posible."], "pt": ["Não fiques sozinho(a): liga agora a alguém de confiança ou a uma linha de ajuda.", "Se fazes um tratamento de substituição, fala com a equipa que te acompanha antes de mudar o que quer que seja.", "Após uma pausa, a tolerância baixa: a mesma dose pode provocar uma overdose. Nunca consumas sozinho(a) e tem naloxona se possível."]},
+  medic:{"fr": ["Ne prends pas de dose supplémentaire pour calmer l’envie : note-la et parles-en à ton médecin.", "Pour le sommeil ou l’anxiété, essaie une respiration lente ou un exercice d’ancrage.", "Ne change pas ta dose seul·e : la diminution se fait avec un médecin ou un pharmacien."], "en": ["Don’t take an extra dose to calm the craving: note it and talk to your doctor.", "For sleep or anxiety, try slow breathing or a grounding exercise.", "Don’t change your dose on your own: tapering is done with a doctor or pharmacist."], "de": ["Nimm keine zusätzliche Dosis, um das Verlangen zu beruhigen: Notiere es und sprich mit deiner Ärztin oder deinem Arzt.", "Bei Schlafproblemen oder Angst: Versuch langsames Atmen oder eine Erdungsübung.", "Ändere deine Dosis nicht allein: Das Reduzieren erfolgt mit ärztlicher oder pharmazeutischer Begleitung."], "it": ["Non prendere una dose in più per calmare la voglia: annotala e parlane con il medico.", "Per il sonno o l’ansia, prova la respirazione lenta o un esercizio di radicamento.", "Non cambiare la dose da solo/a: la riduzione si fa con un medico o un farmacista."], "es": ["No tomes una dosis extra para calmar las ganas: anótalas y habla con tu médico.", "Para el sueño o la ansiedad, prueba la respiración lenta o un ejercicio de anclaje.", "No cambies la dosis por tu cuenta: la reducción se hace con un médico o un farmacéutico."], "pt": ["Não tomes uma dose extra para acalmar a vontade: regista-a e fala com o teu médico.", "Para o sono ou a ansiedade, experimenta a respiração lenta ou um exercício de ancoragem.", "Não alteres a dose sozinho(a): a redução faz-se com um médico ou farmacêutico."]},
+  halluc:{"fr": ["Repère les occasions (fêtes, amis) où l’envie apparaît, et prépare une autre activité.", "Demande-toi ce que tu cherches dans cette expérience : d’autres façons d’y répondre existent.", "Si tu as consommé et que tu te sens très mal : un endroit calme, une personne de confiance, et les urgences en cas de confusion ou de malaise."], "en": ["Spot the occasions (parties, friends) when the urge appears, and plan another activity.", "Ask yourself what you are looking for in the experience: there are other ways to meet that need.", "If you have used and feel very unwell: a calm place, someone you trust, and emergency services if there is confusion or fainting."], "de": ["Erkenne die Gelegenheiten (Partys, Freunde), bei denen das Verlangen auftaucht, und plane etwas anderes.", "Frag dich, was du in dieser Erfahrung suchst: Es gibt andere Wege, dieses Bedürfnis zu erfüllen.", "Wenn du konsumiert hast und es dir sehr schlecht geht: ein ruhiger Ort, eine Vertrauensperson und bei Verwirrtheit oder Unwohlsein der Notruf."], "it": ["Individua le occasioni (feste, amici) in cui compare la voglia e prepara un’altra attività.", "Chiediti cosa cerchi in questa esperienza: esistono altri modi per rispondere a quel bisogno.", "Se hai consumato e ti senti molto male: un luogo tranquillo, una persona di fiducia e i soccorsi in caso di confusione o malore."], "es": ["Identifica las ocasiones (fiestas, amigos) en que aparecen las ganas y prepara otra actividad.", "Pregúntate qué buscas en esa experiencia: hay otras maneras de responder a esa necesidad.", "Si has consumido y te encuentras muy mal: un lugar tranquilo, una persona de confianza, y emergencias si hay confusión o malestar."], "pt": ["Identifica as ocasiões (festas, amigos) em que a vontade aparece e prepara outra atividade.", "Pergunta-te o que procuras nessa experiência: há outras formas de responder a essa necessidade.", "Se consumiste e te sentes muito mal: um lugar calmo, uma pessoa de confiança e a emergência em caso de confusão ou mal-estar."]},
+  jeu:{"fr": ["Éloigne ton téléphone ou ferme les applis de paris ; bloque les sites si tu le peux.", "N’essaie pas de « te refaire » : les pertes ne se rattrapent pas en rejouant.", "Confie ta carte bancaire à quelqu’un ou fixe un plafond de dépenses avec ta banque."], "en": ["Put your phone away or close the betting apps; block the sites if you can.", "Don’t try to win it back: losses aren’t recovered by playing again.", "Give your bank card to someone you trust or set a spending cap with your bank."], "de": ["Leg das Handy weg oder schliess die Wett-Apps; sperre die Websites, wenn du kannst.", "Versuch nicht, Verluste zurückzuholen: Durch Weiterspielen holt man sie nicht zurück.", "Gib deine Bankkarte einer Vertrauensperson oder lege mit deiner Bank ein Ausgabenlimit fest."], "it": ["Allontana il telefono o chiudi le app di scommesse; blocca i siti se puoi.", "Non cercare di «rifarti»: le perdite non si recuperano giocando ancora.", "Affida la carta bancaria a qualcuno o fissa un tetto di spesa con la banca."], "es": ["Aparta el móvil o cierra las apps de apuestas; bloquea las webs si puedes.", "No intentes recuperar lo perdido: las pérdidas no se recuperan volviendo a jugar.", "Deja tu tarjeta a alguien de confianza o fija un límite de gasto con tu banco."], "pt": ["Afasta o telemóvel ou fecha as apps de apostas; bloqueia os sites se puderes.", "Não tentes recuperar: as perdas não se recuperam a jogar outra vez.", "Entrega o cartão a alguém de confiança ou define um limite de gastos com o teu banco."]},
+  ecran:{"fr": ["Pose le téléphone dans une autre pièce pendant 15 minutes.", "Désactive les notifications de l’appli ou fixe une limite de temps d’écran.", "Choisis une activité sans écran : marcher, appeler quelqu’un, lire quelques pages."], "en": ["Put your phone in another room for 15 minutes.", "Turn off the app’s notifications or set a screen-time limit.", "Pick an activity away from screens: a walk, a call, a few pages of a book."], "de": ["Leg das Handy für 15 Minuten in einen anderen Raum.", "Schalte die Benachrichtigungen der App aus oder setze ein Bildschirmzeit-Limit.", "Wähle etwas ohne Bildschirm: spazieren, jemanden anrufen, ein paar Seiten lesen."], "it": ["Lascia il telefono in un’altra stanza per 15 minuti.", "Disattiva le notifiche dell’app o imposta un limite di tempo davanti allo schermo.", "Scegli un’attività senza schermo: camminare, chiamare qualcuno, leggere qualche pagina."], "es": ["Deja el móvil en otra habitación durante 15 minutos.", "Desactiva las notificaciones de la app o pon un límite de tiempo de pantalla.", "Elige una actividad sin pantallas: caminar, llamar a alguien, leer unas páginas."], "pt": ["Deixa o telemóvel noutra divisão durante 15 minutos.", "Desativa as notificações da app ou define um limite de tempo de ecrã.", "Escolhe uma atividade sem ecrã: caminhar, ligar a alguém, ler algumas páginas."]},
+  achats:{"fr": ["Attends 24 heures avant tout achat non prévu.", "Ferme l’appli ou le site, et retire ta carte enregistrée.", "Note ce que tu ressens : l’envie d’acheter répond souvent à une émotion."], "en": ["Wait 24 hours before any unplanned purchase.", "Close the app or website and remove your saved card.", "Note how you feel: the urge to buy often answers an emotion."], "de": ["Warte 24 Stunden vor jedem ungeplanten Kauf.", "Schliess die App oder Website und entferne deine gespeicherte Karte.", "Notiere, was du fühlst: Der Kaufdrang ist oft eine Antwort auf ein Gefühl."], "it": ["Aspetta 24 ore prima di ogni acquisto non previsto.", "Chiudi l’app o il sito e rimuovi la carta salvata.", "Annota cosa provi: la voglia di comprare risponde spesso a un’emozione."], "es": ["Espera 24 horas antes de cualquier compra no prevista.", "Cierra la app o la web y elimina tu tarjeta guardada.", "Anota lo que sientes: las ganas de comprar suelen responder a una emoción."], "pt": ["Espera 24 horas antes de qualquer compra não planeada.", "Fecha a app ou o site e remove o cartão guardado.", "Regista o que sentes: a vontade de comprar responde muitas vezes a uma emoção."]},
+  porno:{"fr": ["Change de pièce ou sors quelques minutes : l’envie retombe souvent vite.", "Éloigne le téléphone de ton lit et active un filtre si cela t’aide.", "Repère le moment (fatigue, ennui, solitude) et prépare une autre réponse."], "en": ["Change rooms or step outside for a few minutes: the urge often fades quickly.", "Keep your phone away from your bed and turn on a filter if it helps.", "Notice the moment (tiredness, boredom, loneliness) and plan another response."], "de": ["Wechsle den Raum oder geh ein paar Minuten hinaus: Das Verlangen lässt oft schnell nach.", "Leg das Handy weg vom Bett und aktiviere einen Filter, wenn es dir hilft.", "Erkenne den Moment (Müdigkeit, Langeweile, Einsamkeit) und plane eine andere Antwort."], "it": ["Cambia stanza o esci qualche minuto: la voglia spesso cala in fretta.", "Tieni il telefono lontano dal letto e attiva un filtro se ti aiuta.", "Individua il momento (stanchezza, noia, solitudine) e prepara un’altra risposta."], "es": ["Cambia de habitación o sal unos minutos: las ganas suelen bajar rápido.", "Aleja el móvil de la cama y activa un filtro si te ayuda.", "Identifica el momento (cansancio, aburrimiento, soledad) y prepara otra respuesta."], "pt": ["Muda de divisão ou sai alguns minutos: a vontade costuma baixar depressa.", "Afasta o telemóvel da cama e ativa um filtro se te ajudar.", "Identifica o momento (cansaço, tédio, solidão) e prepara outra resposta."]}};
+const TIP_OF={cigarette:'tabac',vape:'tabac',puff:'tabac',chicha:'tabac',cocaine:'stim',amphet:'stim',meth:'stim',mdma:'stim',opioides:'opio',medic:'medic',halluc:'halluc',jeux_argent:'jeu',jeux_video:'ecran',reseaux:'ecran',internet:'ecran',achats:'achats',porno:'porno'};
+function tipKey(type){return TIP_OF[type]||(CRAVE_TIPS[type]?type:'autre')}
 function sosPersonal(hid){const h=S.habits.find(x=>x.id===hid)||S.habits[0];const P=planData();
   const st=P.strategies.slice(0,3),tips=h?LC(CRAVE_TIPS[tipKey(h.type)]):[];
   // plans « si… alors… » : ceux de cette habitude d’abord, puis les plans généraux
