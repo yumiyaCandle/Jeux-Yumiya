@@ -1807,6 +1807,37 @@ html.fx #app .hm-p,html.fx #app .card:not(.card .card){border-radius:28px!import
   html.fx .sosfab{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
 }
 @media (prefers-reduced-motion: reduce){html.fx .hm-wrings .wr{animation:none}}
+
+/* ---------- Quatrième passe : épurer ---------- */
+/* Record : petite pastille en haut à droite de la carte principale (comme « +4 pts ») */
+.hm-rec-s{display:none}
+html.fx #app .hm-hero{position:relative}
+html.fx #app .hm-hero .hm-rec{position:absolute;top:22px;inset-inline-end:22px;margin:0;padding:4px 10px;font-size:.74rem;font-weight:700;letter-spacing:.02em;
+  background:rgba(255,214,90,.16)!important;color:#FFE08A!important;border:1px solid rgba(255,214,90,.35)!important;gap:5px}
+html.fx[data-hero="couleur"] #app .hm-hero .hm-rec{background:rgba(255,255,255,.2)!important;color:#fff!important;border-color:rgba(255,255,255,.4)!important}
+html.fx #app .hm-hero .hm-rec svg{width:13px;height:13px}
+html.fx #app .hm-hero .hm-rec-l{display:none}
+html.fx #app .hm-hero .hm-rec-s{display:inline}
+/* « Depuis le dernier arrêt » : discret quand le grand chiffre suffit */
+html.fx #app .hm-hero .hm-since-long{font-size:.86rem;opacity:.8;margin-top:2px}
+/* Raison en citation, dans la carte lavande */
+.hm-quote{font-size:1.2rem;font-weight:650;line-height:1.3;margin:6px 0 8px}
+html.fx #app .hm-why .hm-quote{font-family:"Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;font-style:italic;font-weight:500;font-size:1.55rem;letter-spacing:-.01em;line-height:1.22;color:#2B2258}
+html.fx #app .hm-why .hm-quote::before{content:"« ";opacity:.45}html.fx #app .hm-why .hm-quote::after{content:" »";opacity:.45}
+html.fx #app .hm-why .hm-reason{font-size:.86rem;opacity:.85}
+@media (prefers-color-scheme: dark){html.fx:not([data-theme="light"]) #app .hm-why .hm-quote{color:#F1ECFF}}
+html.fx[data-theme="dark"] #app .hm-why .hm-quote{color:#F1ECFF}
+/* Graphiques : barres à la couleur d’accent, coins arrondis */
+html.fx{--bar:color-mix(in srgb,var(--green-strong) 62%,#9AA8BC)}
+@media (prefers-color-scheme: dark){html.fx:not([data-theme="light"]){--bar:color-mix(in srgb,var(--green) 40%,#2A3D5C)}}
+html.fx[data-theme="dark"]{--bar:color-mix(in srgb,var(--green) 40%,#2A3D5C)}
+html.fx #app .chart .gbar{rx:6px}
+/* Photos d’en-tête plus basses : le contenu remonte */
+html.fx #app .ph-fig.page-ph .ph,html.fx #app .ph-fig.j-cover .ph,html.fx #app .ph-fig.lib-cover .ph{height:132px!important;max-height:132px!important;aspect-ratio:auto!important;border-radius:22px!important;overflow:hidden}
+html.fx #app .ph-fig.page-ph img,html.fx #app .ph-fig.j-cover img,html.fx #app .ph-fig.lib-cover img{width:100%!important;height:100%!important;object-fit:cover!important}
+/* Cartes d’habitude plus aérées : actions secondaires discrètes */
+html.fx #app .h-tools{gap:16px;font-size:.88rem}
+html.fx #app .h-tools .link{font-weight:600}
 </style>
 </head>
 <body>
@@ -2326,8 +2357,8 @@ function viewHome(){
     <div class="hm-main">
       <p class="hm-k"><span class="hm-pill ${reduce?'red':''}">${esc(reduce?t('Réduction'):t('Arrêt'))}</span>${esc(hName(h))}</p>
       <p class="hm-days"><span class="num" data-live="days" data-h="${h.id}">${nf(dd,0)}</span><span class="hm-u">${esc(tn(dd,'jour sans {habit}','jours sans {habit}',{habit:hLow(h)}))}</span></p>
-      <p class="hm-since">${esc(reduce?t('Depuis la dernière consommation :'):t('Depuis le dernier arrêt :'))} <b class="num" data-live="since" data-h="${h.id}">${esc(sinceLong(el))}</b></p>
-      ${isRec?`<p class="hm-rec">${ic('trophy','sm')}${esc(t('C’est actuellement ta plus longue période.'))}</p>`:''}
+      <p class="hm-since${dd>=2?' hm-since-long':''}">${esc(reduce?t('Depuis la dernière consommation :'):t('Depuis le dernier arrêt :'))} <b class="num" data-live="since" data-h="${h.id}">${esc(sinceLong(el))}</b></p>
+      ${isRec?`<p class="hm-rec" title="${esc(t('C’est actuellement ta plus longue période.'))}">${ic('trophy','sm')}<span class="hm-rec-l">${esc(t('C’est actuellement ta plus longue période.'))}</span><span class="hm-rec-s">${esc(t('Record'))}</span></p>`:''}
       <dl class="hm-facts">
         <div style="--c:#B79CFF;--v:${best?Math.min(1,el/best):0}"><dt>${esc(t('Record personnel'))}</dt><dd class="num">${esc(durText(best,true))}</dd><i class="hm-bar" aria-hidden="true"></i></div>
         ${tMode(h.type)==='time'?`<div style="--c:#FF7A59;--v:${pct}"><dt>${esc(t('Temps libéré'))}</dt><dd class="num">${esc(unitN(h,Math.round(avoided(h)*10)/10))}</dd><i class="hm-bar" aria-hidden="true"></i></div>`:`<div style="--c:#FF7A59;--v:${pct}"><dt>${esc(t('Économies estimées'))}</dt><dd class="num" data-live="savedh" data-h="${h.id}">${esc(money(savedOf(h)))}</dd><i class="hm-bar" aria-hidden="true"></i></div>`}
@@ -2342,7 +2373,7 @@ function viewHome(){
       <p class="hm-k">${esc(t('Consommations du jour'))}</p>
       <div class="hm-log"><p class="hm-q"><b class="num">${esc(unitN(h,tq))}</b></p>
         <div class="hm-step2" dir="ltr"><button data-a="quickMinus" data-h="${h.id}" ${tl.length?'':'disabled'} aria-label="${esc(t('Retirer la dernière consommation'))}">−</button><button data-a="quickPlus" data-h="${h.id}" aria-label="${esc(t('Ajouter une consommation'))}">+</button></div></div>
-      <p class="hm-sub">${esc(tl.length?t('Dernière à {time}. Une erreur ? Touche « − » pour la retirer.',{time:ftime(tl[0].ts)}):t('« + » enregistre une consommation maintenant. « Détails » permet d’indiquer l’heure et le contexte.'))}</p>
+      ${tl.length?`<p class="hm-sub">${esc(t('Dernière à {time}. Une erreur ? Touche « − » pour la retirer.',{time:ftime(tl[0].ts)}))}</p>`:S.logs.length<3?`<p class="hm-sub">${esc(t('« + » enregistre une consommation maintenant. « Détails » permet d’indiquer l’heure et le contexte.'))}</p>`:''}
       <div class="hm-acts"><button class="btn quiet sm" data-a="logForm" data-h="${h.id}">${esc(t('Détails'))}</button>${reduce?'':`<button class="btn quiet sm" data-a="lapse" data-id="${h.id}">${esc(t('J’ai fait un écart'))}</button>`}</div>
     </section>
     <nav class="hm-p hm-help" aria-label="${esc(t('Accès rapide'))}">
@@ -2354,9 +2385,8 @@ function viewHome(){
   <div class="hm-grid">
     ${hmWeek(h)}
     <section class="hm-p hm-why">
-      <p class="hm-k">${esc(t('Ton objectif'))}</p>
-      ${goal?`<p class="hm-goal" dir="auto">${esc(goal)}</p>`:''}
-      ${reason?`<p class="hm-reason"><span>${esc(t('Ta raison'))}</span> <span dir="auto">${esc(t(reason))}</span></p>`:''}
+      <p class="hm-k">${esc(reason?t('Ta raison'):t('Ton objectif'))}</p>
+      ${reason?`<p class="hm-quote" dir="auto">${esc(t(reason))}</p>${goal?`<p class="hm-reason" dir="auto">${esc(goal)}</p>`:''}`:goal?`<p class="hm-goal" dir="auto">${esc(goal)}</p>`:''}
       <a class="link" href="#plan">${esc(t('Voir mon plan'))}</a>
     </section>
   </div>
@@ -2636,7 +2666,6 @@ function viewHabits(){
   return topbar(t('Mes habitudes'))+`<div class="stack fade-in" style="margin-top:16px">
   ${S.habits.map(h=>habitCard(h)).join('')}
   <button class="btn primary block" data-a="habitForm">${ic('plus')}${esc(t('Ajouter une habitude'))}</button>
-  <div class="notice">${ic('info')}<span>${esc(t('Chaque habitude a son propre compteur. Une consommation remet seulement le compteur concerné à zéro : tes records et ton historique sont conservés.'))}</span></div>
   </div>`;
 }
 function goalTxt(h){if(h.goal!=='diminuer')return t('Objectif : arrêter');if(h.limit==='')return t('Objectif : diminuer');const q=unitN(h,+h.limit),p=limPer(h);return p==='semaine'?t('Objectif : diminuer (max {q} par semaine)',{q}):p==='mois'?t('Objectif : diminuer (max {q} par mois)',{q}):t('Objectif : diminuer (max {q} par jour)',{q})}
@@ -2661,10 +2690,10 @@ function habitCard(h){
       <div class="tile"><div class="k">${esc(t('Meilleur record'))}</div><div class="v num">${durText(best,true)}</div></div>
       <div class="tile"><div class="k">${esc(t('Économisé'))}</div><div class="v num" style="color:var(--green-strong)">${money(savedOf(h))}</div></div>
     </div>
-    <p class="small muted">${esc(t('Début de la série : {date} à {time}',{date:fdate(cs,{weekday:'long',day:'numeric',month:'long'}),time:ftime(cs)}))}</p>
     <div class="actions">${h.paused?'':`<button class="btn ghost sm" data-a="logForm" data-h="${h.id}">${ic('plus','sm')}${esc(t('Consommation'))}</button>`}<button class="btn ghost sm" data-a="habitDetail" data-id="${h.id}">${esc(t('Historique et étapes'))}</button>${ficheOf(h)?`<button class="btn ghost sm" data-a="article" data-id="${ficheOf(h)}">${ic('info','sm')}${esc(t('Comprendre et se faire aider'))}</button>`:''}</div>
-    <div class="h-tools">${S.habits.length>1&&!isMain(h)?`<button class="link" data-a="setMain" data-id="${h.id}">${esc(t('Définir comme principale'))}</button>`:''}<button class="link" data-a="habitPause" data-id="${h.id}">${esc(h.paused?t('Reprendre le suivi'):t('Mettre en pause'))}</button><button class="link" data-a="habitForm" data-id="${h.id}">${esc(t('Modifier'))}</button><button class="link danger" data-a="delHabit" data-id="${h.id}">${esc(t('Supprimer'))}</button></div>
+    <div class="h-tools">${S.habits.length>1&&!isMain(h)?`<button class="link" data-a="setMain" data-id="${h.id}">${esc(t('Définir comme principale'))}</button>`:''}<button class="link" data-a="habitPause" data-id="${h.id}">${esc(h.paused?t('Reprendre le suivi'):t('Mettre en pause'))}</button><button class="link danger" data-a="delHabit" data-id="${h.id}">${esc(t('Supprimer'))}</button></div>
     <div data-detail="${h.id}" hidden class="stack">
+      <p class="small muted">${esc(t('Début de la série : {date} à {time}',{date:fdate(cs,{weekday:'long',day:'numeric',month:'long'}),time:ftime(cs)}))}</p>
       <h3>${esc(t('Étapes'))}</h3><div class="badges">${badges}</div>
       <h3>${esc(t('Historique des séries'))}</h3>
       ${hist.length?`<div class="list">${hist.map(s=>{const L=s.end-s.start;const rec=L===bestPast&&L>0;return `<div class="li"><div class="grow"><b class="num">${durText(L,true)}</b> ${rec?`<span class="pill" style="background:var(--green-soft);color:var(--green-ink)">${esc(t('Record'))}</span>`:''}<p class="small muted">${esc(t('Du {a} au {b}',{a:fdate(s.start),b:fdate(s.end)}))}</p></div></div>`}).join('')}</div>`:`<p class="small muted">${esc(t('Aucune série terminée pour le moment. Ton historique apparaîtra ici.'))}</p>`}
