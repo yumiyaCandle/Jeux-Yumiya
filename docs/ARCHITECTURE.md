@@ -82,6 +82,10 @@ Inspirée d’une vidéo de présentation fournie par l’éditeur, adaptée aux
 - Mode « contraste élevé » du système : surfaces presque opaques, bordures franches.
 - Graphiques : barres arrondies en haut et posées à plat sur l’axe ; anneaux de la semaine avec une palette validée par le script dataviz
   (daltonisme, luminosité, contraste) dans chaque thème ; barres sombres à 4:1 de contraste.
+- Graphiques à parcourir (`chPick`, `chEnd`) : on glisse le doigt ou la souris sur le graphique, la valeur et la date du point touché
+  s'affichent au-dessus (les autres barres s'estompent, repère vertical), puis le résumé « Plus haut : … » revient quand on s'arrête.
+  Clavier : un seul arrêt de tabulation par graphique, flèches (Maj : 7 d'un coup), Début/Fin, Échap ; lecture annoncée aux lecteurs d'écran.
+  `touch-action: pan-y` garde le défilement vertical de la page. Retour haptique de sélection dans les apps natives seulement.
 
 ## Après un écart
 

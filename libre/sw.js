@@ -2,7 +2,7 @@
    Rôle : rendre l’app utilisable hors ligne après une première visite, et proposer les mises à jour.
    Aucune donnée personnelle ne passe par ici : elles restent dans le stockage local du navigateur.
    À chaque nouvelle version publiée, changer VERSION : l’app propose alors « Mettre à jour ». */
-const VERSION='libre-2026-11-21-ecart';
+const VERSION='libre-2026-11-21-graphiques';
 const CORE=[
  "./",
  "./index.html",

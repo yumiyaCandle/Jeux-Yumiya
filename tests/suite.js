@@ -358,6 +358,31 @@ test('Distribution', 'Page de présentation : sans erreur, sans requête externe
   }
 });
 
+test('Statistiques', 'Graphiques à parcourir : glisser le doigt ou les flèches affiche la valeur, puis le résumé revient', async (b, base) => {
+  const st = profileState({ days: 40 });
+  st.logs = Array.from({ length: 30 }, (_, i) => ({ id: 'l' + i, habitId: 'h0', type: 'cigarette', ts: Date.now() - i * 11 * 36e5, qty: 1 + (i % 3) }));
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('stats'); await p.waitForTimeout(900);
+  const w = p.locator('.chart-w').first(); await w.scrollIntoViewIfNeeded();
+  const sum = await w.locator('.ch-read').textContent(); assert.match(sum, /Plus haut : \d/);
+  assert.equal(await p.evaluate(() => document.querySelectorAll('.chart-w rect.gbar[tabindex]').length), 0, 'une seule tabulation par graphique');
+  const box = await w.locator('svg.chart').boundingBox(); const yy = box.y + box.height / 2;
+  await p.mouse.move(box.x + box.width * 0.2, yy); await p.waitForTimeout(80);
+  const a = await w.locator('.ch-read').textContent();
+  await p.mouse.move(box.x + box.width * 0.95, yy); await p.waitForTimeout(80);
+  const z = await w.locator('.ch-read').textContent();
+  assert.ok(a !== sum && z !== a, 'la lecture suit le pointeur : ' + a + ' / ' + z);
+  assert.equal(await w.locator('rect.gbar.sel').count(), 1);
+  await p.mouse.move(box.x + box.width / 2, box.y - 120); await p.waitForTimeout(800);
+  assert.equal(await w.locator('.ch-read').textContent(), sum, 'résumé revenu');
+  await w.focus(); await p.keyboard.press('Home'); const h = await w.locator('.ch-read').textContent();
+  await p.keyboard.press('ArrowRight'); const r = await w.locator('.ch-read').textContent();
+  assert.ok(h !== sum && r !== h, 'flèches : ' + h + ' → ' + r);
+  assert.equal(await w.evaluate(x => +x.dataset.i), 1);
+  await p.keyboard.press('Escape'); await p.waitForTimeout(50);
+  assert.equal(await w.locator('.ch-read').textContent(), sum);
+  assert.deepEqual(p.errors || [], []);
+});
+
 test('Suivi', 'Après un écart : le total des jours sans est mis en avant, pas un grand « 0 » (fr et en)', async (b, base) => {
   for (const lang of ['fr', 'en']) {
     const st = profileState({ days: 40, lang }); st.logs = [{ id: 'l1', habitId: 'h0', type: 'cigarette', ts: Date.now() - 36e5, qty: 1 }];
