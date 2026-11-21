@@ -83,6 +83,12 @@ Inspirée d’une vidéo de présentation fournie par l’éditeur, adaptée aux
 - Graphiques : barres arrondies en haut et posées à plat sur l’axe ; anneaux de la semaine avec une palette validée par le script dataviz
   (daltonisme, luminosité, contraste) dans chaque thème ; barres sombres à 4:1 de contraste.
 
+## Après un écart
+
+Le jour d’un écart (moins d’un jour depuis le dernier arrêt, au moins un jour sans au total), la carte principale montre le total
+des jours sans (`cleanDaysOf`) au lieu d’un grand « 0 », avec un lien vers « Comprendre ce moment ». Choix tiré de l’analyse des avis
+des concurrents (`docs/ANALYSE-CONCURRENCE.md`) ; test « Après un écart » dans `tests/suite.js`.
+
 ## Langues
 
 Catalogues pour 19 langues + compléments `EXTRA`. Interface complète : fr, en, de, it, es, pt. Les 14 autres sont signalées « Partielle »

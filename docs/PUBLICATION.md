@@ -81,7 +81,9 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 > • Santé Apple (facultatif) : ton activité et ton sommeil à côté de ton suivi
 > • 19 langues
 >
-> Tes données restent sur ton téléphone, chiffrées. Pas de compte, pas de publicité, pas de mesure d’audience.
+> Gratuit, sans abonnement : tous les outils sont accessibles. Tes données restent sur ton téléphone, chiffrées. Pas de compte, pas de publicité, pas de mesure d’audience.
+
+> (Choix de positionnement tiré de l’analyse des avis des concurrents, voir `docs/ANALYSE-CONCURRENCE.md` : à garder vrai si un modèle payant est ajouté un jour.)
 > LIBRE ne remplace pas un professionnel de santé. En cas d’urgence, appelle les secours. Pour l’alcool, les somnifères, les anxiolytiques ou les opioïdes, parle à un médecin avant d’arrêter.
 
 **Mots-clés (App Store, 100 car.)** : arrêter de fumer,alcool,addiction,sobriété,cannabis,sevrage,envies,jours sans,journal,bien-être

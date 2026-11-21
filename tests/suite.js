@@ -358,4 +358,15 @@ test('Distribution', 'Page de présentation : sans erreur, sans requête externe
   }
 });
 
+test('Suivi', 'Après un écart : le total des jours sans est mis en avant, pas un grand « 0 » (fr et en)', async (b, base) => {
+  for (const lang of ['fr', 'en']) {
+    const st = profileState({ days: 40, lang }); st.logs = [{ id: 'l1', habitId: 'h0', type: 'cigarette', ts: Date.now() - 36e5, qty: 1 }];
+    const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
+    const big = await p.textContent('.hm-hero .hm-days .num'); assert.notEqual(big.trim(), '0', lang + ' : grand zéro');
+    assert.ok(+big.replace(/\D/g, '') >= 39, lang + ' : total ' + big);
+    assert.match(await p.textContent('.hm-hero .hm-slip'), lang === 'fr' ? /ne t’enlève rien/ : /takes nothing away/);
+    assert.ok(await p.$('.hm-hero [data-a="lapse"]'), 'lien « Comprendre ce moment »'); noErr(p); await p.ctx.close();
+  }
+});
+
 module.exports = { T };
