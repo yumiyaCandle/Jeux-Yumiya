@@ -30,9 +30,15 @@ Aucun serveur, aucun compte, aucune bibliothèque tierce dans la page (la police
 
 | Contexte | Où | Chiffrement |
 |---|---|---|
-| Navigateur, PWA, LIBRE.html | `localStorage['libre.v1']`, copie de sécurité `libre.v1.avant` | Aucun (dit clairement dans l’app) |
+| Navigateur, PWA, LIBRE.html | `localStorage['libre.v1']`, copie de sécurité `libre.v1.avant` | Aucun par défaut (dit dans l’app) ; AES-256-GCM avec mot de passe si l’utilisateur l’active |
 | App iPhone | `Application Support/LibreVault/state.bin` et `avant.bin` | AES-256-GCM, clé 256 bits dans le trousseau (AfterFirstUnlock) + protection de données iOS |
 | App Android | `files/vault/state.bin` et `avant.bin` | AES-256-GCM, clé non exportable dans l’Android Keystore |
+
+Navigateur, chiffrement facultatif (Profil › Tes données) : `libre.v1` et `libre.v1.avant` contiennent alors une enveloppe
+`{_webvault:1, enc:'AES-256-GCM', kdf:'PBKDF2-SHA256', iter:600000, salt, iv, ct}`. Clé dérivée du mot de passe, gardée en mémoire (`WKEY`),
+écritures en file (`wvPut`). Au démarrage, `load()` repère l’enveloppe (`WV_PENDING`) : rien n’est affiché ni écrit tant que le mot de passe
+n’a pas ouvert les données (`wvGate`). Après 5 minutes en arrière-plan, la page se recharge. Mot de passe oublié : l’enveloppe est mise de côté
+(`libre.v1.chiffre.<date>`), jamais effacée.
 
 Dans l’app, `save()` met en file d’attente une écriture vers le coffre (une à la fois, la plus récente gagne).
 Au démarrage, `vaultBoot()` lit le coffre avant le premier affichage ; si des données existent encore dans le stockage de la WebView

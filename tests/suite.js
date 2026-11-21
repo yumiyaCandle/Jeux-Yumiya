@@ -96,6 +96,47 @@ async function importFile(p, txt) {
   const f = path.join(require('os').tmpdir(), 'libre-test-' + Date.now() + '.json'); fs.writeFileSync(f, txt);
   const [fc] = await Promise.all([p.waitForEvent('filechooser'), p.click('[data-a="importFile"]')]); await fc.setFiles(f); await p.waitForTimeout(400);
 }
+test('Sécurité', 'Navigateur : chiffrement facultatif par mot de passe (rien en clair, mot de passe exigé, désactivation, oubli sans perte)', async (b, base) => {
+  const journal = [{ id: 'j1', ts: Date.now() - 864e5, mood: 2, text: 'SECRET-JOURNAL-123', triggers: [] }];
+  const p = await page(b, base, { init: seed(profileState({ name: 'Zéphyrine', extra: { journal } })) }); await p.goto(base); await p.settle();
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="wvOn"]').click()); await p.waitForSelector('#wv1');
+  await p.fill('#wv1', 'court'); await p.fill('#wv2', 'court'); await p.click('#wvSet button[type=submit]');
+  assert.match(await p.textContent('#wvSetErr'), /8 caractères/);
+  await p.fill('#wv1', 'mon-mot-de-passe'); await p.fill('#wv2', 'mon-mot-de-passe'); await p.click('#wvSet button[type=submit]');
+  assert.match(await p.textContent('#wvSetErr'), /Coche/);
+  await p.check('#wvOk'); await p.click('#wvSet button[type=submit]'); await p.waitForFunction(() => !document.querySelector('#wvSet'), null, { timeout: 15000 });
+  const dump = () => p.evaluate(() => Object.keys(localStorage).map(k => k + '=' + localStorage.getItem(k)).join('\n'));
+  let all = await dump();
+  assert.ok(!/SECRET-JOURNAL|Zéphyrine|Z\\u00e9phyrine/.test(all), 'aucune donnée en clair dans le stockage');
+  assert.ok(JSON.parse(await p.evaluate(() => localStorage.getItem('libre.v1')))._webvault === 1);
+  // une modification est elle aussi écrite chiffrée
+  await p.go('journal'); await p.click('[data-a="journalForm"]'); await p.waitForSelector('#j-text'); await p.fill('#j-text', 'DEUXIEME-SECRET'); await p.click('[data-a="saveJournal"]'); await p.waitForTimeout(400);
+  all = await dump(); assert.ok(!/DEUXIEME-SECRET/.test(all), 'nouvelle entrée chiffrée');
+  // rechargement : mot de passe exigé, rien d'affiché avant
+  await p.reload(); await p.waitForSelector('#wvPw'); assert.doesNotMatch(await p.textContent('#app'), /Zéphyrine|SECRET/);
+  await p.evaluate(() => { location.hash = 'journal'; }); await p.waitForTimeout(200); assert.ok(await p.$('#wvPw'), 'la navigation ne contourne pas l’écran');
+  await p.fill('#wvPw', 'mauvais'); await p.click('#wvF button'); await p.waitForFunction(() => /incorrect/.test(document.getElementById('wvErr').textContent), null, { timeout: 15000 });
+  assert.ok(JSON.parse(await p.evaluate(() => localStorage.getItem('libre.v1')))._webvault === 1, 'données intactes après une erreur');
+  await p.fill('#wvPw', 'mon-mot-de-passe'); await p.click('#wvF button'); await p.waitForSelector('#app[data-view]:not([data-view="lock"])', { timeout: 15000 });
+  await p.go('journal'); await p.waitForTimeout(300); const jt = await p.textContent('.jbook');
+  assert.match(jt, /SECRET-JOURNAL-123/); assert.match(jt, /DEUXIEME-SECRET/);
+  // désactivation : mot de passe demandé, puis données en clair à nouveau et identiques
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="wvOff"]').click()); await p.waitForSelector('#wv0');
+  await p.fill('#wv0', 'faux'); await p.click('#wvUnset button'); await p.waitForFunction(() => /incorrect/.test(document.getElementById('wvUnErr').textContent), null, { timeout: 15000 });
+  await p.fill('#wv0', 'mon-mot-de-passe'); await p.click('#wvUnset button'); await p.waitForFunction(() => !document.querySelector('#wvUnset'), null, { timeout: 15000 });
+  const plain = JSON.parse(await p.evaluate(() => localStorage.getItem('libre.v1')));
+  assert.equal(plain.profile.name, 'Zéphyrine'); assert.equal(plain.journal.length, 2);
+  // oubli : on réactive, on recharge, « mot de passe oublié » repart de zéro mais garde la version chiffrée à part
+  await p.evaluate(() => document.querySelector('[data-a="wvOn"]').click()); await p.waitForSelector('#wv1');
+  await p.fill('#wv1', 'autre-mot-de-passe'); await p.fill('#wv2', 'autre-mot-de-passe'); await p.check('#wvOk'); await p.click('#wvSet button[type=submit]');
+  await p.waitForFunction(() => !document.querySelector('#wvSet'), null, { timeout: 15000 });
+  await p.reload(); await p.waitForSelector('#wvPw'); await p.click('[data-a="wvForgot"]'); await p.waitForTimeout(200);
+  await p.click('#layer .btn.danger'); await p.waitForSelector('#app[data-view]:not([data-view="lock"])', { timeout: 15000 });
+  const keys = await p.evaluate(() => Object.keys(localStorage));
+  assert.ok(keys.some(k => /^libre\.v1\.chiffre\.\d+$/.test(k)), 'la version chiffrée est conservée à part');
+  assert.deepEqual(p.errors, []);
+});
+
 test('Sauvegarde', 'Export chiffré : aucun texte lisible, mauvais mot de passe refusé, restauration exacte', async (b, base) => {
   const st = profileState({ name: 'Nom-Secret', extra: { journal: [{ id: 'j1', ts: Date.now(), mood: 2, text: 'Confidence-intime', triggers: [] }] } });
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
@@ -381,6 +422,95 @@ test('Statistiques', 'Graphiques à parcourir : glisser le doigt ou les flèches
   await p.keyboard.press('Escape'); await p.waitForTimeout(50);
   assert.equal(await w.locator('.ch-read').textContent(), sum);
   assert.deepEqual(p.errors || [], []);
+});
+
+test('Suivi', 'Modifier une consommation passée : quantité et heure changées, compteur recalculé, annulable', async (b, base) => {
+  const st = profileState({ days: 30 }); const H = 36e5;
+  st.logs = [{ id: 'old', habitId: 'h0', type: 'cigarette', ts: Date.now() - 50 * H, qty: 2 }, { id: 'last', habitId: 'h0', type: 'cigarette', ts: Date.now() - 5 * H, qty: 1 }];
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('habitudes'); await p.waitForTimeout(300);
+  await p.evaluate(() => document.querySelector('[data-a="editLog"][data-id="last"]').click());
+  await p.waitForSelector('#lg-qty'); assert.match(await p.textContent('#layer'), /Modifier la consommation/);
+  await p.fill('#lg-qty', '3');
+  const d = new Date(Date.now() - 30 * 36e5); const pad = n => String(n).padStart(2, '0');
+  await p.fill('#lg-ts', `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`);
+  await p.click('[data-a="saveLog"]'); await p.waitForTimeout(200);
+  const s1 = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.equal(s1.logs.length, 2, 'pas de doublon'); const l = s1.logs.find(x => x.id === 'last');
+  assert.equal(l.qty, 3); assert.ok(Math.abs(l.ts - (Date.now() - 30 * 36e5)) < 2 * 60e3, 'heure modifiée');
+  await p.click('.toast button'); await p.waitForTimeout(150);
+  const s2 = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.equal(s2.logs.find(x => x.id === 'last').qty, 1, 'annulation');
+  await p.evaluate(() => document.querySelector('[data-a="editLog"][data-id="last"]').click()); await p.waitForSelector('#lg-ts');
+  await p.fill('#lg-ts', `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`); await p.click('[data-a="saveLog"]'); await p.waitForTimeout(150);
+  await p.closeLayer(); await p.go('accueil'); await p.waitForTimeout(300);
+  assert.equal((await p.textContent('[data-live="days"]')).trim(), '1', 'compteur recalculé depuis la nouvelle heure (30 h → 1 jour)');
+  assert.deepEqual(p.errors, []);
+});
+
+test('Journal', 'Modifier une entrée, filtrer par humeur et par mois', async (b, base) => {
+  const now = Date.now(), D = 864e5;
+  const journal = [{ id: 'a', ts: now - 2 * D, mood: 1, text: 'jour difficile', triggers: [] }, { id: 'b', ts: now - D, mood: 5, text: 'belle journée', triggers: [] }, { id: 'c', ts: now - 70 * D, mood: 3, text: 'il y a longtemps', triggers: [] }];
+  const p = await page(b, base, { init: seed(profileState({ extra: { journal } })) }); await p.goto(base); await p.settle(); await p.go('journal'); await p.waitForTimeout(300);
+  await p.click('[data-a="jFilter"][data-k="low"]'); await p.waitForTimeout(100);
+  assert.equal(await p.locator('.jentry').count(), 1); assert.match(await p.textContent('.jbook'), /jour difficile/);
+  await p.click('[data-a="jFilter"][data-k="all"]'); await p.waitForTimeout(100);
+  const opts = await p.locator('#jm option').count(); assert.ok(opts >= 3, 'mois proposés');
+  await p.selectOption('#jm', { index: opts - 1 }); await p.waitForTimeout(150);
+  assert.equal(await p.locator('.jentry').count(), 1); assert.match(await p.textContent('.jbook'), /longtemps/);
+  await p.selectOption('#jm', ''); await p.waitForTimeout(150);
+  await p.click('[data-a="editJournal"][data-id="b"]'); await p.waitForSelector('#j-text');
+  await p.fill('#j-text', 'belle journée, modifiée'); await p.click('[data-a="saveJournal"]'); await p.waitForTimeout(200);
+  const s = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.equal(s.journal.length, 3, 'pas de doublon'); const e = s.journal.find(x => x.id === 'b');
+  assert.equal(e.text, 'belle journée, modifiée'); assert.equal(e.ts, journal[1].ts, 'date d’origine conservée');
+  assert.deepEqual(p.errors, []);
+});
+
+test('Outils', 'Favoris : ajouter un exercice, il apparaît en haut et reste après rechargement', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle(); await p.go('outils'); await p.waitForTimeout(300);
+  await p.evaluate(() => document.querySelector('[data-a="favTool"][data-id="breath"]').click()); await p.waitForTimeout(150);
+  assert.match(await p.textContent('#app'), /Mes favoris/);
+  await p.reload(); await p.waitForSelector('#app[data-view]'); await p.go('outils'); await p.waitForTimeout(300);
+  assert.equal(await p.locator('[data-a="favTool"][data-id="breath"][aria-pressed="true"]').count() >= 1, true);
+  await p.evaluate(() => document.querySelector('[data-a="favTool"][data-id="breath"]').click()); await p.waitForTimeout(150);
+  assert.doesNotMatch(await p.textContent('#app'), /Mes favoris/);
+  assert.deepEqual(p.errors, []);
+});
+
+test('Suivi', 'Modifier puis supprimer un suivi : réglages enregistrés, suppression récupérable depuis la copie de sécurité', async (b, base) => {
+  const st = profileState({ types: ['cigarette', 'alcool'] });
+  st.logs = [{ id: 'l1', habitId: 'h0', type: 'cigarette', ts: Date.now() - 30 * 36e5, qty: 2 }, { id: 'l2', habitId: 'h1', type: 'alcool', ts: Date.now() - 20 * 36e5, qty: 1 }];
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('habitudes'); await p.waitForTimeout(300);
+  await p.evaluate(() => document.querySelector('[data-a="habitForm"][data-id="h0"]').click()); await p.waitForSelector('#hf-qty');
+  await p.fill('#hf-qty', '14'); await p.click('[data-a="saveHabit"]'); await p.waitForTimeout(200);
+  let s1 = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.equal(+s1.habits.find(h => h.id === 'h0').qty, 14); assert.equal(s1.logs.length, 2, 'historique conservé');
+  await p.evaluate(() => document.querySelector('[data-a="habitForm"][data-id="h0"]').click()); await p.waitForSelector('[data-a="delHabit"]');
+  await p.click('#layer [data-a="delHabit"]'); await p.waitForTimeout(150); await p.click('#layer .btn.danger'); await p.waitForTimeout(200);
+  s1 = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.deepEqual(s1.habits.map(h => h.id), ['h1']); assert.deepEqual(s1.logs.map(l => l.id), ['l2'], 'les consommations de l’autre suivi restent');
+  await p.go('profil'); await p.waitForTimeout(200); assert.ok(await p.$('[data-a="snapRestore"]'), 'copie de sécurité proposée');
+  await p.evaluate(() => document.querySelector('[data-a="snapRestore"]').click()); await p.waitForTimeout(150); await p.click('#layer .btn.primary, #layer .btn.danger'); await p.waitForTimeout(300);
+  s1 = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.equal(s1.habits.length, 2); assert.equal(s1.logs.length, 2, 'suivi et consommations récupérés');
+  assert.deepEqual(p.errors, []);
+});
+
+test('Outils', 'SOS et les 8 exercices s’ouvrent, se lancent et se ferment sans erreur', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
+  await p.click('.hm-sos'); await p.waitForTimeout(500);
+  const sos = await p.textContent('#layer'); assert.ok(sos.trim().length > 40, 'SOS ouvert');
+  await p.evaluate(() => { const b = [...document.querySelectorAll('#layer button')].find(x => x.offsetParent && /\d/.test(x.textContent)); b && b.click(); }); await p.waitForTimeout(400);
+  assert.ok((await p.textContent('#layer')).trim().length > 40, 'SOS : étape suivante');
+  await p.closeLayer();
+  for (const id of ['urge', 'delay', 'triggers', 'breath', 'ground', 'stress', 'cbt', 'plan']) {
+    await p.go('outils'); await p.waitForTimeout(200);
+    await p.evaluate(id => document.querySelector(`[data-a="tool"][data-id="${id}"]`).click(), id); await p.waitForTimeout(400);
+    const txt = (await p.textContent('#layer')).trim(); assert.ok(txt.length > 30, 'exercice ouvert : ' + id);
+    await p.evaluate(() => { const b = [...document.querySelectorAll('#layer .btn.primary')].find(x => x.offsetParent && !x.disabled); b && b.click(); }); await p.waitForTimeout(300);
+    await p.closeLayer();
+  }
+  assert.deepEqual(p.errors, []);
 });
 
 test('Suivi', 'Après un écart : le total des jours sans est mis en avant, pas un grand « 0 » (fr et en)', async (b, base) => {

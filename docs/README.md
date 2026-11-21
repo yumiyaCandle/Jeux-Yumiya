@@ -2,6 +2,9 @@
 
 | Document | Contenu |
 |---|---|
+| [AUDIT-REFONTE.md](AUDIT-REFONTE.md) | Refonte du 21/11/2026 : diagnostic, bugs corrigés, ajouts, chiffrement web, ce qui n’a pas été fait et pourquoi |
+| [TESTS-REFONTE.md](TESTS-REFONTE.md) | Rapport de tests : les 24 points demandés, résultats, ce qui n’a pas pu être testé |
+| [ACTIONS-RESTANTES.md](ACTIONS-RESTANTES.md) | Ce qui demande ton intervention avant la publication |
 | [AUDIT.md](AUDIT.md) | Rapport d’audit : problèmes classés, corrections, bugs trouvés en test, résultat |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Documentation technique : données, stockage chiffré, sécurité, rappels, langues, tests |
 | [PUBLICATION.md](PUBLICATION.md) | Checklists App Store et Google Play, textes des fiches, éléments à fournir |
