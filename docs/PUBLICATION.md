@@ -48,7 +48,7 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 **Technique**
 - [ ] Cible **API 36 (Android 16)** : obligatoire pour les nouvelles apps et mises à jour depuis le 31/08/2026 (déjà configuré). Minimum API 24.
 - [ ] Fichier **.aab** signé avec la clé d’upload ; Play App Signing activé.
-- [ ] Permissions : INTERNET, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, WAKE_LOCK. `SCHEDULE_EXACT_ALARM` **retirée**. Aucune permission sensible (localisation, contacts, stockage, caméra).
+- [ ] Permissions : INTERNET, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, WAKE_LOCK, VIBRATE (retour haptique, permission ordinaire sans demande). `SCHEDULE_EXACT_ALARM` **retirée**. Aucune permission sensible (localisation, contacts, stockage, caméra).
 - [ ] `allowBackup="false"` (données chiffrées par une clé non exportable).
 - [ ] Essais sur au moins un téléphone réel récent (Android 14 à 16) et un ancien (Android 8 à 10), voir `TESTS-APPAREILS.md`.
 

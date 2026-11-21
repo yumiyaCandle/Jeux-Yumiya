@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "LIBRE – application iPhone et Android (Capacitor 8)",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "web": "node scripts/sync-web.mjs",
     "sync": "node scripts/sync-web.mjs && npx cap sync",
@@ -17,6 +19,7 @@
     "@capacitor/app": "8.1.2",
     "@capacitor/core": "8.6.2",
     "@capacitor/filesystem": "8.1.5",
+    "@capacitor/haptics": "8.0.2",
     "@capacitor/ios": "8.6.2",
     "@capacitor/local-notifications": "8.3.1",
     "@capacitor/share": "8.0.3"

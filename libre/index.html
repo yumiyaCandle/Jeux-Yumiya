@@ -1829,15 +1829,24 @@ html.fx #app .hm-why .hm-reason{font-size:.86rem;opacity:.85}
 html.fx[data-theme="dark"] #app .hm-why .hm-quote{color:#F1ECFF}
 /* Graphiques : barres à la couleur d’accent, coins arrondis */
 html.fx{--bar:color-mix(in srgb,var(--green-strong) 62%,#9AA8BC)}
-@media (prefers-color-scheme: dark){html.fx:not([data-theme="light"]){--bar:color-mix(in srgb,var(--green) 40%,#2A3D5C)}}
-html.fx[data-theme="dark"]{--bar:color-mix(in srgb,var(--green) 40%,#2A3D5C)}
-html.fx #app .chart .gbar{rx:6px}
+@media (prefers-color-scheme: dark){html.fx:not([data-theme="light"]){--bar:color-mix(in srgb,var(--green) 55%,#8FA6C6)}}
+html.fx[data-theme="dark"]{--bar:color-mix(in srgb,var(--green) 55%,#8FA6C6)}
 /* Photos d’en-tête plus basses : le contenu remonte */
 html.fx #app .ph-fig.page-ph .ph,html.fx #app .ph-fig.j-cover .ph,html.fx #app .ph-fig.lib-cover .ph{height:132px!important;max-height:132px!important;aspect-ratio:auto!important;border-radius:22px!important;overflow:hidden}
 html.fx #app .ph-fig.page-ph img,html.fx #app .ph-fig.j-cover img,html.fx #app .ph-fig.lib-cover img{width:100%!important;height:100%!important;object-fit:cover!important}
 /* Cartes d’habitude plus aérées : actions secondaires discrètes */
 html.fx #app .h-tools{gap:16px;font-size:.88rem}
 html.fx #app .h-tools .link{font-weight:600}
+
+/* Contraste élevé demandé par le système : surfaces presque opaques, bordures franches */
+@media (prefers-contrast: more){
+  html.fx #app .card:not(.card .card),html.fx #app .hm-p:not(.hm-hero),html.fx .sheet,html.fx .nav{background:var(--card)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:1.5px solid var(--ink)!important}
+  html.fx #amb::before{opacity:.35}}
+
+/* Anneaux de la semaine : palette validée (daltonisme, luminosité, contraste) pour chaque thème */
+:root{--ring1:#2FBF71;--ring2:#D94FA0;--ring3:#3F8FE8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ring1:#2AA866;--ring2:#D2569E;--ring3:#4A8BE0}}
+:root[data-theme="dark"]{--ring1:#2AA866;--ring2:#D2569E;--ring3:#4A8BE0}
 </style>
 </head>
 <body>
@@ -2194,7 +2203,12 @@ function toast(title,body,act){
   document.body.appendChild(el);clearTimeout(toastT);toastT=setTimeout(()=>toastOut(el),act?7000:4200);
   el.onclick=e=>{const isAct=e.target.closest('.tact');toastOut(el);if(isAct&&act)act.fn()};
 }
-function haptic(){try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}}
+/* Retour haptique : moteur natif d’iOS et d’Android dans l’app (navigator.vibrate n’existe pas sur iPhone),
+   vibration courte dans les navigateurs qui la permettent. kind : 'light' (appui), 'success' (action terminée). */
+const HAPTIC_SUCCESS=new Set(['saveLog','saveJournal','lapseSave','planSave','goalDone','plDone','habitSave','sosOk']);
+function haptic(kind){try{const H=typeof CAP==='function'&&CAP('Haptics');
+  if(H){if(kind==='success')H.notification({type:'SUCCESS'}).catch(()=>{});else H.impact({style:'LIGHT'}).catch(()=>{});return}
+  navigator.vibrate&&navigator.vibrate(kind==='success'?[10,40,14]:8)}catch(e){}}
 function checkBadges(silent){
   const fresh=[];
   for(const h of S.habits){
@@ -2427,8 +2441,8 @@ function hmWeek(h){
     return `<li class="${cls}"><span class="hm-wl">${esc(d)}</span><span class="hm-wd" aria-label="${esc(fdate(a,{weekday:'long'}))} : ${esc(cls.includes('clean')?t('sans consommation'):cls.includes('used')?t('consommation'):'—')}">${cls.includes('clean')?ic('check','sm'):nf(new Date(a).getDate(),0)}</span></li>`}).join('');
   /* Anneaux de la semaine (effets visuels) : jours sans, envies traversées, bilans du jour */
   const n=Math.max(1,count),wsT=ws,sw=S.sos.filter(x=>x.ts>=wsT),ck=TS().checkins;let ckd=0;for(let i=0;i<7;i++){const a=addDays(ws,i);if(a<=today&&ck[dayKey(a)])ckd++}
-  const days=Math.max(1,Math.round((today-ws)/DAY)+1),R=[[clean/n,'#2FD27A',t('Jours sans')],[sw.length?sw.filter(x=>x.ok).length/sw.length:0,'#FF5A5F',t('Envies traversées')],[ckd/days,'#3FA8FF',t('Bilans du jour')]];
-  const rings=`<div class="hm-wrings" role="img" aria-label="${esc(R.map(r=>r[2]+' : '+Math.round(r[0]*100)+' %').join(', '))}"><svg viewBox="0 0 100 100" aria-hidden="true">${R.map(([v,c],i)=>{const r=42-i*13,C=2*Math.PI*r;return `<circle cx="50" cy="50" r="${r}" fill="none" stroke="${c}" stroke-opacity=".18" stroke-width="10"/><circle class="wr" cx="50" cy="50" r="${r}" fill="none" stroke="${c}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C*(1-Math.min(1,v))).toFixed(1)}" style="--c:${C.toFixed(1)}"/>`}).join('')}</svg>
+  const days=Math.max(1,Math.round((today-ws)/DAY)+1),R=[[clean/n,'var(--ring1)',t('Jours sans')],[sw.length?sw.filter(x=>x.ok).length/sw.length:0,'var(--ring2)',t('Envies traversées')],[ckd/days,'var(--ring3)',t('Bilans du jour')]];
+  const rings=`<div class="hm-wrings" role="img" aria-label="${esc(R.map(r=>r[2]+' : '+Math.round(r[0]*100)+' %').join(', '))}"><svg viewBox="0 0 100 100" aria-hidden="true">${R.map(([v,c],i)=>{const r=42-i*13,C=2*Math.PI*r;return `<circle cx="50" cy="50" r="${r}" fill="none" style="stroke:${c}" stroke-opacity=".18" stroke-width="10"/><circle class="wr" cx="50" cy="50" r="${r}" fill="none" style="stroke:${c}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C*(1-Math.min(1,v))).toFixed(1)}" style="--c:${C.toFixed(1)}"/>`}).join('')}</svg>
     <ul>${R.map(([v,c,l])=>`<li><i style="background:${c}"></i>${esc(l)} <b class="num">${nf(Math.round(v*100),0)} %</b></li>`).join('')}</ul></div>`;
   return `<section class="hm-p hm-week">${rings}<div class="hm-row"><p class="hm-k">${esc(t('Ta semaine'))}</p><span class="hm-sub">${t('<b>{clean}</b> / {total} jours sans',{clean:nf(clean,0),total:nf(count,0)})}</span></div><ol class="hm-days7">${cells}</ol><a class="link" href="#calendrier">${esc(t('Calendrier'))}</a></section>`;
 }
@@ -2721,10 +2735,11 @@ function bars(vals,labels,opts){
   opts=opts||{};const W=320,H=150,L=30,B=22,Tp=18,max=niceMax(Math.max(...vals,opts.ref||0,1));
   const n=vals.length,cw=(W-L-4)/n,bw=Math.min(28,cw*.62);
   const y=v=>Tp+(H-Tp-B)*(1-v/max);
-  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||t('Graphique'))}" direction="ltr">`;
+  const cid='bc'+(bars.n=(bars.n||0)+1);
+  let s=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts.aria||t('Graphique'))}" direction="ltr"><defs><clipPath id="${cid}"><rect x="0" y="0" width="${W}" height="${H-B}"/></clipPath></defs>`;
   [0,.5,1].forEach(f=>{const v=max*f,yy=y(v);s+=`<line class="grid" x1="${L}" x2="${W}" y1="${yy}" y2="${yy}"/><text x="${L-6}" y="${yy+3}" text-anchor="end">${nf(v,max<5?1:0)}</text>`});
   vals.forEach((v,i)=>{const x=L+cw*i+(cw-bw)/2,yy=y(v),h=Math.max(v>0?2:0,H-B-yy);const last=i===n-1;
-    s+=`<rect class="gbar" tabindex="0" data-tip="${esc(((opts.tips&&opts.tips[i])||labels[i])?((opts.tips&&opts.tips[i])||labels[i])+' : '+nf(v):nf(v))}" x="${x}" y="${H-B-h}" width="${bw}" height="${h}" rx="4" style="--i:${i};fill:${last?'var(--green)':opts.color||'var(--bar)'};opacity:${last?1:.82}"><title>${esc(labels[i])} : ${nf(v)}</title></rect>`;
+    s+=`<rect class="gbar" clip-path="url(#${cid})" tabindex="0" data-tip="${esc(((opts.tips&&opts.tips[i])||labels[i])?((opts.tips&&opts.tips[i])||labels[i])+' : '+nf(v):nf(v))}" x="${x}" y="${H-B-h}" width="${bw}" height="${h?h+4:0}" rx="4" style="--i:${i};fill:${last?'var(--green)':opts.color||'var(--bar)'};opacity:${last?1:.82}"><title>${esc(labels[i])} : ${nf(v)}</title></rect>`;
     if(v>0&&(last||n<=8))s+=`<text x="${x+bw/2}" y="${H-B-h-4}" text-anchor="middle" style="fill:var(--ink);font-weight:700">${nf(v)}</text>`;
     s+=`<text x="${x+bw/2}" y="${H-6}" text-anchor="middle">${esc(labels[i])}</text>`});
   if(opts.ref){const yy=y(opts.ref);s+=`<line class="ref" x1="${L}" x2="${W}" y1="${yy}" y2="${yy}"/><text x="${W-2}" y="${yy-4}" text-anchor="end" style="fill:var(--amber);font-weight:700">${esc(opts.refLabel||'')}</text>`}
@@ -3428,7 +3443,7 @@ function drawSos(){
 function toggleBreath(){
   const s=ui.sos;s.breathing=!s.breathing;clearInterval(breathT);
   if(s.breathing){let phase=0;const tick=()=>{const o=$('#orb'),x=$('#btxt');if(!o){clearInterval(breathT);return}
-      if(phase%2===0){o.style.transform='scale(1.75)';x.textContent=t('Inspire…')}else{o.style.transform='scale(.85)';x.textContent=t('Expire…');s.cycles++;const c=$('#bcyc');if(c)c.textContent=tn(s.cycles,'{n} cycle','{n} cycles')}phase++};
+      haptic();if(phase%2===0){o.style.transform='scale(1.75)';x.textContent=t('Inspire…')}else{o.style.transform='scale(.85)';x.textContent=t('Expire…');s.cycles++;const c=$('#bcyc');if(c)c.textContent=tn(s.cycles,'{n} cycle','{n} cycles')}phase++};
     drawSos();requestAnimationFrame(()=>requestAnimationFrame(tick));breathT=setInterval(tick,5000)}
   else drawSos();
 }
@@ -4472,7 +4487,7 @@ function sparkline(s){const pts=[{v:s.before}].concat(s.samples);if(pts.length<2
 function breathTick(){const s=ui.tool,R=RHYTHMS.find(r=>r.id===s.rh)||RHYTHMS[0],cyc=R.i+R.o;
   s.bt=(s.bt||0)+1;const ph=s.bt%cyc,inh=ph<R.i,left=inh?R.i-ph:cyc-ph;
   const o=$('#borb'),x=$('#btx'),c=$('#bsec');if(!o)return;
-  if(ph===0){o.className='borb in';x.textContent=t('Inspire…')}else if(ph===R.i){o.className='borb out';x.textContent=t('Expire…')}
+  if(ph===0){haptic();o.className='borb in';x.textContent=t('Inspire…')}else if(ph===R.i){haptic();o.className='borb out';x.textContent=t('Expire…')}
   if(c)c.textContent=nf(left,0);if(ph===0&&s.bt>1){s.cycles=(s.cycles||0)+1;const b=$('#bcyc');if(b)b.textContent=tn(s.cycles,'{n} cycle','{n} cycles')}}
 
 /* ---------- Enregistrements ---------- */
@@ -4613,7 +4628,7 @@ function s5Tick(){const s=ui.s5;if(!s||!s.run)return;s.el++;
   if(prev&&prev.i!==ph.i){drawS5();return}
   const c=$('#s5-clock');if(c)c.textContent=s5Clock(S5_TOTAL-s.el);
   const pl=$('#s5-pl');if(pl)pl.style.width=Math.round(s.el/S5_TOTAL*100)+'%';
-  const b=$('#s5-bt');if(b){const inh=(s.el-ph.start)%10<5;b.textContent=inh?t('Inspire'):t('Expire');const o=$('#s5-orb');if(o)o.classList.toggle('in',inh)}
+  const b=$('#s5-bt');if(b){const inh=(s.el-ph.start)%10<5;if(b.dataset.inh!==String(inh)){if(b.dataset.inh!=null)haptic();b.dataset.inh=String(inh)}b.textContent=inh?t('Inspire'):t('Expire');const o=$('#s5-orb');if(o)o.classList.toggle('in',inh)}
 }
 function s5Clock(sec){sec=Math.max(0,sec);return clockTxt(sec)}
 function s5Acts(h){const P=planData(),out=[];P.strategies.slice(0,2).forEach(x=>out.push({v:x,own:1}));
@@ -5096,7 +5111,7 @@ const A10={
   qsJournal:()=>{S.sos.push({ts:now(),ok:false,intensity:ui.sosq?ui.sosq.intensity:null});save();closeSheet();journalForm({craving:ui.sosq?ui.sosq.intensity:5})}
 };
 Object.assign(A,A6,A7,A8,A9,A10,A_S5,A_NT,A_HK);
-document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(!f)return;if(HAPTIC_ON.has(el.dataset.a))haptic();
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(!f)return;if(HAPTIC_ON.has(el.dataset.a))haptic(HAPTIC_SUCCESS.has(el.dataset.a)?'success':'light');
   if(el.tagName==='INPUT')return; f(el,e)});
 document.addEventListener('change',e=>{const el=e.target;
   if(el.dataset&&el.dataset.nt){ntInput(el);return}

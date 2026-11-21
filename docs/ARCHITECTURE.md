@@ -75,6 +75,14 @@ Inspirée d’une vidéo de présentation fournie par l’éditeur, adaptée aux
   barre d’onglets flottante en pilule sur téléphone, onglet actif dans un rond sombre.
 - Tout est coupé si le système demande moins d’animations (`prefers-reduced-motion`) ; le verre devient opaque si le système demande moins de transparence.
 
+## Finitions (guides Apple Design et dataviz)
+
+- Retour haptique natif (plugin Capacitor Haptics) : léger à l’appui, « succès » quand une action se termine, une pulsation à chaque phase de respiration guidée ;
+  vibration courte dans les navigateurs qui la permettent. (`navigator.vibrate` n’existe pas sur iPhone.)
+- Mode « contraste élevé » du système : surfaces presque opaques, bordures franches.
+- Graphiques : barres arrondies en haut et posées à plat sur l’axe ; anneaux de la semaine avec une palette validée par le script dataviz
+  (daltonisme, luminosité, contraste) dans chaque thème ; barres sombres à 4:1 de contraste.
+
 ## Langues
 
 Catalogues pour 19 langues + compléments `EXTRA`. Interface complète : fr, en, de, it, es, pt. Les 14 autres sont signalées « Partielle »
