@@ -1,5 +1,7 @@
 # LIBRE — Audit avant publication App Store / Google Play
 
+> **Document historique (version 1, 20 novembre 2026).** Il décrit l’état de départ : le projet natif s’appelait alors `libre-ios/` et utilisait Capacitor 7. Ces points ont été corrigés depuis : le projet actuel est `libre-app/` (iOS et Android, **Capacitor 8.6**). L’état à jour est dans `AUDIT-V3.md`.
+
 Audit réalisé le 20 novembre 2026 sur la branche `claude/libre-photography-visual-identity-3h9i40`
 (`libre/index.html`, ~2,1 Mo, application monopage ; `libre-ios/` projet Capacitor 7).
 Le fichier « LIBRE.html » joint au message n’a pas été reçu : l’audit porte sur la version du dépôt,

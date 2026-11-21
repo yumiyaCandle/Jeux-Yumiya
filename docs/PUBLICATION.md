@@ -1,6 +1,6 @@
 # Publier LIBRE sur l’App Store et Google Play
 
-Exigences vérifiées le 20 novembre 2026 sur les pages officielles d’Apple et de Google (voir « Sources » en bas).
+Exigences vérifiées le 20 novembre 2026 sur les pages officielles d’Apple et de Google (voir « Sources » en bas) ; document mis à jour le 22 novembre 2026 (version 3). Rien ici ne signifie qu’Apple ou Google ont accepté l’app : elle n’a encore été soumise à aucun store.
 Elles changent régulièrement : relis-les au moment de la soumission.
 
 ## 1. Ce que tu dois fournir toi-même
@@ -18,7 +18,7 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 | **Clé de signature Android** (clé d’upload) et ses mots de passe | Signer le fichier .aab | À garder hors du dépôt |
 | **Décision iPad** | L’app fonctionne sur iPad (mise en page large testée) ; si tu ne veux pas fournir de captures iPad, passer `TARGETED_DEVICE_FAMILY` à `1` | Xcode |
 | **Pays de distribution** | Les numéros d’aide intégrés couvrent certains pays ; vérifier ceux de chaque pays choisi | Stores |
-| **Traductions humaines** des contenus longs (bibliothèque, frise « Mon corps ») pour de, it, es, pt | Aujourd’hui ces contenus s’affichent en anglais dans ces langues | — |
+| **Traductions humaines** des contenus longs (bibliothèque, frise « Mon corps ») pour de, it, es, pt, et des 14 langues non proposées au lancement | Aujourd’hui ces contenus s’affichent en anglais dans ces langues ; fichiers prêts dans `i18n/a-traduire/` | `LANGUES.md` |
 
 ## 2. Checklist App Store (Apple)
 
@@ -26,7 +26,8 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 - [ ] Construire avec **Xcode 26 / SDK iOS 26** ou plus récent (obligatoire depuis le 28/04/2026).
 - [ ] Cible minimale iOS 15 (imposée par Capacitor 8).
 - [ ] Équipe de signature choisie, identifiant unique, capacité **HealthKit** active (`App.entitlements` déjà référencé).
-- [ ] `Info.plist` : `NSHealthShareUsageDescription` et `NSHealthUpdateUsageDescription` présents (déjà fait) ; textes relus.
+- [ ] `Info.plist` : `NSHealthShareUsageDescription` (lecture seule ; `NSHealthUpdateUsageDescription` retiré car LIBRE n’écrit rien) et `NSFaceIDUsageDescription` (biométrie, option encore cachée) ; traductions dans `fr/en/de/it/es/pt.lproj/InfoPlist.strings`, à vérifier dans Xcode (Build Phases › Copy Bundle Resources).
+- [ ] `capacitor.config.json` : `loggingBehavior: "none"` (aucun journal des appels natifs, même en version de développement) ; vérifier après chaque `npx cap sync`.
 - [ ] `PrivacyInfo.xcprivacy` présent (déjà fait) ; Xcode › Product › Archive › « Generate Privacy Report » sans avertissement.
 - [ ] `ITSAppUsesNonExemptEncryption = NO` (chiffrement standard du système uniquement) ; confirmer la réponse dans App Store Connect. Pour la France, Apple peut demander une déclaration ; elle n’est en général pas requise pour ce type d’usage, à vérifier au moment de la soumission.
 - [ ] Icône 1024 px sans transparence (générée) ; écran de lancement (généré).
@@ -50,6 +51,8 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 - [ ] Fichier **.aab** signé avec la clé d’upload ; Play App Signing activé.
 - [ ] Permissions : INTERNET, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, WAKE_LOCK, VIBRATE (retour haptique, permission ordinaire sans demande). `SCHEDULE_EXACT_ALARM` **retirée**. Aucune permission sensible (localisation, contacts, stockage, caméra).
 - [ ] `allowBackup="false"` (données chiffrées par une clé non exportable).
+- [ ] Dépendance `androidx.biometric:biometric:1.1.0` (biométrie, option cachée tant qu’elle n’est pas essayée) ; aucune permission supplémentaire n’est déclarée (`USE_BIOMETRIC` et l’ancienne `USE_FINGERPRINT` sont ajoutées par la bibliothèque : permissions normales, sans demande à l’utilisateur ; permissions finales vérifiées dans le manifeste fusionné : INTERNET, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, WAKE_LOCK, VIBRATE, USE_BIOMETRIC, USE_FINGERPRINT).
+- [ ] `versionCode` à augmenter à chaque envoi (`android/app/build.gradle`).
 - [ ] Essais sur au moins un téléphone réel récent (Android 14 à 16) et un ancien (Android 8 à 10), voir `TESTS-APPAREILS.md`.
 
 **Play Console › Contenu de l’app**
@@ -79,7 +82,7 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 > • Fiches d’information sourcées (OMS, NIDA, HAS, NICE…) et page « Quand consulter »
 > • Rappels discrets et personnalisables
 > • Santé Apple (facultatif) : ton activité et ton sommeil à côté de ton suivi
-> • 19 langues
+> • 6 langues : français, anglais, allemand, italien, espagnol, portugais
 >
 > Gratuit, sans abonnement : tous les outils sont accessibles. Tes données restent sur ton téléphone, chiffrées. Pas de compte, pas de publicité, pas de mesure d’audience.
 

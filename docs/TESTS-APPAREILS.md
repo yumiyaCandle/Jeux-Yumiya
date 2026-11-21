@@ -93,3 +93,24 @@ un Android récent (Android 15 ou 16, Pixel ou Samsung), un Android ancien et mo
 | 46 | Ouverture à froid en moins de 2 s sur l’appareil le plus ancien | | |
 | 47 | Avec une sauvegarde de 3 ans (fichier fourni par `tests/` ou créé), Statistiques et Journal s’ouvrent en moins de 2 s | | |
 | 48 | Batterie : après une journée, LIBRE n’apparaît pas parmi les gros consommateurs | | |
+
+## Ajouts de la version 3
+
+Chaque ligne : résultat attendu ; noter « réussi », « échoué » (avec capture) ou « non fait ».
+
+**iPhone et Android**
+- [ ] Redémarrer le téléphone, puis ouvrir LIBRE **avant** de le déverrouiller (depuis une notification si possible) : LIBRE affiche « Tes données ne sont pas encore accessibles » et « Réessayer » ; après déverrouillage, « Réessayer » rouvre les données. Rien n'est perdu.
+- [ ] Mode avion : ouvrir LIBRE, SOS, exercices, journal, statistiques : tout fonctionne sans réseau.
+- [ ] Rappels en mode avion et après redémarrage : ils arrivent à l'heure prévue, texte neutre sur l'écran verrouillé.
+- [ ] Texte du système au maximum (iOS : Réglages › Accessibilité › Affichage et taille du texte ; Android : Taille de police) : aucun texte coupé sur Accueil, Habitudes, Progrès, Profil.
+- [ ] VoiceOver / TalkBack : parcourir Accueil, ouvrir SOS, ajouter une consommation, lire un graphique (glisser à un doigt sur le graphique, ou il annonce le résumé).
+- [ ] Changer la langue du téléphone en allemand puis en arabe : LIBRE s'affiche en allemand, puis en anglais (l'arabe n'est pas proposé au lancement).
+- [ ] La demande d'autorisation Santé (iPhone) s'affiche dans la langue du téléphone (fr, en, de, it, es, pt).
+
+**Biométrie (option cachée : à faire avant de l'activer, voir `BIOMETRIE.md`)**
+- [ ] Face ID, Touch ID, empreinte Android : activer, réussir, annuler, échouer ; le code reste utilisable.
+- [ ] Téléphone sans biométrie : message « Indisponible sur ce téléphone ».
+
+**Android uniquement**
+- [ ] Bouton Retour sur chaque écran et dans chaque fenêtre : ferme la fenêtre, revient en arrière, puis réduit l'app.
+- [ ] Refuser la permission de notifications, puis l'accorder depuis les réglages : LIBRE l'indique correctement.

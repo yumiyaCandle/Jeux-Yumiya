@@ -4,6 +4,11 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.AtomicFile;
 
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -35,10 +40,12 @@ import javax.crypto.spec.GCMParameterSpec;
  *
  * JavaScript : Capacitor.Plugins.LibreVault
  *   isAvailable()              -> { available }
- *   read({ name })             -> { data: string | null }
+ *   read({ name })             -> { data: string | null }  (erreurs : UNAVAILABLE momentané, UNREADABLE définitif)
  *   write({ name, data })      -> {}
  *   remove({ name })           -> {}
  *   move({ from, to })         -> {}   (met de côté un fichier illisible sans l’effacer)
+ *   biometricStatus()          -> { available, kind }   (empreinte, visage… ; NON ESSAYÉ SUR APPAREIL)
+ *   biometricAuth({ title, subtitle, cancel }) -> {}  ou erreur CANCELED / FAILED / UNAVAILABLE
  */
 @CapacitorPlugin(name = "LibreVault")
 public class LibreVaultPlugin extends Plugin {
@@ -104,12 +111,22 @@ public class LibreVaultPlugin extends Plugin {
         File f = file(name);
         JSObject r = new JSObject();
         if (!f.exists()) { r.put("data", null); call.resolve(r); return; }
+        // UNAVAILABLE : Keystore ou fichier momentanément inaccessibles -> l’app attend et propose de réessayer.
+        // UNREADABLE : le déchiffrement échoue (clé différente, fichier altéré) -> l’app met le fichier de côté.
+        byte[] blob;
+        SecretKey k;
         try {
-            byte[] blob = new AtomicFile(f).readFully();
-            r.put("data", new String(open(key(), blob), StandardCharsets.UTF_8));
+            blob = new AtomicFile(f).readFully();
+            k = key();
+        } catch (Exception e) {
+            call.reject("Coffre momentanément inaccessible", "UNAVAILABLE", e);
+            return;
+        }
+        try {
+            r.put("data", new String(open(k, blob), StandardCharsets.UTF_8));
             call.resolve(r);
         } catch (Exception e) {
-            // Clé absente ou fichier altéré : on ne renvoie rien, on n’efface rien.
+            // Clé différente ou fichier altéré : on ne renvoie rien, on n’efface rien.
             call.reject("Lecture impossible", "UNREADABLE", e);
         }
     }
@@ -139,6 +156,48 @@ public class LibreVaultPlugin extends Plugin {
         if (!validName(name)) { call.reject("Nom invalide", "BAD_NAME"); return; }
         new AtomicFile(file(name)).delete();
         call.resolve();
+    }
+
+    /* ---------- Déverrouillage biométrique (facultatif) ----------
+       Sert seulement à lever le verrouillage par code de LIBRE (qui masque l’app) : la biométrie ne remplace ni le code
+       ni le chiffrement du coffre, qui ne dépend pas d’elle. Écrit d’après la documentation AndroidX Biometric,
+       compilé mais pas encore essayé sur un téléphone : l’option reste cachée dans l’app (BIO_ENABLED). */
+    private static final int AUTHENTICATORS = BiometricManager.Authenticators.BIOMETRIC_STRONG | BiometricManager.Authenticators.BIOMETRIC_WEAK;
+
+    @PluginMethod
+    public void biometricStatus(PluginCall call) {
+        JSObject r = new JSObject();
+        int st = BiometricManager.from(getContext()).canAuthenticate(AUTHENTICATORS);
+        r.put("available", st == BiometricManager.BIOMETRIC_SUCCESS);
+        r.put("kind", "biometric");
+        r.put("status", st);
+        call.resolve(r);
+    }
+
+    @PluginMethod
+    public void biometricAuth(PluginCall call) {
+        if (!(getActivity() instanceof FragmentActivity)) { call.reject("Indisponible", "UNAVAILABLE"); return; }
+        if (BiometricManager.from(getContext()).canAuthenticate(AUTHENTICATORS) != BiometricManager.BIOMETRIC_SUCCESS) {
+            call.reject("Indisponible", "UNAVAILABLE"); return;
+        }
+        final String title = call.getString("title", "LIBRE");
+        final String subtitle = call.getString("subtitle", "");
+        final String cancel = call.getString("cancel", "Annuler");
+        final FragmentActivity act = (FragmentActivity) getActivity();
+        act.runOnUiThread(() -> {
+            BiometricPrompt prompt = new BiometricPrompt(act, ContextCompat.getMainExecutor(act), new BiometricPrompt.AuthenticationCallback() {
+                @Override public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) { call.resolve(); }
+                @Override public void onAuthenticationError(int code, CharSequence msg) {
+                    boolean canceled = code == BiometricPrompt.ERROR_USER_CANCELED || code == BiometricPrompt.ERROR_NEGATIVE_BUTTON || code == BiometricPrompt.ERROR_CANCELED;
+                    call.reject(String.valueOf(msg), canceled ? "CANCELED" : "FAILED");
+                }
+                // onAuthenticationFailed : tentative non reconnue ; le système laisse réessayer, rien à renvoyer.
+            });
+            BiometricPrompt.PromptInfo.Builder info = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle(title).setNegativeButtonText(cancel).setAllowedAuthenticators(AUTHENTICATORS).setConfirmationRequired(false);
+            if (!subtitle.isEmpty()) info.setSubtitle(subtitle);
+            prompt.authenticate(info.build());
+        });
     }
 
     @PluginMethod

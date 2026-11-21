@@ -3,7 +3,7 @@
   "appName": "LIBRE",
   "webDir": "www",
   "backgroundColor": "#0E2747",
-  "loggingBehavior": "debug",
+  "loggingBehavior": "none",
   "ios": { "contentInset": "never", "limitsNavigationsToAppBoundDomains": false, "scrollEnabled": true },
   "android": { "allowMixedContent": false, "captureInput": false, "webContentsDebuggingEnabled": false },
   "plugins": {

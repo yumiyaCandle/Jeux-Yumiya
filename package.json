@@ -1,0 +1,22 @@
+{
+  "name": "libre-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LIBRE – tests automatisés (Playwright) et outils de fabrication. L'app native a son propre package.json dans libre-app/.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test:setup": "playwright install chromium",
+    "test": "python3 tools/i18n.py audit && python3 tools/build-standalone.py --check && node tests/run.js",
+    "test:e2e": "node tests/run.js",
+    "check:i18n": "python3 tools/i18n.py audit",
+    "check:standalone": "python3 tools/build-standalone.py --check",
+    "check:sources": "python3 tools/check-sources.py",
+    "build:standalone": "python3 tools/build-standalone.py",
+    "build:all": "python3 tools/build-standalone.py && cd libre-app && npm run sync"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}

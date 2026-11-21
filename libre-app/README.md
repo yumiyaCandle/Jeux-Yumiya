@@ -27,7 +27,7 @@ libre-app/
 
 | Option | Pour | Contre | Verdict |
 |---|---|---|---|
-| **Capacitor 8** | Réutilise tel quel le code testé de LIBRE (5 500 lignes, 19 langues) ; vrais projets Xcode / Android Studio ; plugins natifs écrits en Swift et Java quand il le faut | Interface rendue dans une WebView | **Retenu** : publier sans réécrire, en gardant une seule base de code |
+| **Capacitor 8** | Réutilise tel quel le code testé de LIBRE (une seule source, 6 langues proposées) ; vrais projets Xcode / Android Studio ; plugins natifs écrits en Swift et Java quand il le faut | Interface rendue dans une WebView | **Retenu** : publier sans réécrire, en gardant une seule base de code |
 | Réécriture SwiftUI + Kotlin | Interface 100 % native | Deux réécritures complètes, risques de régression, coût ×3 | Disproportionné pour la v1 |
 | React Native / Flutter | Une base mobile commune | Réécriture complète de l’interface | Même problème que ci-dessus |
 | PWA seule | Aucun store | Pas de HealthKit, rappels seulement app ouverte, pas de présence sur les stores | Insuffisant |

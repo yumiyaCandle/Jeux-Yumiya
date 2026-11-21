@@ -1,7 +1,9 @@
 """Fabrique libre/LIBRE.html : une version autonome (un seul fichier, photos et police incluses, sans service worker).
-Usage, depuis la racine du dépôt : python3 tools/build-standalone.py [dossier de copie facultatif]"""
+Usage, depuis la racine du dépôt : python3 tools/build-standalone.py [dossier de copie facultatif]
+       python3 tools/build-standalone.py --check   (vérifie que libre/LIBRE.html correspond à la source ; code 1 sinon)"""
 import base64,json,re,sys
-SP=sys.argv[1] if len(sys.argv)>1 else None
+CHECK='--check' in sys.argv
+SP=next((a for a in sys.argv[1:] if a!='--check'),None)
 H=open('libre/index.html',encoding='utf-8').read()
 m=json.load(open('libre/photos/photos.json'))
 data={x['key']:'data:image/webp;base64,'+base64.b64encode(open(f"libre/photos/{x['key']}-720.webp",'rb').read()).decode() for x in m}
@@ -13,4 +15,7 @@ for f in ['latin','latin-ext','cyrillic','vietnamese']:
 # fichier autonome : pas de manifeste ni de service worker (impossible depuis un fichier ouvert directement)
 H,n=re.subn(r'<!--pwa-->.*?<!--/pwa-->','<link rel="icon" href="data:image/svg+xml;base64,'+base64.b64encode(open('libre/icons/icon.svg','rb').read()).decode()+'">',H,flags=re.S);assert n==1
 assert H.count('const PWA_BUILD=true;')==1;H=H.replace('const PWA_BUILD=true;','const PWA_BUILD=false;')
+if CHECK:
+    ok=open('libre/LIBRE.html',encoding='utf-8').read()==H
+    print('LIBRE.html à jour' if ok else 'LIBRE.html N’EST PAS À JOUR : lancer python3 tools/build-standalone.py');sys.exit(0 if ok else 1)
 open('libre/LIBRE.html','w',encoding='utf-8').write(H);(SP and open(SP+'/LIBRE.html','w',encoding='utf-8').write(H));print(len(H)//1024,'Ko')

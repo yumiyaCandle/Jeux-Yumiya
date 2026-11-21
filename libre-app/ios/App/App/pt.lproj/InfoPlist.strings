@@ -1,0 +1,3 @@
+/* Textes affichés par iOS (demandes d’autorisation). Version française de référence : Info.plist. */
+"NSHealthShareUsageDescription" = "Se o permitires, o LIBRE lê os teus passos, distância, minutos de exercício, energia ativa, sono, frequência cardíaca (em repouso e a sua variabilidade) e frequência respiratória, para os mostrar junto do teu acompanhamento. O LIBRE não escreve nada na Saúde. Estes dados ficam no teu iPhone e nunca são enviados.";
+"NSFaceIDUsageDescription" = "O Face ID permite abrir o LIBRE sem escrever o teu código. O teu rosto nunca é enviado ao LIBRE: é o teu iPhone que o verifica.";

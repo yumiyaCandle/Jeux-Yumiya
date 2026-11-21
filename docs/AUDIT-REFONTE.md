@@ -1,5 +1,7 @@
 # LIBRE : audit et refonte du 21 novembre 2026
 
+> **Document historique (version 2, 21 novembre 2026).** La remarque « aucun ZIP n’était joint » concerne cette version-là uniquement. Les chiffres de tests (43) et la liste des langues proposées (19) ont changé depuis : voir `AUDIT-V3.md`, `TESTS.md` et `LANGUES.md`.
+
 Ce document complète `AUDIT.md` (premier audit : PIN, sauvegardes chiffrées, coffre natif, projets iOS et Android).
 Il couvre la mission « audit, refonte et optimisation professionnelle ».
 

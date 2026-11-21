@@ -101,12 +101,45 @@ des concurrents (`docs/ANALYSE-CONCURRENCE.md`) ; test « Après un écart » da
 
 ## Langues
 
-Catalogues pour 19 langues + compléments `EXTRA`. Interface complète : fr, en, de, it, es, pt. Les 14 autres sont signalées « Partielle »
-(interface en anglais, textes de sécurité traduits). Contenus longs (bibliothèque, frise « Mon corps ») : fr et en ; fiches par addiction :
-6 langues. Dates, nombres et devises via `Intl` selon la langue et le pays.
+Catalogues pour 19 langues + compléments `EXTRA` dans `libre/index.html`. **Proposées au lancement : fr, en, de, it, es, pt**
+(`LAUNCH_LANGS` ; les autres restent dans le code, non proposées, voir `LANGUES.md`). Interface entièrement traduite dans ces 6 langues
+(contrôle : `python3 tools/i18n.py audit`, code de sortie 1 sinon). Contenus longs (bibliothèque, frise « Mon corps ») : fr et en ;
+fiches par addiction : 6 langues. Dates, nombres et devises via `Intl` selon la langue et la région.
+
+## Compteurs : ce que chaque chiffre représente
+
+- **Compteur principal** (« 3 jours, 7 h ») : **durée réelle** depuis la dernière consommation (périodes de 24 h, `now() - curStart(h)`).
+  Un jour de changement d'heure dure 23 ou 25 h : le passage au jour suivant peut avoir lieu une heure plus tôt ou plus tard.
+- **Jours sans** (statistiques, calendrier, « jours sans au total ») : **jours calendaires** en heure locale (`cleanDaysOf`, minuit à minuit),
+  calculés avec `setDate` / `setHours` : justes aux changements d'heure et les années bissextiles (test « Calculs », 4 fuseaux).
+- **Record** : la plus longue durée entre deux consommations. **Économies** : estimation à partir de la quantité et du budget saisis.
+- Les données sont horodatées en temps universel ; un changement de fuseau déplace les frontières de jours calendaires, pas les durées.
+
+## Compatibilité des données entre versions
+
+Chaque écriture marque les données avec `dataV` (actuellement 3). Une version plus ancienne qui trouve un `dataV` plus grand
+passe en lecture seule (`DATA_TOO_NEW`) et le signale. Les champs inconnus sont conservés par `normalize()`.
+
+## Coffre natif momentanément inaccessible
+
+Le plugin renvoie `UNAVAILABLE` (trousseau ou fichier inaccessibles, par exemple avant le premier déverrouillage après un redémarrage)
+ou `UNREADABLE` (déchiffrement impossible). `vaultBoot()` attend sur un écran « Réessayer » dans le premier cas (`vaultGate`), et ne met
+le fichier de côté que dans le second.
+
+## Outils du dépôt
+
+| Commande (racine) | Rôle |
+|---|---|
+| `npm ci` puis `npm run test:setup` | Installe Playwright 1.63.0 et Chromium |
+| `npm test` | Contrôle des langues, vérifie que `LIBRE.html` est à jour, puis lance tous les tests (code 1 au premier échec) |
+| `npm run test:e2e -- "<filtre>"` | Lance seulement les tests dont le nom contient le filtre |
+| `npm run build:standalone` | Régénère `libre/LIBRE.html` |
+| `npm run build:all` | Régénère `LIBRE.html` puis copie l'app dans les projets iOS et Android (`npx cap sync`) |
+| `npm run check:sources` | Vérifie les liens cités (accès Internet nécessaire) |
+| `python3 tools/i18n.py export DOSSIER` | Exporte les textes à traduire |
 
 ## Tests
 
-- `tests/run.js` : suite Playwright (serveur intégré, plugins natifs simulés avec la même interface), résultats dans `tests/RESULTATS.md`.
+- `npm test` (voir ci-dessus). `tests/run.js` : suite Playwright (serveur intégré, plugins natifs simulés avec la même interface), résultats dans `tests/RESULTATS.md`.
 - `libre-app/android/app/src/test/` : tests JUnit du format chiffré du coffre.
 - `docs/TESTS-APPAREILS.md` : plan de test manuel sur iPhone et Android.

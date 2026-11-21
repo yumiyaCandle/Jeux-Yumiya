@@ -53,9 +53,11 @@
 	</array>
 	<!-- Santé Apple (facultatif, lecture seule). Texte affiché par iOS dans la feuille d’autorisation. -->
 	<key>NSHealthShareUsageDescription</key>
-	<string>LIBRE lit, si tu l’autorises, tes pas, ton activité, ton sommeil et ta fréquence cardiaque pour les afficher à côté de ton suivi. Ces données restent sur ton iPhone et ne sont jamais envoyées.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>LIBRE n’écrit aucune donnée dans Santé. Elle lit seulement celles que tu autorises.</string>
+	<string>LIBRE lit, si tu l’autorises, tes pas, ta distance, tes minutes d’exercice, ton énergie active, ton sommeil, ta fréquence cardiaque (au repos et sa variabilité) et ta fréquence respiratoire, pour les afficher à côté de ton suivi. LIBRE n’écrit rien dans Santé. Ces données restent sur ton iPhone et ne sont jamais envoyées.</string>
+	<!-- Face ID : demandé seulement si l’utilisateur active le déverrouillage biométrique (option encore cachée, voir docs/BIOMETRIE.md). -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>Face ID permet d’ouvrir LIBRE sans taper ton code. Ton visage n’est jamais transmis à LIBRE : c’est ton iPhone qui le vérifie.</string>
+	<!-- Pas de NSHealthUpdateUsageDescription : LIBRE n’écrit aucune donnée dans Santé (toShare vide). -->
 	<!-- Chiffrement : uniquement le chiffrement standard du système (CryptoKit) pour protéger les données sur l’appareil. À confirmer dans App Store Connect. -->
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>

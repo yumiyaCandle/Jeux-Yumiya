@@ -20,6 +20,7 @@
 		CE4CFD7FA7192C359DACEE0B /* LibreHealthPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80897B0F5BC4449FA701175C /* LibreHealthPlugin.swift */; };
 		C2423BED6056B580D5CCC7F8 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2047B674A9A0E164288AD79D /* MainViewController.swift */; };
 		B69926B2989B5B3DD9C14AE0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 85CCDB3732489B8EDB267EF7 /* PrivacyInfo.xcprivacy */; };
+		9978BFA1F4FC44699621D58F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7B839F393D3482595DC0AB8 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,12 @@
 		2047B674A9A0E164288AD79D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		85CCDB3732489B8EDB267EF7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		31D03A6EDB916C7917D2E836 /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
+		32B551F239544DB98CE8C105 /* InfoPlist.strings */ = {isa = PBXFileReference; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; includeInIndex = 0; };
+		BE736984BC8148B08D1435F9 /* InfoPlist.strings */ = {isa = PBXFileReference; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; includeInIndex = 0; };
+		3BBEA5C30FCE40A685D14E3C /* InfoPlist.strings */ = {isa = PBXFileReference; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; includeInIndex = 0; };
+		0ABC2C2D21154CFFB093D687 /* InfoPlist.strings */ = {isa = PBXFileReference; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; includeInIndex = 0; };
+		525110929CB945B59679B20C /* InfoPlist.strings */ = {isa = PBXFileReference; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; includeInIndex = 0; };
+		2E5307D7A0934897A8586939 /* InfoPlist.strings */ = {isa = PBXFileReference; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.plist.strings; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +82,7 @@
 			children = (
 				9582B6822FE993A50072D4E8 /* SceneDelegate.swift */,
 				8AA628081FDA2AA1BA989C41 /* LibreVaultPlugin.swift */,
+				D7B839F393D3482595DC0AB8 /* InfoPlist.strings */,
 				80897B0F5BC4449FA701175C /* LibreHealthPlugin.swift */,
 				2047B674A9A0E164288AD79D /* MainViewController.swift */,
 				85CCDB3732489B8EDB267EF7 /* PrivacyInfo.xcprivacy */,
@@ -120,8 +128,8 @@
 		504EC2FC1FED79650016851F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastSwiftUpdateCheck = 920;
+				LastUpgradeCheck = 920;
 				TargetAttributes = {
 					504EC3031FED79650016851F = {
 						CreatedOnToolsVersion = 9.2;
@@ -137,6 +145,11 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
+				de,
+				it,
+				es,
+				pt,
 			);
 			mainGroup = 504EC2FB1FED79650016851F;
 			packageReferences = (
@@ -163,6 +176,7 @@
 				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
 				B69926B2989B5B3DD9C14AE0 /* PrivacyInfo.xcprivacy in Resources */,
+				9978BFA1F4FC44699621D58F /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +212,19 @@
 				504EC3111FED79650016851F /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		D7B839F393D3482595DC0AB8 /* InfoPlist.strings */ = {
+			isa = "PBXVariantGroup";
+			children = (
+				32B551F239544DB98CE8C105 /* InfoPlist.strings */,
+				BE736984BC8148B08D1435F9 /* InfoPlist.strings */,
+				3BBEA5C30FCE40A685D14E3C /* InfoPlist.strings */,
+				0ABC2C2D21154CFFB093D687 /* InfoPlist.strings */,
+				525110929CB945B59679B20C /* InfoPlist.strings */,
+				2E5307D7A0934897A8586939 /* InfoPlist.strings */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

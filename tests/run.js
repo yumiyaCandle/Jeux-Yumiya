@@ -27,6 +27,8 @@ const suite = require('./suite');
   md += `**${n('réussi')} réussis · ${n('échoué')} échoués · ${n('non exécuté')} non exécutés** sur ${res.length}.\n\n| Groupe | Test | Résultat | Durée |\n|---|---|---|---|\n`;
   for (const r of res) md += `| ${r.group} | ${r.name} | ${r.status}${r.msg ? ' : ' + r.msg.replace(/\|/g, '/') : ''} | ${(r.ms / 1000).toFixed(1)} s |\n`;
   if (perf) md += `\n## Mesures de charge\n\n${perf.logs} consommations, ${perf.journal} entrées de journal.\n\n| Écran | Temps (ms) |\n|---|---|\n` + Object.entries(perf.times).map(([k, v]) => `| ${k} | ${v} |`).join('\n') + '\n';
+  const perf2 = suite.lastPerf2 || require('./suite').lastPerf2;
+  if (perf2) md += `\n## Téléphone modeste simulé (processeur 4× plus lent)\n\n12 000 consommations, 5 000 entrées de journal ; données chiffrées : ${Math.round(perf2.size / 1024)} Ko.\n\n| Action | Temps (ms) |\n|---|---|\n` + Object.entries(perf2.times).map(([k, v]) => `| ${k} | ${v} |`).join('\n') + '\n';
   md += `\n## Non couvert ici\n\nCes tests simulent les plugins natifs (mêmes appels, mêmes réponses). Ils ne remplacent pas un essai sur un vrai iPhone et un vrai téléphone Android (voir docs/TESTS-APPAREILS.md) : chiffrement natif réel, HealthKit, notifications réelles, VoiceOver et TalkBack.\n`;
   if (!filter) fs.writeFileSync(path.join(__dirname, 'RESULTATS.md'), md);
   process.exit(n('échoué') ? 1 : 0);

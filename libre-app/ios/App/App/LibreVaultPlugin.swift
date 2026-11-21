@@ -2,6 +2,7 @@ import Foundation
 import Capacitor
 import CryptoKit
 import Security
+import LocalAuthentication
 
 /// LIBRE – coffre de données chiffré (iOS).
 ///
@@ -24,7 +25,9 @@ public class LibreVaultPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "read", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "write", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "remove", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "move", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "move", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "biometricStatus", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "biometricAuth", returnType: CAPPluginReturnPromise)
     ]
 
     private let service = "ch.libre.app.vault"
@@ -83,13 +86,22 @@ public class LibreVaultPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func read(_ call: CAPPluginCall) {
         guard let name = valid(call.getString("name")) else { call.reject("Nom invalide", "BAD_NAME"); return }
         queue.async {
+            // Trois cas bien séparés, pour que l’app ne mette jamais de côté un coffre simplement inaccessible :
+            //  - UNAVAILABLE : trousseau ou fichier momentanément inaccessibles (téléphone pas encore déverrouillé
+            //    depuis le démarrage, erreur du système) -> l’app attend et propose de réessayer ;
+            //  - UNREADABLE : le déchiffrement échoue (clé différente, fichier altéré) -> l’app met le fichier de côté.
+            let f: URL, blob: Data, k: SymmetricKey
             do {
-                let f = try self.file(name)
+                f = try self.file(name)
                 guard FileManager.default.fileExists(atPath: f.path) else { call.resolve(["data": NSNull()]); return }
-                let plain = try LibreVaultPlugin.open(try self.key(), try Data(contentsOf: f))
+                blob = try Data(contentsOf: f)
+                k = try self.key()
+            } catch { call.reject("Coffre momentanément inaccessible", "UNAVAILABLE", error); return }
+            do {
+                let plain = try LibreVaultPlugin.open(k, blob)
                 call.resolve(["data": String(decoding: plain, as: UTF8.self)])
             } catch {
-                // Clé absente (sauvegarde non chiffrée restaurée) ou fichier altéré : rien n’est effacé.
+                // Clé différente (sauvegarde non chiffrée restaurée) ou fichier altéré : rien n’est effacé.
                 call.reject("Lecture impossible", "UNREADABLE", error)
             }
         }
@@ -111,6 +123,36 @@ public class LibreVaultPlugin: CAPPlugin, CAPBridgedPlugin {
         queue.async {
             if let f = try? self.file(name) { try? FileManager.default.removeItem(at: f) }
             call.resolve()
+        }
+    }
+
+    // MARK: Déverrouillage biométrique (facultatif)
+    // Lève seulement le verrouillage par code de LIBRE (qui masque l’app) ; le coffre chiffré n’en dépend pas.
+    // Écrit d’après la documentation LocalAuthentication, PAS ENCORE COMPILÉ NI ESSAYÉ sur iPhone :
+    // l’option reste cachée dans l’app (BIO_ENABLED) jusqu’à cet essai.
+    @objc func biometricStatus(_ call: CAPPluginCall) {
+        let ctx = LAContext()
+        var err: NSError?
+        let ok = ctx.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &err)
+        var kind = "biometric"
+        switch ctx.biometryType {
+        case .faceID: kind = "faceid"
+        case .touchID: kind = "touchid"
+        default: break
+        }
+        call.resolve(["available": ok, "kind": kind])
+    }
+    @objc func biometricAuth(_ call: CAPPluginCall) {
+        let ctx = LAContext()
+        ctx.localizedCancelTitle = call.getString("cancel") ?? "Annuler"
+        var err: NSError?
+        guard ctx.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &err) else { call.reject("Indisponible", "UNAVAILABLE"); return }
+        let reason = call.getString("subtitle") ?? call.getString("title") ?? "LIBRE"
+        ctx.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { ok, error in
+            if ok { call.resolve(); return }
+            let code = (error as? LAError)?.code
+            let canceled = code == .userCancel || code == .appCancel || code == .systemCancel || code == .userFallback
+            call.reject("Non reconnu", canceled ? "CANCELED" : "FAILED", error)
         }
     }
 

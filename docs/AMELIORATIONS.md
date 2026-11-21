@@ -1,5 +1,7 @@
 # Améliorations proposées (non développées)
 
+> **Mise à jour version 3 :** la proposition n° 2 (biométrie) est écrite en natif mais désactivée jusqu’à un essai sur téléphone (`BIOMETRIE.md`). L’évaluation à jour des pistes est dans `AUDIT-V3.md` § 6.
+
 LIBRE a déjà beaucoup de fonctions. Les propositions ci-dessous sont classées par utilité réelle pour une personne
 qui veut réduire ou arrêter, puis par coût. Aucune n’ajoute de serveur, de compte ou de transmission de données.
 

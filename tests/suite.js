@@ -137,6 +137,49 @@ test('Sécurité', 'Navigateur : chiffrement facultatif par mot de passe (rien e
   assert.deepEqual(p.errors, []);
 });
 
+test('Sécurité', 'Navigateur chiffré : changer le mot de passe, et deux onglets ouverts qui ne s’écrasent pas', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ name: 'Onglets' })) }); await p.goto(base); await p.settle();
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="wvOn"]').click()); await p.waitForSelector('#wv1');
+  await p.fill('#wv1', 'ancien-mot-de-passe'); await p.fill('#wv2', 'ancien-mot-de-passe'); await p.check('#wvOk'); await p.click('#wvSet button[type=submit]');
+  await p.waitForFunction(() => !document.querySelector('#wvSet'), null, { timeout: 15000 });
+  // changement : mauvais mot de passe actuel refusé, puis nouveau mot de passe
+  await p.evaluate(() => document.querySelector('[data-a="wvPw"]').click()); await p.waitForSelector('#wvc0');
+  await p.fill('#wvc0', 'faux-faux-faux'); await p.fill('#wvc1', 'nouveau-mot-de-passe'); await p.fill('#wvc2', 'nouveau-mot-de-passe'); await p.click('#wvChg button[type=submit]');
+  await p.waitForFunction(() => /incorrect/.test(document.getElementById('wvChgErr').textContent), null, { timeout: 15000 });
+  await p.fill('#wvc0', 'ancien-mot-de-passe'); await p.click('#wvChg button[type=submit]'); await p.waitForFunction(() => !document.querySelector('#wvChg'), null, { timeout: 15000 });
+  // second onglet : l'ancien mot de passe ne marche plus, le nouveau oui
+  const q = await p.ctx.newPage(); q.errors = []; q.on('pageerror', e => q.errors.push(e.message));
+  await q.goto(base); await q.waitForSelector('#wvPw'); await q.fill('#wvPw', 'ancien-mot-de-passe'); await q.click('#wvF button');
+  await q.waitForFunction(() => /incorrect/.test(document.getElementById('wvErr').textContent), null, { timeout: 15000 });
+  await q.fill('#wvPw', 'nouveau-mot-de-passe'); await q.click('#wvF button'); await q.waitForSelector('#app[data-view]:not([data-view="lock"])', { timeout: 15000 });
+  // une entrée écrite dans le premier onglet apparaît dans le second, puis l'inverse : aucune n'est perdue
+  await p.go('journal'); await p.click('[data-a="journalForm"]'); await p.waitForSelector('#j-text'); await p.fill('#j-text', 'ECRIT-ONGLET-1'); await p.click('[data-a="saveJournal"]'); await p.waitForTimeout(600);
+  await q.evaluate(() => { location.hash = 'journal'; }); await q.waitForTimeout(600); assert.match(await q.textContent('#app'), /ECRIT-ONGLET-1/);
+  await q.click('[data-a="journalForm"]'); await q.waitForSelector('#j-text'); await q.fill('#j-text', 'ECRIT-ONGLET-2'); await q.click('[data-a="saveJournal"]'); await q.waitForTimeout(600);
+  await p.waitForTimeout(300); await p.evaluate(() => document.getElementById('layer').innerHTML = ''); await p.go('accueil'); await p.go('journal');
+  const tj = await p.textContent('#app'); assert.match(tj, /ECRIT-ONGLET-1/); assert.match(tj, /ECRIT-ONGLET-2/);
+  const raw = await p.evaluate(() => Object.values(localStorage).join(' ')); assert.ok(!/ECRIT-ONGLET|Onglets/.test(raw), 'toujours rien en clair');
+  assert.deepEqual(p.errors, []); assert.deepEqual(q.errors, []);
+});
+
+test('Sauvegarde', 'Fichier chiffré modifié à la main : refusé, données actuelles intactes', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ name: 'Intacte' })) }); await p.goto(base); await p.settle();
+  const out = await p.evaluate(async () => { const txt = JSON.stringify({ v: 2, profile: { name: 'Pirate', created: 1 }, habits: [], logs: [] });
+    return await (async () => { const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+      const k = await crypto.subtle.importKey('raw', new TextEncoder().encode('motdepasse'), 'PBKDF2', false, ['deriveKey']);
+      const key = await crypto.subtle.deriveKey({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 600000 }, k, { name: 'AES-GCM', length: 256 }, false, ['encrypt']);
+      const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(txt)));
+      ct[5] ^= 1; const b64 = u => btoa(String.fromCharCode(...u));
+      return JSON.stringify({ _libre: { app: 'LIBRE', format: 5, encrypted: 'AES-256-GCM', kdf: 'PBKDF2-SHA256', iter: 600000, salt: b64(salt), iv: b64(iv), exportedAt: Date.now() }, ct: b64(ct) }); })(); });
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="importData"]').click()); await p.waitForSelector('#imp');
+  await p.fill('#imp', out); await p.click('[data-a="doImport"]'); await p.waitForTimeout(400);
+  const pw = await p.$('#layer input[type=password]'); assert.ok(pw, 'mot de passe demandé'); await pw.fill('motdepasse');
+  await p.evaluate(() => { const f = document.querySelector('#layer form'); f && f.requestSubmit(); }); await p.waitForTimeout(2500);
+  const s = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1'))); assert.equal(s.profile.name, 'Intacte');
+  assert.match(await p.textContent('#layer'), /incorrect|endommag|illisible|ne peut/i, 'erreur affichée');
+  assert.deepEqual(p.errors, []);
+});
+
 test('Sauvegarde', 'Export chiffré : aucun texte lisible, mauvais mot de passe refusé, restauration exacte', async (b, base) => {
   const st = profileState({ name: 'Nom-Secret', extra: { journal: [{ id: 'j1', ts: Date.now(), mood: 2, text: 'Confidence-intime', triggers: [] }] } });
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
@@ -197,6 +240,21 @@ test('Natif', 'Coffre illisible : le fichier est mis de côté, jamais écrasé'
   await p.goto(base); await p.waitForTimeout(1500);
   assert.ok((await p.evaluate(() => window.__calls)).some(c => c[0] === 'LibreVault.move'), 'fichier déplacé');
   assert.match(await p.textContent('body'), /introuvables/i); noErr(p);
+});
+
+test('Natif', 'Coffre momentanément inaccessible : LIBRE attend, n’écrit rien en clair, ne met rien de côté, puis rouvre les données', async (b, base) => {
+  const st = profileState({ name: 'Gardée' });
+  const p = await page(b, base, { native: { platform: 'ios', vaultBusy: true }, init: { fn: ([s]) => { if (!sessionStorage.getItem('__vault')) sessionStorage.setItem('__vault', JSON.stringify({ state: 'ENC:' + btoa(unescape(encodeURIComponent(JSON.stringify(s)))) })); }, arg: [st] } });
+  await p.goto(base); await p.waitForSelector('[data-a="vaultRetry"]');
+  await p.evaluate(() => { location.hash = 'journal'; }); await p.waitForTimeout(200);
+  assert.ok(await p.$('[data-a="vaultRetry"]'), 'la navigation ne contourne pas l’attente');
+  await p.click('[data-a="vaultRetry"]'); await p.waitForTimeout(300); assert.ok(await p.$('[data-a="vaultRetry"]'), 'toujours en attente');
+  const calls = await p.evaluate(() => window.__calls.map(c => c[0])); assert.ok(!calls.includes('LibreVault.move'), 'rien n’est mis de côté');
+  assert.equal(await p.evaluate(() => localStorage.getItem('libre.v1')), null, 'rien d’écrit en clair');
+  await p.evaluate(() => sessionStorage.setItem('__busy', 'off')); await p.click('[data-a="vaultRetry"]');
+  await p.waitForSelector('#app[data-view="journal"]', { timeout: 8000 }); await p.go('accueil');
+  assert.match(await p.textContent('#app'), /Gardée/, 'données rouvertes');
+  assert.deepEqual(p.errors, []);
 });
 
 test('Natif', 'Version store : pas de mode démo, pas de service worker, pas d’installation PWA', async (b, base) => {
@@ -261,6 +319,17 @@ test('Langues', 'Chaque langue : navigation traduite, aucune erreur', async (b, 
     noErr(p); await p.ctx.close();
   }
 }, { slow: true });
+
+test('Langues', 'Lancement en 6 langues : seules les langues traduites sont proposées, les autres traductions restent dans le code', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ lang: 'ar' })) }); await p.goto(base); await p.settle();
+  assert.equal(await p.evaluate(() => document.documentElement.lang), 'en', 'une langue partielle enregistrée s’affiche en anglais, sans mélange');
+  assert.equal(await p.evaluate(() => document.documentElement.dir), 'ltr');
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="langPicker"]').click()); await p.waitForSelector('.lang-item');
+  const offered = await p.evaluate(() => [...document.querySelectorAll('.lang-item')].map(x => x.dataset.l));
+  assert.deepEqual([...new Set(offered.map(c => c.split('-')[0]))].sort(), ['de', 'en', 'es', 'fr', 'it', 'pt'], 'langues proposées : ' + offered.join(','));
+  assert.ok(await p.evaluate(() => window.__libreI18n.tr && JSON.stringify(window.__libreI18n.langs()).includes('ar')), 'traduction arabe conservée');
+  assert.deepEqual(p.errors, []);
+});
 
 test('Langues', 'Formats régionaux : dates et devise', async (b, base) => {
   const st = profileState({ lang: 'de' }); st.prefs.currency = 'CHF';
@@ -366,7 +435,7 @@ test('Apparence', 'Animations actives : ouverture, entrée des blocs, barres qui
   await p.waitForTimeout(1800); await p.evaluate(() => document.querySelectorAll('#layer').forEach(x => x.innerHTML = ''));
   await p.evaluate(() => { location.hash = 'stats'; }); await p.waitForTimeout(60);
   assert.ok(await p.evaluate(() => document.getAnimations().filter(a => a.effect && a.effect.target && a.effect.target.closest && a.effect.target.closest('#app')).length) >= 3, 'blocs animés');
-  await p.waitForTimeout(1200); await p.click('text=30 jours'); await p.waitForTimeout(50);
+  await p.waitForTimeout(1200); await p.click('[data-a="statP"][data-v="30"]'); await p.waitForTimeout(50);
   assert.ok(await p.evaluate(() => document.getAnimations().some(a => a.effect && a.effect.target && a.effect.target.matches && a.effect.target.matches('rect.gbar'))), 'barres animées');
   assert.deepEqual(errs, []); await ctx.close();
 });
@@ -510,6 +579,124 @@ test('Outils', 'SOS et les 8 exercices s’ouvrent, se lancent et se ferment san
     await p.evaluate(() => { const b = [...document.querySelectorAll('#layer .btn.primary')].find(x => x.offsetParent && !x.disabled); b && b.click(); }); await p.waitForTimeout(300);
     await p.closeLayer();
   }
+  assert.deepEqual(p.errors, []);
+});
+
+test('Calculs', 'Jours calendaires exacts malgré les changements d’heure, les années bissextiles et 4 fuseaux horaires', async (b, base) => {
+  for (const tz of ['Europe/Zurich', 'America/New_York', 'Australia/Sydney', 'Asia/Kolkata']) {
+    const st = profileState({ days: 400 });
+    const p = await page(b, base, { init: seed(st), timezoneId: tz }); await p.goto(base); await p.settle();
+    const r = await p.evaluate(() => {
+      const C = window.__libreCalc, out = [];
+      // 1) passer au lendemain donne toujours minuit local, y compris les jours de 23 h et de 25 h
+      for (const [y, m, d] of [[2026, 2, 28], [2026, 2, 29], [2026, 9, 24], [2026, 9, 25], [2026, 10, 1], [2026, 3, 4], [2026, 3, 5], [2028, 1, 28]]) {
+        const a = C.sod(new Date(y, m, d, 15, 30).getTime()); const n = new Date(C.addDays(a, 1));
+        const exp = new Date(y, m, d + 1); out.push(n.getHours() === 0 && n.getMinutes() === 0 && n.getDate() === exp.getDate() && n.getMonth() === exp.getMonth());
+      }
+      // 2) 29 février 2028 existe, 2027 n’en a pas
+      out.push(new Date(C.addDays(C.sod(new Date(2028, 1, 28, 12).getTime()), 1)).getDate() === 29);
+      out.push(new Date(C.addDays(C.sod(new Date(2027, 1, 28, 12).getTime()), 1)).getMonth() === 2);
+      // 3) nombre de jours suivis : comparé à un calcul indépendant sur des dates civiles (UTC, sans changement d’heure)
+      const h = C.habits()[0], ymd = t => { const d = new Date(t); return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()); };
+      const exp = Math.round((ymd(Date.now()) - ymd(h.trackStart)) / 864e5) + 1, got = C.cleanDaysOf(h);
+      out.push(got.tracked === exp && got.clean === exp);
+      return out;
+    });
+    assert.ok(r.every(Boolean), tz + ' : ' + JSON.stringify(r));
+    assert.deepEqual(p.errors, []); await p.ctx.close();
+  }
+});
+
+test('Affichage', 'Barres d’onglets : aucun libellé coupé à 320 et 375 px, dans les 6 langues complètes', async (b, base) => {
+  const bad = [];
+  for (const lang of ['fr', 'en', 'de', 'it', 'es', 'pt']) for (const w of [320, 375]) {
+    const p = await page(b, base, { init: seed(profileState({ lang, types: ['cigarette', 'alcool'] })), viewport: { width: w, height: 800 } }); await p.goto(base); await p.settle();
+    for (const v of ['accueil', 'habitudes', 'stats', 'calendrier', 'journal', 'outils', 'biblio', 'profil']) { await p.go(v); await p.waitForTimeout(150);
+      bad.push(...await p.evaluate(([v, lang, w]) => [...document.querySelectorAll('.segc')].filter(c => c.scrollWidth > c.clientWidth + 1).map(c => `${lang} ${w}px ${v}:${c.dataset.seg}`), [v, lang, w])); }
+    assert.deepEqual(p.errors, []); await p.ctx.close();
+  }
+  assert.deepEqual(bad, []);
+});
+
+test('Journal', 'Brouillon : un texte non enregistré revient après une fermeture accidentelle, jamais écrit sur l’appareil', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle(); await p.go('journal');
+  await p.click('[data-a="journalForm"]'); await p.waitForSelector('#j-text'); await p.fill('#j-text', 'BROUILLON-PRECIEUX');
+  await p.click('#layer [data-a="close"]'); await p.waitForTimeout(250);
+  assert.ok(!(await p.evaluate(() => Object.values(localStorage).join(' '))).includes('BROUILLON-PRECIEUX'), 'brouillon jamais écrit');
+  await p.click('[data-a="journalForm"]'); await p.waitForSelector('#j-text');
+  assert.equal(await p.inputValue('#j-text'), 'BROUILLON-PRECIEUX'); assert.ok(await p.$('[data-a="jDraftClear"]'));
+  await p.click('[data-a="saveJournal"]'); await p.waitForTimeout(250);
+  const s1 = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.equal(s1.journal.length, 1); assert.ok(s1.journal[0].id && s1.journal[0].id.length > 3, 'identifiant valide');
+  await p.click('[data-a="journalForm"]'); await p.waitForSelector('#j-text'); assert.equal(await p.inputValue('#j-text'), '', 'plus de brouillon après enregistrement');
+  await p.fill('#j-text', 'A-EFFACER'); await p.click('#layer [data-a="close"]'); await p.waitForTimeout(200);
+  await p.click('[data-a="journalForm"]'); await p.waitForSelector('[data-a="jDraftClear"]'); await p.click('[data-a="jDraftClear"]'); await p.waitForTimeout(150);
+  assert.equal(await p.inputValue('#j-text'), '');
+  assert.deepEqual(p.errors, []);
+});
+
+test('Accessibilité', 'Texte agrandi à 200 % (WCAG 1.4.4) : aucun écran ne déborde, en français et en allemand', async (b, base) => {
+  const bad = [];
+  for (const lang of ['fr', 'de']) {
+    const p = await page(b, base, { init: seed(profileState({ lang, types: ['cigarette', 'alcool'] })), viewport: { width: 390, height: 844 } });
+    await p.ctx.addInitScript(() => document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = 'html{font-size:200%!important}'; document.head.appendChild(s); }));
+    await p.goto(base); await p.settle();
+    assert.ok(await p.evaluate(() => parseFloat(getComputedStyle(document.documentElement).fontSize) >= 30), 'texte bien agrandi');
+    for (const v of ['accueil', 'habitudes', 'stats', 'calendrier', 'journal', 'outils', 'biblio', 'profil']) { await p.go(v); await p.waitForTimeout(200);
+      const o = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth); if (o > 1) bad.push(`${lang} ${v} : ${o}px`); }
+    assert.deepEqual(p.errors, []); await p.ctx.close();
+  }
+  assert.deepEqual(bad, [], bad.join(', '));
+});
+
+test('Performance', 'Téléphone modeste simulé (processeur 4× plus lent) : 12 000 consommations, 5 000 entrées de journal, données chiffrées', async (b, base) => {
+  const st = profileState({ types: ['cigarette', 'alcool', 'cannabis'], days: 1095, name: 'Charge' }); let r = 11; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647;
+  const D = 864e5, start = Date.now() - 1095 * D;
+  for (let k = 0; k < 12000; k++) { const h = st.habits[k % 3]; st.logs.push({ id: 'l' + k, habitId: h.id, type: h.type, ts: start + rnd() * 1094 * D, qty: 1 }); }
+  for (let k = 0; k < 5000; k++) st.journal.push({ id: 'j' + k, ts: start + rnd() * 1094 * D, mood: 1 + (k % 5), craving: k % 10, triggers: ['Stress'], text: 'Une journée comme les autres, avec ses hauts et ses bas. '.repeat(3) });
+  const p = await page(b, base, { init: seed(st) }); const cdp = await p.ctx.newCDPSession(p); await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+  const T = {}; let t0 = Date.now(); await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]'); T['démarrage (clair)'] = Date.now() - t0; await p.waitForTimeout(1500); await p.closeLayer();
+  for (const v of ['habitudes', 'stats', 'calendrier', 'journal', 'outils']) { t0 = Date.now(); await p.go(v); T[v] = Date.now() - t0; }
+  await p.go('journal'); t0 = Date.now(); await p.fill('#jq', 'hauts'); await p.waitForTimeout(400); T['recherche journal'] = Date.now() - t0 - 220;
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="wvOn"]').click()); await p.waitForSelector('#wv1');
+  await p.fill('#wv1', 'mot-de-passe-long'); await p.fill('#wv2', 'mot-de-passe-long'); await p.check('#wvOk');
+  t0 = Date.now(); await p.click('#wvSet button[type=submit]'); await p.waitForFunction(() => !document.querySelector('#wvSet'), null, { timeout: 60000 }); T['activer le chiffrement'] = Date.now() - t0;
+  const size = await p.evaluate(() => localStorage.getItem('libre.v1').length);
+  await p.reload(); await p.waitForSelector('#wvPw'); await p.fill('#wvPw', 'mot-de-passe-long');
+  t0 = Date.now(); await p.click('#wvF button'); await p.waitForSelector('#app[data-view]:not([data-view="lock"])', { timeout: 60000 }); T['ouvrir les données chiffrées'] = Date.now() - t0;
+  await p.go('journal'); t0 = Date.now(); await p.click('[data-a="journalForm"]'); await p.waitForSelector('#j-text'); await p.fill('#j-text', 'nouvelle'); await p.click('[data-a="saveJournal"]'); await p.waitForTimeout(50); T['enregistrer une entrée (chiffrée)'] = Date.now() - t0;
+  await p.waitForTimeout(1500); const s2 = await p.evaluate(() => localStorage.getItem('libre.v1')); assert.ok(!s2.includes('nouvelle'), 'toujours chiffré');
+  module.exports.lastPerf2 = { times: T, size };
+  for (const [k, v] of Object.entries(T)) assert.ok(v < 4000, `${k} : ${v} ms`);
+  assert.deepEqual(p.errors, []);
+}, { slow: true });
+
+test('Natif', 'Biométrie : cachée par défaut ; activée pour un essai, elle déverrouille sans remplacer le code (plugin simulé)', async (b, base) => {
+  const st = profileState(); st.prefs.lock = null;
+  let p = await page(b, base, { native: { platform: 'ios' }, init: seed(st) }); await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]');
+  await p.go('profil'); assert.equal(await p.$('[data-a="bioSet"]'), null, 'option cachée tant que BIO_ENABLED est faux'); await p.ctx.close();
+  p = await page(b, base, { native: { platform: 'ios' }, init: seed(st) }); await p.ctx.addInitScript(() => { window.__libreBioTest = true; });
+  await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]'); await p.closeLayer(); await p.go('profil');
+  assert.equal(await p.$('[data-a="bioSet"]'), null, 'pas de biométrie sans code');
+  await p.evaluate(() => document.querySelector('[data-a="lockToggle"]').click()); await p.waitForSelector('#layer input');
+  const ins = await p.$$('#layer input[type="password"],#layer input[inputmode="numeric"]'); for (const i of ins) await i.fill('2468');
+  await p.evaluate(() => { const f = document.getElementById('lockSet'); f && f.requestSubmit(); }); await p.waitForTimeout(2000);
+  await p.evaluate(() => document.querySelector('[data-a="bioSet"]').click()); await p.waitForTimeout(500);
+  await p.reload(); await p.waitForSelector('#app[data-view="lock"]'); await p.waitForTimeout(900);
+  assert.notEqual(await p.evaluate(() => document.getElementById('app').dataset.view), 'lock', 'déverrouillé par la biométrie simulée');
+  await p.evaluate(() => sessionStorage.setItem('__bioFail', '1')); await p.reload(); await p.waitForSelector('#app[data-view="lock"]'); await p.waitForTimeout(900);
+  assert.equal(await p.evaluate(() => document.getElementById('app').dataset.view), 'lock', 'échec : reste verrouillé'); assert.ok(await p.$('#lockPin'), 'le code reste proposé');
+  await p.fill('#lockPin', '2468'); await p.click('#lockF button'); await p.waitForSelector('#app:not([data-view="lock"])', { timeout: 15000 });
+  assert.deepEqual(p.errors, []);
+});
+
+test('Données', 'Données d’une version plus récente : lecture seule, rien n’est écrit par-dessus', async (b, base) => {
+  const st = profileState({ name: 'Futur' }); st.dataV = 99; st.futureField = { garde: true };
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]'); await p.waitForTimeout(1600);
+  const before = await p.evaluate(() => localStorage.getItem('libre.v1'));
+  await p.closeLayer(); await p.evaluate(() => document.querySelector('[data-a="quickPlus"]')?.click()); await p.waitForTimeout(300);
+  const after = await p.evaluate(() => localStorage.getItem('libre.v1'));
+  assert.equal(after, before, 'aucune écriture'); assert.ok(JSON.parse(after).futureField.garde);
   assert.deepEqual(p.errors, []);
 });
 

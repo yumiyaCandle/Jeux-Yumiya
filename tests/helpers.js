@@ -27,7 +27,7 @@ function serve() {
    Le coffre « LibreVault » simulé conserve son contenu dans sessionStorage (survit aux rechargements)
    et le stocke encodé : le test vérifie ainsi qu’aucune donnée ne reste en clair dans localStorage. */
 function nativeMock(opts = {}) {
-  return ({ platform, vaultBroken, noVault }) => {
+  return ({ platform, vaultBroken, noVault, vaultBusy }) => {
     const vget = () => JSON.parse(sessionStorage.getItem('__vault') || '{}');
     const vset = o => sessionStorage.setItem('__vault', JSON.stringify(o));
     window.__calls = [];
@@ -50,9 +50,11 @@ function nativeMock(opts = {}) {
     };
     if (!noVault) P.LibreVault = {
       isAvailable: async () => ({ available: true }),
-      read: async ({ name }) => { if (vaultBroken && name === 'state') throw new Error('KEY_MISSING'); const v = vget()[name]; return { data: v == null ? null : decodeURIComponent(escape(atob(v.slice(4)))) }; },
+      read: async ({ name }) => { if (vaultBusy && sessionStorage.getItem('__busy') !== 'off') { const e = new Error('Coffre momentanément inaccessible'); e.code = 'UNAVAILABLE'; throw e; } if (vaultBroken && name === 'state') throw new Error('KEY_MISSING'); const v = vget()[name]; return { data: v == null ? null : decodeURIComponent(escape(atob(v.slice(4)))) }; },
       write: async ({ name, data }) => { const o = vget(); o[name] = 'ENC:' + btoa(unescape(encodeURIComponent(data))); vset(o); return {}; },
       remove: async ({ name }) => { const o = vget(); delete o[name]; vset(o); return {}; },
+      biometricStatus: async () => ({ available: true, kind: 'faceid' }),
+      biometricAuth: async () => { call('LibreVault.biometricAuth', {}); if (sessionStorage.getItem('__bioFail')) { const e = new Error('Non reconnu'); e.code = 'CANCELED'; throw e; } return {}; },
       move: async ({ from, to }) => { const o = vget(); if (o[from] != null) { o[to] = o[from]; delete o[from]; } else { o[to] = 'ENC:'; } vset(o); call('LibreVault.move', { from, to }); return {}; }
     };
     window.__fire = (ev, d) => listeners[ev] && listeners[ev](d || {});
@@ -64,7 +66,7 @@ async function launch() { return chromium.launch(); }
 
 async function page(browser, base, o = {}) {
   const ctx = await browser.newContext({ viewport: o.viewport || { width: 390, height: 844 }, locale: o.locale || 'fr-CH', colorScheme: o.colorScheme || 'light',
-    reducedMotion: 'reduce', acceptDownloads: true });
+    reducedMotion: 'reduce', acceptDownloads: true, ...(o.timezoneId ? { timezoneId: o.timezoneId } : {}) });
   if (o.native) await ctx.addInitScript(nativeMock(), o.native);
   if (o.init) await ctx.addInitScript(o.init.fn, o.init.arg);
   const p = await ctx.newPage();
@@ -90,6 +92,7 @@ function profileState(o = {}) {
   return Object.assign({ v: 2, profile: { name: o.name || 'Camille', created: now - (o.days || 20) * D }, habits, logs: [], journal: [], sos: [], tools: { urges: [], cbt: [], plans: [], triggers: [], checkins: {}, goals: {} },
     contacts: [], reasons: ['Ma santé'], notifs: [], unlocked: {}, sent: {}, prefs: { lang: o.lang || 'fr', mainHabit: 'h0' } }, o.extra || {});
 }
-const seed = (state, key = 'libre.v1') => ({ fn: ([s, k]) => { if (!sessionStorage.getItem('__seeded')) { localStorage.setItem(k, JSON.stringify(s)); sessionStorage.setItem('__seeded', '1'); } }, arg: [state, key] });
+/* Données injectées une seule fois par onglet, et jamais par-dessus des données déjà présentes (second onglet du même navigateur) */
+const seed = (state, key = 'libre.v1') => ({ fn: ([s, k]) => { if (!sessionStorage.getItem('__seeded') && localStorage.getItem(k) == null) { localStorage.setItem(k, JSON.stringify(s)); sessionStorage.setItem('__seeded', '1'); } }, arg: [state, key] });
 
 module.exports = { serve, launch, page, profileState, seed, ROOT };
