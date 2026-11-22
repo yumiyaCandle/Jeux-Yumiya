@@ -1,5 +1,5 @@
-// Produit toutes les icônes et écrans de lancement de LIBRE (identité « Encre ») à partir du logo :
-// un cercle ouvert et un point safran dans l'ouverture, sur fond encre.
+// Produit toutes les icônes et écrans de lancement de LIBRE (identité « Souffle ») à partir du logo :
+// un cercle ouvert ivoire et un point pêche dans l'ouverture (le jour qui se lève), sur fond sauge.
 // Usage : node libre-app/scripts/render-assets.js   (écrit libre/icons, libre-app/assets, et remplace les PNG iOS/Android
 // aux tailles déjà présentes dans les projets natifs ; aucun outil externe requis).
 const { chromium } = require('playwright');
@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.join(__dirname, '..', '..');
 const APP = path.join(ROOT, 'libre-app');
-const PINE = '#17181C', PAPER = '#F6F3EC', SUN = '#E2A21B';
+const PINE = '#4C7A66', PAPER = '#FAF7F1', SUN = '#F4B99C';
 // Logo dans un repère 48×48 (même dessin que logoMark() dans libre/index.html)
 const markPaths = (ink) => `<path d="M33.2 9.4A17 17 0 1 0 40.6 21" fill="none" stroke="${ink}" stroke-width="4.2" stroke-linecap="round"/><circle cx="38.6" cy="12.2" r="4.6" fill="${SUN}"/>`;
 // scale = part du côté occupée par le logo

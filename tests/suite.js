@@ -461,19 +461,20 @@ test('Apparence', 'Option « verre » : animations d’ouverture, entrée des bl
   assert.deepEqual(errs, []); await ctx.close();
 });
 
-test('Apparence', 'Carte principale (couleur et sombre) : texte blanc lisible (≥ 4,5:1 mesuré sur les pixels), 4 couleurs, clair et sombre', async (b, base) => {
+test('Apparence', 'Ton chemin (bloc principal) : chaque texte lisible sur son fond réel (≥ 4,5:1 mesuré sur les pixels), clair et sombre, toutes les couleurs d’accent', async (b, base) => {
   const lum = ([r, g, b]) => [r, g, b].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }).reduce((s, v, i) => s + v * [.2126, .7152, .0722][i], 0);
+  const ratio = (a, c) => { const x = lum(a), y = lum(c); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); };
   for (const cs of ['light', 'dark']) for (const acc of ['vert', 'lagon', 'indigo', 'corail', 'sombre']) {
     const st = profileState({ days: 27 }); if (acc === 'sombre') st.prefs.hero = 'sombre'; else { st.prefs.accent = acc; st.prefs.hero = 'couleur'; }
     const p = await page(b, base, { colorScheme: cs, init: seed(st) }); await p.goto(base); await p.settle();
     const pts = await p.evaluate(() => { const h = document.querySelector('.hm-hero'); h.scrollIntoView({ block: 'center' }); const out = [];
-      h.querySelectorAll('dt,.hm-since,.hm-k,.hm-sub,.hm-step').forEach(e => { const r = e.getBoundingClientRect(); if (r.width) out.push([r.left + 4, r.top + r.height / 2], [r.right - 6, r.top + r.height / 2]); });
+      h.querySelectorAll('dt,dd,.hm-since,.hm-k,.hm-sub,.hm-step,.hm-days .num,.hm-u').forEach(e => { const r = e.getBoundingClientRect(); if (!r.width) return; const c = getComputedStyle(e).color.match(/\d+(\.\d+)?/g).slice(0, 3).map(Number); out.push([r.left + 2, r.top + r.height / 2, c]); });
       h.querySelectorAll('*').forEach(e => e.style.setProperty('color', 'transparent', 'important')); h.querySelectorAll('svg,.hm-orbs,.hm-pill,.hm-rec').forEach(e => e.style.visibility = 'hidden'); return out; });
     await p.waitForTimeout(120); const buf = await p.screenshot();
     const px = await p.evaluate(async ([b64, pts]) => { const img = new Image(); img.src = 'data:image/png;base64,' + b64; await img.decode(); const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
       const x = c.getContext('2d'); x.drawImage(img, 0, 0); return pts.map(([a, b]) => [...x.getImageData(Math.round(a), Math.round(b), 1, 1).data].slice(0, 3)); }, [buf.toString('base64'), pts]);
-    const min = Math.min(...px.map(c => 1.05 / (lum(c) + .05)));
-    assert.ok(min >= 4.5, `${cs} ${acc} : contraste ${min.toFixed(2)}`); await p.ctx.close();
+    const min = Math.min(...px.map((bg, i) => ratio(bg, pts[i][2])));
+    assert.ok(pts.length >= 6, 'textes mesurés'); assert.ok(min >= 4.5, `${cs} ${acc} : contraste ${min.toFixed(2)}`); await p.ctx.close();
   }
 }, { slow: true });
 
@@ -897,10 +898,10 @@ test('Parcours 11', 'Notifications refusées dans le téléphone : rien n’est 
   noErr(p);
 });
 
-test('Apparence', 'Identité « Encre » par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
+test('Apparence', 'Identité « Souffle » par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
   const st = profileState({}); st.prefs.fx = true;
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
-  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Encre par défaut');
+  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Souffle par défaut');
   await p.go('profil'); await p.openFold('p-look'); await p.evaluate(() => document.querySelector('input[data-a="fxToggle"]').click()); await p.waitForTimeout(200);
   assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), true, 'verre activé à la demande');
   assert.equal((await stateOf(p)).prefs.look, 'verre');
@@ -963,7 +964,7 @@ test('Soutien', 'Fiche interactive : gestes cochés, « Ça t’a aidé ? » enr
 });
 
 /* ---------- Refonte « Clairière » : navigation, journal guidé, lecture des données, bibliothèque par thèmes ---------- */
-test('Navigation', 'Barre Aujourd’hui · Soutien · Progrès (statistiques d’abord) · Journal ; bouton « Aide » dans l’en-tête de chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
+test('Navigation', 'Barre Aujourd’hui · Soutien · Parcours (statistiques d’abord) · Journal ; bouton « Aide » dans l’en-tête de chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'], name: 'Lou' })) }); await p.goto(base); await p.settle();
   for (const v of ['accueil', 'habitudes', 'stats', 'outils', 'journal']) {
     await p.go(v); await p.closeLayer();

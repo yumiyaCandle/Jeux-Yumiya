@@ -125,3 +125,7 @@ depuis une fiche utilise le stockage existant). 87 tests, dont tous les tests de
 
 Aucun mécanisme modifié. Nouvelle donnée facultative `tools.sitLog` dans le même état chiffré (voir `PRIVACY-REVIEW.md` § 9).
 88 tests, dont tous les tests de sécurité, repassent.
+
+## 12. Refonte « Souffle »
+
+Aucun mécanisme modifié, aucune donnée nouvelle. 88 tests, dont tous les tests de sécurité, repassent.

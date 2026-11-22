@@ -308,3 +308,33 @@ Pictogrammes au trait existants (un seul jeu, 24 px). Logo, icônes iOS/Android/
 | Fiche interactive | `.sit3-step` : cercle à cocher (encre + coche safran), texte barré safran une fois fait ; `.sit3-fb` : question « Ça t'a aidé ? » |
 | Écrans courts (≤ 740 px de haut) | Titres réduits, message d'accueil sur 2 lignes, compteur resserré |
 | Graphiques | Libellés ≥ 11 px, couleur `--muted` |
+
+## Design system « Souffle » (identité par défaut, remplace « Encre »)
+
+Bloc CSS « SOUFFLE » à la fin de `libre/index.html`. Palette, rôles et justification : `REFONTE-SOUFFLE.md` § 2–3.
+
+| Jeton | Clair | Sombre | Rôle |
+|---|---|---|---|
+| `--bg` | `#FAF7F1` | `#161A18` | Fond ivoire |
+| `--sand` | `#F2ECE2` | `#232925` | Panneaux chaleureux |
+| `--brand` / `--brand-strong` | `#4C7A66` / `#3B6453` | `#8CC2A8` / `#9DCDB5` | Marque (sauge) : action principale, actif, chiffres |
+| `--brand-soft` / `--brand-wash` | `#E4EEE7` / `#EFF4EF` | `#22342B` / `#1D2A23` | Fonds de marque |
+| `--teal` / `--teal-soft` | `#2F7480` / `#E2EFF0` | `#8CC6CE` / `#1C2C2F` | Secondaire : liens, informations |
+| `--saffron` (pêche) / `--peach-soft` / `--terra-ink` | `#E39A7B` / `#FCEEE6` / `#8E4128` | `#E9A88C` / `#2E231E` / `#F0B89F` | Accent humain : aide, accueil |
+| `--ink` / `--muted` | `#2A302C` / `#5D6660` | `#E9ECE7` / `#A9B2AC` | Textes |
+| `--sos` | `#B42318` | `#F08A7E` | Danger uniquement |
+| `--font-title` | ui-rounded (SF Pro Rounded), Nunito, Inter | — | Titres, chiffres |
+
+| Composant | Règle |
+|---|---|
+| Panneau doux | Fond sable, sauge clair ou pêche, rayon 20, pas d'ombre ; réservé aux blocs importants (journée, chemin, situation, kit) |
+| Liste | Filets fins `--rule`, rangées ≥ 48 px |
+| Bouton principal | Sauge plein, texte blanc (4,9:1), rayon 14 |
+| Bouton secondaire | Contour sauge 1,5 px |
+| Lien | Bleu-vert souligné |
+| Bouton Aide | Pastille pêche, point terracotta |
+| Onglet actif (barre) | Icône dans une pastille sauge claire, libellé sauge |
+| Onglet interne actif | Trait sauge sous le libellé |
+| Aide immédiate | Plein écran sauge très clair ; besoins sur surfaces blanches ; principal en sauge plein |
+| Message de confirmation | Fond sauge foncé, texte blanc, trait pêche |
+| Humeurs | `#C07A5E`, `#D8AA86`, `#B9B3A6`, `#8DB59F`, `#4C7A66`, toujours avec leur libellé |

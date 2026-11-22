@@ -27,8 +27,8 @@ Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente auc
 
 ## 2 bis. Signature et fichiers Android
 
-- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-ENCRE-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `90144f7b73333b5adf9d779c2ca29bb1c7a1c4af07bf706045eca7f1257f4efc`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-SOUFFLE-COMPLET.zip`, qui ne contient que le projet).
+  Empreinte SHA-256 : `015418f0eacbf2bccf02a8742cbdd45129e82cc0fa99d86db7a504581d747d3e`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -85,6 +85,12 @@ pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source offici
 - Rouvrir des langues après traduction (`LANGUES.md`).
 - Garder ou non le support iPad (captures iPad à fournir si gardé).
 - Pays de distribution (les numéros d'aide affichés en dépendent).
+
+## 14. Après la refonte « Souffle »
+
+- Faire réagir quelques personnes concernées (et un professionnel) à l'ambiance de l'accueil et de l'aide immédiate.
+- Vérifier sur iPhone la police arrondie (SF Pro Rounded) ; sur Android, le rendu avec Inter.
+- Inclure le logo « Souffle » (cercle ivoire, point pêche, fond sauge) dans la recherche de marque.
 
 ## 13. Après la finition
 
