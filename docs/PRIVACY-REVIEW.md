@@ -70,3 +70,9 @@ Un fichier partagé (e-mail, cloud, messagerie) sort du contrôle de LIBRE : l'a
 - **Conseils personnalisés** : règles explicites calculées sur l'appareil, chaque conseil dit « Parce que… », réglage pour les désactiver
   (les messages de sécurité restent). Aucune IA externe, aucun envoi.
 - La CSP (`connect-src 'self'`) reste en place : aucune de ces nouveautés ne peut envoyer de données.
+
+## 7. Refonte « Clairière » (22 novembre 2026)
+
+Le journal peut contenir trois champs facultatifs de plus : émotions choisies dans une liste, intention pour demain, question de
+réflexion choisie. Mêmes garanties que le reste du journal : sur l'appareil seulement, chiffré dans les apps, jamais envoyé, inclus
+dans l'export et effacé par « Tout effacer ». Les déclarations App Store / Google Play ne changent pas (aucune collecte).

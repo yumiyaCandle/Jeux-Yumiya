@@ -122,3 +122,63 @@ information = encre et `--muted`. Jamais la couleur seule : toujours un mot, une
 | États vides | `.hm-empty`, textes « Aucune … » | Toujours une action proposée |
 | Erreurs | `toast()` | Titre + phrase qui dit quoi faire |
 | Notifications | centre `notifCenter` | Textes discrets par défaut |
+
+## Design system « Clairière » (identité par défaut depuis le 22 novembre 2026)
+
+Remplace « Horizon » comme style par défaut (bloc CSS « CLAIRIÈRE » à la fin de `libre/index.html`, sélecteurs `html:not(.fx)`).
+Les échelles v2 (espacements, rayons, texte, mouvement) ci-dessus restent valables. Intention et justification : `REFONTE-CLAIRIERE.md` § 1.
+
+### Palettes
+
+| Rôle | Jeton | Clair | Sombre |
+|---|---|---|---|
+| Fond | `--bg` | `#F1F3EE` brume | `#0A1412` forêt de nuit |
+| Surface | `--card` | `#FFFFFF` | `#12201D` |
+| Encre / action principale | `--ink` | `#12302A` vert pin | `#E8EEEA` |
+| Texte secondaire | `--muted` | `#53635C` | `#9DB1A8` |
+| Filet / bordure | `--line` | `#DCE3DB` | `#22342F` |
+| Champ | `--field` | `#E8EDE6` | `#192A26` |
+| Bloc principal | `--navy` / `--navy-2` | `#123A33` / `#1A4A41` | `#0F2A25` / `#163A33` |
+| Secondaire chaud (décor) | `--apricot` | `#E8915F` | `#E8915F` |
+| Réussite / progression | `--green`, `--green-strong`, `--green-soft`, `--green-ink` | `#2E7B5A` … | `#71C79E` … |
+| Gain / attention douce | `--amber`, `--sun-soft`, `--sun-ink` | `#A35B1E` … | `#E3A06B` … |
+| Alerte / urgence (réservé) | `--sos`, `--sos-soft` | `#B23C32` | `#E0584E` |
+| Graphiques | `--bar` ; anneaux `--ring1..3` | `#5B8F7B` | `#6FA790` |
+| Signature | `--hz-line` | dégradé abricot → sauge | idem |
+
+### Typographie
+
+Titres de page, de carte et de feuille : `--font-title` (Iowan Old Style, Palatino, Georgia : polices du système, rien à télécharger),
+graisse 500–600. Texte et interface : Inter (fichiers locaux). Grand titre `clamp(2rem, 7.6vw, 2.45rem)`, interligne 1,08. Petites
+capitales d'en-tête (`.eyebrow`) : Inter, espacement 0,12 em, couleur sauge. Chiffres : tabulaires (`.num`).
+
+### Formes, ombres, bordures
+
+Cartes : rayon 24, filet 1 px `--line`, ombre `--sh-1` à peine perceptible (clair) ou aucune (sombre). Tuiles : rayon 18.
+Boutons : pilule (999). Bloc principal : vert pin + deux halos (abricot en haut à droite, sauge en bas à gauche).
+
+### Composants
+
+| Composant | Classe | Règle |
+|---|---|---|
+| Barre de navigation | `.nav` + `.nav-help` | 4 destinations + bouton **Aide** central (54 px, encre, anneau couleur du fond) ; sur ordinateur, barre latérale |
+| Avatar de profil | `.avatar-btn` | Initiale du prénom (ou pictogramme), 44 px de zone tactile, `aria-current` sur le profil |
+| Logo | `logoMark()` | Arc ouvert + horizon + soleil abricot ; jamais fermé |
+| Bienvenue | `.welcome3`, `.w3-*` | Photo encadrée, nom en serif, 4 tuiles, bouton collant en bas |
+| Question du journal | `.j3-prompt`, `.j3-q` | Fond sauge pâle, question en serif |
+| Humeur de la semaine | `.j3-week` | 7 pastilles ; vide = cercle pointillé ; jamais la couleur seule (titre et libellé) |
+| Entrée de journal | `.jentry.j3` | Liseré gauche de la couleur d'humeur, heure, libellé d'humeur, étiquettes Réussite / Difficulté / Intention |
+| Lecture des données | `.rd3` | Constat en phrase + « Comment c'est calculé » (`details`) + rappel « pas un diagnostic » |
+| Thème de bibliothèque | `.lib3-t`, `.lib3-head` | Icône, titre, nombre de fiches ; page du thème : objectif pédagogique |
+| Champs de saisie | `.field`, `textarea`, `input` | Libellé visible au-dessus, icône facultative (`.j3-blk`), exemple en texte indicatif |
+| Modales | `.sheet` | Titre en serif, poignée, voile |
+| Menus repliables | `details` (`.fold`, `.j3-tools`) | Résumé ≥ 44 px, état conservé |
+| Chargement | Aucun écran de chargement réseau (tout est local) ; les photos ont un fond dégradé pendant le décodage (`.ph`) | — |
+| États vides | Phrase + action (journal vide, statistiques « Encore quelques jours de suivi ») | Toujours une suite possible |
+| Erreurs | `toast()` titre + phrase d'action ; feuilles de confirmation pour les actions définitives | — |
+| Notifications | Centre `notifCenter`, cloche avec pastille corail | Textes discrets par défaut |
+
+### Icônes d'application et lancement
+
+Produites par `libre-app/scripts/render-assets.js` : fond `#123A33`, logo `#F1F3EE` + soleil `#E8915F`. Icône adaptative Android
+(premier plan dans la zone sûre, fond vert pin), icône iOS 1024 sans transparence, icônes PWA (dont « maskable »).

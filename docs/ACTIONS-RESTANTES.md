@@ -27,8 +27,8 @@ Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente auc
 
 ## 2 bis. Signature et fichiers Android
 
-- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-REFONTE-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `3bea63aa5af2efb05823e90386aa24223cb1c3e9ec5ef40a2cb14866d69af68e8`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-CLAIRIERE-COMPLET.zip`, qui ne contient que le projet).
+  Empreinte SHA-256 : `3c04e82374a090c65bf55041fc6001e270dc513493dde63dc4e5b4bfdd5ac0dc`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -85,6 +85,13 @@ pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source offici
 - Rouvrir des langues après traduction (`LANGUES.md`).
 - Garder ou non le support iPad (captures iPad à fournir si gardé).
 - Pays de distribution (les numéros d'aide affichés en dépendent).
+
+## 10. Après la refonte « Clairière »
+
+- Faire relire les questions du journal, les objectifs des thèmes et les phrases de la lecture des données (fin de `VALIDATION-MEDICALE.md`).
+- Vérifier sur iPhone et Android que le bouton Aide central reste au-dessus de la barre système et que les nouvelles icônes s'affichent
+  correctement (icône adaptative Android, écran d'accueil iOS).
+- Faire valider la nouvelle identité (nom, logo) dans ta recherche de marque (§ 2 ter).
 
 ## 9. Après la refonte intégrale
 

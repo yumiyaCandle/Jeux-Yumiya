@@ -1,23 +1,59 @@
-// Produit les images sources de l’icône et de l’écran de lancement à partir du logo LIBRE (libre/icons/icon.svg).
-// Ensuite : npx @capacitor/assets generate  (génère toutes les tailles iOS et Android).
+// Produit toutes les icônes et écrans de lancement de LIBRE (identité « Clairière ») à partir du logo :
+// un arc ouvert (la liberté), un soleil abricot qui se lève dans l'ouverture, une ligne d'horizon, sur fond vert pin.
+// Usage : node libre-app/scripts/render-assets.js   (écrit libre/icons, libre-app/assets, et remplace les PNG iOS/Android
+// aux tailles déjà présentes dans les projets natifs ; aucun outil externe requis).
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
-const out = path.join(__dirname, '..', 'assets');
-fs.mkdirSync(out, { recursive: true });
-const NAVY = '#0E2747';
-const mark = (size, s) => `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 100 100"><g transform="translate(${50 - 32 * s / 1.3333} ${50 - 32 * s / 1.3333}) scale(${s})"><path d="M33 9.5A17 17 0 1 0 41 24" fill="none" stroke="#F7F5F0" stroke-width="4.5" stroke-linecap="round"/><path d="M24 30c0-8 5-14 15-17c-1 9-6 15-15 17z" fill="#2CC584"/><path d="M24 30l7-8" stroke="${NAVY}" stroke-width="1.6" stroke-linecap="round"/></g></svg>`;
-const page = (body, bg, w, h) => `<html><body style="margin:0;width:${w}px;height:${h}px;background:${bg};display:grid;place-items:center">${body}</body></html>`;
+const ROOT = path.join(__dirname, '..', '..');
+const APP = path.join(ROOT, 'libre-app');
+const PINE = '#123A33', PAPER = '#F1F3EE', SUN = '#E8915F';
+// Logo dans un repère 48×48 (même dessin que logoMark() dans libre/index.html)
+const markPaths = (ink) => `<path d="M36.5 11.5A17 17 0 1 0 41 24" fill="none" stroke="${ink}" stroke-width="4.5" stroke-linecap="round"/><path d="M14 31.5h20" stroke="${ink}" stroke-width="3" stroke-linecap="round" opacity=".55"/><circle cx="24" cy="25" r="6.2" fill="${SUN}"/>`;
+// scale = part du côté occupée par le logo
+const svg = (size, { bg, scale }) => { const s = size * scale / 48, o = (size - 48 * s) / 2;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${bg ? `<rect width="${size}" height="${size}" fill="${bg}"/>` : ''}<g transform="translate(${o} ${o}) scale(${s})">${markPaths(PAPER)}</g></svg>`; };
+const html = (body, bg, w, h) => `<html><body style="margin:0;width:${w}px;height:${h}px;background:${bg};display:grid;place-items:center;overflow:hidden">${body}</body></html>`;
 (async () => {
   const b = await chromium.launch();
-  const shot = async (name, html, w, h, transparent) => { const p = await b.newPage({ viewport: { width: w, height: h } }); await p.setContent(html); await p.screenshot({ path: path.join(out, name), omitBackground: !!transparent }); await p.close(); };
-  // Icône complète (iOS, Android ancien format) : identique à l’icône actuelle de LIBRE
-  await shot('icon-only.png', page(fs.readFileSync(path.join(__dirname, '..', '..', 'libre', 'icons', 'icon.svg'), 'utf8').replace('<svg ', '<svg width="1024" height="1024" '), NAVY, 1024, 1024), 1024, 1024);
-  // Icône adaptative Android : logo au centre de la zone sûre (66 %), fond bleu nuit séparé
-  await shot('icon-foreground.png', page(mark(1024, 1.0), 'transparent', 1024, 1024), 1024, 1024, true);
-  await shot('icon-background.png', page('', NAVY, 1024, 1024), 1024, 1024);
-  // Écran de lancement : logo sur fond bleu nuit (mêmes couleurs en mode clair et sombre)
-  await shot('splash.png', page(mark(900, 0.9), NAVY, 2732, 2732), 2732, 2732);
-  await shot('splash-dark.png', page(mark(900, 0.9), NAVY, 2732, 2732), 2732, 2732);
-  await b.close(); console.log('images écrites dans', out);
+  const shot = async (file, body, bg, w, h, transparent) => { fs.mkdirSync(path.dirname(file), { recursive: true });
+    const p = await b.newPage({ viewport: { width: w, height: h } }); await p.setContent(html(body, bg, w, h)); await p.screenshot({ path: file, omitBackground: !!transparent }); await p.close(); };
+  // Icône vectorielle de référence (PWA, site)
+  fs.writeFileSync(path.join(ROOT, 'libre', 'icons', 'icon.svg'), svg(100, { bg: PINE, scale: .62 }).replace(/ width="100" height="100"/, ''));
+  const full = (n) => svg(n, { bg: PINE, scale: .62 }), mask = (n) => svg(n, { bg: PINE, scale: .5 });
+  // PWA
+  await shot(path.join(ROOT, 'libre/icons/icon-192.png'), full(192), PINE, 192, 192);
+  await shot(path.join(ROOT, 'libre/icons/icon-512.png'), full(512), PINE, 512, 512);
+  await shot(path.join(ROOT, 'libre/icons/maskable-512.png'), mask(512), PINE, 512, 512);
+  await shot(path.join(ROOT, 'libre/icons/apple-touch-icon.png'), full(180), PINE, 180, 180);
+  // Sources Capacitor (conservées pour @capacitor/assets si on l'utilise un jour)
+  await shot(path.join(APP, 'assets/icon-only.png'), full(1024), PINE, 1024, 1024);
+  await shot(path.join(APP, 'assets/icon-foreground.png'), svg(1024, { scale: .42 }), 'transparent', 1024, 1024, true);
+  await shot(path.join(APP, 'assets/icon-background.png'), '', PINE, 1024, 1024);
+  await shot(path.join(APP, 'assets/splash.png'), svg(900, { scale: .7 }), PINE, 2732, 2732);
+  await shot(path.join(APP, 'assets/splash-dark.png'), svg(900, { scale: .7 }), PINE, 2732, 2732);
+  // iOS : icône 1024 (sans transparence) et écrans de lancement
+  const ios = path.join(APP, 'ios/App/App/Assets.xcassets');
+  await shot(path.join(ios, 'AppIcon.appiconset/AppIcon-512@2x.png'), full(1024), PINE, 1024, 1024);
+  for (const f of fs.readdirSync(path.join(ios, 'Splash.imageset')).filter(f => f.endsWith('.png')))
+    await shot(path.join(ios, 'Splash.imageset', f), svg(900, { scale: .7 }), PINE, 2732, 2732);
+  // Android : mêmes fichiers, mêmes tailles qu'avant
+  const res = path.join(APP, 'android/app/src/main/res');
+  for (const d of fs.readdirSync(res)) {
+    const dir = path.join(res, d);
+    if (d.startsWith('mipmap-') && !d.includes('anydpi')) {
+      const n = { ldpi: 36, mdpi: 48, hdpi: 72, xhdpi: 96, xxhdpi: 144, xxxhdpi: 192 }[d.slice(7)]; if (!n) continue;
+      await shot(path.join(dir, 'ic_launcher.png'), full(n).replace('<rect ', `<rect rx="${n * .18}" `), 'transparent', n, n, true);
+      await shot(path.join(dir, 'ic_launcher_round.png'), full(n).replace('<rect ', `<rect rx="${n / 2}" `), 'transparent', n, n, true);
+      // Icône adaptative : premier plan = logo dans la zone sûre, arrière-plan = vert pin
+      await shot(path.join(dir, 'ic_launcher_foreground.png'), svg(n, { scale: .42 }), 'transparent', n, n, true);
+      await shot(path.join(dir, 'ic_launcher_background.png'), '', PINE, n, n);
+    }
+    if (d.startsWith('drawable') && fs.existsSync(path.join(dir, 'splash.png'))) {
+      const { w, h } = await (async () => { const buf = fs.readFileSync(path.join(dir, 'splash.png')); return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) }; })();
+      const m = Math.round(Math.min(w, h) * .4);
+      await shot(path.join(dir, 'splash.png'), svg(m, { scale: .7 }), PINE, w, h);
+    }
+  }
+  await b.close(); console.log('icônes et écrans de lancement écrits');
 })();

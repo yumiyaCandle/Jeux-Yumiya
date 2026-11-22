@@ -2,7 +2,7 @@
    Rôle : rendre l’app utilisable hors ligne après une première visite, et proposer les mises à jour.
    Aucune donnée personnelle ne passe par ici : elles restent dans le stockage local du navigateur.
    À chaque nouvelle version publiée, changer VERSION : l’app propose alors « Mettre à jour ». */
-const VERSION='libre-2026-11-22-refonte';
+const VERSION='libre-2026-11-22-clairiere';
 const CORE=[
  "./",
  "./index.html",
@@ -33,10 +33,6 @@ const CORE=[
  "./photos/autres-1280.webp",
  "./photos/autres-720.avif",
  "./photos/autres-720.webp",
- "./photos/biblio-1280.avif",
- "./photos/biblio-1280.webp",
- "./photos/biblio-720.avif",
- "./photos/biblio-720.webp",
  "./photos/cannabis-1280.avif",
  "./photos/cannabis-1280.webp",
  "./photos/cannabis-720.avif",
@@ -53,10 +49,6 @@ const CORE=[
  "./photos/envies-1280.webp",
  "./photos/envies-720.avif",
  "./photos/envies-720.webp",
- "./photos/journal-1280.avif",
- "./photos/journal-1280.webp",
- "./photos/journal-720.avif",
- "./photos/journal-720.webp",
  "./photos/mental-1280.avif",
  "./photos/mental-1280.webp",
  "./photos/mental-720.avif",

@@ -160,3 +160,13 @@ Aucun de ces contenus n'est validé.
 | Carte « moment difficile » et « objectif atteint » | Accueil | Orientation vers un professionnel suffisante ? |
 
 Aucun n'est validé.
+
+## Refonte « Clairière » : nouveaux contenus à relire
+
+| Contenu | Où | Question |
+|---|---|---|
+| 8 questions de réflexion guidée (`J_PROMPTS`) | Journal | Formulations adaptées à des personnes en difficulté ? Une question peut-elle raviver une envie ? |
+| Objectifs pédagogiques des 11 thèmes (`LIB_THEMES`) | Bibliothèque | Exacts et prudents ? (ex. « pas une question de volonté ») |
+| Phrases de la lecture des données (`readingCard`) | Statistiques | Ton juste (« Ce n'est pas un échec : regarde ce qui a changé ») ? |
+
+Aucun n'est validé. Les fiches « rôle de l'entourage » et « retrouver confiance » restent à écrire avec des sources vérifiées.

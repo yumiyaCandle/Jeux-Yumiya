@@ -25,8 +25,9 @@ test('Inscription', 'Créer un profil « cigarettes » de bout en bout, puis le 
       await i.fill(k === 'name' ? 'Camille' : k === 'age' ? '34' : k === 'height' ? '170' : k === 'weight' ? '65' : ty === 'datetime-local' ? '2026-11-10T20:00' : '10'); }
     const gs = await p.$$('[data-a="obPick"][data-p*="goal"]');
     if (gs.length && !(await p.$('[data-a="obPick"][data-p*="goal"][aria-pressed="true"]'))) { await p.click('[data-a="obPick"][data-p*="goal"][data-v="arreter"]'); continue; }
-    for (const a of ['obPick', 'obSince', 'obLast']) { const els = await p.$$(`[data-a="${a}"]`); if (els.length && !(await p.$(`[data-a="${a}"][aria-pressed="true"]`))) { await els[0].click(); await p.waitForTimeout(120); break; } }
-    const cta = await p.$('#obCta:not([disabled])'); if (cta) await cta.click();
+    for (const a of ['obPick', 'obSince', 'obLast']) { const els = await p.$$(`[data-a="${a}"]`); if (els.length && !(await p.$(`[data-a="${a}"][aria-pressed="true"]`))) { await els[0].click().catch(() => {}); await p.waitForTimeout(120); break; } }
+    // l’inscription avance seule après un choix : un élément peut disparaître entre la recherche et le clic
+    const cta = await p.$('#obCta:not([disabled])'); if (cta) await cta.click().catch(() => {});
   }
   let s = await p.state(); assert.ok(s && s.profile, 'profil créé'); assert.equal(s.habits[0].type, 'cigarette'); assert.equal(s.prefs.mainHabit, s.habits[0].id);
   await p.reload(); await p.waitForSelector('#app[data-view="accueil"]'); s = await p.state(); assert.equal(s.profile.name, 'Camille'); noErr(p);
@@ -540,6 +541,7 @@ test('Journal', 'Modifier une entrée, filtrer par humeur et par mois', async (b
   const now = Date.now(), D = 864e5;
   const journal = [{ id: 'a', ts: now - 2 * D, mood: 1, text: 'jour difficile', triggers: [] }, { id: 'b', ts: now - D, mood: 5, text: 'belle journée', triggers: [] }, { id: 'c', ts: now - 70 * D, mood: 3, text: 'il y a longtemps', triggers: [] }];
   const p = await page(b, base, { init: seed(profileState({ extra: { journal } })) }); await p.goto(base); await p.settle(); await p.go('journal'); await p.waitForTimeout(300);
+  await p.click('.j3-tools summary'); // les filtres sont repliés sous « Filtrer »
   await p.click('[data-a="jFilter"][data-k="low"]'); await p.waitForTimeout(100);
   assert.equal(await p.locator('.jentry').count(), 1); assert.match(await p.textContent('.jbook'), /jour difficile/);
   await p.click('[data-a="jFilter"][data-k="all"]'); await p.waitForTimeout(100);
@@ -789,7 +791,7 @@ test('Aide', 'Jeux d’argent : la ligne spécialisée du pays n’apparaît que
 const stateOf = p => p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
 
 test('Parcours 1', 'Découverte : objectif « mieux comprendre », difficultés et accompagnement choisis ; ni âge, ni sexe, ni taille, ni poids demandés ; accueil sans compteur d’abstinence', async (b, base) => {
-  const p = await page(b, base); await p.goto(base); await p.click('[data-a="obNext"]'); const asked = [];
+  const p = await page(b, base); await p.goto(base); await p.click('[data-a="obNext"]').catch(() => {}); const asked = [];
   for (let n = 0; n < 80; n++) {
     await p.waitForTimeout(150);
     const txt = await p.evaluate(() => document.body.innerText);
@@ -797,13 +799,13 @@ test('Parcours 1', 'Découverte : objectif « mieux comprendre », difficultés 
     if (/Ta taille|Tu es…|Quel âge/.test(txt)) asked.push('donnée corporelle');
     if (await p.$('[data-a="obToggleType"]')) { const sel = '[data-a="obToggleType"][data-k="cannabis"]'; if (await p.getAttribute(sel, 'aria-pressed') !== 'true') await p.click(sel); }
     for (const i of await p.$$('input[data-ob]')) { if (!(await i.isVisible()) || await i.inputValue()) continue; const k = await i.getAttribute('data-ob'), ty = await i.getAttribute('type'); await i.fill(k === 'name' ? 'Alix' : ty === 'datetime-local' ? '2026-11-10T20:00' : '5').catch(() => {}); }
-    if (/quel est ton objectif/i.test(txt) && !(await p.$('[data-a="obPick"][data-p*="goal"][aria-pressed="true"]'))) { await p.click('[data-a="obPick"][data-v="comprendre"]'); continue; }
-    if (/le plus difficile/.test(txt) && !(await p.$('[data-a="obHard"][aria-pressed="true"]'))) { await p.click('[data-a="obHard"][data-v="Soirée / fête"]'); continue; }
-    if (/accompagné·e \?/.test(txt) && await p.getAttribute('[data-a="obFlag"][data-f="remind"]', 'aria-pressed') === 'true') { await p.click('[data-a="obFlag"][data-f="remind"]'); continue; }
+    if (/quel est ton objectif/i.test(txt) && !(await p.$('[data-a="obPick"][data-p*="goal"][aria-pressed="true"]'))) { await p.click('[data-a="obPick"][data-v="comprendre"]').catch(() => {}); continue; }
+    if (/le plus difficile/.test(txt) && !(await p.$('[data-a="obHard"][aria-pressed="true"]'))) { await p.click('[data-a="obHard"][data-v="Soirée / fête"]').catch(() => {}); continue; }
+    if (/accompagné·e \?/.test(txt) && await p.getAttribute('[data-a="obFlag"][data-f="remind"]', 'aria-pressed') === 'true') { await p.click('[data-a="obFlag"][data-f="remind"]').catch(() => {}); continue; }
     let clk = 0; for (const a of ['obPick', 'obSince', 'obLast']) { if ((await p.$$(`[data-a="${a}"]`)).length && !(await p.$(`[data-a="${a}"][aria-pressed="true"]`))) { await p.click(`[data-a="${a}"] >> nth=0`).catch(() => {}); await p.waitForTimeout(80); clk = 1; } } if (clk) continue;
     await p.click('#obCta:not([disabled])', { timeout: 500 }).catch(() => {});
   }
-  await p.click('#obCta'); await p.waitForSelector('#app[data-view="accueil"]'); await p.waitForTimeout(1200); await p.closeLayer();
+  await p.click('#obCta').catch(() => {}); await p.waitForSelector('#app[data-view="accueil"]'); await p.waitForTimeout(1200); await p.closeLayer();
   const s = await stateOf(p);
   assert.deepEqual(asked, [], 'aucune question sur le corps : ' + asked.join());
   assert.equal(s.habits[0].goal, 'comprendre'); assert.equal(s.habits[0].limit, '');
@@ -895,15 +897,72 @@ test('Parcours 11', 'Notifications refusées dans le téléphone : rien n’est 
   noErr(p);
 });
 
-test('Apparence', 'Direction Horizon par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
+test('Apparence', 'Identité « Clairière » par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
   const st = profileState({}); st.prefs.fx = true;
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
-  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Horizon par défaut');
+  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Clairière par défaut');
   await p.go('profil'); await p.openFold('p-look'); await p.evaluate(() => document.querySelector('input[data-a="fxToggle"]').click()); await p.waitForTimeout(200);
   assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), true, 'verre activé à la demande');
   assert.equal((await stateOf(p)).prefs.look, 'verre');
   await p.reload(); await p.waitForSelector('#app[data-view]');
   assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), true, 'choix conservé');
+  noErr(p);
+});
+
+/* ---------- Refonte « Clairière » : navigation, journal guidé, lecture des données, bibliothèque par thèmes ---------- */
+test('Navigation', 'L’aide immédiate est au centre de la barre, sur chaque onglet ; le profil s’ouvre depuis l’avatar de l’en-tête', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'], name: 'Lou' })) }); await p.goto(base); await p.settle();
+  for (const v of ['accueil', 'habitudes', 'stats', 'outils', 'journal']) {
+    await p.go(v); await p.closeLayer();
+    const nav = await p.evaluate(() => [...document.querySelectorAll('nav .in > *')].map(x => x.className || x.getAttribute('href')).join('|'));
+    assert.match(nav, /#accueil\|#habitudes\|nav-help\|#stats\|#outils/, v + ' : ' + nav);
+    await p.click('nav .nav-help'); await p.waitForTimeout(300);
+    assert.match(await p.textContent('#layer'), /Une envie forte/, v + ' : le bouton Aide ouvre l’aide immédiate'); await p.closeLayer();
+  }
+  assert.equal((await p.textContent('.avatar-btn')).trim(), 'L');
+  await p.click('.avatar-btn'); await p.waitForFunction(() => document.getElementById('app').dataset.view === 'profil');
+  assert.equal(await p.getAttribute('.avatar-btn', 'aria-current'), 'page');
+  noErr(p);
+});
+
+test('Journal', 'Écriture guidée : une question du jour, émotions, pensée, intention pour demain ; tout est enregistré et réaffiché', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle(); await p.go('journal'); await p.closeLayer();
+  const q1 = await p.textContent('.j3-q'); await p.click('[data-a="jPromptNext"]'); const q2 = await p.textContent('.j3-q'); assert.notEqual(q1, q2, 'une autre question est proposée');
+  await p.click('[data-a="jPrompt"]'); await p.waitForSelector('#j-text');
+  assert.equal((await p.textContent('.j3-qbox p:last-child')).trim(), q2.trim(), 'la question choisie est rappelée');
+  await p.click('[data-a="jEmo"][data-k="Fatigue"]'); await p.click('[data-a="jMood"][data-v="4"]');
+  await p.fill('#j-text', 'Une marche au soleil'); await p.fill('#j-goal', 'Préparer une boisson avant la pause');
+  await p.click('[data-a="saveJournal"]'); await p.waitForTimeout(400);
+  const j = (await stateOf(p)).journal[0];
+  assert.deepEqual(j.emo, ['Fatigue']); assert.equal(j.mood, 4); assert.equal(j.goal, 'Préparer une boisson avant la pause'); assert.ok(j.prompt, 'question enregistrée');
+  const book = await p.textContent('.jbook'); assert.match(book, /Aujourd’hui/); assert.match(book, /Intention/); assert.match(book, /Fatigue/);
+  assert.equal(await p.locator('.j3-week i[style]').count(), 1, 'humeur du jour visible sur la semaine');
+  noErr(p);
+});
+
+test('Statistiques', 'Lecture expliquée : constats en phrases simples, chacun avec son mode de calcul ; jamais présentés comme un diagnostic', async (b, base) => {
+  const D = 864e5, st = profileState({ types: ['cigarette'], days: 40 });
+  st.logs = Array.from({ length: 9 }, (_, i) => ({ id: 'l' + i, habitId: 'h0', type: 'cigarette', ts: Date.now() - (8 + i) * D + 0, qty: 1, trigger: 'Stress' }));
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('stats');
+  const txt = await p.textContent('.rd3');
+  assert.match(txt, /Ce que tes données montrent/); assert.match(txt, /Moins de consommations cette semaine/); assert.match(txt, /Stress/);
+  assert.match(txt, /pas un diagnostic ni une prédiction/);
+  assert.ok(await p.locator('.rd3 details').count() >= 3, 'chaque constat dit comment il est calculé');
+  const nw = await page(b, base, { init: seed(profileState({ types: ['cigarette'], days: 2 })) }); await nw.goto(base); await nw.settle(); await nw.go('stats');
+  assert.match(await nw.textContent('.rd3'), /Encore quelques jours de suivi/, 'pas de conclusion sur trop peu de données');
+  noErr(p); noErr(nw); await nw.ctx.close();
+});
+
+test('Bibliothèque', 'Par thèmes : 11 thèmes avec un objectif pédagogique, chaque fiche s’ouvre ; un thème sans fiche dédiée le dit', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ types: ['alcool'] })) }); await p.goto(base); await p.settle(); await p.go('biblio');
+  const n = await p.locator('.lib3-t').count(); assert.equal(n, 11);
+  for (let i = 0; i < n; i++) {
+    await p.click(`.lib3-t >> nth=${i}`); await p.waitForTimeout(150);
+    assert.match(await p.textContent('.lib3-head'), /Objectif :/); assert.ok(await p.locator('.art').count() >= 1, 'au moins une fiche');
+    if (i === 9) assert.match(await p.textContent('#app'), /en préparation/);
+    await p.click('[data-a="libTheme"][data-k=""]'); await p.waitForTimeout(100);
+  }
+  await p.click('.lib3-t >> nth=1'); await p.click('.art >> nth=0'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Sources/);
   noErr(p);
 });
 

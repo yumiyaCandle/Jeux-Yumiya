@@ -101,3 +101,11 @@ champs facultatifs (voir `PRIVACY-REVIEW.md` § 6) stockés dans le même état 
 
 Aucun mécanisme de sécurité modifié. Nouveaux champs : `strat` dans l'historique des envies, plans créés depuis un modèle (mêmes champs
 que les plans existants). Stockés dans le même état (coffre chiffré dans les apps). 80 tests, dont tous les tests de sécurité, repassent.
+
+## 8. Refonte « Clairière » (22 novembre 2026)
+
+Aucun mécanisme de sécurité modifié (chiffrement, clés, verrouillage, sauvegardes, CSP, voile, rappels, journaux, permissions,
+identifiants). Nouveaux champs facultatifs du journal : `emo` (émotions choisies dans une liste), `goal` (intention pour demain),
+`prompt` (question de réflexion choisie). Ils sont stockés dans le même état (coffre chiffré dans les apps, coffre web facultatif),
+inclus dans les sauvegardes chiffrées et effacés par « Tout effacer ». L'écouteur ajouté (`toggle` sur les filtres du journal) ne lit
+aucune donnée. Les icônes sont générées localement, sans service externe. 84 tests, dont tous les tests de sécurité, repassent.

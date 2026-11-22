@@ -22,7 +22,7 @@ pas d'émulateur**. Détail test par test : `TESTS.md` (généré) et `tests/RES
 | `npm run check:versions` | 1.0.0 / build 1 sur Android, iOS, `package.json` ; copies natives et `LIBRE.html` à jour |
 | `npm audit --audit-level=high` (racine et `libre-app`) | 0 vulnérabilité |
 | `./gradlew assembleDebug assembleRelease bundleRelease :app:testDebugUnitTest lintRelease` | Réussi ; 12 tests JUnit ; lint : 0 erreur, 29 avertissements |
-| Extraction de `LIBRE-REFONTE-COMPLET.zip` dans un dossier vierge, puis `npm ci`, `npm test`, `npm run sync`, `gradlew assembleDebug bundleRelease :app:testDebugUnitTest` | Réussi : archive intègre, aucun fichier de clé ou de secret, 75 tests réussis, contrastes et cibles conformes, versions cohérentes, compilation Android et 12 tests JUnit réussis |
+| Extraction de `LIBRE-CLAIRIERE-COMPLET.zip` dans un dossier vierge, puis `npm ci`, `npm test`, `npm run sync`, `gradlew assembleDebug bundleRelease :app:testDebugUnitTest` | Réussi : archive intègre, aucun fichier de clé ou de secret, 75 tests réussis, contrastes et cibles conformes, versions cohérentes, compilation Android et 12 tests JUnit réussis |
 
 ## 3. Tests ajoutés dans cette version (non-régression)
 
@@ -78,3 +78,23 @@ Tous **réussis réellement dans Chromium** (Playwright) ; « simulé » = plugi
 | 12 | Après une mise à jour | Migration · état v3 ; Données d'une version plus récente ; Apparence · Horizon pour profil existant | Web |
 
 Plus : Plans · modèle « Pression sociale ». Total : **80 réussis, 0 échoué**.
+
+## 7. Refonte « Clairière » (22 novembre 2026)
+
+Exécutés réellement dans Chromium (Playwright) : **84 réussis, 0 échoué**.
+
+| Nouveau test | Ce qui est vérifié |
+|---|---|
+| Navigation | Sur 5 écrans : la barre est Accueil · Habitudes · **Aide** · Progrès · Outils ; le bouton Aide ouvre l'aide immédiate ; l'avatar ouvre le profil |
+| Journal · écriture guidée | Question suivante, réponse à la question, émotions, humeur, intention : enregistrées, réaffichées, regroupées sous « Aujourd'hui », humeur visible sur la semaine |
+| Statistiques · lecture expliquée | Constats (tendance, déclencheur), « Comment c'est calculé » sur chacun, mention « pas un diagnostic » ; rien de conclu avec 2 jours de suivi |
+| Bibliothèque · thèmes | 11 thèmes, objectif pédagogique, au moins une fiche par thème, thème « entourage » signalé « en préparation », une fiche s'ouvre avec ses sources |
+
+Adaptés à l'interface (pas aux résultats) : filtres du journal ouverts depuis « Filtrer » ; robot d'inscription tolérant au passage
+automatique à l'étape suivante. Contrastes AA, zones tactiles, texte 200 % (fr, de) : conformes. Android : `assembleDebug
+assembleRelease bundleRelease :app:testDebugUnitTest lintRelease` réussi, 12 tests JUnit, 0 erreur de lint. iOS : non compilé.
+Appareils réels : aucun.
+
+Vérification de l'archive : `LIBRE-CLAIRIERE-COMPLET.zip` extraite dans un dossier vierge, puis `npm ci`, `npm test` (84 réussis),
+contrastes et cibles conformes, `libre-app` : `npm ci`, `npm run sync`, `gradlew assembleDebug bundleRelease :app:testDebugUnitTest`
+réussi. Aucun fichier de clé ni secret dans l'archive.

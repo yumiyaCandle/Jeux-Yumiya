@@ -2,6 +2,8 @@
 
 | Document | Contenu |
 |---|---|
+| [REFONTE-CLAIRIERE.md](REFONTE-CLAIRIERE.md) | **Refonte « Clairière »** (dernière) : nouvelle identité, navigation, bienvenue, journal, statistiques, bibliothèque ; avant/après (`ux/clairiere/`), tests, limites |
+| [AUDIT-CLAIRIERE.md](AUDIT-CLAIRIERE.md) | Audit initial de la refonte « Clairière » : écran par écran, fonctionnel, aides, sécurité, plan |
 | [REFONTE-INTEGRALE.md](REFONTE-INTEGRALE.md) | **Refonte intégrale** : comparaison avant/après écran par écran, fonctionnalités, sécurité, tests, limites |
 | [AUDIT-REFONTE.md](AUDIT-REFONTE.md) | Audit initial de la refonte : tableau écran par écran, fonctionnel, aides, sécurité, plan |
 | [TRANSFORMATION.md](TRANSFORMATION.md) | **Transformation « Horizon »** : constats, nouvelle direction artistique, fonctionnalités ajoutées, données, limites (captures dans `ux/`) |
