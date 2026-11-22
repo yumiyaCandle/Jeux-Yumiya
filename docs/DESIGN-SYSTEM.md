@@ -91,3 +91,34 @@ Couche CSS « HORIZON » à la fin de la feuille de style de `libre/index.html`,
 Règles : une seule couleur d'action (encre pleine, claire sur fond sombre) ; surfaces pleines, filet 1 px, ombre douce, rayon 20 px ;
 pas de flou ; serif italique réservé aux mots qui comptent ; chiffres tabulaires ; barre d'onglets ancrée ; feuilles modales pleines ;
 aucun décor sans information. Vérifié par `npm run check:contrast` (AA) et `npm run check:targets` (≥ 24 px).
+
+## Design system v2 (refonte intégrale)
+
+**Échelles** (jetons CSS sur `:root`, direction Horizon) :
+
+| Famille | Jetons |
+|---|---|
+| Espacement | `--sp-1` 4 · `--sp-2` 8 · `--sp-3` 12 · `--sp-4` 16 · `--sp-5` 20 · `--sp-6` 24 · `--sp-7` 32 · `--sp-8` 40 px |
+| Rayons | `--r-xs` 8 · `--r-sm` 12 · `--r-md` 16 · `--r-card` 20 · `--r-pill` 999 |
+| Texte | `--fs-xs` .78 · `--fs-sm` .88 · `--fs-md` 1 · `--fs-lg` 1.25 · `--fs-xl` 1.6 · `--fs-2xl` 2.2 · `--fs-hero` 4 rem ; interlignage `--lh-tight` 1.1, `--lh-body` 1.5 |
+| Mouvement | `--t-fast` 120 ms · `--t-base` 220 ms · `--ease` cubic-bezier(.2,.8,.2,1) ; tout est coupé si l'appareil demande moins d'animations |
+
+**Couleurs fonctionnelles** : réussite = sauge (`--green*`) ; gain = ambre (`--amber`) ; alerte et urgence = corail (`--sos`, `--sos-soft`) ;
+information = encre et `--muted`. Jamais la couleur seule : toujours un mot, une coche ou une icône.
+
+**Composants** (classes) :
+
+| Composant | Classe | Règle |
+|---|---|---|
+| Bouton principal / secondaire / discret | `.btn.primary` / `.btn.ghost` / `.btn.quiet` | Une seule action principale par écran ; ≥ 44 px |
+| Lien | `.link` | Zone de toucher ≥ 44 px (pseudo-élément) |
+| Carte | `.hm-p`, `.card` | Surface pleine, filet, rayon 20 |
+| Carte de situation | `.hm-sit` (+ `.sit-hard`, `.sit-slip`, `.sit-new`, `.sit-goal`) | Une seule à la fois, en tête de l'accueil |
+| Liste d'étapes | `.hm-steps` | Cochée automatiquement à partir des données |
+| Choix | `.seg button`, `.choice`, `.opt` | `aria-pressed` ; sélectionné = sauge pâle + contour |
+| Stratégie (aide guidée) | `.s5-strat` (`.reco` = recommandée) | 2 recommandées, autres repliées |
+| Feuille modale | `.sheet` | Pleine, voile derrière, poignée |
+| Numéro d'urgence | `.em-btn` | Corail profond, texte blanc ≥ 4,5:1 |
+| États vides | `.hm-empty`, textes « Aucune … » | Toujours une action proposée |
+| Erreurs | `toast()` | Titre + phrase qui dit quoi faire |
+| Notifications | centre `notifCenter` | Textes discrets par défaut |

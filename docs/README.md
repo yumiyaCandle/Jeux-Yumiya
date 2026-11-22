@@ -2,6 +2,8 @@
 
 | Document | Contenu |
 |---|---|
+| [REFONTE-INTEGRALE.md](REFONTE-INTEGRALE.md) | **Refonte intégrale** : comparaison avant/après écran par écran, fonctionnalités, sécurité, tests, limites |
+| [AUDIT-REFONTE.md](AUDIT-REFONTE.md) | Audit initial de la refonte : tableau écran par écran, fonctionnel, aides, sécurité, plan |
 | [TRANSFORMATION.md](TRANSFORMATION.md) | **Transformation « Horizon »** : constats, nouvelle direction artistique, fonctionnalités ajoutées, données, limites (captures dans `ux/`) |
 | [AUDIT-FINAL.md](AUDIT-FINAL.md) | **Rapport final** : diagnostic P0–P3, corrections, critères d'acceptation, niveau de préparation |
 | [SECURITE-FINALE.md](SECURITE-FINALE.md) | Sécurité plateforme par plateforme, CSP, scénarios d'attaque, permissions |

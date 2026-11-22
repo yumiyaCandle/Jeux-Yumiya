@@ -788,7 +788,7 @@ test('Aide', 'Jeux d’argent : la ligne spécialisée du pays n’apparaît que
 /* ---------- Transformation « Horizon » : parcours A à H ---------- */
 const stateOf = p => p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
 
-test('Scénario A', 'Découverte : objectif « mieux comprendre », difficultés et accompagnement choisis ; ni âge, ni sexe, ni taille, ni poids demandés ; accueil sans compteur d’abstinence', async (b, base) => {
+test('Parcours 1', 'Découverte : objectif « mieux comprendre », difficultés et accompagnement choisis ; ni âge, ni sexe, ni taille, ni poids demandés ; accueil sans compteur d’abstinence', async (b, base) => {
   const p = await page(b, base); await p.goto(base); await p.click('[data-a="obNext"]'); const asked = [];
   for (let n = 0; n < 80; n++) {
     await p.waitForTimeout(150);
@@ -825,7 +825,7 @@ test('Suivi', 'Réduction : le bloc principal montre la moyenne sur 7 jours et c
   noErr(p);
 });
 
-test('Scénario C', 'Journée difficile : pistes simples, objectif allégé pour la journée puis rétabli, numéro d’urgence du pays proposé', async (b, base) => {
+test('Parcours 5', 'Journée difficile : pistes simples, objectif allégé pour la journée puis rétabli, numéro d’urgence du pays proposé', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'], extra: { prefs: { lang: 'fr', mainHabit: 'h0', helpCountry: 'CH' } } })) }); await p.goto(base); await p.settle();
   await p.click('[data-a="checkin"][data-v="1"]'); await p.waitForTimeout(200);
   await p.click('.ck [data-a="hardDay"]'); await p.waitForTimeout(300);
@@ -840,17 +840,24 @@ test('Scénario C', 'Journée difficile : pistes simples, objectif allégé pour
   noErr(p);
 });
 
-test('Scénario B', 'Envie forte : 5 minutes guidées, bilan avec déclencheur et émotion facultatifs, tout est enregistré', async (b, base) => {
+test('Parcours 3', 'Envie forte : aide guidée en 7 étapes (ressenti, intensité, contexte, stratégie adaptée, exercice, bilan, enregistrement)', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle();
   await p.click('.hm-sos'); await p.waitForTimeout(300);
   assert.match(await p.textContent('#layer'), /Urgences/);
-  await p.click('[data-a="s5Open"]'); await p.waitForTimeout(200); await p.click('[data-a="s5Start"]');
-  for (let i = 0; i < 4; i++) { await p.waitForTimeout(150); await p.click('[data-a="s5Next"]'); }
-  await p.waitForSelector('[data-a="s5Out"]', { timeout: 5000 });
-  await p.click('.s5-more summary'); await p.click('[data-a="s5Trig"][data-v="Ennui"]'); await p.click('[data-a="s5Emo"][data-v="Solitude"]');
-  await p.click('[data-a="s5Out"][data-v="held"]'); await p.waitForTimeout(400);
+  await p.click('[data-a="s5Open"]'); await p.waitForTimeout(200);
+  await p.click('[data-a="s5Feel"][data-v="Solitude"]'); await p.waitForTimeout(150);   // 1. ressenti
+  await p.click('[data-a="s5To"][data-v="ctx"]'); await p.waitForTimeout(150);          // 2. intensité
+  await p.click('[data-a="s5Ctx"][data-v="Ennui"]'); await p.waitForTimeout(150);       // 3. contexte
+  const reco = await p.$$eval('.s5-strat.reco', b => b.map(x => x.dataset.v));
+  assert.deepEqual(reco, ['agir', 'vague'], 'stratégies proposées selon le contexte : ' + reco);
+  await p.click('.s5-strat.reco >> nth=0');                                              // 4. stratégie
+  for (let i = 0; i < 3; i++) { await p.waitForTimeout(150); await p.click('[data-a="s5Next"]'); } // 5. exercice
+  await p.waitForSelector('[data-a="s5Out"]', { timeout: 5000 });                       // 6. bilan
+  assert.match(await p.textContent('.s5-more summary'), /déclenchée/);
+  await p.click('[data-a="s5Out"][data-v="held"]'); await p.waitForTimeout(400);       // 7. enregistrement
   const h = (await stateOf(p)).tools.history.slice(-1)[0];
-  assert.equal(h.outcome, 'held'); assert.equal(h.trigger, 'Ennui'); assert.equal(h.emotion, 'Solitude'); assert.equal(h.tool, 'sos5');
+  assert.equal(h.outcome, 'held'); assert.equal(h.trigger, 'Ennui'); assert.equal(h.emotion, 'Solitude'); assert.equal(h.tool, 'sos5'); assert.equal(h.strat, 'agir');
+  assert.match(await p.textContent('#layer'), /Préparer un plan pour « Ennui »/);
   noErr(p);
 });
 
@@ -871,12 +878,12 @@ test('Aide', 'Numéros groupés par situation ; LIBRE n’est pas un service d�
   const p = await page(b, base, { init: seed(profileState({ types: ['jeux_argent'], extra: { prefs: { lang: 'fr', mainHabit: 'h0', helpCountry: 'CH' } } })) }); await p.goto(base); await p.settle();
   await p.go('profil'); await p.openFold('p-safe'); await p.waitForTimeout(200);
   const txt = await p.evaluate(() => document.getElementById('app').innerText);
-  assert.match(txt, /DANGER IMMÉDIAT OU URGENCE MÉDICALE[\s\S]*144[\s\S]*BESOIN DE PARLER[\s\S]*143[\s\S]*SOUTIEN SPÉCIALISÉ[\s\S]*0800 040 080/i);
+  assert.match(txt, /DANGER IMMÉDIAT[\s\S]*112[\s\S]*URGENCE MÉDICALE[\s\S]*144[\s\S]*BESOIN DE PARLER[\s\S]*143[\s\S]*ACCOMPAGNEMENT PROFESSIONNEL[\s\S]*0800 040 080/i);
   assert.match(txt, /LIBRE n’est pas un service d’urgence/);
   noErr(p);
 });
 
-test('Scénario H', 'Notifications refusées dans le téléphone : rien n’est programmé, un message clair, l’app reste entièrement utilisable', async (b, base) => {
+test('Parcours 11', 'Notifications refusées dans le téléphone : rien n’est programmé, un message clair, l’app reste entièrement utilisable', async (b, base) => {
   const p = await page(b, base, { native: { platform: 'android', ntDenied: true }, init: seed(profileState({ types: ['cigarette'] })) });
   await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]'); await p.waitForTimeout(1500); await p.closeLayer();
   await p.go('profil'); await p.openFold('p-notif'); await p.waitForTimeout(200);
@@ -897,6 +904,71 @@ test('Apparence', 'Direction Horizon par défaut, y compris pour les profils exi
   assert.equal((await stateOf(p)).prefs.look, 'verre');
   await p.reload(); await p.waitForSelector('#app[data-view]');
   assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), true, 'choix conservé');
+  noErr(p);
+});
+
+/* ---------- Refonte intégrale : parcours 2, 4, 6, 8 et plans ---------- */
+test('Parcours 2', 'Tableau de bord adaptatif : premiers pas, moment difficile, reprise, objectif atteint (une seule carte, la plus importante)', async (b, base) => {
+  const D = 864e5, open = async st => { const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); const r = await p.evaluate(() => { const c = document.querySelector('.hm-sit'); return c ? c.className + ' | ' + c.innerText : ''; }); noErr(p); await p.ctx.close(); return r; };
+  const nw = profileState({ types: ['cigarette'], days: 2 }); nw.reasons = [];
+  assert.match(await open(nw), /sit-new[\s\S]*0 sur 4[\s\S]*Écrire pourquoi tu changes/i);
+  const hard = profileState({ types: ['cigarette'], days: 30 }); hard.tools.checkins = { [new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 10)]: { mood: 1, ts: Date.now() } };
+  hard.reasons = ['Ma santé']; hard.contacts = [{ name: 'Sam', phone: '0790000000' }];
+  const rh = await open(hard); assert.match(rh, /sit-hard[\s\S]*On prend les choses une par une/, rh);
+  const slip = profileState({ types: ['cigarette'], days: 30 }); slip.contacts = [{ name: 'Sam', phone: '1' }]; slip.tools.plans = [{ id: 'p', if: 'a', then: 'b' }];
+  slip.logs = [{ id: 'x', habitId: 'h0', type: 'cigarette', ts: Date.now() - 3 * 36e5, qty: 1 }];
+  assert.match(await open(slip), /sit-slip[\s\S]*Une reprise ne t’enlève rien/);
+  const goal = profileState({ types: ['cigarette'], days: 400 });
+  assert.match(await open(goal), /sit-goal[\s\S]*Toutes les étapes sont franchies/);
+  const calm = profileState({ types: ['cigarette'], days: 30 }); calm.contacts = [{ name: 'Sam', phone: '1' }]; calm.tools.plans = [{ id: 'p', if: 'a', then: 'b' }];
+  assert.equal(await open(calm), '', 'aucune carte quand rien de particulier');
+});
+
+test('Parcours 4', 'Exercice guidé (surfer sur l’envie) : démarrer, terminer, indiquer le résultat ; la séance est enregistrée', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle();
+  await p.go('outils'); await p.evaluate(() => { const x = document.createElement('button'); x.dataset.a = 'tool'; x.dataset.id = 'urge'; document.body.appendChild(x); x.click(); x.remove(); });
+  for (let i = 0; i < 12; i++) {
+    await p.waitForTimeout(250);
+    if (await p.$('[data-a="tlOutcome"]')) { await p.click('[data-a="tlOutcome"] >> nth=0'); break; }
+    const nxt = await p.$('#layer button.btn.primary:not([disabled]), [data-a="tlFinish"]'); if (nxt) await nxt.click();
+  }
+  await p.waitForTimeout(400);
+  const st = await stateOf(p), last = (st.tools.history || []).slice(-1)[0];
+  assert.ok(last && last.tool === 'urge', 'séance enregistrée : ' + JSON.stringify(last));
+  noErr(p);
+});
+
+test('Parcours 6', 'Rechute : la feuille rappelle ce qui reste acquis, la reprise est notée sans culpabiliser, la suite est préparée', async (b, base) => {
+  const st = profileState({ types: ['cigarette'], days: 30 }); st.logs = [{ id: 'x', habitId: 'h0', type: 'cigarette', ts: Date.now() - 2 * 36e5, qty: 1 }]; st.sos = [{ ts: Date.now() - 5 * 864e5, ok: true, intensity: 7 }];
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
+  await p.click('.hm-sit [data-a="lapse"]'); await p.waitForTimeout(300);
+  const txt = await p.textContent('#layer');
+  assert.match(txt, /Ce qui reste acquis/); assert.match(txt, /jours sans au total/); assert.match(txt, /1 envie traversée/);
+  assert.doesNotMatch(txt, /échec|faute|honte/i, 'aucun mot culpabilisant');
+  await p.click('[data-a="lpTrig"] >> nth=0'); await p.click('[data-a="lapseSave"]'); await p.waitForTimeout(400);
+  const s2 = await stateOf(p); assert.ok(s2.journal.some(j => j.kind === 'lapse'), 'reprise notée dans le journal');
+  noErr(p);
+});
+
+test('Parcours 8', 'Modifier son objectif : passer d’« arrêter » à « mieux comprendre » ; le compteur d’abstinence disparaît, les données restent', async (b, base) => {
+  const st = profileState({ types: ['alcool'], days: 20 }); st.logs = [{ id: 'a', habitId: 'h0', type: 'alcool', ts: Date.now() - 5 * 864e5, qty: 2 }];
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
+  assert.match(await p.textContent('.hm-hero'), /jours sans alcool/);
+  await p.go('habitudes'); await p.click('[data-a="habitForm"][data-id="h0"]'); await p.waitForTimeout(300);
+  await p.click('[data-a="hfGoal"][data-k="comprendre"]'); await p.click('[data-a="saveHabit"]'); await p.waitForTimeout(400);
+  const s2 = await stateOf(p); assert.equal(s2.habits[0].goal, 'comprendre'); assert.equal(s2.logs.length, 1, 'données conservées');
+  await p.go('accueil'); const hero = await p.textContent('.hm-hero');
+  assert.match(hero, /Observation/); assert.doesNotMatch(hero, /jours sans alcool/);
+  noErr(p);
+});
+
+test('Plans', 'Plans par situation : un modèle « Pression sociale » remplit le plan, modifiable, puis enregistré et visible', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ types: ['alcool'] })) }); await p.goto(base); await p.settle();
+  await p.evaluate(() => { const x = document.createElement('button'); x.dataset.a = 'tool'; x.dataset.id = 'plan'; document.body.appendChild(x); x.click(); x.remove(); });
+  await p.waitForTimeout(300); await p.click('[data-a="planTpl"][data-i="2"]');
+  assert.match(await p.inputValue('#pl-if'), /insiste/); await p.fill('#pl-then', 'je dis non merci et je rentre à 23 h');
+  await p.click('[data-a="planSave"]'); await p.waitForTimeout(400);
+  const pl = (await stateOf(p)).tools.plans.slice(-1)[0]; assert.match(pl.if, /insiste/); assert.equal(pl.then, 'je dis non merci et je rentre à 23 h');
   noErr(p);
 });
 

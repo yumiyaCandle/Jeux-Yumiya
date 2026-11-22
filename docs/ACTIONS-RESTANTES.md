@@ -27,8 +27,8 @@ Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente auc
 
 ## 2 bis. Signature et fichiers Android
 
-- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-HORIZON-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `350828ee7c3faacfcc98191ddd91b22dbcd1360b4d0ef518a598f8c014684710`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-REFONTE-COMPLET.zip`, qui ne contient que le projet).
+  Empreinte SHA-256 : `3bea63aa5af2efb05823e90386aa24223cb1c3e9ec5ef40a2cb14866d69af68e8`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -85,6 +85,13 @@ pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source offici
 - Rouvrir des langues après traduction (`LANGUES.md`).
 - Garder ou non le support iPad (captures iPad à fournir si gardé).
 - Pays de distribution (les numéros d'aide affichés en dépendent).
+
+## 9. Après la refonte intégrale
+
+- Écrire et faire relire deux fiches manquantes de la bibliothèque : **rôle de l'entourage** et **retrouver confiance en soi** (sources à
+  vérifier, relecture professionnelle) ; je ne les ai pas rédigées sans pouvoir vérifier les sources.
+- Faire relire les nouveaux contenus de l'aide guidée (fin de `VALIDATION-MEDICALE.md`).
+- Tests avec des personnes réelles, sur iPhone et Android (`TESTS-APPAREILS.md`).
 
 ## 8. Après la transformation « Horizon »
 

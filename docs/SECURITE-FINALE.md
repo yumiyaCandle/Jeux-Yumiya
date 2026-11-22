@@ -96,3 +96,8 @@ Vérifié dans le manifeste fusionné de la version release (`processReleaseMani
 Aucun mécanisme de sécurité modifié : chiffrement, clés, verrouillage, sauvegardes, CSP, voile de confidentialité, rappels discrets sont
 inchangés et leurs tests repassent. Changements liés aux données : collecte réduite (âge, sexe, taille, poids non demandés), nouveaux
 champs facultatifs (voir `PRIVACY-REVIEW.md` § 6) stockés dans le même état chiffré. Format de sauvegarde inchangé (5).
+
+## 7. Refonte intégrale (22 novembre 2026)
+
+Aucun mécanisme de sécurité modifié. Nouveaux champs : `strat` dans l'historique des envies, plans créés depuis un modèle (mêmes champs
+que les plans existants). Stockés dans le même état (coffre chiffré dans les apps). 80 tests, dont tous les tests de sécurité, repassent.

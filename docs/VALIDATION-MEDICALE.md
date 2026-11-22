@@ -148,3 +148,15 @@ les points de la section précédente restent ouverts.
 | Messages d'observation (« Observer sans te juger, c'est déjà reprendre la main ») | Accueil | — |
 
 Aucun de ces contenus n'est validé.
+
+## Refonte intégrale : nouveaux contenus à relire
+
+| Contenu | Où | Question |
+|---|---|---|
+| Correspondance contexte/émotion → stratégie (`S5_MAP`) | Aide guidée | Les associations (ex. solitude → parler, fatigue → prendre soin du corps) sont-elles pertinentes ? |
+| Phrases de refus (« Non merci, je fais une pause en ce moment »…) | Aide guidée, modèle de plan | Adaptées ? |
+| Liste « prendre soin de toi » (eau, manger, se reposer, prendre l'air) | Aide guidée | — |
+| Modèles de plans (5) | Plans | Formulations et actions proposées |
+| Carte « moment difficile » et « objectif atteint » | Accueil | Orientation vers un professionnel suffisante ? |
+
+Aucun n'est validé.

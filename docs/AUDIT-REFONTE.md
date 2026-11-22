@@ -1,121 +1,76 @@
-# LIBRE : audit et refonte du 21 novembre 2026
+# Audit initial — refonte intégrale de LIBRE
 
-> **Document historique (version 2, 21 novembre 2026).** La remarque « aucun ZIP n’était joint » concerne cette version-là uniquement. Les chiffres de tests (43) et la liste des langues proposées (19) ont changé depuis : voir `AUDIT-V3.md`, `TESTS.md` et `LANGUES.md`.
+22 novembre 2026. Point de départ : commit `6437887` (direction « Horizon »), étiquette Git `avant-refonte-integrale`.
+Méthode : lecture du code (`libre/index.html`, projets natifs, tests), contrôle automatique des actions, 36 captures de tous les écrans,
+sous-écrans et de cinq états de l'accueil (Chromium, 390 × 844). Captures : `docs/ux/avant-refonte/`.
 
-Ce document complète `AUDIT.md` (premier audit : PIN, sauvegardes chiffrées, coffre natif, projets iOS et Android).
-Il couvre la mission « audit, refonte et optimisation professionnelle ».
+## 1. Audit UX/UI écran par écran
 
-## 0. Point de départ et sauvegarde
+Priorités : **P1** gêne réelle pour une personne en difficulté ou risque ; **P2** qualité ; **P3** finition.
 
-- Aucun fichier ZIP n'était joint à la demande. Le travail porte sur la dernière version du dépôt, qui est celle des archives de `livraison/`.
-- **Version d'origine conservée** : commit `3ca9e12` de la branche `claude/libre-photography-visual-identity-3h9i40`. Chaque modification est
-  un commit séparé ; `git diff 3ca9e12` montre tout ce qui a changé.
-- La mention `PWA_BUILD=false` de la demande vient du fichier autonome `LIBRE.html` (voir § 7) : dans `index.html`, la valeur est `true`.
+| Écran | État actuel | Problèmes identifiés | Modifications prévues | Priorité |
+|---|---|---|---|---|
+| Bienvenue | Photo, nom, slogan, 3 atouts, action principale | Ne dit pas clairement **à qui** s'adresse LIBRE ni **ce qui la distingue** (sans compte, sans pub) | Trois promesses claires : pour qui, comment elle aide, confidentialité | P2 |
+| Inscription | 6 à 11 étapes, objectifs arrêter/réduire/comprendre, difficultés, accompagnement | Correcte depuis Horizon ; la confidentialité n'est pas présentée avant de commencer | Écran « Tes données restent chez toi » intégré au début | P2 |
+| Accueil | Même structure quel que soit l'état | **Ne change pas selon la situation** : en difficulté ou après une reprise, l'aide adaptée est sous la ligne de flottaison ; pas d'accompagnement des premiers jours ; objectif atteint sans suite | Carte de **situation** en tête : premiers pas, moment difficile, reprise, objectif atteint | **P1** |
+| SOS (écran d'entrée) | 10 choix : 5 minutes, exercice selon l'intensité, respirer, s'ancrer, recul, autre chose, écrire, appeler, conseils, numéros | **Trop de décisions en pleine crise** ; l'aide ne dépend pas de la cause de l'envie | Un seul parcours guidé principal : ressenti → intensité → contexte → stratégie adaptée → exercice → bilan → enregistrement ; les autres choix restent accessibles | **P1** |
+| 5 minutes guidées | Intensité, 4 phases fixes, bilan avec déclencheur/émotion | Phases identiques pour le stress, l'ennui, la solitude ou la pression sociale | Phases choisies selon la stratégie (souffle, ancrage, agir, parler, refuser, se reposer) | **P1** |
+| Numéros d'aide | 4 groupes | La demande distingue 6 situations | 6 rubriques : danger immédiat, urgence médicale, crise psychologique, besoin de parler, soutien émotionnel, accompagnement professionnel | P1 |
+| Après un écart | Formulaire complet (situation, émotion, intensité, ce qui aurait aidé, plan) | Bon contenu, mais **long d'un bloc** ; les progrès déjà faits ne sont pas rappelés dans la feuille | Rappel des acquis en tête ; ordre « ce qui s'est passé → ce qui a aidé → la suite » | P2 |
+| Journal | Humeur, intensité, déclencheurs, difficultés, réussites, notes | Complet ; pas d'invite pour démarrer quand on ne sait pas quoi écrire | Amorces d'écriture facultatives | P3 |
+| Statistiques | Vue d'ensemble 7 j / 30 j / 3 m / 12 m, comparaisons, graphiques | Clair ; estimations signalées | Conservé (vérifié) | — |
+| Calendrier, bilans | Couleur + coche, bilans mensuels | Clair | Conservé | — |
+| Outils | Exercices, « pour préparer la suite », ton espace | Bon ; deux « plans » | Un seul « Mon plan » avec plans par situation | P2 |
+| Mon plan personnel / Mon plan anti-rechute | Deux écrans distincts | **Doublon de nom et de concept** ; aucun modèle pour démarrer | Plans par situation (envie, soirées, pression sociale, stress, après une période compliquée) avec modèles modifiables | P1 |
+| Bibliothèque | 35 fiches sourcées, par thème | Manquent « rôle de l'entourage » et « retrouver confiance » ; en anglais pour DE/IT/ES/PT | Signalé ; nouvelles fiches à écrire avec sources et relecture professionnelle | P2 |
+| Mes envies | Analyse si ≥ 4 envies | Correct | Conservé | — |
+| Mon corps, Santé : quand consulter | Frises sourcées, signes d'urgence | Correct | Conservé | — |
+| Profil | 3 cartes + 8 réglages au même niveau | **Liste plate** : « Photographies » au même niveau que données et sécurité ; confidentialité difficile à repérer | Sections : Mon accompagnement · Confidentialité et données · Application · Aide | P1 |
+| Verrouillage | Code, aide accessible, oubli | Correct | Conservé | — |
+| Notifications | Centre avec historique | Correct | Conservé | — |
+| Navigation | 5 onglets + SOS en haut de chaque écran | Peu profonde, aide toujours à 1 toucher | Conservée (déjà conforme) ; libellés vérifiés | — |
 
-## 1. Diagnostic
+## 2. Audit fonctionnel
 
-| Domaine | État constaté | Décision |
-|---|---|---|
-| Suivi des habitudes (création, réglages, date de début, objectif arrêt ou réduction, consommation d'avant, pause et reprise, plusieurs suivis) | Fonctionne, testé | Conservé |
-| Consommations | Ajout, suppression et annulation fonctionnent. **Impossible de corriger une consommation passée** : il fallait la supprimer et la ressaisir | **Ajouté : modifier** (quantité, heure, contexte, commentaire) |
-| Suppression d'un suivi | Efface les consommations liées **sans copie de sécurité**, alors que l'effacement du journal en a une | **Corrigé** : copie de sécurité, retour possible depuis Profil |
-| Calculs des jours | Compteur = temps réel écoulé depuis la dernière consommation (périodes de 24 h) ; jours calendaires via `setDate`/`setHours` en heure locale : années bissextiles et changements d'heure corrects | Conservé. Limite : un jour de changement d'heure dure 23 ou 25 h, le compteur « jours » peut basculer une heure plus tôt ou plus tard |
-| Après un écart | Le grand chiffre montre le total des jours sans (cycle précédent) | Conservé |
-| Statistiques | 7 j, 30 j, 3 mois, 12 mois, comparaison avec la période d'avant, bilans hebdomadaire et mensuel, graphiques à parcourir au doigt | Conservé |
-| Économies | Calculées depuis la quantité et le budget saisis ; l'écran d'accueil disait « calculé automatiquement » | **Texte corrigé** : « une estimation, à partir de ce que tu dépensais avant » |
-| Journal | Ajout, suppression confirmée, recherche, filtres réussites/difficultés/envies fortes, pagination | **Ajouté** : modifier une entrée, filtres « humeur basse », « bonne humeur » et par mois |
-| Envies et SOS | Bouton « J'ai une envie » sur l'accueil et dans Outils, SOS guidé 5 min (respiration, minuteur, vague, raisons, plan, proches, numéros d'aide du pays) | Conservé |
-| Exercices | 8 exercices avec durée, description et sources | **Ajouté : favoris** (étoile, section « Mes favoris » en haut d'Outils). Mise en page corrigée sur petit écran |
-| Petites missions du jour | Existent déjà : « Petit objectif » du jour, facultatif, cochable, lié à un outil | Conservé, pas de doublon |
-| Version web : stockage | `localStorage` en clair (dit clairement dans l'app) | **Ajouté : chiffrement facultatif par mot de passe** (§ 3) |
-| « Copier en texte » | Copie toutes les données en clair, sans avertissement | **Avertissement ajouté** ; l'export chiffré est proposé |
-| Aide « nouvel appareil » | Disait que le fichier « n'est pas chiffré », alors qu'il l'est par défaut | **Corrigé** |
-| Écran de bienvenue | Ne citait que 5 substances (LIBRE en suit 20) ; ne disait pas que l'app s'adresse aux adultes | **Corrigé**, en 19 langues |
-| Langues | fr, en, de, it, es, pt : complètes (0 texte manquant). 13 autres : interface en anglais, textes de sécurité traduits, signalées « Partielle » | Voir § 5 |
-| Natif (Capacitor, LibreVault, LibreHealth, rappels) | Audité au premier audit ; inchangé ici. Android compilé et testé (tests unitaires du coffre) | Voir § 6 |
+- **Actions** : 193 boutons (`data-a`) croisés avec 202 gestionnaires : aucun bouton sans action (6 signalés par l'outil sont reliés autrement : fonctions globales ou écouteur `change`).
+- **Doublons** : deux écrans « plan » ; deux entrées vers les mêmes exercices (SOS et Outils) — utile pour l'accès rapide, gardé.
+- **Valeur faible** : réglage « Photographies » placé trop haut ; rangé dans « Application ».
+- **Données** : 75 tests automatisés passent ; aucune donnée non enregistrée trouvée.
 
-## 2. Bugs corrigés
+## 3. Audit des aides
 
-1. **Suppression d'un suivi irréversible** : maintenant précédée d'une copie de sécurité, et le message le dit.
-2. **Marqueur d'écran resté sur « verrouillé »** après « Code oublié » : l'inscription s'affichait sous un écran marqué `lock`. Corrigé.
-3. **Débordement horizontal en allemand** (Profil › Rappels, 360 px) : la ligne « Tägliche Erinnerung » + heure + interrupteur dépassait. Corrigé (coupure des mots longs, champ heure à largeur fixe).
-4. **Texte des exercices écrasé** sur petit écran (durée + étoile à droite) : la durée passe sous la description.
-5. **Textes inexacts** : fichier « non chiffré », économies « calculées », 5 substances seulement (§ 1).
+| Aide | Compréhensible | Utilisable en crise | Adaptée au contexte | Concrète | Fiable | Décision |
+|---|---|---|---|---|---|---|
+| 5 minutes guidées | Oui | Oui | **Non** (phases fixes) | Oui | Techniques reconnues (respiration lente, surf de l'envie, ancrage) | Refaite : stratégies par contexte |
+| Écran SOS | Oui | **Moyen** (trop de choix) | Non | Oui | — | Refait : un parcours principal |
+| Surfer sur l'envie, Reporter, Respirer, S'ancrer, Questionner une pensée, Stress/ennui | Oui | Oui | Partiel | Oui | Sources affichées | Gardés (bonne qualité), appelés par les stratégies |
+| Déclencheurs (journal d'envie) | Oui | Non (long) | — | Oui | — | Gardé hors crise |
+| Plan anti-rechute (si… alors…) | Oui | — | **Pas de modèles** | Oui | Intentions de mise en œuvre (Gollwitzer) | Modèles par situation |
+| Journée difficile | Oui | Oui | Oui | Oui | — | Gardée |
+| Numéros d'aide | Oui | Oui | Partiel (4 groupes) | Oui | Sources officielles | 6 rubriques |
 
-## 3. Sécurité et confidentialité
+## 4. Audit technique et sécurité
 
-### Chiffrement facultatif de la version web (nouveau)
-- **Où** : Profil › Tes données › « Chiffrer mes données sur ce navigateur ». Désactivé par défaut ; proposé seulement dans un navigateur
-  (dans les apps, le coffre natif chiffre déjà tout).
-- **Comment** : AES-256-GCM ; clé dérivée du mot de passe par PBKDF2-SHA-256 (600 000 itérations, sel aléatoire de 16 octets) ; IV aléatoire
-  de 12 octets à chaque écriture. Les données **et** la copie de sécurité sont chiffrées. Le mot de passe n'est jamais enregistré ; la clé reste
-  en mémoire et n'est pas exportable.
-- **Sûreté des données** : à l'activation, le texte chiffré est relu et comparé avant de remplacer la version en clair. Tant que le mot de passe
-  n'est pas saisi, rien n'est affiché et rien ne peut être écrit par-dessus. Un mauvais mot de passe ne modifie rien. « Mot de passe oublié »
-  repart de zéro mais **conserve la version chiffrée à part** (`libre.v1.chiffre.<date>`), jamais effacée. Plusieurs onglets ouverts : chaque
-  onglet relit la version chiffrée au lieu de l'écraser.
-- **Après 5 minutes en arrière-plan**, la page se recharge et redemande le mot de passe (la clé quitte la mémoire).
-- **Limites, dites dans l'app et ici** : aucune récupération possible ; pendant que LIBRE est ouverte, la clé est en mémoire (un logiciel
-  malveillant sur l'ordinateur pourrait la lire) ; la langue choisie reste en clair (elle ne révèle rien d'intime). Le verrouillage par code
-  reste présenté comme un masquage, pas comme un chiffrement.
-- Testé : aucune donnée lisible dans le stockage (nom, journal, nouvelle entrée), écran de mot de passe infranchissable par la navigation,
-  mauvais mot de passe refusé sans dommage, désactivation avec mot de passe, oubli sans perte (§ tests).
+| Domaine | Constat | Risque | Décision |
+|---|---|---|---|
+| Chiffrement natif | AES-256-GCM, Keystore / trousseau, IV aléatoire, 11 tests d'attaque | Faible ; iOS jamais compilé | Inchangé |
+| Web | Chiffrement facultatif PBKDF2 600 000 ; CSP `connect-src 'self'` | Faible | Inchangé |
+| Sauvegardes | Chiffrées par défaut, format 5 | Faible | Inchangé |
+| Permissions | Notifications, Santé (lecture), biométrie désactivée ; `INTERNET` déclarée par Capacitor | Faible | Inchangé (retrait à valider sur appareil) |
+| Journaux | Aucun `console.log`, logs Capacitor coupés | — | Inchangé |
+| Aperçus | Voile web, écran neutre iOS, protection Android | iOS non compilé | Inchangé |
+| Réseau | Aucune requête ; CSP | — | Inchangé |
+| Nouvelles données de la refonte | Plans par situation, stratégie choisie, émotion | Stockées dans le même état chiffré | Documenté |
 
-### Inchangé et revérifié par les tests
-PIN (PBKDF2 600 000, délais persistants), sauvegardes chiffrées (format 5, refus des formats futurs, fichiers corrompus ou hostiles),
-copie de sécurité avant restauration, effacement complet, aucune requête réseau automatique, notifications neutres par défaut.
+Aucune modification de sécurité n'est prévue : les mécanismes sont corrects et testés ; les changer sans nécessité serait un risque.
 
-### Non fait
-- **Verrouillage biométrique** (Face ID, empreinte) : demande un module natif (LocalAuthentication sur iOS, BiometricPrompt sur Android).
-  Je ne l'ai pas ajouté : il ne peut pas être essayé ici (pas d'iPhone, pas d'émulateur Android), et une fausse intégration est exclue.
-  Ce qu'il faut développer est décrit dans `ACTIONS-RESTANTES.md`.
+## 5. Plan d'action (exécuté dans cet ordre)
 
-## 4. Fonctionnalités ajoutées (toutes testées)
-
-| Ajout | Où |
-|---|---|
-| Modifier une consommation passée (annulable) | Habitudes › détails d'une habitude › crayon |
-| Modifier une entrée du journal (la date d'origine est conservée) | Journal › crayon |
-| Filtres du journal : humeur basse, bonne humeur, par mois | Journal |
-| Exercices favoris | Outils › étoile |
-| Chiffrement facultatif des données web | Profil › Tes données |
-| Copie de sécurité avant la suppression d'un suivi | Habitudes › Modifier › Supprimer |
-
-Rien n'a été supprimé.
-
-## 5. Langues
-
-- fr, en, de, it, es, pt : 0 texte manquant (audit automatique), y compris tous les textes de cette refonte.
-- ar, da, hi, id, ja, ko, nb, nl, pl, ru, sv, tr, vi, zh : **826 textes chacune restent en anglais**. L'app le dit (« Partielle ») et les textes
-  de sécurité sont traduits. En arabe, l'interface est en sens droite-à-gauche avec des passages en anglais. Les traduire correctement demande
-  des traducteurs (environ 11 000 textes au total), pas une traduction automatique non relue. J'ai traduit dans ces 14 langues les textes
-  modifiés de l'écran de bienvenue, de la suppression d'un suivi et de la restauration, pour qu'ils ne régressent pas.
-- Vérifié visuellement à 360 px en arabe et en allemand (Accueil, Outils, Profil) ; le test « aucun débordement » couvre 320 à 1280 px.
-
-## 6. Natif, PWA et architecture
-
-- **Trois distributions, un seul code** (`libre/index.html`) :
-  - **web hébergé / PWA** (`PWA_BUILD=true`) : service worker `sw.js` (cache versionné, mise à jour au rechargement), manifeste, icônes ;
-    fonctionne hors ligne (testé).
-  - **fichier autonome `LIBRE.html`** (`PWA_BUILD=false`) : photos et police incluses ; pas de service worker, car un fichier ouvert
-    directement ne peut pas en avoir. Il est maintenant fabriqué par `tools/build-standalone.py` (le script était hors du dépôt).
-  - **apps iOS et Android** (`libre-app/`, Capacitor 8) : le service worker est désactivé automatiquement ; coffre chiffré natif.
-- **Taille** : 2,2 Mo, dont l'essentiel est fait des traductions (19 langues) et des contenus sourcés. Le découpage en modules a été étudié et
-  **pas fait** : il ajouterait une étape de compilation et des risques de régression pour un gain de démarrage faible (le test de performance
-  affiche chaque écran en moins de 1,5 s avec 3 ans d'historique). C'est à faire seulement avec un outil de build dédié.
-- **Android** : compilé (`assembleDebug`) et tests unitaires du coffre réussis. **iOS** : non compilé ici (Xcode 26 nécessaire, sur Mac).
-- **Santé Apple** : intégration réelle (HealthKit, lecture seule, déconnexion qui efface les copies locales), proposée seulement sur iPhone.
-  Rien n'est proposé sur Android ni sur le web. Health Connect (Android) n'a pas été ajouté : aucune fonction de LIBRE n'en a besoin
-  aujourd'hui, et il impose une déclaration supplémentaire sur Google Play.
-
-## 7. Contenu médical
-
-Les contenus existants restent sourcés et datés (page « Quand consulter », avertissements sur l'arrêt brutal de l'alcool, des
-benzodiazépines et des opioïdes, numéros d'aide par pays). Cette refonte n'a ajouté **aucun** contenu médical. **Une relecture par un
-professionnel de santé reste indispensable avant publication** ; je ne peux pas la remplacer.
-
-## 8. Fichiers modifiés
-
-`libre/index.html`, `libre/privacy.html`, `libre/sw.js`, `libre/LIBRE.html` (fabriqué), `tools/build-standalone.py` (nouveau),
-`tests/suite.js`, `tests/RESULTATS.md`, `docs/AUDIT-REFONTE.md`, `docs/TESTS-REFONTE.md`, `docs/ACTIONS-RESTANTES.md`,
-`docs/ARCHITECTURE.md`, `docs/README.md`, `livraison/*`.
+1. Design system v2 formalisé (jetons d'espacement, de rayons, de typographie, composants) et appliqué aux nouveaux composants.
+2. Accueil adaptatif : carte de situation (premiers pas, moment difficile, reprise, objectif atteint).
+3. Aide immédiate : parcours guidé en 7 étapes avec stratégies selon le déclencheur ; SOS simplifié.
+4. Numéros d'aide en 6 rubriques.
+5. Plans par situation avec modèles ; un seul « Mon plan ».
+6. Profil réorganisé en sections.
+7. Bienvenue : promesses claires ; confidentialité expliquée au début de l'inscription.
+8. Traductions (6 langues), tests des 12 parcours, contrôles d'accessibilité, compilation Android, rapports, archive.
