@@ -133,3 +133,13 @@ Ajouts de la version 4 :
 - [ ] Toucher un numéro d'aide : l'app Téléphone s'ouvre avec le bon numéro (iPhone et Android).
 - [ ] « Effacer toutes mes données », puis « Supprimer cette copie » : plus rien de l'ancien profil (vérifier aussi après redémarrage de l'app).
 - [ ] Mise à jour de l'app par-dessus la version précédente (TestFlight / test interne Play) : les données sont conservées.
+
+Ajouts de la version 5 (rien n'a été essayé sur appareil) :
+- [ ] **Sélecteur d'applications, iPhone** : ouvrir le journal, glisser vers le haut à mi-écran : la vignette de LIBRE montre un écran bleu nuit « LIBRE », pas le journal. Revenir : le contenu réapparaît aussitôt. Une capture d'écran volontaire (boutons) reste possible.
+- [ ] **Sélecteur d'applications, Android 13+** : bouton Aperçu : vignette vide ou grise. Capture d'écran volontaire : possible.
+- [ ] **Sélecteur d'applications, Android 8 à 12** : même vérification ; noter si le contenu apparaît une fraction de seconde.
+- [ ] **PWA Safari et Chrome** : quitter l'onglet ; l'aperçu des onglets montre un fond bleu sans contenu (peut dépendre du navigateur : noter le résultat).
+- [ ] **Rappels après « Effacer toutes mes données »** : programmer un rappel à +2 min, tout effacer : aucune notification n'arrive.
+- [ ] **Santé Apple** (iPhone + Apple Watch si possible) : connecter ; comparer avec l'app Santé pendant 3 jours (pas, sommeil de la nuit, fréquence cardiaque au repos) ; refuser l'accès : « Autorisation demandée, aucune donnée reçue » ; le réactiver dans Réglages › Santé : les données reviennent ; porter la montre sans synchroniser 2 jours puis synchroniser : les jours manquants apparaissent ; changer de fuseau horaire (voyage ou réglage manuel) : les jours ne se décalent pas.
+- [ ] **Nouveau téléphone** : exporter une sauvegarde chiffrée, installer LIBRE sur un autre appareil, « Restaurer une sauvegarde » depuis l'écran d'accueil : tout revient.
+- [ ] **Mise à jour** : installer la version précédente, saisir des données, installer celle-ci par-dessus : données conservées, aucune demande de mot de passe inattendue.

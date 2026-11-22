@@ -92,7 +92,9 @@ public class LibreHealthPlugin: CAPPlugin, CAPBridgedPlugin {
         guard HKHealthStore.isHealthDataAvailable() else { call.reject("Santé n’est pas disponible sur cet appareil", "UNAVAILABLE"); return }
         guard let from = parseISO(call.getString("from")), let to = parseISO(call.getString("to")), from < to else { call.reject("Période invalide", "BAD_RANGE"); return }
         let keys = call.getArray("read", String.self) ?? []
-        let cal = Calendar.current
+        var cal = Calendar.current
+        cal.timeZone = TimeZone.current
+        dayFormatter.timeZone = TimeZone.current // le formateur est créé une fois : on le recale sur le fuseau actuel à chaque lecture
         let start = cal.startOfDay(for: from)
         var days: [String: [String: Double]] = [:]
         var errors: [String] = []

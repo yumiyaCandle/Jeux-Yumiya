@@ -1,0 +1,110 @@
+# LIBRE – vérification reproductible (aucune signature, aucun secret, aucune publication sur les stores).
+# Déclenchement : à chaque pull request et à la demande (onglet Actions › Vérification LIBRE › Run workflow).
+# Le travail iOS ne tourne qu'à la demande : les machines macOS de GitHub coûtent plus cher.
+name: Vérification LIBRE
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      ios:
+        description: "Compiler aussi l'app iOS (machine macOS)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: Web, PWA et fichier autonome
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Installer les dépendances (propre)
+        run: npm ci
+      - name: Installer Chromium pour Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Langues, fichier autonome et tests (npm test)
+        run: npm test
+      - name: Résultats des tests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultats-tests
+          path: tests/RESULTATS.md
+
+  android:
+    name: Android (debug, tests unitaires, lint, release non signée)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: libre-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: libre-app/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Dépendances et synchronisation Capacitor
+        run: |
+          npm ci
+          npm run web
+          npx cap sync android
+      - name: Compiler, tester, analyser
+        working-directory: libre-app/android
+        run: ./gradlew assembleDebug :app:testDebugUnitTest lintRelease assembleRelease bundleRelease --no-daemon
+      - name: Rapports et paquets non signés
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: |
+            libre-app/android/app/build/reports/
+            libre-app/android/app/build/outputs/apk/
+            libre-app/android/app/build/outputs/bundle/
+
+  ios:
+    name: iOS (compilation simulateur, sans signature)
+    if: github.event_name == 'workflow_dispatch' && inputs.ios
+    runs-on: macos-15
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: libre-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Choisir Xcode 26 si disponible
+        run: |
+          ls /Applications | grep -i xcode || true
+          X=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | tail -1)
+          if [ -n "$X" ]; then sudo xcode-select -s "$X"; fi
+          xcodebuild -version
+      - name: Dépendances et synchronisation Capacitor
+        run: |
+          npm ci
+          npm run web
+          npx cap sync ios
+      - name: Compiler pour le simulateur (sans signature)
+        working-directory: libre-app/ios/App
+        run: >
+          xcodebuild -project App.xcodeproj -scheme App -configuration Debug
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO build

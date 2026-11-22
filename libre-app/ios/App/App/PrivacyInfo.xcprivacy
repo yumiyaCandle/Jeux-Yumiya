@@ -4,7 +4,9 @@
   Manifeste de confidentialité de LIBRE (exigé par Apple).
   - Aucun suivi (tracking), aucun domaine de suivi.
   - Aucune donnée « collectée » au sens d’Apple : tout reste sur l’appareil, rien n’est transmis à l’éditeur ni à un tiers.
-  - API à justification utilisées par le code de l’app : aucune (les bibliothèques Capacitor fournissent leur propre manifeste).
+  - API à justification : dates des fichiers (FileTimestamp, raison C617.1), utilisées par le plugin @capacitor/filesystem pour les
+    fichiers que LIBRE écrit dans son propre conteneur (export et partage). Ce plugin n’a pas de manifeste : la déclaration est ici,
+    comme le demande la documentation de Capacitor (capacitorjs.com/docs/ios/privacy-manifest). Capacitor et Cordova ont le leur (vides).
 -->
 <plist version="1.0">
 <dict>
@@ -15,6 +17,15 @@
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array/>
 	<key>NSPrivacyAccessedAPITypes</key>
-	<array/>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>C617.1</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

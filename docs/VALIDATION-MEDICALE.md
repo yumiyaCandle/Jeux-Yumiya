@@ -116,3 +116,20 @@ Une ligne par contenu de la liste ci-dessus. **Aucun contenu ne doit être marqu
 | Messages après un écart | ☐ | ☐ | ☐ | |
 
 Relecteur : nom, qualification, numéro professionnel (si applicable), date, version relue (commit Git), signature.
+
+## Tableau de synthèse (version 5, 22 novembre 2026)
+
+| Contenu | Risque si erroné | Sources dans l'app | Liens vérifiés | Validation professionnelle |
+|---|---|---|---|---|
+| Quand consulter (6 sections) | **Vital** | OMS, HAS, NICE, NIDA, OFSP | Non (réseau bloqué) | **Non**, obligatoire avant publication |
+| Avertissements à la création d'un suivi (alcool, médicaments, drogues) | **Vital** | Idem | Non | **Non**, obligatoire |
+| Numéros d'aide | **Vital** | Sites officiels (`RESSOURCES-AIDE.md`) | 41 confirmés par recherche, pas par appel | Contrôle par l'éditeur, pays par pays, obligatoire |
+| Parcours SOS (5 minutes) | Élevé | Techniques reconnues (respiration, délai, surf de l'envie) | Non | **Non**, obligatoire |
+| Frises « Mon corps » (4) | Moyen | OMS, NHS, CDC | Non | **Non** |
+| Bibliothèque (35 fiches) | Moyen | 82 sources citées | Non | **Non** |
+| Exercices (8) | Faible à moyen | Cochrane, articles | Non | **Non** |
+| Messages après un écart | Moyen (culpabilisation) | Entretien motivationnel, prévention de la rechute | — | **Non** |
+| Données Santé Apple | Faible : affichées sans interprétation médicale (vérifié : aucun texte n'interprète la fréquence cardiaque ou la variabilité) | — | — | Sans objet |
+
+Aucun contenu n'est marqué « validé ». Revue V5 faite par moi (non professionnelle) : pas de nouvelle formulation dangereuse trouvée ;
+les points de la section précédente restent ouverts.

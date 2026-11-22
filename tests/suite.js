@@ -742,6 +742,93 @@ test('Affichage', 'Calendrier à 320 px : l’en-tête « ‹ mois › » reste 
   }
 });
 
+test('Confidentialité', 'Voile : dès que LIBRE passe en arrière-plan, le contenu est masqué, puis réapparaît au retour', async (b, base) => {
+  const st = profileState({ extra: { journal: [{ id: 'j1', ts: Date.now(), mood: 2, text: 'TEXTE-INTIME', triggers: [] }] } });
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('journal');
+  const hide = h => p.evaluate(h => { Object.defineProperty(document, 'hidden', { configurable: true, get: () => h }); Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => h ? 'hidden' : 'visible' }); document.dispatchEvent(new Event('visibilitychange')); }, h);
+  await hide(true);
+  assert.equal(await p.evaluate(() => getComputedStyle(document.getElementById('app')).visibility), 'hidden', 'contenu masqué en arrière-plan');
+  await hide(false);
+  assert.equal(await p.evaluate(() => getComputedStyle(document.getElementById('app')).visibility), 'visible');
+  assert.match(await p.textContent('#app'), /TEXTE-INTIME/);
+  assert.deepEqual(p.errors, []);
+});
+
+test('Confidentialité', 'Tout effacer annule les rappels déjà programmés dans le téléphone, et rien ne réapparaît après réouverture', async (b, base) => {
+  const st = profileState({ name: 'Zorglub-Rappel' });
+  const p = await page(b, base, { native: { platform: 'android' }, init: seed(st) }); await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]'); await p.waitForTimeout(1500); await p.closeLayer();
+  await p.evaluate(() => { window.__sched.push({ id: 101, title: 'Rappel', body: 'texte' }, { id: 102, title: 'Rappel', body: 'texte' }); });
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="resetAsk"]').click()); await p.waitForTimeout(200);
+  await p.click('#layer .btn.danger'); await p.waitForSelector('[data-a="obNext"]'); await p.waitForTimeout(400);
+  assert.equal(await p.evaluate(() => window.__sched.length), 0, 'rappels annulés');
+  await p.click('[data-a="snapDel"]'); await p.waitForTimeout(150); await p.click('#layer .btn.danger'); await p.waitForTimeout(300);
+  await p.reload(); await p.waitForSelector('[data-a="obNext"]'); await p.waitForTimeout(600);
+  assert.doesNotMatch(await p.textContent('body'), /Zorglub/, 'aucune trace du profil après réouverture');
+  assert.deepEqual(p.errors, []);
+});
+
+test('Exports', 'Bilan mensuel : journal et habitude contenant du HTML et du JavaScript, rien ne s’exécute ; nom de fichier sans donnée personnelle', async (b, base) => {
+  const evil = '<img src=x onerror="window.__pwn=1"><script>window.__pwn=2</script>';
+  const st = profileState({ types: ['autre'], extra: { journal: [{ id: 'j1', ts: Date.now() - 864e5, mood: 2, text: evil, triggers: [] }] } });
+  st.habits[0].label = 'Habitude ' + evil + ' « spéciale » é ü 你好 ' + 'x'.repeat(200);
+  st.logs = [{ id: 'l1', habitId: 'h0', type: 'autre', ts: Date.now() - 2 * 864e5, qty: 1, comment: evil, trigger: 'Stress' }];
+  const p = await page(b, base, { native: { platform: 'ios' }, init: seed(st) }); await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]'); await p.waitForTimeout(1500); await p.closeLayer();
+  await p.go('bilans'); await p.waitForTimeout(300); await p.evaluate(() => document.querySelector('[data-a="printMonth"]').click());
+  await p.waitForFunction(() => window.__lastFile, null, { timeout: 8000 });
+  const f = await p.evaluate(() => ({ path: window.__lastFile.path, data: window.__lastFile.data }));
+  assert.match(f.path, /^libre-bilan-\d{4}-\d{2}\.html$/, 'nom de fichier neutre : ' + f.path);
+  assert.ok(!/<script>window\.__pwn|<img src=x onerror/.test(f.data), 'HTML hostile échappé');
+  const q = await p.ctx.newPage(); await q.setContent(f.data); await q.waitForTimeout(300);
+  assert.equal(await q.evaluate(() => window.__pwn), undefined, 'aucun code exécuté à l’ouverture du bilan');
+  const calls = await p.evaluate(() => window.__calls.map(c => c[0]));
+  assert.ok(calls.includes('Share.share'), 'partage système proposé');
+  assert.deepEqual(p.errors, []);
+});
+
+test('Santé Apple', 'États exacts : « autorisation demandée, aucune donnée », synchronisation incomplète signalée, resynchronisation sur 7 jours (plugin simulé)', async (b, base) => {
+  const init = () => { window.__hkCalls = []; window.Capacitor.Plugins.LibreHealth = { isAvailable: async () => ({ available: true }), requestAuthorization: async () => ({ requested: true }),
+    queryDaily: async a => { window.__hkCalls.push(a); return sessionStorage.getItem('__hkData') ? { days: [{ date: new Date().toISOString().slice(0, 10), steps: 4000 }], errors: ['hr: refusé'] } : { days: [], errors: [] }; } }; };
+  const p = await page(b, base, { native: { platform: 'ios', noVault: true }, init: seed(profileState()) }); await p.ctx.addInitScript(init);
+  await p.goto(base); await p.settle(); await p.go('profil'); await p.closeLayer(); await p.openFold('p-hk'); await p.waitForSelector('[data-a="hkConnect"]');
+  await p.click('[data-a="hkConnect"]'); await p.waitForTimeout(800); await p.openFold('p-hk'); await p.waitForTimeout(300);
+  const t1 = await p.textContent('#hkBox'); assert.match(t1, /Autorisation demandée, aucune donnée reçue/); assert.doesNotMatch(t1, /Connecté/);
+  await p.evaluate(() => sessionStorage.setItem('__hkData', '1')); await p.click('[data-a="hkSync"]'); await p.waitForTimeout(600); await p.openFold('p-hk'); await p.waitForTimeout(300);
+  const t2 = await p.textContent('#hkBox'); assert.match(t2, /Données reçues/); assert.match(t2, /incomplète/);
+  const last = await p.evaluate(() => window.__hkCalls[window.__hkCalls.length - 1]);
+  const span = (new Date(last.to) - new Date(last.from)) / 864e5; assert.ok(span >= 7 && span < 9, 'resynchronisation sur 7 jours : ' + span);
+  assert.deepEqual(p.errors, []);
+});
+
+test('Données', 'Migration : un état de la version 3 (sans marqueur dataV) est relu sans perte, puis marqué dataV 3', async (b, base) => {
+  const st = profileState({ types: ['cigarette', 'alcool'], name: 'Ancienne' });
+  st.logs = [{ id: 'l1', habitId: 'h0', type: 'cigarette', ts: Date.now() - 864e5, qty: 2 }]; st.journal = [{ id: 'j1', ts: Date.now(), mood: 4, text: 'garde-moi', triggers: [] }];
+  st.prefs.lock = null; st.prefs.favTools = ['breath']; delete st.dataV;
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('journal');
+  await p.click('[data-a="journalForm"]'); await p.waitForSelector('#j-text'); await p.fill('#j-text', 'nouvelle'); await p.click('[data-a="saveJournal"]'); await p.waitForTimeout(300);
+  const s = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.equal(s.dataV, 3); assert.equal(s.profile.name, 'Ancienne'); assert.equal(s.habits.length, 2); assert.equal(s.logs.length, 1);
+  assert.equal(s.journal.length, 2); assert.ok(s.journal.some(j => j.text === 'garde-moi')); assert.deepEqual(s.prefs.favTools, ['breath']);
+  assert.deepEqual(p.errors, []);
+});
+
+test('Scénario', 'Nouveau téléphone : profil complet, export chiffré, restauration dans un autre navigateur vierge, tout est identique', async (b, base) => {
+  const st = profileState({ types: ['cigarette', 'alcool'], name: 'Voyageur' });
+  st.logs = Array.from({ length: 25 }, (_, i) => ({ id: 'l' + i, habitId: i % 2 ? 'h0' : 'h1', type: i % 2 ? 'cigarette' : 'alcool', ts: Date.now() - i * 36e5 * 9, qty: 1 + (i % 3), comment: 'é « » <b>' + i }));
+  st.journal = Array.from({ length: 12 }, (_, i) => ({ id: 'j' + i, ts: Date.now() - i * 864e5, mood: 1 + (i % 5), text: 'Entrée ' + i + ' ✓', triggers: ['Stress'] }));
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
+  const before = await p.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  const txt = await exportEncrypted(p, 'phrase-de-passe-solide');
+  const q = await page(b, base); await q.goto(base); await q.waitForSelector('[data-a="obNext"]');
+  const file = require('path').join(require('os').tmpdir(), 'libre-test-sauvegarde.libre.json'); fs.writeFileSync(file, txt);
+  const [chooser] = await Promise.all([q.waitForEvent('filechooser'), q.click('[data-a="importFile"]')]);
+  await chooser.setFiles(file); await q.waitForTimeout(500);
+  await q.fill('#layer input[type=password]', 'phrase-de-passe-solide'); await q.evaluate(() => document.querySelector('#layer form').requestSubmit()); await q.waitForTimeout(2500);
+  const conf = await q.$('#layer .btn.primary, #layer .btn.danger'); if (conf) { await conf.click(); await q.waitForTimeout(500); }
+  const after = await q.evaluate(() => JSON.parse(localStorage.getItem('libre.v1')));
+  assert.equal(after.profile.name, 'Voyageur'); assert.deepEqual(after.logs, before.logs); assert.deepEqual(after.journal, before.journal); assert.deepEqual(after.habits, before.habits);
+  assert.deepEqual(p.errors, []); assert.deepEqual(q.errors, []);
+});
+
 test('Suivi', 'Après un écart : le total des jours sans est mis en avant, pas un grand « 0 » (fr et en)', async (b, base) => {
   for (const lang of ['fr', 'en']) {
     const st = profileState({ days: 40, lang }); st.logs = [{ id: 'l1', habitId: 'h0', type: 'cigarette', ts: Date.now() - 36e5, qty: 1 }];

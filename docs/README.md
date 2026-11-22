@@ -2,6 +2,12 @@
 
 | Document | Contenu |
 |---|---|
+| [AUDIT-V5.md](AUDIT-V5.md) | **Rapport de la version 5** : nouveaux problèmes, corrections, réponses aux 14 questions, niveaux de préparation |
+| [APPLE-ENCRYPTION-COMPLIANCE.md](APPLE-ENCRYPTION-COMPLIANCE.md) | Chiffrement et `ITSAppUsesNonExemptEncryption` |
+| [PRIVACY-REVIEW.md](PRIVACY-REVIEW.md) | Manifeste de confidentialité, dépendances, réseau, sélecteur d'applications, exports |
+| [HEALTHKIT-REVIEW.md](HEALTHKIT-REVIEW.md) | Santé Apple : agrégation, sommeil, états, synchronisation |
+| [DATA-LIFECYCLE.md](DATA-LIFECYCLE.md) | Où sont les données, ce que fait chaque opération, ce qui ne peut pas être effacé |
+| [RELEASE-PROCESS.md](RELEASE-PROCESS.md) | Versions, vérification, préparation d'une nouvelle version, intégration continue |
 | [AUDIT-V4.md](AUDIT-V4.md) | **Rapport de la version 4** : problèmes classés P0 à P3, corrections, niveau de préparation réel |
 | [AUDIT-V3.md](AUDIT-V3.md) | Historique : rapport de la version 3 : état initial, problèmes classés, corrections, évaluation des pistes, critères de qualité |
 | [SECURITE.md](SECURITE.md) | Mécanismes réels de protection des données, corrections, limites et risques résiduels |
