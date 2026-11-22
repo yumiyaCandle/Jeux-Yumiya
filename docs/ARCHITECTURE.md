@@ -115,6 +115,12 @@ fiches par addiction : 6 langues. Dates, nombres et devises via `Intl` selon la 
 - **Record** : la plus longue durée entre deux consommations. **Économies** : estimation à partir de la quantité et du budget saisis.
 - Les données sont horodatées en temps universel ; un changement de fuseau déplace les frontières de jours calendaires, pas les durées.
 
+## Numéros d’aide
+
+Table `HELP` par pays (34 pays). Pays affiché : choix de l’utilisateur, sinon région de l’appareil. Une région connue mais absente de la table
+donne `HELP_NONE` : aucun numéro d’un autre pays, message « numéro d’urgence local » et choix du pays. `HELP_CHECKED` indique les pays dont
+les numéros ont été revérifiés (mois) ; l’app l’affiche. Détail et sources : `RESSOURCES-AIDE.md`.
+
 ## Compatibilité des données entre versions
 
 Chaque écriture marque les données avec `dataV` (actuellement 3). Une version plus ancienne qui trouve un `dataV` plus grand

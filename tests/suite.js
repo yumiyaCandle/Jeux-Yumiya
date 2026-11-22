@@ -700,6 +700,48 @@ test('Données', 'Données d’une version plus récente : lecture seule, rien n
   assert.deepEqual(p.errors, []);
 });
 
+test('Aide', 'Pays absent de la table (Luxembourg) : jamais les numéros d’un autre pays, numéro d’urgence local et choix du pays', async (b, base) => {
+  const p = await page(b, base, { locale: 'fr-LU', init: seed(profileState()) }); await p.goto(base); await p.settle();
+  await p.go('profil'); await p.evaluate(() => { const d = [...document.querySelectorAll('details')].find(x => /Aide et sécurité/.test(x.textContent)); if (d) d.open = true; });
+  const txt = await p.textContent('#app');
+  assert.doesNotMatch(txt, /La Main Tendue|Pro Juventute|stop-tabac/, 'aucun numéro suisse affiché pour le Luxembourg');
+  assert.match(txt, /pas encore de numéros vérifiés pour ton pays/); assert.match(txt, /112/);
+  assert.ok(await p.$('[data-a="helpCountryPick"]'), 'choix du pays proposé');
+  assert.deepEqual(p.errors, []);
+});
+
+test('Aide', 'Suisse : numéros affichés avec la date de revérification ; pays non revérifié : avertissement', async (b, base) => {
+  let p = await page(b, base, { locale: 'fr-CH', init: seed(profileState()) }); await p.goto(base); await p.settle();
+  await p.go('profil'); await p.evaluate(() => document.querySelectorAll('details').forEach(d => d.open = true));
+  let txt = await p.textContent('#app'); assert.match(txt, /144/); assert.match(txt, /Numéros revérifiés en novembre 2026/); await p.ctx.close();
+  p = await page(b, base, { locale: 'pt-BR', init: seed(profileState({ lang: 'pt' })) }); await p.goto(base); await p.settle();
+  await p.go('profil'); await p.evaluate(() => document.querySelectorAll('details').forEach(d => d.open = true));
+  txt = await p.textContent('#app'); assert.match(txt, /188/); assert.match(txt, /não foram verificados recentemente/);
+  assert.deepEqual(p.errors, []);
+});
+
+test('Sauvegarde', 'Tout effacer : la copie de sécurité est annoncée et peut être supprimée ; les copies mises de côté sont effacées', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ name: 'Effaçable' })) }); await p.goto(base); await p.settle();
+  await p.evaluate(() => { localStorage.setItem('libre.v1.illisible.123', '{"journal":"SECRET-ILLISIBLE"}'); localStorage.setItem('libre.v1.chiffre.456', '{"_webvault":1}'); });
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="resetAsk"]').click()); await p.waitForTimeout(200);
+  assert.match(await p.textContent('#layer'), /copie de sécurité est gardée/);
+  await p.click('#layer .btn.danger'); await p.waitForSelector('[data-a="obNext"]');
+  const keys = await p.evaluate(() => Object.keys(localStorage)); assert.ok(!keys.some(k => /illisible|chiffre/.test(k)), 'copies mises de côté effacées : ' + keys);
+  assert.ok(await p.$('[data-a="snapDel"]'), 'suppression de la copie proposée sur l’accueil');
+  await p.click('[data-a="snapDel"]'); await p.waitForTimeout(150); await p.click('#layer .btn.danger'); await p.waitForTimeout(200);
+  const all = await p.evaluate(() => Object.entries(localStorage).map(([k, v]) => k + v).join(' '));
+  assert.ok(!/Effaçable/.test(all), 'plus aucune trace du profil effacé'); assert.equal(await p.$('[data-a="snapRestore"]'), null);
+  assert.deepEqual(p.errors, []);
+});
+
+test('Affichage', 'Calendrier à 320 px : l’en-tête « ‹ mois › » reste sur une ligne (fr, it, de)', async (b, base) => {
+  for (const lang of ['fr', 'it', 'de']) {
+    const p = await page(b, base, { init: seed(profileState({ lang })), viewport: { width: 320, height: 640 } }); await p.goto(base); await p.settle(); await p.go('calendrier');
+    const tops = await p.evaluate(() => [...document.querySelectorAll('[data-a="calNav"]')].map(x => Math.round(x.getBoundingClientRect().top)));
+    assert.equal(tops.length, 2); assert.equal(tops[0], tops[1], lang + ' : boutons sur deux lignes'); assert.deepEqual(p.errors, []); await p.ctx.close();
+  }
+});
+
 test('Suivi', 'Après un écart : le total des jours sans est mis en avant, pas un grand « 0 » (fr et en)', async (b, base) => {
   for (const lang of ['fr', 'en']) {
     const st = profileState({ days: 40, lang }); st.logs = [{ id: 'l1', habitId: 'h0', type: 'cigarette', ts: Date.now() - 36e5, qty: 1 }];

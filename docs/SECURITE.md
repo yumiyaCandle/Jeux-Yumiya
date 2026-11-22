@@ -1,6 +1,6 @@
 # Sécurité et protection des données de LIBRE
 
-Version 3, 22 novembre 2026. **Ceci est un audit interne fait pendant le développement, pas une certification
+Version 4, 21 novembre 2026 (mise à jour de la version 3 du même jour). **Ceci est un audit interne fait pendant le développement, pas une certification
 ni un audit indépendant.** Un test d'intrusion par un tiers reste recommandé avant une diffusion large.
 
 ## 1. Principe
@@ -14,7 +14,7 @@ Vérifié par test : aucune requête externe à l'ouverture ni pendant la naviga
 
 | Où | Mécanisme | Protection |
 |---|---|---|
-| App iPhone | `Application Support/LibreVault/*.bin` | AES-256-GCM (CryptoKit), nonce aléatoire de 12 octets à chaque écriture, clé de 256 bits dans le trousseau (`AfterFirstUnlock`), protection de fichiers iOS, écriture atomique |
+| App iPhone | `Application Support/LibreVault/*.bin` | AES-256-GCM (CryptoKit), nonce aléatoire de 12 octets à chaque écriture, clé de 256 bits dans le trousseau (`kSecAttrAccessibleAfterFirstUnlock`, non synchronisée avec le trousseau iCloud), protection de fichiers iOS, écriture atomique. iOS peut inclure la clé, chiffrée, dans les sauvegardes **chiffrées** de l'iPhone (iCloud ou ordinateur), jamais dans une sauvegarde non chiffrée. Choix conservé : il permet de retrouver ses données en changeant d'iPhone ; le passer en `ThisDeviceOnly` ferait perdre les données à chaque restauration sur un autre appareil |
 | App Android | `files/vault/*.bin` | AES-256-GCM, clé non exportable dans l'Android Keystore, IV aléatoire fourni par le Keystore, écriture atomique (`AtomicFile`), sauvegarde automatique Android désactivée |
 | Navigateur (par défaut) | `localStorage` | **Aucun chiffrement** ; l'app le dit dans Profil › Tes données |
 | Navigateur (option) | `localStorage`, enveloppe `_webvault` | AES-256-GCM, clé dérivée du mot de passe (PBKDF2-SHA-256, 600 000 itérations, sel aléatoire de 16 octets), IV aléatoire à chaque écriture ; mot de passe jamais enregistré, clé non exportable gardée en mémoire |
@@ -34,6 +34,15 @@ ou clé différente) fait échouer la lecture : aucune donnée altérée n'est a
 | Sauvegarde chiffrée modifiée à la main | Non testé | Refusée (étiquette GCM), données actuelles intactes. Testé |
 | Ancienne version de l'app (cache) face à des données plus récentes | Pouvait écrire par-dessus | Marqueur `dataV` : une version plus ancienne passe en lecture seule et le dit. Testé |
 | Brouillon du journal | Perdu si la fenêtre se fermait | Gardé **en mémoire seulement** (jamais écrit en clair). Testé |
+
+## 3 bis. Corrections de la version 4
+
+| Risque | Avant | Maintenant |
+|---|---|---|
+| « Effacer toutes mes données » | Une copie complète restait sur l'appareil, sans moyen de la supprimer (sauf en la restaurant) ; le message disait « définitivement supprimés » | Le message annonce la copie ; « Supprimer cette copie » sur l'accueil et dans Profil ; les copies mises de côté (données illisibles, version chiffrée oubliée) sont effacées avec le reste. Testé |
+| Politique de confidentialité, clé iOS | « La clé ne quitte pas l'appareil » : inexact (sauvegardes chiffrées iOS) | Texte exact pour iOS et Android, fr et en ; désinstallation (clé iOS restante, inutilisable seule) et effacement des données du navigateur expliqués |
+| Numéros d'aide | Un pays absent de la table affichait les numéros d'un autre pays (déduit de la langue) | Plus jamais : message « numéro d'urgence local », 112 dans l'UE, choix du pays. Mention de revérification par pays. Testé |
+| Journal vide | « Personne d'autre ne le lit » (absolu) | « Il reste sur ton appareil : LIBRE ne l'envoie nulle part » |
 
 ## 4. Verrouillage
 

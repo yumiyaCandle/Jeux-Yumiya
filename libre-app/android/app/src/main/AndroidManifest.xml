@@ -5,6 +5,11 @@
       du Keystore qui ne quitte jamais le téléphone ; une copie restaurée ailleurs serait illisible.
       Pour changer de téléphone : Profil › Tes données › Exporter un fichier, puis Restaurer.
     -->
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Rappels : pas d’alarmes exactes (réservées par Google Play aux réveils et agendas). Le système peut décaler un rappel de quelques minutes. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" tools:node="remove" />
+
     <application
         android:allowBackup="false"
         android:fullBackupContent="false"
@@ -37,8 +42,4 @@
         </provider>
     </application>
 
-    <!-- Permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Rappels : pas d’alarmes exactes (réservées par Google Play aux réveils et agendas). Le système peut décaler un rappel de quelques minutes. -->
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" tools:node="remove" />
 </manifest>

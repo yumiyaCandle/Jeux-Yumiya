@@ -114,3 +114,22 @@ Chaque ligne : résultat attendu ; noter « réussi », « échoué » (avec cap
 **Android uniquement**
 - [ ] Bouton Retour sur chaque écran et dans chaque fenêtre : ferme la fenêtre, revient en arrière, puis réduit l'app.
 - [ ] Refuser la permission de notifications, puis l'accorder depuis les réglages : LIBRE l'indique correctement.
+
+## Feuille de résultats (version 4)
+
+Pour chaque ligne de ce plan, noter un seul état : **Réussi**, **Échoué** (avec capture et description), **Non testé**, ou **Simulé**
+(vérifié uniquement avec les plugins simulés des tests automatiques ; ce n'est pas un résultat sur appareil).
+À ce jour (21 novembre 2026), **toutes les lignes sont « Non testé » sur appareil réel** ; celles qui ont un test automatique sont « Simulé ».
+
+| Appareil | iOS / Android | Testeur | Date | Version (commit) |
+|---|---|---|---|---|
+| iPhone récent (Face ID) | | | | |
+| iPhone plus ancien (Touch ID, iOS 15 ou 16) | | | | |
+| Android récent (14 à 16, empreinte) | | | | |
+| Android plus ancien (8 à 10) | | | | |
+
+Ajouts de la version 4 :
+- [ ] Pays de l'appareil absent de la liste (ex. Luxembourg) : aucun numéro d'un autre pays ; message « numéro d'urgence local » et « Choisir un pays ».
+- [ ] Toucher un numéro d'aide : l'app Téléphone s'ouvre avec le bon numéro (iPhone et Android).
+- [ ] « Effacer toutes mes données », puis « Supprimer cette copie » : plus rien de l'ancien profil (vérifier aussi après redémarrage de l'app).
+- [ ] Mise à jour de l'app par-dessus la version précédente (TestFlight / test interne Play) : les données sont conservées.

@@ -47,7 +47,7 @@ Contact pour toute question sur cette politique : <b>[ADRESSE E-MAIL À COMPLÉT
 <li>ton prénom ou pseudonyme et, si tu les indiques, ton âge, ta taille et ton poids ;</li>
 <li>les habitudes que tu suis, tes objectifs, tes consommations, tes envies, leurs déclencheurs et tes reprises ;</li>
 <li>ton journal personnel, ton humeur, tes raisons d’arrêter, ton plan et les exercices réalisés ;</li>
-<li>les contacts de confiance que tu ajoutes toi-même (nom et numéro). LIBRE n’accède pas au carnet d’adresses du téléphone ;</li>
+<li>les contacts de confiance que tu ajoutes toi-même (nom et numéro). LIBRE n’accède pas au carnet d’adresses du téléphone ; quand tu choisis d’appeler ou d’écrire à un contact, c’est l’application Téléphone ou Messages de ton appareil qui s’ouvre ;</li>
 <li>tes réglages (langue, pays, devise, rappels, verrouillage). Le code de verrouillage n’est jamais enregistré : seule une empreinte calculée (PBKDF2) est conservée ;</li>
 <li>si tu l’autorises, des résumés quotidiens lus dans Santé Apple (voir point 5).</li>
 </ul>
@@ -55,7 +55,7 @@ Contact pour toute question sur cette politique : <b>[ADRESSE E-MAIL À COMPLÉT
 
 <h2>3. Où elles sont enregistrées</h2>
 <ul>
-<li><b>Application iPhone et Android</b> : dans un fichier chiffré (AES-256-GCM) propre à LIBRE, sur ton téléphone. La clé de chiffrement est conservée par le système (trousseau iOS ou Keystore Android) et ne quitte pas l’appareil.</li>
+<li><b>Application iPhone et Android</b> : dans un fichier chiffré (AES-256-GCM) propre à LIBRE, sur ton téléphone. La clé de chiffrement est conservée par le système et n’est jamais envoyée à l’éditeur ni à un serveur. <b>Android</b> : la clé reste dans le Keystore du téléphone et ne peut pas en être extraite ; la sauvegarde automatique d’Android est désactivée pour LIBRE. <b>iPhone</b> : la clé est rangée dans le trousseau iOS ; iOS peut l’inclure, chiffrée, dans les sauvegardes chiffrées de l’iPhone (sauvegarde iCloud ou sauvegarde chiffrée sur un ordinateur), ce qui permet de retrouver tes données en restaurant une telle sauvegarde. Elle n’est pas incluse dans une sauvegarde non chiffrée.</li>
 <li><b>Version web</b> : dans le stockage local de ton navigateur. <b>Par défaut, sans chiffrement</b> : une personne qui a accès à ton ordinateur ou à ton navigateur pourrait les lire. Tu peux activer « Chiffrer mes données sur ce navigateur » (Profil › Tes données) : elles sont alors chiffrées (AES-256-GCM, clé dérivée de ton mot de passe par PBKDF2-SHA-256, 600 000 itérations). Le mot de passe n’est enregistré nulle part et ne peut pas être récupéré ; s’il est oublié, les données restent illisibles.</li>
 </ul>
 <p>Le verrouillage par code cache l’application aux regards ; ce n’est pas un chiffrement.</p>
@@ -81,7 +81,8 @@ Ce fichier t’appartient : tu décides où le ranger. LIBRE ne conserve pas son
 <p>Sur Android, la sauvegarde automatique du système est désactivée pour LIBRE, car le fichier chiffré serait illisible sur un autre appareil. Pour changer de téléphone, exporte une sauvegarde puis restaure-la.</p>
 
 <h2>8. Durée de conservation et suppression</h2>
-<p>Tes données restent sur ton appareil tant que tu ne les supprimes pas. Pour tout effacer : Profil › Tes données › Effacer toutes mes données. Désinstaller l’application supprime aussi ses données du téléphone.
+<p>Tes données restent sur ton appareil tant que tu ne les supprimes pas. Pour tout effacer : Profil › Tes données › Effacer toutes mes données. Pour te protéger d’une erreur, LIBRE garde alors une <b>copie de sécurité</b> de l’état précédent sur l’appareil ; l’écran d’accueil la propose et permet de la supprimer (« Supprimer cette copie »). Une copie est aussi gardée avant chaque restauration d’une sauvegarde ; tu peux la supprimer depuis Profil › Tes données.</p>
+<p>Désinstaller l’application supprime ses données du téléphone. Sur iPhone, la clé de chiffrement peut rester dans le trousseau après la désinstallation : seule, elle ne permet de lire aucune donnée. Dans un navigateur, effacer les données du site supprime aussi celles de LIBRE.
 Les fichiers de sauvegarde que tu as exportés ne sont pas supprimés automatiquement : supprime-les toi-même si tu le souhaites.</p>
 
 <h2>9. Autorisations demandées</h2>
@@ -123,7 +124,7 @@ Contact for any question about this policy: <b>[E-MAIL ADDRESS – TO BE COMPLET
 <li>your first name or nickname and, if you provide them, your age, height and weight;</li>
 <li>the habits you track, your goals, uses, cravings, their triggers and any slips;</li>
 <li>your personal journal, mood, reasons for stopping, your plan and the exercises you did;</li>
-<li>trusted contacts you add yourself (name and number). LIBRE does not access the phone’s address book;</li>
+<li>trusted contacts you add yourself (name and number). LIBRE does not access the phone’s address book; when you choose to call or text a contact, your device’s Phone or Messages app opens;</li>
 <li>your settings (language, country, currency, reminders, lock). The lock code is never stored: only a derived fingerprint (PBKDF2) is kept;</li>
 <li>if you allow it, daily summaries read from Apple Health (see section 5).</li>
 </ul>
@@ -131,7 +132,7 @@ Contact for any question about this policy: <b>[E-MAIL ADDRESS – TO BE COMPLET
 
 <h2>3. Where it is stored</h2>
 <ul>
-<li><b>iPhone and Android app</b>: in an encrypted file (AES-256-GCM) belonging to LIBRE, on your phone. The encryption key is kept by the system (iOS Keychain or Android Keystore) and never leaves the device.</li>
+<li><b>iPhone and Android app</b>: in an encrypted file (AES-256-GCM) belonging to LIBRE, on your phone. The encryption key is kept by the system and is never sent to the publisher or to a server. <b>Android</b>: the key stays in the phone’s Keystore and cannot be extracted; Android automatic backup is turned off for LIBRE. <b>iPhone</b>: the key is stored in the iOS Keychain; iOS may include it, encrypted, in encrypted iPhone backups (iCloud Backup or an encrypted computer backup), which lets you recover your data by restoring such a backup. It is not included in an unencrypted backup.</li>
 <li><b>Web version</b>: in your browser’s local storage. <b>Not encrypted by default</b>: someone with access to your computer or browser could read it. You can turn on “Encrypt my data in this browser” (Profile › Your data): it is then encrypted (AES-256-GCM, key derived from your password with PBKDF2-SHA-256, 600,000 iterations). The password is stored nowhere and cannot be recovered; if it is forgotten, the data stays unreadable.</li>
 </ul>
 <p>The lock code hides the app from view; it is not encryption.</p>
@@ -157,7 +158,8 @@ The file is yours: you decide where to keep it. LIBRE does not keep its password
 <p>On Android, automatic system backup is turned off for LIBRE, because the encrypted file would be unreadable on another device. To change phones, export a backup and restore it.</p>
 
 <h2>8. Retention and deletion</h2>
-<p>Your data stays on your device until you delete it. To erase everything: Profile › Your data › Erase all my data. Uninstalling the app also deletes its data from the phone.
+<p>Your data stays on your device until you delete it. To erase everything: Profile › Your data › Erase all my data. To protect you from a mistake, LIBRE then keeps a <b>safety copy</b> of the previous state on the device; the welcome screen offers it and lets you delete it (“Delete this copy”). A copy is also kept before each backup restore; you can delete it from Profile › Your data.</p>
+<p>Uninstalling the app deletes its data from the phone. On iPhone, the encryption key may remain in the Keychain after uninstalling: on its own, it cannot read any data. In a browser, clearing the site’s data also deletes LIBRE’s data.
 Backup files you exported are not deleted automatically: delete them yourself if you wish.</p>
 
 <h2>9. Permissions requested</h2>

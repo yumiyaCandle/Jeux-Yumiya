@@ -2,7 +2,8 @@
 
 | Document | Contenu |
 |---|---|
-| [AUDIT-V3.md](AUDIT-V3.md) | **Rapport final de la version 3** : état initial, problèmes classés, corrections, évaluation des pistes, critères de qualité |
+| [AUDIT-V4.md](AUDIT-V4.md) | **Rapport de la version 4** : problèmes classés P0 à P3, corrections, niveau de préparation réel |
+| [AUDIT-V3.md](AUDIT-V3.md) | Historique : rapport de la version 3 : état initial, problèmes classés, corrections, évaluation des pistes, critères de qualité |
 | [SECURITE.md](SECURITE.md) | Mécanismes réels de protection des données, corrections, limites et risques résiduels |
 | [TESTS.md](TESTS.md) | Rapport de tests : automatisés, web, natifs simulés, Android et iOS réels (non faits) |
 | [ACTIONS-RESTANTES.md](ACTIONS-RESTANTES.md) | Ce que tu dois fournir ou faire toi-même |

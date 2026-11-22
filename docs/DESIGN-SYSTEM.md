@@ -51,6 +51,12 @@ Les valeurs changent selon le thème (clair, sombre) et la couleur d'accent choi
 - Une information n'est jamais portée par la couleur seule (calendrier hachuré, coche sur les filtres, libellé en gras dans les graphiques).
 - Cibles tactiles ≥ 24 px (WCAG 2.2), en pratique 40 à 52 px.
 
+## 4 bis. Version 4
+
+- Les lignes `.row.between` peuvent passer à la ligne (texte agrandi) **sauf** l’en-tête du calendrier « ‹ mois › », qui reste sur une ligne (régression de la version 3 corrigée, test à 320 px en fr, it, de).
+- Captures vérifiées à l’œil sur 7 configurations : 320 px clair (fr), 360 px sombre (en), 375 px texte à 150 % (it), 390 px sombre (pt), 393 px sombre (fr), 412 px clair (es), 430 px clair (de).
+- 21st.dev (états vides, parcours de premier lancement) : composants React + Tailwind ; LIBRE a déjà des états vides rédigés et un premier lancement court. Rien d’importé.
+
 ## 5. Comparaison et choix (version 3)
 
 | Sujet | LIBRE avant | Recommandation Apple Design (skill) | Composants 21st.dev étudiés | Résultat |

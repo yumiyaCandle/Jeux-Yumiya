@@ -85,3 +85,34 @@ Descriptions, durées et sources des exercices :
 4. Les repères de consommation d’alcool par pays (Suisse : repères CFANT 2026) et le calcul des verres standard.
 5. La présentation de la réduction des risques (réduire est un objectif valable) et des substituts nicotiniques.
 6. Le caractère non culpabilisant des messages après un écart.
+
+## Formulations signalées pour avis (relecture interne du 21 novembre 2026)
+
+Relecture faite par recherche de mots catégoriques (« disparaît », « toujours », « garanti », « définitivement ») dans les textes de santé.
+Je n'ai pas modifié ces phrases moi-même : elles demandent un avis médical.
+
+| Texte | Où | Question pour le relecteur |
+|---|---|---|
+| « La plupart des symptômes de manque disparaissent. Il reste surtout des envies liées aux habitudes. » | Frise « Mon corps » (étape d'environ un mois) | Formulation et délai acceptables ? Faut-il nuancer (« diminuent nettement chez la plupart des personnes ») ? |
+| « Pourquoi la diminution se fait toujours avec un médecin. » | Fiche médicaments (benzodiazépines) | Le « toujours » est-il voulu (sécurité) ? |
+| Délais de la frise « Mon corps » (cigarette, alcool, cannabis, nicotine) | Habitudes › une habitude › « Mon corps » | Chaque délai et chaque bénéfice annoncé |
+
+## Fiche de relecture à remplir par le professionnel
+
+Une ligne par contenu de la liste ci-dessus. **Aucun contenu ne doit être marqué « validé » sans cette fiche remplie et signée.**
+
+| Contenu | Validé tel quel | À corriger (préciser) | À retirer | Commentaire |
+|---|---|---|---|---|
+| Quand consulter : urgences | ☐ | ☐ | ☐ | |
+| Quand consulter : alcool | ☐ | ☐ | ☐ | |
+| Quand consulter : benzodiazépines | ☐ | ☐ | ☐ | |
+| Quand consulter : opioïdes | ☐ | ☐ | ☐ | |
+| Quand consulter : réduire ou arrêter | ☐ | ☐ | ☐ | |
+| Quand consulter : se faire accompagner | ☐ | ☐ | ☐ | |
+| Frises « Mon corps » (4) | ☐ | ☐ | ☐ | |
+| Bibliothèque (35 fiches, une ligne chacune) | ☐ | ☐ | ☐ | |
+| Exercices (8) et parcours SOS | ☐ | ☐ | ☐ | |
+| Avertissements à la création d'un suivi | ☐ | ☐ | ☐ | |
+| Messages après un écart | ☐ | ☐ | ☐ | |
+
+Relecteur : nom, qualification, numéro professionnel (si applicable), date, version relue (commit Git), signature.

@@ -1,6 +1,6 @@
 # Publier LIBRE sur l’App Store et Google Play
 
-Exigences vérifiées le 20 novembre 2026 sur les pages officielles d’Apple et de Google (voir « Sources » en bas) ; document mis à jour le 22 novembre 2026 (version 3). Rien ici ne signifie qu’Apple ou Google ont accepté l’app : elle n’a encore été soumise à aucun store.
+Exigences vérifiées le 20 novembre 2026 sur les pages officielles d’Apple et de Google (voir « Sources » en bas) ; document mis à jour le 21 novembre 2026 (version 3). Rien ici ne signifie qu’Apple ou Google ont accepté l’app : elle n’a encore été soumise à aucun store.
 Elles changent régulièrement : relis-les au moment de la soumission.
 
 ## 1. Ce que tu dois fournir toi-même
@@ -35,6 +35,8 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 - [ ] Essais complets sur un iPhone réel (voir `TESTS-APPAREILS.md`), y compris Santé Apple et les rappels app fermée.
 - [ ] TestFlight interne, puis externe si possible.
 
+**Points vérifiés dans le projet (21/11/2026)** : `Info.plist` (Santé lecture seule, Face ID, chiffrement non exempté = NON), traductions des demandes d’autorisation en 6 langues, `PrivacyInfo.xcprivacy`, `App.entitlements` (HealthKit), projet Xcode relu par un analyseur. **Non vérifié** : compilation (pas de Mac), signature, captures iPad.
+
 **App Store Connect**
 - [ ] Catégorie principale : **Santé et forme** (secondaire possible : Style de vie).
 - [ ] Classification d’âge : répondre honnêtement au questionnaire (références aux drogues, à l’alcool et au tabac à visée informative/médicale ; jeux d’argent mentionnés sans jeu réel). Résultat attendu : 17+ ou équivalent selon le nouveau barème ; ne pas sous-déclarer.
@@ -48,7 +50,8 @@ Elles changent régulièrement : relis-les au moment de la soumission.
 
 **Technique**
 - [ ] Cible **API 36 (Android 16)** : obligatoire pour les nouvelles apps et mises à jour depuis le 31/08/2026 (déjà configuré). Minimum API 24.
-- [ ] Fichier **.aab** signé avec la clé d’upload ; Play App Signing activé.
+- [ ] Fichier **.aab** signé avec la clé d’upload ; Play App Signing activé. *État au 21/11/2026* : `bundleRelease` et `assembleRelease` réussissent ; AAB non signé dans `livraison/` ; lint Android : 0 erreur, 29 avertissements mineurs (icônes, ressources inutilisées, mise à jour possible d’appcompat).
+- [ ] Icône monochrome (icônes à thème d’Android 13+) : absente, recommandée par lint (facultatif).
 - [ ] Permissions : INTERNET, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, WAKE_LOCK, VIBRATE (retour haptique, permission ordinaire sans demande). `SCHEDULE_EXACT_ALARM` **retirée**. Aucune permission sensible (localisation, contacts, stockage, caméra).
 - [ ] `allowBackup="false"` (données chiffrées par une clé non exportable).
 - [ ] Dépendance `androidx.biometric:biometric:1.1.0` (biométrie, option cachée tant qu’elle n’est pas essayée) ; aucune permission supplémentaire n’est déclarée (`USE_BIOMETRIC` et l’ancienne `USE_FINGERPRINT` sont ajoutées par la bibliothèque : permissions normales, sans demande à l’utilisateur ; permissions finales vérifiées dans le manifeste fusionné : INTERNET, POST_NOTIFICATIONS, RECEIVE_BOOT_COMPLETED, WAKE_LOCK, VIBRATE, USE_BIOMETRIC, USE_FINGERPRINT).

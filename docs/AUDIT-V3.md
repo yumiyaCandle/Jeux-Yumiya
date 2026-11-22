@@ -1,6 +1,8 @@
 # LIBRE version 3 : audit final, corrections et état avant publication
 
-Réalisé les 21 et 22 novembre 2026. Audit interne (pas une certification). Point de départ : le dépôt, commit `5c6935d`
+> **Document historique.** L’état à jour est dans `AUDIT-V4.md`.
+
+Réalisé le 21 novembre 2026. Audit interne (pas une certification). Point de départ : le dépôt, commit `5c6935d`
 (contenu identique à `livraison/LIBRE-projet-complet.zip` de la version 2). Le ZIP n'était pas joint au message ; j'ai donc
 travaillé directement sur la source dont il est tiré. L'historique Git du dépôt permet de comparer chaque fichier avec `5c6935d`.
 

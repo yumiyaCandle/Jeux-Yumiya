@@ -1,6 +1,6 @@
 # Ce que tu dois fournir ou faire toi-même
 
-Mis à jour le 22 novembre 2026 (version 3). Je n'invente aucune de ces informations.
+Mis à jour le 21 novembre 2026 (version 4). Je n'invente aucune de ces informations.
 
 ## 1. Informations légales
 
@@ -11,7 +11,7 @@ Mis à jour le 22 novembre 2026 (version 3). Je n'invente aucune de ces informat
 | E-mail de contact (questions sur la confidentialité) | `libre/privacy.html` : `[ADRESSE E-MAIL À COMPLÉTER]` / `[E-MAIL ADDRESS – TO BE COMPLETED]` |
 | E-mail de support | `libre/site/index.html` (pied de page, fr et en) ; fiches des stores |
 | Numéro d'entreprise (si société) | Fiches des stores, selon le pays |
-| Adresse publique de la politique de confidentialité et de la page de présentation | Activer GitHub Pages (ou un autre hébergement) ; si l'adresse change : `PRIVACY_URL` dans `libre/index.html` |
+| Adresse publique de la politique de confidentialité et de la page de présentation | **Bloquant.** `PRIVACY_URL` vaut `https://yumiyacandle.github.io/Jeux-Yumiya/libre/privacy.html`. Je n'ai pas pu l'ouvrir (domaine bloqué dans mon environnement) et la branche par défaut `main` du dépôt **ne contient pas** le dossier `libre/` : cette adresse ne fonctionnera que si GitHub Pages publie la branche qui contient LIBRE (ou après fusion dans `main`). Confirme que le compte GitHub `yumiyacandle` est bien à toi (ou à l'éditeur), active Pages, ouvre l'adresse dans un navigateur, puis donne-la aux stores. Si tu choisis un autre hébergement, change `PRIVACY_URL` dans `libre/index.html` |
 | Validation juridique (nLPD suisse, RGPD si diffusion dans l'UE) | Faire relire `libre/privacy.html` par un juriste. Je n'ai fourni aucun avis juridique |
 
 ## 2. Comptes, identifiants, signatures
@@ -22,6 +22,10 @@ Mis à jour le 22 novembre 2026 (version 3). Je n'invente aucune de ces informat
 - **Signature Android** : créer la clé d'upload, la garder hors du dépôt, activer Play App Signing.
 - **Signature iOS** : équipe dans Xcode, capacité HealthKit.
 
+## 2 bis. Signature
+
+`livraison/LIBRE-android-release-NON-SIGNE.aab` est construit mais **non signé** : signe-le avec ta clé d'upload (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play.
+
 ## 3. Appareils et essais (impossibles dans mon environnement)
 
 - Un **Mac avec Xcode 26** : compiler l'app iOS (le code Swift et le projet n'ont jamais été compilés ici).
@@ -31,7 +35,7 @@ Mis à jour le 22 novembre 2026 (version 3). Je n'invente aucune de ces informat
 ## 4. Validation médicale
 
 Par un professionnel de santé qualifié (addictologue de préférence) : liste dans `VALIDATION-MEDICALE.md`. Numéros d'aide de chaque
-pays de distribution : `RESSOURCES-AIDE.md` (66 lignes sans date de vérification). Garder une trace écrite de la relecture.
+pays de distribution : `RESSOURCES-AIDE.md` (44 numéros confirmés le 21 novembre 2026 par recherche, 65 encore à vérifier). Garder une trace écrite de la relecture.
 
 ## 5. Traductions humaines
 
