@@ -946,13 +946,29 @@ test('Soutien', 'Centre de soutien : maintenant, 7 situations (3 gestes, un exer
 });
 
 
+test('Soutien', 'Fiche interactive : gestes cochés, « Ça t’a aidé ? » enregistré, puis proposé dans « Ce qui t’aide » ; une reprise mène à la fiche de son déclencheur', async (b, base) => {
+  const st = profileState({ types: ['cigarette'], days: 30 }); st.logs = [{ id: 'x', habitId: 'h0', type: 'cigarette', ts: Date.now() - 2 * 36e5, qty: 1 }];
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('outils');
+  await p.click('[data-a="situation"][data-k="seul"]'); await p.waitForTimeout(300);
+  assert.equal(await p.isVisible('#sit3fb'), false, 'la question vient après un geste');
+  await p.click('.sit3-step >> nth=0'); await p.click('.sit3-step >> nth=1');
+  assert.equal(await p.getAttribute('.sit3-step >> nth=0', 'aria-pressed'), 'true'); assert.equal(await p.isVisible('#sit3fb'), true);
+  await p.click('[data-a="sitHelp"][data-v="2"]'); await p.waitForTimeout(400);
+  const log = (await stateOf(p)).tools.sitLog; assert.equal(log.length, 1); assert.equal(log[0].k, 'seul'); assert.equal(log[0].done, 2); assert.equal(log[0].helped, 2);
+  assert.match(await p.textContent('.cr-rec'), /Ce qui t’aide[\s\S]*La solitude[\s\S]*T’a aidé 1 fois/);
+  await p.go('accueil'); await p.evaluate(() => document.querySelector('[data-a="lapse"]').click()); await p.waitForTimeout(300);
+  await p.click('[data-a="lpTrig"][data-v="Solitude"]'); await p.waitForTimeout(200);
+  await p.click('#layer .lp-sit'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Se sentir seul·e/);
+  noErr(p);
+});
+
 /* ---------- Refonte « Clairière » : navigation, journal guidé, lecture des données, bibliothèque par thèmes ---------- */
-test('Navigation', 'Barre Aujourd’hui · Soutien · Progrès · Journal ; bouton « Aide » dans l’en-tête de chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
+test('Navigation', 'Barre Aujourd’hui · Soutien · Progrès (statistiques d’abord) · Journal ; bouton « Aide » dans l’en-tête de chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'], name: 'Lou' })) }); await p.goto(base); await p.settle();
   for (const v of ['accueil', 'habitudes', 'stats', 'outils', 'journal']) {
     await p.go(v); await p.closeLayer();
     const nav = await p.evaluate(() => [...document.querySelectorAll('nav .in > a')].map(x => x.getAttribute('href')).join('|'));
-    assert.match(nav, /#accueil\|#outils\|#habitudes\|#journal/, v + ' : ' + nav);
+    assert.match(nav, /#accueil\|#outils\|#stats\|#journal/, v + ' : ' + nav);
     await p.click('.pg-head .top-help'); await p.waitForTimeout(300);
     assert.match(await p.textContent('#layer'), /Une envie forte/, v + ' : le bouton Aide ouvre l’aide immédiate'); await p.closeLayer();
   }

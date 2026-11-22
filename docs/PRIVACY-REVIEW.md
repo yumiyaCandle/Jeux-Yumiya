@@ -76,3 +76,10 @@ Un fichier partagé (e-mail, cloud, messagerie) sort du contrôle de LIBRE : l'a
 Le journal peut contenir trois champs facultatifs de plus : émotions choisies dans une liste, intention pour demain, question de
 réflexion choisie. Mêmes garanties que le reste du journal : sur l'appareil seulement, chiffré dans les apps, jamais envoyé, inclus
 dans l'export et effacé par « Tout effacer ». Les déclarations App Store / Google Play ne changent pas (aucune collecte).
+
+## 9. Finition « Encre » (22 novembre 2026)
+
+Nouvelle donnée facultative `tools.sitLog` : quelle fiche d'accompagnement a été utilisée, combien de gestes cochés, et si cela a aidé.
+Sur l'appareil seulement, chiffrée dans les apps, incluse dans l'export, effacée par « Tout effacer », limitée aux 200 dernières
+entrées. Sert uniquement à « Ce qui t'aide », désactivable (« Conseils personnalisés »). Politique de confidentialité mise à jour
+(fr, en). Déclarations des stores inchangées (aucune collecte).

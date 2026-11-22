@@ -102,3 +102,44 @@ utilisent le stockage existant (chiffré dans les apps).
   à faire relire (`VALIDATION-MEDICALE.md`).
 - La police serif dépend du système (New York sur iPhone, Georgia ou équivalent sur Android) : rendu à vérifier sur appareil.
 - Nouveau logo à inclure dans la recherche de marque.
+
+## 10. Finition (même jour, après ton retour)
+
+Base : `avant-finition`. Revue faite **au format réel d'un iPhone** (393 × 852 et iPhone SE 375 × 667, écran visible uniquement,
+sans défilement de capture) ; comparaisons : `docs/ux/finition/`.
+
+### Ce que la revue a montré, et ce qui a changé
+
+| Constat (format iPhone) | Correction |
+|---|---|
+| Le compteur occupait tout le premier écran ; « Agir maintenant » était invisible sans défiler | Compteur resserré : chiffre, depuis quand, trois chiffres clés, puis la prochaine étape **sur une seule ligne** avec un petit anneau. « J'ai une envie » apparaît dès l'ouverture sur iPhone |
+| Sur iPhone SE, même le compteur ne tenait pas | Mise en page resserrée pour les écrans courts : salutation plus petite, message limité à deux lignes, mention « record » masquée (elle reste dans Progrès) |
+| « Progrès » ouvrait la liste des habitudes (une page de gestion) | « Progrès » ouvre d'abord **les statistiques et leur lecture expliquée** ; « Mes suivis » passe en dernier onglet |
+| Les fiches « Selon ce que tu traverses » étaient des pages de conseils | **Fiches interactives** : chaque geste se coche (retour haptique léger), puis « Est-ce que ça t'a aidé ? » (oui · un peu · pas cette fois) |
+| Rien ne retenait ce qui fonctionne pour la personne | **« Ce qui t'aide »** dans Soutien : les fiches notées utiles et les exercices après lesquels l'envie est passée, avec leur nombre de fois et la mention « D'après ce que tu as noté ». Désactivable avec les conseils personnalisés |
+| Après une reprise, le déclencheur noté ne menait nulle part | Le parcours après une reprise propose **« Préparer la prochaine fois »** : la fiche correspondant au déclencheur (solitude → « La solitude », soirée → « Une situation à risque », etc.) |
+| L'humeur sélectionnée gardait l'ancien vert | Sélections homogènes : encre pleine |
+| Le cadre complet autour des 4 gestes rapides faisait « tableau » | Filets seulement, sans cadre |
+
+### Détails professionnels
+
+- **Appui** : toutes les rangées, puces et liens réagissent dès le contact (fond papier plus foncé, léger enfoncement des boutons,
+  supprimé si « moins d'animations »).
+- **Clavier et lecteurs d'écran** : anneau de focus safran visible sur tout élément atteint au clavier.
+- **Confirmations** : messages en encre avec un trait safran ; texte qui dit ce qui va se passer ensuite.
+- **États vides** : une phrase posée en serif, toujours avec une action.
+- **Graphiques** : libellés à 11 px minimum sur iPhone.
+- **Barre d'état** : couleur adaptée au mode clair ou sombre.
+
+### Données
+
+Une seule donnée nouvelle, facultative : `tools.sitLog` (fiche utilisée, nombre de gestes cochés, « ça m'a aidé »), limitée aux
+200 dernières entrées, stockée dans le même état chiffré, incluse dans les sauvegardes, effacée par « Tout effacer ». Mentionnée dans
+la politique de confidentialité (fr, en).
+
+### Tests
+
+88 tests automatisés réussis sur 88 (Chromium), dont le nouveau « Fiche interactive » (gestes cochés, retour enregistré, « Ce qui
+t'aide », lien depuis une reprise). Contrastes AA clair et sombre, zones tactiles, texte à 200 % : conformes. Android : compilation
+debug, release et AAB, 12 tests unitaires, 0 erreur de lint. iOS non compilé. Les captures « iPhone » sont des simulations de
+taille dans Chromium, **pas** un essai sur un iPhone réel (police serif système, clavier, retour haptique à vérifier sur appareil).

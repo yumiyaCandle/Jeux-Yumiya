@@ -296,3 +296,15 @@ Rangées : 54 px minimum, filet en dessous. Tout est aligné sur la marge gauche
 
 Pictogrammes au trait existants (un seul jeu, 24 px). Logo, icônes iOS/Android/web et écrans de lancement :
 `libre-app/scripts/render-assets.js` (fond encre `#17181C`, cercle papier `#F6F3EC`, point safran `#E2A21B`).
+
+### Encre · finition
+
+| Élément | Règle |
+|---|---|
+| Appui | Rangées, puces, liens : fond `--field` au contact ; boutons : `scale(.98)` (aucun mouvement si « moins d'animations ») |
+| Focus clavier | `:focus-visible` : contour safran 2 px, décalé de 2 px |
+| Message de confirmation | `.toast` : fond encre, texte papier, trait safran à gauche |
+| Sélection | Humeur, puces, choix : encre pleine (jamais de couleur d'humeur comme fond de sélection) |
+| Fiche interactive | `.sit3-step` : cercle à cocher (encre + coche safran), texte barré safran une fois fait ; `.sit3-fb` : question « Ça t'a aidé ? » |
+| Écrans courts (≤ 740 px de haut) | Titres réduits, message d'accueil sur 2 lignes, compteur resserré |
+| Graphiques | Libellés ≥ 11 px, couleur `--muted` |

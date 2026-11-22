@@ -121,3 +121,9 @@ iOS : non compilé. Appareils réels : aucun.
 
 Vérification de l’archive `LIBRE-ENCRE-COMPLET.zip` extraite dans un dossier vierge : `npm ci`, `npm test` (87 réussis), contrastes
 conformes ; `libre-app` : `npm ci`, `npm run sync`, `gradlew assembleDebug bundleRelease :app:testDebugUnitTest` réussi ; aucun fichier de clé ni secret.
+
+## 10. Finition « Encre »
+
+Exécutés réellement dans Chromium : **88 réussis, 0 échoué** (nouveau : fiche interactive, « Ce qui t'aide », lien depuis une
+reprise ; navigation mise à jour : « Progrès » ouvre les statistiques). Revue visuelle à 393 × 852 et 375 × 667 (simulation de taille,
+pas un iPhone réel). Contrastes, zones tactiles, texte 200 % : conformes. Android : compilation, 12 tests JUnit, 0 erreur de lint.

@@ -120,3 +120,8 @@ plus mises en cache. 87 tests, dont tous les tests de sécurité, repassent.
 
 Aucun mécanisme de sécurité modifié, aucune nouvelle donnée enregistrée (les fiches de situation sont du contenu fixe ; un plan créé
 depuis une fiche utilise le stockage existant). 87 tests, dont tous les tests de sécurité, repassent.
+
+## 11. Finition « Encre »
+
+Aucun mécanisme modifié. Nouvelle donnée facultative `tools.sitLog` dans le même état chiffré (voir `PRIVACY-REVIEW.md` § 9).
+88 tests, dont tous les tests de sécurité, repassent.

@@ -28,7 +28,7 @@ Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente auc
 ## 2 bis. Signature et fichiers Android
 
 - `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-ENCRE-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `63ca7deb8a430d2cd7d6f4c27c786dff87109318e2d13c03d3688dd5069a5522`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+  Empreinte SHA-256 : `90144f7b73333b5adf9d779c2ca29bb1c7a1c4af07bf706045eca7f1257f4efc`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -85,6 +85,11 @@ pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source offici
 - Rouvrir des langues après traduction (`LANGUES.md`).
 - Garder ou non le support iPad (captures iPad à fournir si gardé).
 - Pays de distribution (les numéros d'aide affichés en dépendent).
+
+## 13. Après la finition
+
+- Sur un iPhone réel : taille et rendu de la police serif, clavier pendant l'écriture du journal, retour haptique des fiches.
+- Faire relire les textes des fiches et de « Ce qui t'aide » (formulations « T'a aidé n fois »).
 
 ## 12. Après la refonte « Encre »
 
