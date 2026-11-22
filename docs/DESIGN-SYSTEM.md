@@ -232,3 +232,67 @@ Feuilles : rayon 32 en haut.
 | Entrée des pages | `#app.pg-in` | 0,42 s, décalage 40 ms ; supprimé si moins d'animations |
 
 Icônes et écrans de lancement : `libre-app/scripts/render-assets.js` (dégradé `#1E1A55` → `#5A43C9`, logo blanc, point `#FF9A6B`).
+
+## Design system « Encre » (identité par défaut, remplace « Envol »)
+
+Bloc CSS « ENCRE » à la fin de `libre/index.html` (sélecteurs `html:not(.fx)`). Intention : `REFONTE-ENCRE.md` § 2.
+
+### Couleurs
+
+| Rôle | Jeton | Clair | Sombre | Usage |
+|---|---|---|---|---|
+| Papier (fond) | `--bg` | `#F6F3EC` | `#121315` | Toutes les pages |
+| Surface (feuilles, champs) | `--card` | `#FFFDF8` | `#1A1B1F` | Uniquement champs et fenêtres |
+| Encre (texte, action principale) | `--ink`, `--accent` | `#17181C` | `#EDE9E0` | Texte, bouton principal, compteur |
+| Texte secondaire | `--muted` | `#5E6068` | `#A3A39E` | Sous-titres, métadonnées |
+| Filet | `--rule` | encre 13 % | papier 14 % | Séparation des sections et des rangées |
+| **Accent unique** | `--saffron` | `#E2A21B` | `#F0B53A` | Trait des surtitres, onglet actif, soulignement des liens, progression, point du logo. **Jamais pour du texte courant** ; texte safran : `--saffron-ink` `#7A5200` |
+| Réussite | `--green*` | `#2F6B4F` | `#7FC3A0` | Jours sans, réussites |
+| Urgence (réservé) | `--sos`, `--sos-soft` | `#B3261E` | `#EF6A5E` | Danger, point du bouton Aide |
+| Surface foncée | `--navy` | `#17181C` | `#1F2025` | Une seule par écran (compteur, « J'ai une envie ») |
+
+### Typographie
+
+| Niveau | Police | Taille / graisse | Interlettrage |
+|---|---|---|---|
+| Titre de page | Serif système (`--font-title` : New York, Iowan, Georgia) | `clamp(2.1rem, 9vw, 2.7rem)` / 500 | −0,025 em, interligne 1,04 |
+| Titre de section | Serif | 1,4 rem / 500 | −0,015 em |
+| Grands chiffres | Serif | jusqu'à 4,6 rem / 500 | −0,04 em |
+| Surtitre | Inter | 0,7 rem / 700, capitales | +0,14 em, trait safran de 16 px avant |
+| Texte | Inter | 16 px / 400 | −0,006 em, interligne 1,5 |
+| Libellés d'interface | Inter | 0,7–0,95 rem / 600 | 0 |
+
+### Espacements et alignements
+
+Grille de 4 px (`--sp-1…8`). Marges latérales 16 px (zones de sécurité respectées). Sections : 22 px au-dessus, filet en tête.
+Rangées : 54 px minimum, filet en dessous. Tout est aligné sur la marge gauche ; seuls le compteur et les chiffres clés sont centrés.
+
+### Composants
+
+| Composant | Classe | Règle |
+|---|---|---|
+| En-tête de page | `.pg-head`, `.pg-kick`, `.pg-title`, `.page-sub` | Mot-symbole ou retour, actions (Aide, notifications, profil), surtitre de section, titre serif, filet |
+| Mot-symbole | `.wm`, `.wm-t`, `.wm-d` | Logo + « libre » serif + point safran (graphique, non textuel) |
+| Bouton Aide | `.top-help` | Contour encre, point rouge, présent sur chaque page |
+| Navigation | `.nav` | 4 onglets, posée, flou léger, filet supérieur ; onglet actif : encre + trait safran au-dessus ; barre latérale au-delà de 900 px |
+| Boutons | `.btn.primary` / `.btn.ghost` / `.btn.quiet` | Encre plein / contour / lien souligné safran ; 52 px (40 px `.sm`), rayon 12 |
+| Onglets internes | `.segc`, `.ptabs` | Texte, trait safran sous l'actif, libellés sur deux lignes si besoin, 44 px mini |
+| Puces de choix | `.seg button`, `.cr-chip` | Pilule à filet ; sélection = encre pleine |
+| Champs | `input`, `textarea`, `select`, `.search` | Fond surface, filet, focus = bord encre + contour safran |
+| Sections | `.card` et blocs de page | Sans fond ni ombre : filet en tête uniquement |
+| Rangées | `.li`, `.cr-row`, `.tool-rw`, `.hub-i` | Filet en dessous, chevron à droite |
+| Mise en avant | `.hm-sit`, `.j3-prompt`, `.rec`, `.plan-goal` | Trait vertical de 3 px (safran ; rouge pour une difficulté) |
+| Compteur | `.hm-hero` | Surface encre, chiffres serif, anneau safran |
+| Aide immédiate | `.qsos`, `.qs-t` | Plein écran encre, rangées à filets clairs |
+| Fiche de situation | `.sit3`, `.sit3-s` | Intro serif, 3 gestes numérotés 01–03, action principale, plan, lecture |
+| Feuilles | `.sheet` | Papier, coins 18 px, titre serif |
+| Graphiques | `--bar` | Barres encre, repères en filet, valeur courante annoncée en texte |
+| Chargement | — | Aucun chargement réseau ; photos : fond neutre pendant le décodage |
+| États vides | Phrase + action | Toujours une suite possible |
+| Erreurs et confirmations | `toast()`, `confirmBox()` | Titre + phrase d'action ; confirmation seulement pour l'irréversible |
+| Notifications | Cloche, pastille rouge | Textes discrets par défaut |
+
+### Icônes et logo
+
+Pictogrammes au trait existants (un seul jeu, 24 px). Logo, icônes iOS/Android/web et écrans de lancement :
+`libre-app/scripts/render-assets.js` (fond encre `#17181C`, cercle papier `#F6F3EC`, point safran `#E2A21B`).

@@ -115,3 +115,8 @@ aucune donnée. Les icônes sont générées localement, sans service externe. 8
 Aucun mécanisme de sécurité modifié. Aucune nouvelle donnée enregistrée : le « moment à risque » est calculé à l'affichage à partir des
 consommations déjà notées, sur l'appareil, et n'est jamais stocké ni transmis. Icônes générées localement. Les photos retirées ne sont
 plus mises en cache. 87 tests, dont tous les tests de sécurité, repassent.
+
+## 10. Refonte « Encre » (22 novembre 2026)
+
+Aucun mécanisme de sécurité modifié, aucune nouvelle donnée enregistrée (les fiches de situation sont du contenu fixe ; un plan créé
+depuis une fiche utilise le stockage existant). 87 tests, dont tous les tests de sécurité, repassent.

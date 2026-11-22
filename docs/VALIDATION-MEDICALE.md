@@ -179,3 +179,10 @@ Aucun n'est validé. Les fiches « rôle de l'entourage » et « retrouver confi
 | Moment à risque (« C'est souvent le soir que c'est plus difficile pour toi… ») | Accueil | Ton adapté ? Risque de suggestion ? |
 
 Aucun n'est validé.
+
+## Refonte « Encre » : fiches « Selon ce que tu traverses » à relire
+
+Sept fiches (`SITUATIONS` dans `libre/index.html`) : stress, ennui, solitude, pression sociale, émotions difficiles, automatismes,
+situation à risque. Chacune : une explication, trois gestes concrets, un exercice, un modèle de plan. Questions : les gestes sont-ils
+adaptés et prudents ? La fiche « émotions difficiles » oriente vers un professionnel si l'émotion dure : formulation suffisante ?
+Aucune n'est validée.

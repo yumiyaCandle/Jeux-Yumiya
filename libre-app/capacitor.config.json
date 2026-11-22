@@ -2,7 +2,7 @@
   "appId": "ch.libre.app",
   "appName": "LIBRE",
   "webDir": "www",
-  "backgroundColor": "#241F63",
+  "backgroundColor": "#17181C",
   "loggingBehavior": "none",
   "ios": { "contentInset": "never", "limitsNavigationsToAppBoundDomains": false, "scrollEnabled": true },
   "android": { "allowMixedContent": false, "captureInput": false, "webContentsDebuggingEnabled": false },

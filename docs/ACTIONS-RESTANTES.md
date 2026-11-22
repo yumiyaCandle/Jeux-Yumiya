@@ -27,8 +27,8 @@ Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente auc
 
 ## 2 bis. Signature et fichiers Android
 
-- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-ENVOL-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `fff736fc41551a951d9710671d024edc303ad4282f0d7f0aa74d5b10081a9aa7`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-ENCRE-COMPLET.zip`, qui ne contient que le projet).
+  Empreinte SHA-256 : `63ca7deb8a430d2cd7d6f4c27c786dff87109318e2d13c03d3688dd5069a5522`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -85,6 +85,12 @@ pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source offici
 - Rouvrir des langues après traduction (`LANGUES.md`).
 - Garder ou non le support iPad (captures iPad à fournir si gardé).
 - Pays de distribution (les numéros d'aide affichés en dépendent).
+
+## 12. Après la refonte « Encre »
+
+- Faire relire les 7 fiches « Selon ce que tu traverses » (fin de `VALIDATION-MEDICALE.md`).
+- Vérifier sur iPhone et Android le rendu de la police serif système, la barre d'onglets au-dessus des gestes système, les nouvelles icônes.
+- Inclure le logo « Encre » (cercle ouvert et point safran) dans la recherche de marque.
 
 ## 11. Après la reconstruction « Envol »
 
