@@ -129,6 +129,8 @@ Relecteur : nom, qualification, numéro professionnel (si applicable), date, ver
 | Bibliothèque (35 fiches) | Moyen | 82 sources citées | Non | **Non** |
 | Exercices (8) | Faible à moyen | Cochrane, articles | Non | **Non** |
 | Messages après un écart | Moyen (culpabilisation) | Entretien motivationnel, prévention de la rechute | — | **Non** |
+| Lignes d’aide « jeux d’argent » (FR, GB, DE, IT, US ; version finale) | Moyen | Sites officiels ou opérateurs (`RESSOURCES-AIDE.md`) | Par recherche, pas par appel | Contrôle par l’éditeur |
+| Avertissement de sevrage à la création d’un suivi (alcool, opioïdes, médicaments, autre) | **Vital** | — | — | Testé automatiquement (affiché pour l’alcool, absent pour les cigarettes) ; formulation **à valider** |
 | Données Santé Apple | Faible : affichées sans interprétation médicale (vérifié : aucun texte n'interprète la fréquence cardiaque ou la variabilité) | — | — | Sans objet |
 
 Aucun contenu n'est marqué « validé ». Revue V5 faite par moi (non professionnelle) : pas de nouvelle formulation dangereuse trouvée ;

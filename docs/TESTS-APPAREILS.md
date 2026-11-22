@@ -143,3 +143,10 @@ Ajouts de la version 5 (rien n'a été essayé sur appareil) :
 - [ ] **Santé Apple** (iPhone + Apple Watch si possible) : connecter ; comparer avec l'app Santé pendant 3 jours (pas, sommeil de la nuit, fréquence cardiaque au repos) ; refuser l'accès : « Autorisation demandée, aucune donnée reçue » ; le réactiver dans Réglages › Santé : les données reviennent ; porter la montre sans synchroniser 2 jours puis synchroniser : les jours manquants apparaissent ; changer de fuseau horaire (voyage ou réglage manuel) : les jours ne se décalent pas.
 - [ ] **Nouveau téléphone** : exporter une sauvegarde chiffrée, installer LIBRE sur un autre appareil, « Restaurer une sauvegarde » depuis l'écran d'accueil : tout revient.
 - [ ] **Mise à jour** : installer la version précédente, saisir des données, installer celle-ci par-dessus : données conservées, aucune demande de mot de passe inattendue.
+
+Ajouts de la version finale (rien n'a été essayé sur appareil) :
+- [ ] **CSP dans les apps** : l'app démarre, toutes les photos s'affichent, la politique de confidentialité s'ouvre, l'export et le partage fonctionnent (iPhone et Android). Si un écran reste blanc : signaler, la CSP est la première suspecte.
+- [ ] **SOS** : « Urgences 144 » (ou le numéro du pays choisi) ouvre l'app Téléphone avec ce numéro ; « Numéros d'aide » affiche la liste du pays.
+- [ ] **Jeux d'argent** : avec une habitude « Jeux d'argent » et le pays France, « Joueurs Info Service 09 74 75 13 13 » apparaît dans Aide et sécurité ; sans cette habitude, la ligne n'apparaît pas.
+- [ ] **VoiceOver / TalkBack** : le bouton d'urgence du SOS est annoncé avec le type de service et le numéro ; les liens texte se touchent facilement au doigt.
+- [ ] **Android, permission Internet** (facultatif) : retirer `android.permission.INTERNET` du manifeste, recompiler, vérifier que l'app se charge ; si oui, la retirer définitivement.

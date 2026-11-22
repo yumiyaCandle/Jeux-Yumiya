@@ -14,7 +14,10 @@
     "check:standalone": "python3 tools/build-standalone.py --check",
     "check:sources": "python3 tools/check-sources.py",
     "build:standalone": "python3 tools/build-standalone.py",
-    "build:all": "python3 tools/build-standalone.py && cd libre-app && npm run sync"
+    "build:all": "python3 tools/build-standalone.py && cd libre-app && npm run sync",
+    "check:contrast": "node tests/contrast.js",
+    "check:targets": "node tests/targets.js",
+    "check:versions": "python3 tools/check-versions.py"
   },
   "devDependencies": {
     "playwright": "1.63.0"

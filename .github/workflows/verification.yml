@@ -33,8 +33,14 @@ jobs:
         run: npm ci
       - name: Installer Chromium pour Playwright
         run: npx playwright install --with-deps chromium
+      - name: Dépendances sans vulnérabilité connue (élevée ou critique)
+        run: npm audit --audit-level=high
       - name: Langues, fichier autonome et tests (npm test)
         run: npm test
+      - name: Accessibilité (contrastes AA, zones tactiles)
+        run: |
+          npm run check:contrast
+          npm run check:targets
       - name: Résultats des tests
         if: always()
         uses: actions/upload-artifact@v4
@@ -63,8 +69,11 @@ jobs:
       - name: Dépendances et synchronisation Capacitor
         run: |
           npm ci
+          npm audit --audit-level=high
           npm run web
-          npx cap sync android
+          npx cap sync
+      - name: Versions identiques (Android, iOS, package.json) et copies web à jour
+        run: python3 ../tools/check-versions.py
       - name: Compiler, tester, analyser
         working-directory: libre-app/android
         run: ./gradlew assembleDebug :app:testDebugUnitTest lintRelease assembleRelease bundleRelease --no-daemon

@@ -30,6 +30,13 @@ chiffré), jamais transmises.
 - iOS : Capacitor et plugins officiels seulement ; aucune URL de service dans leur code source.
 - Journaux : `loggingBehavior: "none"` ; aucun `console.log` dans l'app.
 
+## 3 bis. Version finale : la promesse « aucune connexion » est maintenant imposée par le navigateur
+
+Une politique de sécurité du contenu (`connect-src 'self'`, images et polices limitées à l’app) empêche la page d’envoyer quoi que ce soit
+vers un serveur extérieur, même par erreur ou en cas d’injection de script. Restent possibles, uniquement à l’initiative de l’utilisateur :
+ouvrir un lien (navigateur externe), appeler un numéro (`tel:`), partager un fichier (feuille de partage du système).
+Les lignes d’aide « jeux d’argent » ajoutées ne changent rien aux données : ce sont des numéros affichés, aucun appel n’est fait par l’app.
+
 ## 4. Aperçu dans le sélecteur d'applications (nouveau)
 
 | Plateforme | Avant | Maintenant | Vérifié |

@@ -2,6 +2,10 @@
 
 | Document | Contenu |
 |---|---|
+| [AUDIT-FINAL.md](AUDIT-FINAL.md) | **Rapport final** : diagnostic P0–P3, corrections, critères d'acceptation, niveau de préparation |
+| [SECURITE-FINALE.md](SECURITE-FINALE.md) | Sécurité plateforme par plateforme, CSP, scénarios d'attaque, permissions |
+| [UX-UI-REVIEW.md](UX-UI-REVIEW.md) | Revue des écrans, corrections avant/après (`ux/`), composants 21st.dev examinés |
+| [TESTS-FINAUX.md](TESTS-FINAUX.md) | Tests classés : réussis réellement, simulés, échoués, non exécutés |
 | [AUDIT-V5.md](AUDIT-V5.md) | **Rapport de la version 5** : nouveaux problèmes, corrections, réponses aux 14 questions, niveaux de préparation |
 | [APPLE-ENCRYPTION-COMPLIANCE.md](APPLE-ENCRYPTION-COMPLIANCE.md) | Chiffrement et `ITSAppUsesNonExemptEncryption` |
 | [PRIVACY-REVIEW.md](PRIVACY-REVIEW.md) | Manifeste de confidentialité, dépendances, réseau, sélecteur d'applications, exports |

@@ -1,6 +1,6 @@
 # Ce que tu dois fournir ou faire toi-même
 
-Mis à jour le 22 novembre 2026 (version 5). Je n'invente aucune de ces informations.
+Mis à jour le 22 novembre 2026 (version finale). Je n'invente aucune de ces informations.
 
 ## 1. Informations légales
 
@@ -27,8 +27,8 @@ Mis à jour le 22 novembre 2026 (version 5). Je n'invente aucune de ces informat
 
 ## 2 bis. Signature et fichiers Android
 
-- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-V5-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `f2ba0a4f8987634e692202904d42039a4f83827be84f90ace279014eb127981d`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-FINAL-COMPLET.zip`, qui ne contient que le projet).
+  Empreinte SHA-256 : `24203051933e9f121ece2e27cb8e5a577a0882ee27a00e11ea93f903f0f619ff`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -49,6 +49,14 @@ les registres officiels. **Je ne peux pas dire si le nom est disponible.** Avant
 Il n'a jamais tourné. À faire : Actions › activer les workflows, ouvrir une pull request ou lancer « Run workflow », lire le résultat.
 Les macOS de GitHub sont facturés en minutes : le travail iOS est désactivé par défaut.
 
+## 2 quinquies. À décider après un premier essai sur appareil
+
+- **CSP dans les apps** : la politique de sécurité ajoutée dans la version finale n'a été essayée que dans Chromium. Si un écran reste
+  blanc dans l'app iOS ou Android, c'est la première chose à vérifier (`TESTS-APPAREILS.md`).
+- **Permission Internet (Android)** : déclarée par le modèle Capacitor, inutile pour LIBRE. À retirer seulement si l'app se charge sans elle.
+- **Lignes d'aide « jeux d'argent »** : ajoutées pour FR, GB, DE, IT, US (sources officielles, horaires à reconfirmer) ; Suisse non ajoutée
+  (SOS Jeu 0800 801 381 non reconfirmé) : à compléter si tu distribues en Suisse.
+
 ## 3. Appareils et essais (impossibles dans mon environnement)
 
 - Un **Mac avec Xcode 26** : compiler l'app iOS (le code Swift et le projet n'ont jamais été compilés ici ; nouveauté V5 à vérifier en
@@ -59,7 +67,7 @@ Les macOS de GitHub sont facturés en minutes : le travail iOS est désactivé p
 ## 4. Validation médicale
 
 Par un professionnel de santé qualifié (addictologue de préférence) : liste dans `VALIDATION-MEDICALE.md`. Numéros d'aide de chaque
-pays de distribution : `RESSOURCES-AIDE.md` (critères V5 plus stricts : 41 confirmés par une source officielle ou institutionnelle, 3 probables sur la seule foi d'annuaires, 65 à vérifier ; Belgique, Portugal et Brésil en priorité). Garder une trace écrite de la relecture.
+pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source officielle ou institutionnelle, 3 probables sur la seule foi d'annuaires, 65 à vérifier ; Belgique, Portugal et Brésil en priorité). Garder une trace écrite de la relecture.
 
 ## 5. Traductions humaines
 

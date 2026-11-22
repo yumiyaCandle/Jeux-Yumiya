@@ -71,6 +71,13 @@ Lecture seule (`toShare` vide), types demandés seulement quand l'utilisateur co
 le coffre, effacés à la déconnexion. Aucune proposition sur Android ni dans le navigateur (testé). La description iOS liste
 exactement les mêmes mesures que la politique de confidentialité, en 6 langues.
 
+## 7 bis. Ajouts de la version finale (22 novembre 2026)
+
+- **Politique de sécurité du contenu (CSP)** : aucune connexion vers un serveur extérieur n’est possible depuis la page (`connect-src 'self'`),
+  ni objet, ni formulaire, ni balise `<base>`. Réduit fortement l’impact d’une éventuelle faille XSS : les données ne peuvent pas être
+  envoyées ailleurs par `fetch`, `XMLHttpRequest`, `WebSocket` ou image externe. Testé (Chromium) ; **non essayé dans les apps natives**.
+- Détail complet, plateforme par plateforme : `SECURITE-FINALE.md`.
+
 ## 8. Limites et risques résiduels
 
 - **Navigateur sans chiffrement activé** : toute personne ou tout logiciel ayant accès au profil du navigateur peut lire les données.

@@ -32,6 +32,26 @@ test('Inscription', 'Créer un profil « cigarettes » de bout en bout, puis le 
   await p.reload(); await p.waitForSelector('#app[data-view="accueil"]'); s = await p.state(); assert.equal(s.profile.name, 'Camille'); noErr(p);
 });
 
+test('Sécurité santé', 'Création d’un suivi « alcool » : l’avertissement de sevrage s’affiche avant de commencer, et pas pour les cigarettes', async (b, base) => {
+  const run = async type => { const p = await page(b, base); await p.goto(base); await p.click('[data-a="obNext"]'); let seen = false;
+    for (let n = 0; n < 120 && !seen; n++) {
+      await p.waitForTimeout(150);
+      if ((await p.evaluate(() => document.body.innerText)).includes('le sevrage peut être dangereux')) { seen = true; break; }
+      if (await p.$('[data-a="obToggleType"]')) { const sel = `[data-a="obToggleType"][data-k="${type}"]`; if (await p.getAttribute(sel, 'aria-pressed') !== 'true') await p.click(sel); }
+      for (const i of await p.$$('input[data-ob]')) { if (!(await i.isVisible()) || await i.inputValue()) continue; const k = await i.getAttribute('data-ob'), ty = await i.getAttribute('type');
+        await i.fill(k === 'name' ? 'Camille' : k === 'age' ? '34' : k === 'height' ? '170' : k === 'weight' ? '65' : ty === 'datetime-local' ? '2026-11-10T20:00' : '10'); }
+      const gs = await p.$$('[data-a="obPick"][data-p*="goal"]');
+      if (gs.length && !(await p.$('[data-a="obPick"][data-p*="goal"][aria-pressed="true"]'))) { await p.click('[data-a="obPick"][data-p*="goal"][data-v="arreter"]'); continue; }
+      for (const a of ['obPick', 'obSince', 'obLast']) { const els = await p.$$(`[data-a="${a}"]`); if (els.length && !(await p.$(`[data-a="${a}"][aria-pressed="true"]`))) { await els[0].click(); await p.waitForTimeout(80); } }
+      if ((await p.evaluate(() => document.body.innerText)).includes('Ton plan est prêt')) break;
+      const cta = await p.$('#obCta:not([disabled])'); if (cta) await cta.click();
+    }
+    const txt = await p.evaluate(() => document.body.innerText); await p.ctx.close(); return { seen: seen || txt.includes('le sevrage peut être dangereux'), ready: txt.includes('Ton plan est prêt') || seen };
+  };
+  const a = await run('alcool'); assert.ok(a.seen, 'avertissement affiché pour l’alcool');
+  const c = await run('cigarette'); assert.ok(c.ready && !c.seen, 'pas d’avertissement de sevrage dangereux pour les cigarettes');
+});
+
 test('Suivi', 'Noter une consommation remet le compteur à zéro et persiste', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.waitForSelector('[data-a="quickPlus"]'); await p.closeLayer();
   await p.click('[data-a="quickPlus"]'); await p.waitForTimeout(300);
@@ -740,6 +760,29 @@ test('Affichage', 'Calendrier à 320 px : l’en-tête « ‹ mois › » reste 
     const tops = await p.evaluate(() => [...document.querySelectorAll('[data-a="calNav"]')].map(x => Math.round(x.getBoundingClientRect().top)));
     assert.equal(tops.length, 2); assert.equal(tops[0], tops[1], lang + ' : boutons sur deux lignes'); assert.deepEqual(p.errors, []); await p.ctx.close();
   }
+});
+
+test('Sécurité', 'Politique de sécurité (CSP) : aucune violation en parcourant l’app, et toute connexion vers un serveur extérieur est bloquée', async (b, base) => {
+  const st = profileState({ types: ['cigarette', 'jeux_argent'], extra: { journal: [{ id: 'j1', ts: Date.now(), mood: 3, text: 'x', triggers: [] }] } });
+  const p = await page(b, base, { init: seed(st) });
+  await p.ctx.addInitScript(() => { window.__csp = []; document.addEventListener('securitypolicyviolation', e => window.__csp.push(e.violatedDirective + ' ' + e.blockedURI)); });
+  await p.goto(base); await p.settle();
+  assert.match(await p.evaluate(() => document.querySelector('meta[http-equiv="Content-Security-Policy"]').content), /connect-src 'self'/);
+  for (const v of ['accueil', 'habitudes', 'stats', 'calendrier', 'bilans', 'journal', 'outils', 'biblio', 'profil']) await p.go(v);
+  await p.go('accueil'); await p.click('.hm-sos'); await p.waitForTimeout(400); await p.closeLayer();
+  assert.deepEqual(await p.evaluate(() => window.__csp), [], 'aucune violation pendant l’usage normal');
+  const blocked = await p.evaluate(async () => { try { await fetch('https://example.org/x'); return 'envoyée'; } catch (e) { return 'bloquée'; } });
+  assert.equal(blocked, 'bloquée');
+  assert.ok((await p.evaluate(() => window.__csp)).some(v => /connect-src/.test(v)), 'la tentative est signalée comme violation connect-src');
+  assert.deepEqual(p.external, []);
+});
+
+test('Aide', 'Jeux d’argent : la ligne spécialisée du pays n’apparaît que si cette habitude est suivie', async (b, base) => {
+  const sos = async types => { const p = await page(b, base, { init: seed(profileState({ types, extra: { prefs: { lang: 'fr', mainHabit: 'h0', helpCountry: 'FR' } } })), locale: 'fr-FR' }); await p.goto(base); await p.settle();
+    await p.go('profil'); await p.openFold('p-safe'); await p.waitForTimeout(200);
+    const txt = await p.evaluate(() => document.getElementById('app').innerText); await p.ctx.close(); return txt; };
+  assert.match(await sos(['jeux_argent']), /Joueurs Info Service[\s\S]*09 74 75 13 13/);
+  assert.doesNotMatch(await sos(['cigarette']), /Joueurs Info Service/);
 });
 
 test('Confidentialité', 'Voile : dès que LIBRE passe en arrière-plan, le contenu est masqué, puis réapparaît au retour', async (b, base) => {

@@ -55,6 +55,10 @@ avant l’ouverture du coffre. Un coffre illisible est déplacé, jamais écras�
 - **Affichage** : tout texte venant des données passe par `esc()` avant d’être inséré ; un test importe une sauvegarde hostile.
 - **Notifications** : textes neutres par défaut sur l’écran verrouillé.
 - **Réseau** : aucune requête automatique ; un test vérifie qu’aucune requête externe n’est émise.
+- **Politique de sécurité du contenu (CSP)** : balise `<meta http-equiv="Content-Security-Policy">` dans `index.html`, `privacy.html` et le site.
+  `connect-src 'self'` (aucune connexion vers un serveur extérieur, même en cas d’injection de script), `img-src`/`font-src` limités à l’app
+  et aux `data:`, `object-src 'none'`, `base-uri 'none'`, `form-action 'none'`. `script-src` garde `'unsafe-inline'` : tout le code est dans
+  la page, et Capacitor (Android) injecte son pont en ligne. Test : aucune violation en parcourant l’app ; `fetch` vers l’extérieur bloqué.
 
 ## Rappels
 
@@ -119,7 +123,8 @@ fiches par addiction : 6 langues. Dates, nombres et devises via `Intl` selon la 
 
 Table `HELP` par pays (34 pays). Pays affiché : choix de l’utilisateur, sinon région de l’appareil. Une région connue mais absente de la table
 donne `HELP_NONE` : aucun numéro d’un autre pays, message « numéro d’urgence local » et choix du pays. `HELP_CHECKED` indique les pays dont
-les numéros ont été revérifiés (mois) ; l’app l’affiche. Détail et sources : `RESSOURCES-AIDE.md`.
+les numéros ont été revérifiés (mois) ; l’app l’affiche. Les lignes de type `gamble` (jeux d’argent : FR, GB, DE, IT, US) ne s’affichent que si
+une habitude « Jeux d’argent » est suivie. Détail et sources : `RESSOURCES-AIDE.md`.
 
 ## Compatibilité des données entre versions
 
@@ -142,6 +147,9 @@ le fichier de côté que dans le second.
 | `npm run build:standalone` | Régénère `libre/LIBRE.html` |
 | `npm run build:all` | Régénère `LIBRE.html` puis copie l'app dans les projets iOS et Android (`npx cap sync`) |
 | `npm run check:sources` | Vérifie les liens cités (accès Internet nécessaire) |
+| `npm run check:contrast` | Contrastes WCAG AA sur les écrans principaux, clair et sombre (`tests/contrast.js`) |
+| `npm run check:targets` | Zones tactiles d’au moins 24 × 24 px (`tests/targets.js`) |
+| `npm run check:versions` | Version et build identiques sur Android, iOS et `libre-app/package.json` ; copies web natives et `LIBRE.html` à jour |
 | `python3 tools/i18n.py export DOSSIER` | Exporte les textes à traduire |
 
 ## Tests

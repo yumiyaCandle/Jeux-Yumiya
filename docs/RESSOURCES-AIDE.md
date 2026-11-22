@@ -14,6 +14,7 @@ Dans l’app, les pays dont toutes les lignes principales ont été confirmées 
 | FR | Tabac Info Service | 39 89 | Addictions | confirmé | institutionnelle | Santé publique France |
 | FR | Alcool Info Service | 0 980 980 930 | Addictions | confirmé | institutionnelle | Santé publique France ; alcool-info-service.fr |
 | FR | Drogues Info Service | 0 800 23 13 13 | Addictions | confirmé | officielle | drogues-info-service.fr (opérateur) |
+| FR | Joueurs Info Service | 09 74 75 13 13 | Jeux d’argent | confirmé | officielle | Santé publique France ; sante.fr (8 h-2 h, 7 j/7) |
 | CH | Urgence | 144 | Urgences médicales | confirmé | officielle | ch.ch |
 | CH | Urgence | 112 | Urgences | confirmé | officielle | ch.ch |
 | CH | Urgence | 145 | Intoxication · Tox Info Suisse | confirmé | officielle | ch.ch |
@@ -36,6 +37,7 @@ Dans l’app, les pays dont toutes les lignes principales ont été confirmées 
 | US | 988 Suicide & Crisis Lifeline | 988 | Prévention du suicide | confirmé | officielle | samhsa.gov |
 | US | SAMHSA National Helpline | 1-800-662-4357 | Addictions | confirmé | officielle | samhsa.gov |
 | US | 1-800-QUIT-NOW | 1-800-784-8669 | Addictions | confirmé | officielle | pathstudy.nih.gov |
+| US | National Problem Gambling Helpline | 1-800-522-4700 | Jeux d’argent | confirmé | officielle | ncpgambling.org (numéro national depuis le 29/09/2025, remplace 1-800-GAMBLER) |
 | GB | Urgence | 999 | Urgences | confirmé | officielle | gov.uk |
 | GB | Urgence | 112 | Urgences | confirmé | officielle | gov.uk |
 | GB | Samaritans | 116 123 | Écoute et soutien | confirmé | officielle | samaritans.org (opérateur) |
@@ -43,6 +45,7 @@ Dans l’app, les pays dont toutes les lignes principales ont été confirmées 
 | GB | NHS Smokefree | 0300 123 1044 | Addictions | confirmé | institutionnelle | page d’un NHS Trust (slam.nhs.uk) |
 | GB | Drinkline | 0300 123 1110 | Addictions | confirmé | institutionnelle | pages de NHS Trusts (Derbyshire, Highland) ; horaires limités |
 | GB | FRANK | 0300 123 6600 | Addictions | confirmé | officielle | talktofrank.com (opérateur, 24 h/24) |
+| GB | National Gambling Helpline | 0808 8020 133 | Jeux d’argent | confirmé | officielle | gamcare.org.uk (opérateur, 24 h/24 ; Angleterre, Écosse, pays de Galles) |
 | IE | Urgence | 112 | Urgences | **à vérifier** | — | — |
 | IE | Urgence | 999 | Urgences | **à vérifier** | — | — |
 | IE | Samaritans | 116 123 | Écoute et soutien | **à vérifier** | — | — |
@@ -55,6 +58,7 @@ Dans l’app, les pays dont toutes les lignes principales ont été confirmées 
 | DE | TelefonSeelsorge | 0800 111 0 111 | Écoute et soutien | confirmé | officielle | familienportal.de |
 | DE | TelefonSeelsorge | 0800 111 0 222 | Écoute et soutien | confirmé | officielle | familienportal.de |
 | DE | BIÖG Rauchfrei-Telefon | 0800 8 31 31 31 | Addictions | confirmé | officielle | BZgA / BIÖG |
+| DE | BIÖG Glücksspielsucht | 0800 1 37 27 00 | Jeux d’argent | confirmé | officielle | BZgA / BIÖG (lun-jeu 10 h-22 h, ven-dim 10 h-18 h selon un communiqué de 2023) |
 | AT | Urgence | 144 | Urgences médicales | confirmé | officielle | oesterreich.gv.at ; gesundheit.gv.at |
 | AT | Urgence | 112 | Urgences | confirmé | officielle | oesterreich.gv.at |
 | AT | TelefonSeelsorge | 142 | Écoute et soutien | confirmé | officielle | telefonseelsorge.at (opérateur) |
@@ -74,6 +78,7 @@ Dans l’app, les pays dont toutes les lignes principales ont été confirmées 
 | IT | Urgence | 112 | Urgences | confirmé | officielle | europa.eu |
 | IT | Telefono Amico Italia | 02 2327 2327 | Écoute et soutien | confirmé | officielle | telefonoamico.it (opérateur, 9 h-24 h) |
 | IT | Telefono Verde contro il Fumo (ISS) | 800 554 088 | Addictions | confirmé | officielle | iss.it (lun-ven 10 h-16 h) |
+| IT | Telefono Verde Gioco d’Azzardo (ISS) | 800 558 822 | Jeux d’argent | confirmé | officielle | iss.it (jours ouvrables 10 h-16 h) |
 | NL | Urgence | 112 | Urgences | **à vérifier** | — | — |
 | NL | 113 Zelfmoordpreventie | 113 | Prévention du suicide | **à vérifier** | — | — |
 | NL | 113 Zelfmoordpreventie | 0800 0113 | Prévention du suicide | **à vérifier** | — | — |
@@ -118,7 +123,7 @@ Dans l’app, les pays dont toutes les lignes principales ont été confirmées 
 | DK | Urgence | 112 | Urgences | **à vérifier** | — | — |
 | DK | Livslinien | 70 201 201 | Prévention du suicide | **à vérifier** | — | — |
 
-Total : 41 confirmés (source officielle ou institutionnelle), 3 probables (source secondaire seulement, à vérifier), 65 à vérifier.
+Total : 46 confirmés (source officielle ou institutionnelle), 3 probables (source secondaire seulement, à vérifier), 65 à vérifier.
 
 ## Points d’attention
 
@@ -126,6 +131,7 @@ Total : 41 confirmés (source officielle ou institutionnelle), 3 probables (sour
 - **Différences régionales** : Belgique (lignes francophones et néerlandophones distinctes), Royaume-Uni (NHS 111 / NHS 24, Smokefree pour l’Angleterre, Smokeline en Écosse, Drinkline Scotland), Canada (lignes tabac et dépendances provinciales), Allemagne et Autriche (numéros fédéraux, services locaux en plus), Suisse (Addiction Suisse et centres cantonaux). LIBRE ne gère qu’un niveau national : à signaler dans les fiches de store.
 - **Royaume-Uni** : Drinkline n’est confirmé que par des pages de NHS Trusts (pas par nhs.uk) ; un annuaire cite un ancien numéro (0800 917 82 82) : à revérifier en priorité.
 - **Suisse** : tous les numéros confirmés ; le site Indexaddictions.ch (annuaire des centres) n’a pas été reconfirmé par cette recherche.
+- **Jeux d’argent** (ajout final) : lignes nationales FR, GB, DE, IT, US, affichées seulement si une habitude « Jeux d’argent » est suivie. Suisse : SOS Jeu (0800 801 381) non reconfirmé (documents anciens, un autre numéro apparaît en 2026) : non ajouté.
 - **Canada** : seuls 911 et 988 sont proposés ; les lignes d’aide au tabac et aux dépendances sont provinciales (cancer.ca/quitlines).
 - **Portugal (SNS 24) et Brésil (CVV 188)** : non confirmés par cette recherche ; ces pays ne portent pas la mention « revérifiés ».
 - **France** : horaires des lignes Info Service tirés de documents parfois anciens (2019) ; à confirmer sur les sites.
