@@ -135,3 +135,16 @@ Relecteur : nom, qualification, numéro professionnel (si applicable), date, ver
 
 Aucun contenu n'est marqué « validé ». Revue V5 faite par moi (non professionnelle) : pas de nouvelle formulation dangereuse trouvée ;
 les points de la section précédente restent ouverts.
+
+## Nouveaux contenus de la transformation (22 novembre 2026), à relire
+
+| Contenu | Où | Question pour le relecteur |
+|---|---|---|
+| Feuille « Journée difficile » : « Ça arrive à tout le monde, et ça ne dit rien de ta valeur… », objectif allégé « prendre soin de toi » | Accueil | Formulation adaptée à une personne en détresse ? Faut-il orienter plus tôt vers un professionnel ? |
+| « Si tu es en danger ou si tu penses à te faire du mal, appelle les urgences » | Journée difficile | Formulation et place suffisantes ? |
+| Mode réduction : moyenne sur 7 jours comparée à « avant », pourcentage | Accueil | Présentation non culpabilisante ? |
+| Mode « Mieux comprendre » (observation sans objectif) | Inscription, accueil | Pertinent pour toutes les substances ? (pour l'alcool, les benzodiazépines et les opioïdes, l'avertissement de sevrage reste affiché) |
+| « Ces exercices aident beaucoup de personnes, mais leur effet varie » | SOS | Formulation acceptable ? |
+| Messages d'observation (« Observer sans te juger, c'est déjà reprendre la main ») | Accueil | — |
+
+Aucun de ces contenus n'est validé.

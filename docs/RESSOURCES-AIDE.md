@@ -4,7 +4,7 @@ Générée depuis la table `HELP` de `libre/index.html`, le 22 novembre 2026. Un
 
 **Méthode (21 et 22 novembre 2026)** : recherche web (l’accès direct aux sites est bloqué dans l’environnement de travail : les pages n’ont pas été ouvertes, seuls leurs extraits indexés ont été lus). **Critères V5, plus stricts** : « confirmé » exige une source **officielle** (autorité publique ou opérateur du service lui-même) ou **institutionnelle** (organisme de santé public ou reconnu). Une source **secondaire** (annuaire comme findahelpline, média, site d’expatriés, liste non officielle) ne suffit plus : le numéro reste « probable, à vérifier ». Les horaires peuvent avoir changé. Ce n’est pas un appel de test. **Chaque numéro doit être contrôlé sur le site officiel avant publication, puis une fois par an.**
 
-Dans l’app, les pays dont toutes les lignes principales ont été confirmées affichent « Numéros revérifiés en novembre 2026 » (`HELP_CHECKED` : CH, FR, CA, DE, AT, IT, ES, GB, US) ; les autres affichent « Ces numéros n’ont pas encore été revérifiés récemment ».
+Dans l’app, les numéros sont groupés par situation : danger immédiat ou urgence médicale ; crise ; besoin de parler ; soutien spécialisé. Dans l’app, les pays dont toutes les lignes principales ont été confirmées affichent « Numéros revérifiés en novembre 2026 » (`HELP_CHECKED` : CH, FR, CA, DE, AT, IT, ES, GB, US) ; les autres affichent « Ces numéros n’ont pas encore été revérifiés récemment ».
 
 | Pays | Nom | Numéro ou site | Type | État au 22/11/2026 | Niveau de la source | Source |
 |---|---|---|---|---|---|---|
@@ -21,7 +21,8 @@ Dans l’app, les pays dont toutes les lignes principales ont été confirmées 
 | CH | La Main Tendue | 143 | Écoute et soutien | confirmé | officielle | ch.ch ; Unisanté |
 | CH | Pro Juventute | 147 | Écoute pour les jeunes, jusqu’à 25 ans | confirmé | officielle | ch.ch ; 147.ch |
 | CH | stop-tabac | 0848 000 181 | Addictions | confirmé | institutionnelle | Ligue contre le cancer ; stop-tabac.ch |
-| CH | SafeZone.ch | safezone.ch | Addictions | confirmé | institutionnelle | Unisanté (mention) |
+| CH | SafeZone.ch | safezone.ch | Addictions | confirmé | officielle | bag.admin.ch (OFSP ; consultation en ligne, pas pour les urgences) |
+| CH | Aide jeu excessif (24 h/24) | 0800 040 080 | Jeux d’argent | confirmé | institutionnelle | GREA / PILDJ (rapports 2022-2024) ; communiqué cantonal « Game-Changer » 2026 : ligne nationale, 24 h/24, gratuite, anonyme, 3 langues |
 | CH | Indexaddictions.ch | indexaddictions.ch | Centres d’aide près de chez toi | **à vérifier** | — | — |
 | BE | Urgence | 112 | Urgences | confirmé | officielle | brussels.be ; europa.eu |
 | BE | Centre de Prévention du Suicide | 0800 32 123 | Prévention du suicide | probable, **à vérifier** | secondaire | findahelpline.com ; liste brussels.be |
@@ -123,7 +124,7 @@ Dans l’app, les pays dont toutes les lignes principales ont été confirmées 
 | DK | Urgence | 112 | Urgences | **à vérifier** | — | — |
 | DK | Livslinien | 70 201 201 | Prévention du suicide | **à vérifier** | — | — |
 
-Total : 46 confirmés (source officielle ou institutionnelle), 3 probables (source secondaire seulement, à vérifier), 65 à vérifier.
+Total : 47 confirmés (source officielle ou institutionnelle), 3 probables (source secondaire seulement, à vérifier), 65 à vérifier.
 
 ## Points d’attention
 
@@ -131,7 +132,7 @@ Total : 46 confirmés (source officielle ou institutionnelle), 3 probables (sour
 - **Différences régionales** : Belgique (lignes francophones et néerlandophones distinctes), Royaume-Uni (NHS 111 / NHS 24, Smokefree pour l’Angleterre, Smokeline en Écosse, Drinkline Scotland), Canada (lignes tabac et dépendances provinciales), Allemagne et Autriche (numéros fédéraux, services locaux en plus), Suisse (Addiction Suisse et centres cantonaux). LIBRE ne gère qu’un niveau national : à signaler dans les fiches de store.
 - **Royaume-Uni** : Drinkline n’est confirmé que par des pages de NHS Trusts (pas par nhs.uk) ; un annuaire cite un ancien numéro (0800 917 82 82) : à revérifier en priorité.
 - **Suisse** : tous les numéros confirmés ; le site Indexaddictions.ch (annuaire des centres) n’a pas été reconfirmé par cette recherche.
-- **Jeux d’argent** (ajout final) : lignes nationales FR, GB, DE, IT, US, affichées seulement si une habitude « Jeux d’argent » est suivie. Suisse : SOS Jeu (0800 801 381) non reconfirmé (documents anciens, un autre numéro apparaît en 2026) : non ajouté.
+- **Jeux d’argent** (ajout final) : lignes nationales FR, GB, DE, IT, US, affichées seulement si une habitude « Jeux d’argent » est suivie. Suisse : ligne nationale 0800 040 080 ajoutée (version transformation) ; l’ancienne permanence SOS Jeu (0800 801 381) n’est pas reprise, sa validité actuelle n’étant pas confirmée.
 - **Canada** : seuls 911 et 988 sont proposés ; les lignes d’aide au tabac et aux dépendances sont provinciales (cancer.ca/quitlines).
 - **Portugal (SNS 24) et Brésil (CVV 188)** : non confirmés par cette recherche ; ces pays ne portent pas la mention « revérifiés ».
 - **France** : horaires des lignes Info Service tirés de documents parfois anciens (2019) ; à confirmer sur les sites.

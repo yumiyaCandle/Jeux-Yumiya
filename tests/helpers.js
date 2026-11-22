@@ -27,7 +27,7 @@ function serve() {
    Le coffre « LibreVault » simulé conserve son contenu dans sessionStorage (survit aux rechargements)
    et le stocke encodé : le test vérifie ainsi qu’aucune donnée ne reste en clair dans localStorage. */
 function nativeMock(opts = {}) {
-  return ({ platform, vaultBroken, noVault, vaultBusy }) => {
+  return ({ platform, vaultBroken, noVault, vaultBusy, ntDenied }) => {
     const vget = () => JSON.parse(sessionStorage.getItem('__vault') || '{}');
     const vset = o => sessionStorage.setItem('__vault', JSON.stringify(o));
     window.__calls = [];
@@ -36,7 +36,7 @@ function nativeMock(opts = {}) {
     const listeners = {};
     const P = {
       LocalNotifications: {
-        checkPermissions: async () => ({ display: 'granted' }), requestPermissions: async () => ({ display: 'granted' }),
+        checkPermissions: async () => ({ display: ntDenied ? 'denied' : 'granted' }), requestPermissions: async () => ({ display: ntDenied ? 'denied' : 'granted' }),
         getPending: async () => ({ notifications: window.__sched.map(n => ({ id: n.id })) }),
         cancel: async ({ notifications }) => { const ids = notifications.map(n => n.id); window.__sched = window.__sched.filter(n => !ids.includes(n.id)); },
         schedule: async ({ notifications }) => { window.__sched.push(...notifications); return { notifications: notifications.map(n => ({ id: n.id })) }; }

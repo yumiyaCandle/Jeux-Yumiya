@@ -2,6 +2,7 @@
 
 | Document | Contenu |
 |---|---|
+| [TRANSFORMATION.md](TRANSFORMATION.md) | **Transformation « Horizon »** : constats, nouvelle direction artistique, fonctionnalités ajoutées, données, limites (captures dans `ux/`) |
 | [AUDIT-FINAL.md](AUDIT-FINAL.md) | **Rapport final** : diagnostic P0–P3, corrections, critères d'acceptation, niveau de préparation |
 | [SECURITE-FINALE.md](SECURITE-FINALE.md) | Sécurité plateforme par plateforme, CSP, scénarios d'attaque, permissions |
 | [UX-UI-REVIEW.md](UX-UI-REVIEW.md) | Revue des écrans, corrections avant/après (`ux/`), composants 21st.dev examinés |

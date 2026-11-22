@@ -60,3 +60,13 @@ demander de l'aide) et l'enregistrement d'écran pour l'assistance, sans protég
 | Fichiers temporaires (apps) | Copie dans le cache de l'app pour la feuille de partage | Supprimée 2 minutes après le partage | Non vérifié sur appareil |
 
 Un fichier partagé (e-mail, cloud, messagerie) sort du contrôle de LIBRE : l'app le dit avant un export sans mot de passe.
+
+## 6. Transformation (22 novembre 2026) : moins de données demandées
+
+- **Âge, sexe, taille et poids ne sont plus demandés à l'inscription** : ils n'étaient utilisés par aucun calcul. Ils restent modifiables
+  (facultatifs) dans le profil ; les profils existants les conservent. La politique de confidentialité le dit (fr, en).
+- Nouvelles données **facultatives**, stockées comme le reste (coffre chiffré dans les apps) : situations difficiles indiquées, préférences
+  d'accompagnement, émotion et déclencheur notés après une envie, objectif allégé du jour.
+- **Conseils personnalisés** : règles explicites calculées sur l'appareil, chaque conseil dit « Parce que… », réglage pour les désactiver
+  (les messages de sécurité restent). Aucune IA externe, aucun envoi.
+- La CSP (`connect-src 'self'`) reste en place : aucune de ces nouveautés ne peut envoyer de données.

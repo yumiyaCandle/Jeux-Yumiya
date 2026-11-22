@@ -70,3 +70,24 @@ Les valeurs changent selon le thème (clair, sombre) et la couleur d'accent choi
 
 Aucun composant 21st.dev n'a été intégré : tous dépendent de React, Tailwind et Framer Motion. Les ajouter imposerait
 un outil de compilation et plusieurs bibliothèques à une app qui n'en a aucune, pour des fonctions déjà présentes.
+
+## Direction « Horizon » (par défaut depuis la transformation du 22 novembre 2026)
+
+Remplace le style « verre et photos » comme style par défaut (ce dernier reste une option : Profil › Apparence › Effets visuels).
+Couche CSS « HORIZON » à la fin de la feuille de style de `libre/index.html`, active quand `html` n'a pas la classe `fx`.
+
+| Jeton | Clair | Sombre | Usage |
+|---|---|---|---|
+| `--bg` | `#F4F1EA` (lin) | `#0C121D` | Fond |
+| `--card` | `#FFFFFF` | `#141C2A` | Surfaces |
+| `--ink` | `#152238` | `#ECE8E1` | Texte, action principale |
+| `--muted` | `#5C6473` | `#9CA4B1` | Texte secondaire (≥ 4,5:1) |
+| `--line` | `#E5DFD4` | `#243044` | Filets |
+| `--green` / `--green-strong` | `#3F7F6E` / `#2E6A5B` | `#7DB9A7` / `#8DC6B4` | Progression, liens |
+| `--amber` | `#B7772F` | `#E0A866` | Ce qui se gagne |
+| `--sos` | `#B9443C` | `#E0776E` (boutons d'urgence : `#A8372F`) | Aide urgente uniquement |
+| `--hz-line` | dégradé `#E3A45E → #DB9171 → #8DB9A9 → #3F7F6E` | idem | Signature : ligne d'horizon |
+
+Règles : une seule couleur d'action (encre pleine, claire sur fond sombre) ; surfaces pleines, filet 1 px, ombre douce, rayon 20 px ;
+pas de flou ; serif italique réservé aux mots qui comptent ; chiffres tabulaires ; barre d'onglets ancrée ; feuilles modales pleines ;
+aucun décor sans information. Vérifié par `npm run check:contrast` (AA) et `npm run check:targets` (≥ 24 px).

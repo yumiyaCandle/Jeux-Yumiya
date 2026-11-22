@@ -90,3 +90,9 @@ Vérifié dans le manifeste fusionné de la version release (`processReleaseMani
 - Le code de verrouillage masque l'app ; il ne chiffre pas (un code à 4 chiffres est devinable par qui copie les données).
 - Fichiers exportés et sauvegardes iPhone : hors du contrôle de LIBRE (voir `DATA-LIFECYCLE.md`).
 - Aucun audit externe ni test d'intrusion : recommandé avant une diffusion large.
+
+## 6. Transformation du 22 novembre 2026
+
+Aucun mécanisme de sécurité modifié : chiffrement, clés, verrouillage, sauvegardes, CSP, voile de confidentialité, rappels discrets sont
+inchangés et leurs tests repassent. Changements liés aux données : collecte réduite (âge, sexe, taille, poids non demandés), nouveaux
+champs facultatifs (voir `PRIVACY-REVIEW.md` § 6) stockés dans le même état chiffré. Format de sauvegarde inchangé (5).

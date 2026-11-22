@@ -1,6 +1,6 @@
 # Ce que tu dois fournir ou faire toi-même
 
-Mis à jour le 22 novembre 2026 (version finale). Je n'invente aucune de ces informations.
+Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente aucune de ces informations.
 
 ## 1. Informations légales
 
@@ -27,8 +27,8 @@ Mis à jour le 22 novembre 2026 (version finale). Je n'invente aucune de ces inf
 
 ## 2 bis. Signature et fichiers Android
 
-- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-FINAL-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `24203051933e9f121ece2e27cb8e5a577a0882ee27a00e11ea93f903f0f619ff`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-HORIZON-COMPLET.zip`, qui ne contient que le projet).
+  Empreinte SHA-256 : `350828ee7c3faacfcc98191ddd91b22dbcd1360b4d0ef518a598f8c014684710`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -85,3 +85,11 @@ pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source offici
 - Rouvrir des langues après traduction (`LANGUES.md`).
 - Garder ou non le support iPad (captures iPad à fournir si gardé).
 - Pays de distribution (les numéros d'aide affichés en dépendent).
+
+## 8. Après la transformation « Horizon »
+
+- **Faire tester par de vraies personnes** (idéalement accompagnées par un professionnel) : première ouverture, envie forte, journée
+  difficile, après une reprise. Je n'ai pu vérifier que le comportement, pas le ressenti.
+- Faire relire les nouveaux textes listés en fin de `VALIDATION-MEDICALE.md`.
+- Décider si le style « verre et photos » doit rester une option (il double la surface à maintenir) ou être retiré plus tard.
+- Captures des stores régénérées avec le nouveau style : à revoir avant envoi (`LIBRE-captures-stores.zip`).
