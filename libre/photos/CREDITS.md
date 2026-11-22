@@ -8,7 +8,6 @@ Modifications : images redimensionnées et recadrées (3:2), converties en AVIF 
 
 | Fichier | Photographe | Licence | Page de la photo |
 |---|---|---|---|
-| `aube-*.avif/webp` | Anna Shvets | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 4672717](https://www.pexels.com/fr-fr/photo/4672717/) |
 | `sommet-*.avif/webp` | Reza Yudhistira | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 35370605](https://www.pexels.com/fr-fr/photo/35370605/) |
 | `tabac-*.avif/webp` | cottonbro studio | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 4822309](https://www.pexels.com/fr-fr/photo/4822309/) |
 | `alcool-*.avif/webp` | Dziana Hasanbekava | [Licence Pexels](https://www.pexels.com/fr-fr/license/) | [Pexels 7809753](https://www.pexels.com/fr-fr/photo/7809753/) |

@@ -1,5 +1,5 @@
-// Produit toutes les icônes et écrans de lancement de LIBRE (identité « Clairière ») à partir du logo :
-// un arc ouvert (la liberté), un soleil abricot qui se lève dans l'ouverture, une ligne d'horizon, sur fond vert pin.
+// Produit toutes les icônes et écrans de lancement de LIBRE (identité « Envol ») à partir du logo :
+// un cercle ouvert dont s'échappe un trait vers la lumière (point aube), sur un dégradé nuit → indigo.
 // Usage : node libre-app/scripts/render-assets.js   (écrit libre/icons, libre-app/assets, et remplace les PNG iOS/Android
 // aux tailles déjà présentes dans les projets natifs ; aucun outil externe requis).
 const { chromium } = require('playwright');
@@ -7,12 +7,12 @@ const fs = require('fs');
 const path = require('path');
 const ROOT = path.join(__dirname, '..', '..');
 const APP = path.join(ROOT, 'libre-app');
-const PINE = '#123A33', PAPER = '#F1F3EE', SUN = '#E8915F';
+const PINE = '#241F63', PAPER = '#FFFFFF', SUN = '#FF9A6B';
 // Logo dans un repère 48×48 (même dessin que logoMark() dans libre/index.html)
-const markPaths = (ink) => `<path d="M36.5 11.5A17 17 0 1 0 41 24" fill="none" stroke="${ink}" stroke-width="4.5" stroke-linecap="round"/><path d="M14 31.5h20" stroke="${ink}" stroke-width="3" stroke-linecap="round" opacity=".55"/><circle cx="24" cy="25" r="6.2" fill="${SUN}"/>`;
+const markPaths = (ink) => `<path d="M29.5 7.8A17 17 0 1 0 40.2 18.5" fill="none" stroke="${ink}" stroke-width="4.4" stroke-linecap="round"/><path d="M17 31L33.5 14.5" stroke="${ink}" stroke-width="4.4" stroke-linecap="round"/><circle cx="38" cy="10" r="4.2" fill="${SUN}"/>`;
 // scale = part du côté occupée par le logo
 const svg = (size, { bg, scale }) => { const s = size * scale / 48, o = (size - 48 * s) / 2;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${bg ? `<rect width="${size}" height="${size}" fill="${bg}"/>` : ''}<g transform="translate(${o} ${o}) scale(${s})">${markPaths(PAPER)}</g></svg>`; };
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${bg ? `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1E1A55"/><stop offset=".6" stop-color="#33299A"/><stop offset="1" stop-color="#5A43C9"/></linearGradient></defs><rect width="${size}" height="${size}" fill="url(#g)"/>` : ''}<g transform="translate(${o} ${o}) scale(${s})">${markPaths(PAPER)}</g></svg>`; };
 const html = (body, bg, w, h) => `<html><body style="margin:0;width:${w}px;height:${h}px;background:${bg};display:grid;place-items:center;overflow:hidden">${body}</body></html>`;
 (async () => {
   const b = await chromium.launch();

@@ -182,3 +182,53 @@ Boutons : pilule (999). Bloc principal : vert pin + deux halos (abricot en haut 
 
 Produites par `libre-app/scripts/render-assets.js` : fond `#123A33`, logo `#F1F3EE` + soleil `#E8915F`. Icône adaptative Android
 (premier plan dans la zone sûre, fond vert pin), icône iOS 1024 sans transparence, icônes PWA (dont « maskable »).
+
+## Design system « Envol » (identité par défaut depuis la reconstruction du 22 novembre 2026)
+
+Remplace « Clairière » (bloc CSS « ENVOL » à la fin de `libre/index.html`, sélecteurs `html:not(.fx)`). Justification :
+`REFONTE-ENVOL.md` § 1.
+
+### Palettes
+
+| Rôle | Jeton | Clair | Sombre |
+|---|---|---|---|
+| Fond | `--bg` | `#F4F3F9` | `#0C0B1C` |
+| Surface | `--card` | `#FFFFFF` | `#171630` |
+| Texte | `--ink` / `--muted` | `#1A1838` / `#5D5A78` | `#EDEBFA` / `#A6A3C6` |
+| Action principale | `--accent`, `--accent-ink`, `--accent-soft`, `--accent-strong` | `#4B3FD8` sur blanc | `#8C84FF` (texte `#0C0B1C`) |
+| Réussite | `--green*` | `#13896B` | `#4FD1A8` |
+| Gain / attention douce | `--amber`, `--sun-soft`, `--sun-ink` | `#A3570F` | `#F2AE6B` |
+| Urgence (réservé) | `--sos`, `--sos-soft` | `#C8283E` | `#F0566B` |
+| Aube (décor, logo) | `--apricot` | `#FF9A6B` | `#FF9A6B` |
+| Bandeaux | `--tone-dawn`, `--tone-teal`, `--tone-rose`, `--tone-sky`, `--tone-night` | dégradés nuit → indigo + halo | idem |
+| Barre d'état | `--hd` | `#1E1A55` | `#110F2E` |
+
+### Typographie
+
+Inter uniquement (fichiers locaux). Grand titre de bandeau : 800, `clamp(2rem, 8.4vw, 2.6rem)`, interlettrage −0,04 em, blanc. Titres de
+carte : 760, 1,22 rem. Surtitres (`.eyebrow`) : 0,72 rem, capitales, 750, indigo. Compteur d'accueil : 800, jusqu'à 4,6 rem. Corps : 16 px.
+
+### Formes, ombres, bordures
+
+Cartes : rayon 26 (compteur 30), aucune bordure, `--sh-1` (ombre indigo douce) + filet `--edge` à 6 %. Bandeau : rayon inférieur 34.
+Barre de navigation : rayon 26, flottante à 10–12 px des bords, flou d'arrière-plan. Boutons : rayon 16, 52 px (40 px pour `.sm`).
+Feuilles : rayon 32 en haut.
+
+### Composants
+
+| Composant | Classe | Règle |
+|---|---|---|
+| Bandeau de page | `.pg-head` (`data-tone`), `.pg-bar`, `.pg-title`, `.page-sub` | Toutes les pages (`topbar()`), le contenu suivant chevauche de 40 px |
+| Retour | `.pg-back` | Pastille translucide, libellé de la section parente |
+| Navigation | `.nav`, `.nav-help` | 4 destinations + Aide au centre (58 px, dégradé indigo, logo) ; barre latérale au-delà de 900 px |
+| Onglets | `.segc`, `.ptabs` | Onglet actif plein indigo ; libellés sur deux lignes si nécessaire |
+| Compteur | `.hm-hero` | Anneau en tête, chiffre centré, 3 pastilles |
+| Agir maintenant | `.hm-help`, `.hm-sos`, `.hm-tools`, `.hm-hard` | Envie (dégradé), 4 gestes en tuiles, journée difficile |
+| Moment à risque | `.hm-risk` | Fond ambre pâle, 2 actions, « Pourquoi je vois ça ? » |
+| Triage de l'aide | `.qs-tri`, `.qs-t` (`-main`, `-danger`) | 4 besoins, 76 px de haut minimum |
+| Tuiles d'exercice | `.rs-t` | Icône, nom, durée |
+| Grille « Ton espace » | `.hub-g` | Colonnes adaptatives (texte agrandi) |
+| Bienvenue | `.welcome4`, `.w4-*` | Plein écran, bouton blanc collant |
+| Entrée des pages | `#app.pg-in` | 0,42 s, décalage 40 ms ; supprimé si moins d'animations |
+
+Icônes et écrans de lancement : `libre-app/scripts/render-assets.js` (dégradé `#1E1A55` → `#5A43C9`, logo blanc, point `#FF9A6B`).

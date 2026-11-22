@@ -897,10 +897,10 @@ test('Parcours 11', 'Notifications refusées dans le téléphone : rien n’est 
   noErr(p);
 });
 
-test('Apparence', 'Identité « Clairière » par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
+test('Apparence', 'Identité « Envol » par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
   const st = profileState({}); st.prefs.fx = true;
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
-  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Clairière par défaut');
+  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Envol par défaut');
   await p.go('profil'); await p.openFold('p-look'); await p.evaluate(() => document.querySelector('input[data-a="fxToggle"]').click()); await p.waitForTimeout(200);
   assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), true, 'verre activé à la demande');
   assert.equal((await stateOf(p)).prefs.look, 'verre');
@@ -909,13 +909,44 @@ test('Apparence', 'Identité « Clairière » par défaut, y compris pour les pr
   noErr(p);
 });
 
+/* ---------- Refonte « Envol » : aide triée par besoin, moment à risque, ressources ---------- */
+test('Aide', 'Triage : « De quoi as-tu besoin ? » propose 4 besoins ; chacun mène au bon outil (aide guidée, respiration, proche, urgences)', async (b, base) => {
+  const st = profileState({ types: ['cigarette'] }); st.contacts = [{ name: 'Sam', phone: '0790000000' }];
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
+  const open = async () => { await p.closeLayer(); await p.click('nav .nav-help'); await p.waitForTimeout(300); };
+  await open(); assert.match(await p.textContent('#layer'), /De quoi as-tu besoin/); assert.equal(await p.locator('.qs-t').count(), 4);
+  assert.equal(await p.getAttribute('.qs-t.qs-call', 'href'), 'tel:0790000000');
+  await p.click('.qs-t-main'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Qu’est-ce que tu ressens/);
+  await open(); await p.click('.qs-t.qs-breath'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Inspire|Expire|respir/i);
+  await open(); await p.click('.qs-t-danger'); await p.waitForTimeout(300); const t = await p.textContent('#layer'); assert.match(t, /Tu n’es pas seul·e/); assert.match(t, /144/);
+  noErr(p);
+});
+
+test('Personnalisation', 'Moment à risque : signalé à l’heure où la personne consomme le plus souvent, avec son explication ; absent si les conseils sont désactivés', async (b, base) => {
+  const mk = recs => { const st = profileState({ types: ['cigarette'], days: 40 }); st.prefs.recs = recs;
+    st.logs = Array.from({ length: 6 }, (_, i) => ({ id: 'l' + i, habitId: 'h0', type: 'cigarette', ts: Date.now() - (i + 2) * 864e5, qty: 1 })); return st; };
+  const p = await page(b, base, { init: seed(mk(true)) }); await p.goto(base); await p.settle();
+  const txt = await p.textContent('.hm-risk'); assert.match(txt, /C’est souvent .* que c’est plus difficile pour toi/); assert.match(txt, /100 % de tes consommations/); assert.match(txt, /pas une prédiction/);
+  const q = await page(b, base, { init: seed(mk(false)) }); await q.goto(base); await q.settle();
+  assert.equal(await q.locator('.hm-risk').count(), 0, 'désactivé avec les conseils personnalisés');
+  noErr(p); noErr(q); await q.ctx.close();
+});
+
+test('Ressources', 'Un exercice tout de suite en un toucher, espace personnel en tuiles, tous les exercices accessibles', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle(); await p.go('outils');
+  assert.equal(await p.locator('.rs-t').count(), 4); assert.ok(await p.locator('.hub-g .hub-i').count() >= 5);
+  await p.click('.rs-t >> nth=0'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Respiration/);
+  await p.closeLayer(); assert.match(await p.textContent('#app'), /Tous les exercices/);
+  noErr(p);
+});
+
 /* ---------- Refonte « Clairière » : navigation, journal guidé, lecture des données, bibliothèque par thèmes ---------- */
-test('Navigation', 'L’aide immédiate est au centre de la barre, sur chaque onglet ; le profil s’ouvre depuis l’avatar de l’en-tête', async (b, base) => {
+test('Navigation', 'Barre Aujourd’hui · Suivi · Aide · Journal · Ressources sur chaque onglet ; l’aide immédiate commence par « De quoi as-tu besoin ? » ; le profil s’ouvre depuis l’avatar', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'], name: 'Lou' })) }); await p.goto(base); await p.settle();
   for (const v of ['accueil', 'habitudes', 'stats', 'outils', 'journal']) {
     await p.go(v); await p.closeLayer();
     const nav = await p.evaluate(() => [...document.querySelectorAll('nav .in > *')].map(x => x.className || x.getAttribute('href')).join('|'));
-    assert.match(nav, /#accueil\|#habitudes\|nav-help\|#stats\|#outils/, v + ' : ' + nav);
+    assert.match(nav, /#accueil\|#habitudes\|nav-help\|#journal\|#outils/, v + ' : ' + nav);
     await p.click('nav .nav-help'); await p.waitForTimeout(300);
     assert.match(await p.textContent('#layer'), /Une envie forte/, v + ' : le bouton Aide ouvre l’aide immédiate'); await p.closeLayer();
   }

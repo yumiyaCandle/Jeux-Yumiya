@@ -109,3 +109,9 @@ identifiants). Nouveaux champs facultatifs du journal : `emo` (émotions choisie
 `prompt` (question de réflexion choisie). Ils sont stockés dans le même état (coffre chiffré dans les apps, coffre web facultatif),
 inclus dans les sauvegardes chiffrées et effacés par « Tout effacer ». L'écouteur ajouté (`toggle` sur les filtres du journal) ne lit
 aucune donnée. Les icônes sont générées localement, sans service externe. 84 tests, dont tous les tests de sécurité, repassent.
+
+## 9. Reconstruction « Envol » (22 novembre 2026)
+
+Aucun mécanisme de sécurité modifié. Aucune nouvelle donnée enregistrée : le « moment à risque » est calculé à l'affichage à partir des
+consommations déjà notées, sur l'appareil, et n'est jamais stocké ni transmis. Icônes générées localement. Les photos retirées ne sont
+plus mises en cache. 87 tests, dont tous les tests de sécurité, repassent.

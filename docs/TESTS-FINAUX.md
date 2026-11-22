@@ -22,7 +22,7 @@ pas d'émulateur**. Détail test par test : `TESTS.md` (généré) et `tests/RES
 | `npm run check:versions` | 1.0.0 / build 1 sur Android, iOS, `package.json` ; copies natives et `LIBRE.html` à jour |
 | `npm audit --audit-level=high` (racine et `libre-app`) | 0 vulnérabilité |
 | `./gradlew assembleDebug assembleRelease bundleRelease :app:testDebugUnitTest lintRelease` | Réussi ; 12 tests JUnit ; lint : 0 erreur, 29 avertissements |
-| Extraction de `LIBRE-CLAIRIERE-COMPLET.zip` dans un dossier vierge, puis `npm ci`, `npm test`, `npm run sync`, `gradlew assembleDebug bundleRelease :app:testDebugUnitTest` | Réussi : archive intègre, aucun fichier de clé ou de secret, 75 tests réussis, contrastes et cibles conformes, versions cohérentes, compilation Android et 12 tests JUnit réussis |
+| Extraction de `LIBRE-ENVOL-COMPLET.zip` dans un dossier vierge, puis `npm ci`, `npm test`, `npm run sync`, `gradlew assembleDebug bundleRelease :app:testDebugUnitTest` | Réussi : archive intègre, aucun fichier de clé ou de secret, 75 tests réussis, contrastes et cibles conformes, versions cohérentes, compilation Android et 12 tests JUnit réussis |
 
 ## 3. Tests ajoutés dans cette version (non-régression)
 
@@ -95,6 +95,18 @@ automatique à l'étape suivante. Contrastes AA, zones tactiles, texte 200 % (fr
 assembleRelease bundleRelease :app:testDebugUnitTest lintRelease` réussi, 12 tests JUnit, 0 erreur de lint. iOS : non compilé.
 Appareils réels : aucun.
 
-Vérification de l'archive : `LIBRE-CLAIRIERE-COMPLET.zip` extraite dans un dossier vierge, puis `npm ci`, `npm test` (84 réussis),
+Vérification de l'archive : `LIBRE-ENVOL-COMPLET.zip` extraite dans un dossier vierge, puis `npm ci`, `npm test` (84 réussis),
 contrastes et cibles conformes, `libre-app` : `npm ci`, `npm run sync`, `gradlew assembleDebug bundleRelease :app:testDebugUnitTest`
 réussi. Aucun fichier de clé ni secret dans l'archive.
+
+## 8. Reconstruction « Envol » (22 novembre 2026)
+
+Exécutés réellement dans Chromium : **87 réussis, 0 échoué**. Nouveaux : triage de l'aide (4 besoins, chacun vers le bon outil, appel
+du proche, numéros d'urgence) ; moment à risque (affiché avec son explication, absent si les conseils sont désactivés) ; ressources
+(4 exercices immédiats, espace en tuiles). Mis à jour : barre de navigation (Aujourd'hui · Suivi · Aide · Journal · Ressources).
+Défauts trouvés par les tests et corrigés dans l'app : graphique masqué par la barre flottante, onglets du Suivi coupés à 320 px,
+grilles débordant à 200 %, un contraste insuffisant en mode sombre (journal). Android : compilation, 12 tests JUnit, 0 erreur de lint.
+iOS : non compilé. Appareils réels : aucun.
+
+Vérification de l’archive `LIBRE-ENVOL-COMPLET.zip`, extraite dans un dossier vierge : `npm ci`, `npm test` (87 réussis), contrastes conformes,
+`libre-app` : `npm ci`, `npm run sync`, `gradlew assembleDebug bundleRelease :app:testDebugUnitTest` réussi ; aucun fichier de clé ni secret.

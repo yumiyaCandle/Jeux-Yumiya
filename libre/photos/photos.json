@@ -1,25 +1,5 @@
 [
   {
-    "key": "aube",
-    "pexels": 4672717,
-    "title": "Pexels 4672717",
-    "page": "https://www.pexels.com/fr-fr/photo/4672717/",
-    "author": "Anna Shvets",
-    "license": "Licence Pexels",
-    "licenseUrl": "https://www.pexels.com/fr-fr/license/",
-    "w": 1280,
-    "h": 853,
-    "sizes": [
-      720,
-      1280
-    ],
-    "bg": [
-      "#efe9fb",
-      "#d3c9d7"
-    ],
-    "orig": "1920×1280"
-  },
-  {
     "key": "sommet",
     "pexels": 35370605,
     "title": "Pexels 35370605",

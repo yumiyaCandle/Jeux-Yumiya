@@ -27,8 +27,8 @@ Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente auc
 
 ## 2 bis. Signature et fichiers Android
 
-- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-CLAIRIERE-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `3c04e82374a090c65bf55041fc6001e270dc513493dde63dc4e5b4bfdd5ac0dc`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-ENVOL-COMPLET.zip`, qui ne contient que le projet).
+  Empreinte SHA-256 : `fff736fc41551a951d9710671d024edc303ad4282f0d7f0aa74d5b10081a9aa7`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -85,6 +85,13 @@ pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source offici
 - Rouvrir des langues après traduction (`LANGUES.md`).
 - Garder ou non le support iPad (captures iPad à fournir si gardé).
 - Pays de distribution (les numéros d'aide affichés en dépendent).
+
+## 11. Après la reconstruction « Envol »
+
+- Faire relire le triage de l'aide et le message « moment à risque » (fin de `VALIDATION-MEDICALE.md`).
+- Sur téléphone : vérifier la barre de navigation flottante au-dessus de la barre système (iPhone avec et sans bouton, Android à
+  gestes et à boutons), la fluidité des transitions, les nouvelles icônes (adaptative Android, iOS).
+- Inclure le nouveau logo « Envol » dans la recherche de marque (§ 2 ter).
 
 ## 10. Après la refonte « Clairière »
 

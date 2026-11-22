@@ -170,3 +170,12 @@ Aucun n'est validé.
 | Phrases de la lecture des données (`readingCard`) | Statistiques | Ton juste (« Ce n'est pas un échec : regarde ce qui a changé ») ? |
 
 Aucun n'est validé. Les fiches « rôle de l'entourage » et « retrouver confiance » restent à écrire avec des sources vérifiées.
+
+## Reconstruction « Envol » : nouveaux contenus à relire
+
+| Contenu | Où | Question |
+|---|---|---|
+| Triage « De quoi as-tu besoin ? » (4 besoins et leurs sous-titres) | Aide | Les quatre portes d'entrée sont-elles les bonnes ? « Je suis en danger » mène aux urgences et lignes d'écoute |
+| Moment à risque (« C'est souvent le soir que c'est plus difficile pour toi… ») | Accueil | Ton adapté ? Risque de suggestion ? |
+
+Aucun n'est validé.
