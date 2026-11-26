@@ -17,7 +17,10 @@
     "build:all": "python3 tools/build-standalone.py && cd libre-app && npm run sync",
     "check:contrast": "node tests/contrast.js",
     "check:targets": "node tests/targets.js",
-    "check:versions": "python3 tools/check-versions.py"
+    "check:versions": "python3 tools/check-versions.py",
+    "test:server": "node --test server/test/server.test.js",
+    "test:accounts": "node tests/accounts.js",
+    "server:dev": "STATIC_DIR=libre node server/src/index.js"
   },
   "devDependencies": {
     "playwright": "1.63.0"

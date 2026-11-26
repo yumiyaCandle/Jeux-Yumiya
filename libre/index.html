@@ -2399,6 +2399,25 @@ html:not(.fx) #app .lib>*:first-child{margin-top:0}
 .w4-feat b{display:block;color:#fff;font-size:.95rem;margin-bottom:2px}
 .w4-cta{position:sticky;bottom:0;margin-top:auto;display:flex;flex-direction:column;gap:2px;padding:14px 0 max(14px,env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,transparent,#4A38B8 26%)}
 .w4-go{background:#fff!important;color:#2A2280!important;min-height:56px;border-radius:18px;font-size:1.05rem;font-weight:750;box-shadow:0 14px 30px -12px rgba(0,0,0,.45)}
+.w4-alt{background:rgba(255,255,255,.14)!important;color:#fff!important;min-height:52px;border-radius:18px;font-weight:700;margin-top:8px;border:1px solid rgba(255,255,255,.28)!important}
+/* ===== Comptes ===== */
+.auth{min-height:100dvh;display:flex;flex-direction:column;gap:18px;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:calc(env(safe-area-inset-top,0px) + 12px) 22px max(18px,env(safe-area-inset-bottom,0px));background:radial-gradient(80% 45% at 0% 0%,rgba(108,99,255,.35),transparent 60%),linear-gradient(175deg,#16134A 0%,#241F63 34%,var(--bg,#F4F3F9) 34.1%)}
+.au-top{display:flex;align-items:center;justify-content:space-between;color:#fff}
+.au-top .iconbtn{color:#fff}
+.au-logo{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.18em;font-size:.84rem;color:#fff}
+.lang-btn{display:inline-flex;align-items:center;gap:6px;min-height:44px;min-width:44px;padding:0 14px;border-radius:999px;border:0;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-weight:700;font-size:.86rem;letter-spacing:.04em;cursor:pointer}
+.au-body{width:100%;max-width:460px;margin:8px auto 0;background:var(--card,#fff);color:var(--ink);border-radius:26px;padding:24px 20px;box-shadow:0 24px 60px -28px rgba(22,19,74,.55);display:flex;flex-direction:column;gap:14px}
+.au-body h1{font-size:1.6rem;line-height:1.15;margin:0;letter-spacing:-.01em}
+.au-sub{margin:0;color:var(--muted);font-size:.95rem;line-height:1.45}
+.au-ch{width:100%}
+.au-err{margin:0;padding:10px 12px;border-radius:12px;background:#FDECEC;color:#8A1C1C;font-size:.92rem;font-weight:600}
+.au-link{align-self:center;min-height:44px;font-weight:650}
+.au-code{font-size:1.6rem;letter-spacing:.4em;text-align:center;font-variant-numeric:tabular-nums}
+.au-key{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1.06rem;line-height:1.6;letter-spacing:.06em;word-break:break-all;background:var(--accent-soft,#E9E6FF);color:var(--ink);padding:14px;border-radius:14px;margin:0;text-align:center;user-select:all}
+.au-check{display:flex;gap:10px;align-items:center;min-height:44px;font-weight:600}
+.au-check input{width:22px;height:22px;flex:none}
+.au-foot{text-align:center;color:var(--muted);max-width:460px;margin:0 auto;display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap}
+@media (prefers-color-scheme:dark){.auth{background:radial-gradient(80% 45% at 0% 0%,rgba(108,99,255,.35),transparent 60%),linear-gradient(175deg,#16134A 0%,#241F63 34%,var(--bg,#0F0E22) 34.1%)}.au-err{background:#3A1414;color:#FFC9C9}}
 .w4-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 18px}
 .w4-links .link{color:#fff;font-weight:650;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px}
 .w4-legal{margin:2px 0 0;text-align:center;font-size:.76rem;color:rgba(255,255,255,.78)}
@@ -2803,7 +2822,7 @@ const P={star:'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.
   coin:'M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18zM15 9.5a3 3 0 0 0-5.5 1h5M9.5 13.5h5M15 15a3 3 0 0 1-5.5-1',
   clock:'M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18zM12 7v5l3 2',heart:'M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z',
   download:'M12 4v11M7 10l5 5 5-5M5 20h14',upload:'M12 15V4M7 9l5-5 5 5M5 20h14',copy:'M9 9h11v11H9zM5 15H4V4h11v1',
-  globe:'M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',search:'M11 18a7 7 0 1 0 0-14a7 7 0 0 0 0 14zM21 21l-5-5',refresh:'M20 11a8 8 0 0 0-14.6-4.5M4 4v4h4M4 13a8 8 0 0 0 14.6 4.5M20 20v-4h-4'
+  globe:'M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',search:'M11 18a7 7 0 1 0 0-14a7 7 0 0 0 0 14zM21 21l-5-5',copy:'M9 9h11v11H9zM5 15H4V4h11v1',refresh:'M20 11a8 8 0 0 0-14.6-4.5M4 4v4h4M4 13a8 8 0 0 0 14.6 4.5M20 20v-4h-4'
 };
 function ic(n,cls){return `<svg class="i ${cls||''} ${n==='left'||n==='right'?'flip':''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${P[n]||P.other}"/></svg>`}
 function logoMark(size,ink){
@@ -2852,7 +2871,9 @@ function load(){let r=null;
    (par exemple restée en cache) qui ouvre des données plus récentes passe en lecture seule : elle n’écrit rien par-dessus. */
 const APP_DATA_V=3;
 const DATA_TOO_NEW=()=>(+S.dataV||0)>APP_DATA_V;
-function save(){if(DATA_TOO_NEW()){const n=now();if(!(ui.tooNewAt>n-4000)){ui.tooNewAt=n;setTimeout(()=>toast(t('Non enregistré'),t('Une version plus récente de LIBRE a enregistré tes données. Recharge la page pour obtenir la mise à jour : en attendant, rien n’est modifié.')),60)}return}S.dataV=APP_DATA_V;mem=S;
+function save(){saveCore();if(window.ACCT_READY&&!BOOTED_SYNC)acctQueue()}
+var BOOTED_SYNC=false;
+function saveCore(){if(DATA_TOO_NEW()){const n=now();if(!(ui.tooNewAt>n-4000)){ui.tooNewAt=n;setTimeout(()=>toast(t('Non enregistré'),t('Une version plus récente de LIBRE a enregistré tes données. Recharge la page pour obtenir la mise à jour : en attendant, rien n’est modifié.')),60)}return}S.dataV=APP_DATA_V;mem=S;
   if(NATIVE&&!BOOTED&&VAULT())return; /* rien n’est écrit en clair avant l’ouverture du coffre */
   if(VAULT_ON){vaultPut('state',JSON.stringify(S));try{if(S.prefs.lang)localStorage.setItem(LKEY,S.prefs.lang)}catch(e){}return}
   if(WV_PENDING)return; /* données chiffrées pas encore ouvertes : ne jamais les remplacer */
@@ -3041,6 +3062,7 @@ function renderCore(){
     const lk=String(+S.prefs.lock.until>now());if(app.dataset.view==='lock'&&app.dataset.lk===lk&&$('#lockPin'))return;app.dataset.lk=lk;
     document.body.classList.remove('lightbar');app.innerHTML=lockScreen();app.dataset.view='lock';$('#navWrap')?.remove();setTimeout(()=>$('#lockPin')?.focus(),60);
     if(BIO_ON()&&S.prefs.lock.bio&&lk==='false'&&!ui.bioAsked){ui.bioAsked=true;setTimeout(()=>{if(ui.locked)bioUnlock()},350)}return}
+  if(window.ACCT_READY&&ACCT.probed&&(ui.auth||acctRequired())){document.body.classList.remove('lightbar');const k=JSON.stringify([ui.auth&&ui.auth.step,ui.auth&&ui.auth.mode,ui.auth&&ui.auth.ch,ui.auth&&ui.auth.err,ui.auth&&ui.auth.en,LANG]);if(app.dataset.view==='auth'&&app.dataset.ak===k)return;app.dataset.ak=k;app.innerHTML=renderAuth();app.dataset.view='auth';$('#navWrap')?.remove();$('.sosfab')?.remove();setTimeout(()=>{const f=app.querySelector('input:not([type=checkbox])');if(f&&!f.value)try{f.focus({preventScroll:true})}catch(e){}},60);return}
   if(!S.profile){document.body.classList.remove('lightbar');app.innerHTML=renderOnboarding();app.dataset.view='onboarding';$('#navWrap')?.remove();$('.sosfab')?.remove();drawScene();obAfterRender();return}
   const v=ui.view;
   let html='';
@@ -3946,7 +3968,7 @@ function viewProfile(){
       <p class="small muted">${esc(t('Ce fichier chiffré ne suit pas forcément quand tu changes de téléphone : exporte une sauvegarde avant, puis restaure-la sur le nouvel appareil. Si tu désinstalles LIBRE, tes données sont supprimées.'))}</p>`
       :`<p class="small">${esc(t('Tes données sont enregistrées uniquement dans ce navigateur, sur cet appareil. LIBRE n’a ni serveur ni compte : rien n’est envoyé ni partagé.'))}</p>
       <p class="small muted">${esc(t('Sans sauvegarde, elles sont perdues si tu effaces les données du navigateur ou si tu changes d’appareil. Sur iPhone, Safari peut effacer les données d’un site resté plusieurs jours sans être ouvert : ajoute LIBRE à l’écran d’accueil et fais des sauvegardes régulières.'))}</p>`}
-      <p class="small muted">${esc(t('La synchronisation entre plusieurs appareils nécessiterait un serveur et un compte : elle n’existe pas dans cette version.'))}</p>
+      ${acctGet()?`<p class="small"><b>${esc(t('Ton compte garde une copie chiffrée de tes données.'))}</b> ${esc(t('Elle est chiffrée sur cet appareil avant l’envoi : le serveur ne peut pas la lire. Tu la retrouves sur un autre appareil en te connectant.'))}</p>`:`<p class="small muted">${esc(ACCT.on?t('Crée un compte pour retrouver tes données sur un autre appareil (Profil › Mon compte).'):t('La synchronisation entre plusieurs appareils nécessite le serveur de comptes LIBRE : il n’est pas joignable depuis cette version.'))}</p>`}
       <details class="privacy"><summary>${esc(t('Ce que LIBRE fait, et ne fait pas, de tes données'))}</summary><ul>
         <li>${esc(VAULT_ON?t('Tout reste sur ce téléphone. Aucune donnée n’est envoyée à un serveur, à une publicité ou à un outil de mesure d’audience.'):t('Tout reste dans le stockage de ce navigateur. Aucune donnée n’est envoyée à un serveur, à une publicité ou à un outil de mesure d’audience.'))}</li>
         <li>${esc(t('LIBRE ne charge rien depuis Internet : la police et les photos sont incluses. Seuls les liens vers les sources, que tu choisis d’ouvrir, mènent vers d’autres sites.'))}</li>
@@ -3978,6 +4000,8 @@ function viewProfile(){
       ${S.reasons.length?`<div class="list">${S.reasons.map((r,i)=>`<div class="li"><span class="grow" dir="auto">${esc(t(r))}</span><button class="iconbtn" style="color:var(--ink)" data-a="delReason" data-i="${i}" aria-label="${esc(t('Supprimer'))}">${ic('trash','sm')}</button></div>`).join('')}</div>`:`<p class="small muted">${esc(t('Tes raisons s’afficheront dans le SOS et sur l’accueil. Par exemple : « Retrouver mon souffle », « Économiser pour un voyage ».'))}</p>`}</div>
     <div class="card stack"><div class="row between"><h2>${esc(t('Mes proches'))}</h2><button class="btn sm ghost" data-a="contactForm">${ic('plus','sm')}${esc(t('Ajouter'))}</button></div>
       ${S.contacts.length?`<div class="list">${S.contacts.map((c,i)=>`<div class="li"><div class="hico">${ic('phone','sm')}</div><div class="grow"><b dir="auto">${esc(c.name)}</b><p class="small muted num" dir="ltr" style="text-align:start">${esc(c.phone)}</p></div><button class="iconbtn" style="color:var(--ink)" data-a="delContact" data-i="${i}" aria-label="${esc(t('Supprimer'))}">${ic('trash','sm')}</button></div>`).join('')}</div>`:`<p class="small muted">${esc(t('Ajoute une ou deux personnes de confiance à contacter quand une envie est forte.'))}</p>`}</div>
+    <h2 class="tl-h">${esc(t('Mon compte'))}</h2>
+    ${fold('p-acct',t('Compte et synchronisation'),(()=>{const a=acctGet();return a?(a.expired?t('Session expirée'):a.email||a.phone):ACCT.on?t('Aucun compte'):t('Non disponible')})(),acctCard())}
     <h2 class="tl-h">${esc(t('Mon accompagnement'))}</h2>
     ${fold('p-notif',t('Notifications et rappels'),ntc.enabled?(ntc.pauseUntil>now()?t('En pause'):t('{n} rappels actifs',{n:nf(nOn,0)})):t('Désactivées'),PF_notif)}
     ${fold('p-recs',t('Conseils personnalisés'),S.prefs.recs===false?t('Désactivés'):t('Activés'),`<div class="card stack">
@@ -4047,7 +4071,7 @@ function drawLangList(){
 }
 function setLang(code){
   const prevDir=document.documentElement.dir;
-  S.prefs.lang=code;S.prefs.langAuto=false;S.prefs.currency=S.prefs.currency||null;applyLocale();save();
+  S.prefs.lang=code;S.prefs.langAuto=false;S.prefs.currency=S.prefs.currency||null;applyLocale();save();if(window.ACCT_READY)acctLang(code);
   DNcache();closeSheet();if(ui.story){ui.story=null}render();
   const st=langStatus(code);
   toast(t('Langue : {name}',{name:langLabel(code)}),st==='full'?t('Toute l’application est maintenant dans cette langue.'):st==='ui'?t('L’interface est entièrement traduite. Les articles et certains contenus détaillés s’affichent en anglais pour le moment.'):t('Cette langue n’est pas encore entièrement traduite. Les textes manquants s’affichent en anglais en attendant.'));
@@ -4169,9 +4193,9 @@ function renderOnboarding(){
       <li><i>${ic('target','sm')}</i><span><b>${esc(t('Pour arrêter, réduire ou comprendre'))}</b>${esc(t('Tabac, alcool, cannabis, jeux, écrans et d’autres habitudes, à ton rythme.'))}</span></li>
       <li><i>${ic('pulse','sm')}</i><span><b>${esc(t('Une aide au bon moment'))}</b>${esc(t('Un parcours guidé quand l’envie monte, des plans pour les moments difficiles.'))}</span></li>
       <li><i>${ic('stats','sm')}</i><span><b>${esc(t('Tes progrès, sans jugement'))}</b>${esc(t('Une reprise n’efface rien : ce que tu as accompli reste visible.'))}</span></li>
-      <li><i>${ic('shield','sm')}</i><span><b>${esc(t('Rien ne sort de ton téléphone'))}</b>${esc(t('Pas de compte, pas de publicité. Tes données restent sur ton appareil.'))}</span></li>
+      <li><i>${ic('shield','sm')}</i><span>${ACCT.on?`<b>${esc(t('Tes données, chiffrées'))}</b>${esc(t('Ton compte te permet de les retrouver sur un autre appareil. Elles sont chiffrées sur ton appareil : personne d’autre ne peut les lire. Pas de publicité.'))}`:`<b>${esc(t('Rien ne sort de ton téléphone'))}</b>${esc(t('Pas de compte, pas de publicité. Tes données restent sur ton appareil.'))}`}</span></li>
     </ul>
-    <div class="w4-cta"><button class="btn block w4-go" data-a="obNext">${esc(t('Créer mon profil'))}</button>
+    <div class="w4-cta">${ACCT.on?`<button class="btn block w4-go" data-a="acctGo" data-m="create">${esc(t('Créer mon compte'))}</button><button class="btn block w4-alt" data-a="acctGo" data-m="login">${esc(t('J’ai déjà un compte'))}</button>`:`<button class="btn block w4-go" data-a="obNext">${esc(t('Créer mon profil'))}</button>`}
       <div class="w4-links"><button class="link" data-a="importFile">${ic('upload','sm')}${esc(t('Restaurer une sauvegarde'))}</button>${NATIVE?'':`<button class="link" data-a="demo">${esc(t('Explorer avec un profil de démonstration'))}</button>`}</div>
       <p class="w4-legal">${esc(t('LIBRE s’adresse aux adultes. Elle accompagne, elle ne remplace pas un professionnel de santé.'))}</p>${snapHtml(true)}</div>
   </div>`;
@@ -6317,6 +6341,207 @@ const A10={
   qsJournal:()=>{S.sos.push({ts:now(),ok:false,intensity:ui.sosq?ui.sosq.intensity:null});save();closeSheet();journalForm({craving:ui.sosq?ui.sosq.intensity:5})}
 };
 Object.assign(A,A6,A7,A8,A9,A10,A_S5,A_NT,A_HK);
+/* ============ Comptes LIBRE (serveur de comptes + coffre chiffré de bout en bout) ============
+   - Le serveur (dossier server/) gère l'identité : e-mail + mot de passe (adresse vérifiée par code) ou téléphone (code SMS).
+   - Les données (addictions, journal, statistiques…) sont chiffrées sur l'appareil (AES-256-GCM, Web Crypto) avec une clé de
+     données aléatoire. Cette clé n'est envoyée au serveur qu'enveloppée : par le mot de passe (comptes e-mail) et par la clé de
+     récupération (tous les comptes), via PBKDF2-SHA-256 à 600 000 itérations. Le serveur ne peut pas lire les données.
+   - Sans serveur joignable (fichier ouvert hors ligne, aperçu, hébergement statique), les comptes sont indisponibles et l'app
+     le dit : aucun faux compte n'est créé dans le navigateur. */
+var ACCT_KEY='libre.acct.v1';
+var API_BASE=(document.querySelector('meta[name="libre-api"]')||{}).content||(/^https?:$/.test(location.protocol)?location.origin:'');
+var ACCT={on:false,probed:false,timer:null,busy:false,lastPull:0};
+function acctGet(){try{const a=JSON.parse(localStorage.getItem(ACCT_KEY)||'null');return a&&a.token&&a.dk?a:null}catch(e){return null}}
+function acctSet(a){try{if(a)localStorage.setItem(ACCT_KEY,JSON.stringify(a));else localStorage.removeItem(ACCT_KEY)}catch(e){}}
+const ab64=u=>{let s='';const b=new Uint8Array(u);for(let i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s)};
+const b64ab=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function kdf(secret,salt){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(secret),'PBKDF2',false,['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',hash:'SHA-256',salt,iterations:600000},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function wrapKey(dk,secret){const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},await kdf(secret,salt),b64ab(dk));return {v:1,n:600000,s:ab64(salt),i:ab64(iv),c:ab64(ct)}}
+async function unwrapKey(w,secret){const k=await kdf(secret,b64ab(w.s));return ab64(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64ab(w.i)},k,b64ab(w.c)))}
+async function dkKey(dk){return crypto.subtle.importKey('raw',b64ab(dk),{name:'AES-GCM'},false,['encrypt','decrypt'])}
+async function sealState(dk,obj){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},await dkKey(dk),new TextEncoder().encode(JSON.stringify(obj)));return JSON.stringify({v:1,i:ab64(iv),c:ab64(ct)})}
+async function openState(dk,blob){const o=JSON.parse(blob);const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64ab(o.i)},await dkKey(dk),b64ab(o.c));return JSON.parse(new TextDecoder().decode(pt))}
+/* Clé de récupération : 160 bits aléatoires en base 32 (lettres et chiffres sans ambiguïté), par groupes de 4 */
+function newRecovery(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',b=crypto.getRandomValues(new Uint8Array(32));return [...b].map(x=>A[x%32]).join('').match(/.{4}/g).join('-')}
+const recNorm=s=>String(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'').replace(/O/g,'0').replace(/I/g,'1');
+async function api(method,path,body,token){
+  if(!API_BASE)throw Object.assign(new Error('network'),{code:'network'});
+  let r;try{r=await fetch(API_BASE+path,{method,headers:Object.assign(body?{'Content-Type':'application/json'}:{},token?{Authorization:'Bearer '+token}:{}),body:body?JSON.stringify(body):undefined,cache:'no-store',credentials:'omit'})}
+  catch(e){throw Object.assign(new Error('network'),{code:'network'})}
+  let j={};try{j=await r.json()}catch(e){}
+  if(!r.ok)throw Object.assign(new Error(j.error||'server_error'),{code:j.error||'server_error',status:r.status,data:j});return j}
+async function acctProbe(){if(!API_BASE){ACCT.probed=true;return}
+  try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),3000);const r=await fetch(API_BASE+'/v1/health',{signal:c.signal,cache:'no-store',credentials:'omit'});clearTimeout(tm);
+    const j=r.ok?await r.json():null;ACCT.on=!!(j&&j.service==='libre-accounts')}catch(e){ACCT.on=false}
+  ACCT.probed=true;if(ACCT.on&&acctGet())acctPull();render()}
+/* Le compte est obligatoire quand le serveur est joignable (sauf profil de démonstration) */
+function acctRequired(){return ACCT.on&&!acctGet()&&!(S.profile&&S.profile.demo)&&(S.profile||ui.auth)}
+/* ---------- Synchronisation ---------- */
+function acctQueue(){const a=acctGet();if(!a||a.expired||!ACCT.on)return;a.dirty=true;acctSet(a);clearTimeout(ACCT.timer);ACCT.timer=setTimeout(()=>acctPush(),2500)}
+function mergeState(x,y){ // x = cet appareil, y = compte. Listes d'éléments identifiés : union ; réglages : ceux de cet appareil
+  if(x==null)return y;if(y==null)return x;
+  if(Array.isArray(x)&&Array.isArray(y)){const ids=a=>a.every(o=>o&&typeof o==='object'&&'id' in o);
+    if(ids(x)&&ids(y)){const m=new Map();y.forEach(o=>m.set(o.id,o));x.forEach(o=>m.set(o.id,o));return [...m.values()]}
+    if(x.every(v=>typeof v!=='object')&&y.every(v=>typeof v!=='object'))return [...new Set([...y,...x])];return x.length>=y.length?x:y}
+  if(typeof x==='object'&&typeof y==='object'){const o=Object.assign({},y);for(const k in x)o[k]=k in y?mergeState(x[k],y[k]):x[k];return o}
+  return x}
+async function acctPush(retry){const a=acctGet();if(!a||a.expired||ACCT.busy)return;ACCT.busy=true;
+  try{const blob=await sealState(a.dk,S);const r=await api('PUT','/v1/vault',{version:a.ver||0,blob,keys:a.keys},a.token);
+    const b=acctGet();if(b){b.ver=r.version;b.dirty=false;b.last=Date.now();acctSet(b)}}
+  catch(e){if(e.code==='version_conflict'&&!retry){ACCT.busy=false;await acctPull(true);return acctPush(true)}if(e.status===401)acctExpired()}
+  finally{ACCT.busy=false}}
+async function acctPull(force){const a=acctGet();if(!a||a.expired)return;if(!force&&Date.now()-ACCT.lastPull<60e3)return;ACCT.lastPull=Date.now();
+  try{const r=await api('GET','/v1/vault',null,a.token),v=r.vault;if(!v||v.version<=(a.ver||0))return;
+    const remote=await openState(a.dk,v.blob),b=acctGet();if(!b)return;
+    S=normalize(b.dirty?mergeState(S,remote):remote);mem=S;b.ver=v.version;b.keys=v.keys;b.last=Date.now();acctSet(b);
+    BOOTED_SYNC=true;save();BOOTED_SYNC=false;applyLocale();if(!$('#layer').innerHTML.trim())render()}
+  catch(e){if(e.status===401)acctExpired()}}
+function acctExpired(){const a=acctGet();if(!a||a.expired)return;a.expired=true;acctSet(a);render();toast(t('Session expirée'),t('Connecte-toi à nouveau pour continuer la synchronisation. Tes données restent sur cet appareil.'))}
+document.addEventListener('visibilitychange',()=>{const a=acctGet();if(!a||!ACCT.on)return;if(document.visibilityState==='hidden'&&a.dirty){clearTimeout(ACCT.timer);acctPush()}else if(document.visibilityState==='visible')acctPull()});
+/* ---------- Après une connexion ou une inscription ---------- */
+async function acctSignedIn(res,secret){
+  if(res.user&&res.user.lang&&res.user.lang!==S.prefs.lang&&langOn(res.user.lang)){S.prefs.lang=res.user.lang;S.prefs.langAuto=false;applyLocale()}
+  const prev=acctGet(),base={uid:res.user.id,token:res.token,ident:res.user.email||res.user.phone||'',email:res.user.email,phone:res.user.phone};
+  const v=res.vault;
+  if(!v){ // Nouveau compte : clé de données, clé de récupération, envoi des données actuelles de cet appareil (migration)
+    const dk=ab64(crypto.getRandomValues(new Uint8Array(32))),rec=newRecovery(),keys={rec:await wrapKey(dk,recNorm(rec))};
+    if(secret)keys.pw=await wrapKey(dk,secret);
+    const a=Object.assign(base,{dk,keys,ver:0,dirty:false});acctSet(a);await acctPush();ui.auth={step:'recovery',rec};render();return}
+  let dk=null;
+  if(prev&&prev.uid===res.user.id&&prev.dk)dk=prev.dk;
+  if(!dk&&secret&&v.keys.pw)try{dk=await unwrapKey(v.keys.pw,secret)}catch(e){}
+  if(!dk){ui.auth={step:'unlock',res,secret};render();return}
+  await acctAdopt(res,base,dk,v,secret)}
+async function acctAdopt(res,base,dk,v,secret){
+  const remote=await openState(dk,v.blob),hadLocal=!!(S.profile&&!S.profile.demo);
+  const keys=Object.assign({},v.keys);let rewrap=false;
+  if(secret&&!keys.pw){keys.pw=await wrapKey(dk,secret);rewrap=true}
+  else if(secret&&keys.pw){try{await unwrapKey(keys.pw,secret)}catch(e){keys.pw=await wrapKey(dk,secret);rewrap=true}} // mot de passe réinitialisé : la clé est réenveloppée
+  acctSet(Object.assign(base,{dk,keys,ver:v.version,dirty:hadLocal}));
+  S=normalize(hadLocal?mergeState(S,remote):remote);mem=S;if(res.user&&res.user.lang&&langOn(res.user.lang)){S.prefs.lang=res.user.lang;S.prefs.langAuto=false}save();applyLocale();ui.auth=null;
+  if(hadLocal||rewrap)acctPush();
+  if(!S.profile){ui.obStep=1}render();toast(t('Connecté'),hadLocal?t('Les données de cet appareil ont été ajoutées à ton compte.'):t('Tes données ont été retrouvées.'))}
+async function acctUnlock(rec){const st=ui.auth,v=st.res.vault;let dk;
+  try{dk=await unwrapKey(v.keys.rec,recNorm(rec))}catch(e){return acctErr('recovery_invalid')}
+  const r=st.res,base={uid:r.user.id,token:r.token,ident:r.user.email||r.user.phone||'',email:r.user.email,phone:r.user.phone};
+  // Nouvelle clé de récupération proposée ? Non : la clé saisie reste valable.
+  await acctAdopt(r,base,dk,v,st.secret)}
+/* Repartir sans les anciennes données (clé de récupération perdue) : le coffre du compte est remplacé après confirmation */
+async function acctFresh(){const st=ui.auth,r=st.res;
+  const dk=ab64(crypto.getRandomValues(new Uint8Array(32))),rec=newRecovery(),keys={rec:await wrapKey(dk,recNorm(rec))};if(st.secret)keys.pw=await wrapKey(dk,st.secret);
+  acctSet({uid:r.user.id,token:r.token,ident:r.user.email||r.user.phone||'',email:r.user.email,phone:r.user.phone,dk,keys,ver:r.vault.version,dirty:true});
+  await acctPush();ui.auth={step:'recovery',rec};render()}
+const ACCT_ERR={email_invalid:N_('Cette adresse e-mail n’est pas valide.'),password_weak:N_('Choisis un mot de passe d’au moins 10 caractères.'),credentials_invalid:N_('E-mail ou mot de passe incorrect.'),code_invalid:N_('Code incorrect ou expiré. Vérifie-le ou demande un nouveau code.'),phone_invalid:N_('Ce numéro n’est pas valide. Indique-le avec l’indicatif du pays, par exemple +41 79 123 45 67.'),too_many_codes:N_('Trop de codes demandés. Réessaie dans une heure.'),too_many_attempts:N_('Trop d’essais. Réessaie dans quelques minutes.'),too_many_requests:N_('Trop d’essais. Réessaie dans quelques minutes.'),email_taken:N_('Cette adresse est déjà utilisée par un autre compte.'),phone_taken:N_('Ce numéro est déjà utilisé par un autre compte.'),send_failed:N_('L’envoi du code a échoué. Réessaie dans un instant.'),network:N_('Le serveur de comptes ne répond pas. Vérifie ta connexion.'),recovery_invalid:N_('Cette clé de récupération ne correspond pas à ce compte.'),server_error:N_('Une erreur est survenue. Réessaie dans un instant.')};
+function acctErr(code){if(ui.auth){ui.auth.err=ACCT_ERR[code]||ACCT_ERR.server_error;ui.auth.en=(ui.auth.en||0)+1;ui.auth.busy=false;render()}else toast(t('Compte'),t(ACCT_ERR[code]||ACCT_ERR.server_error))}
+/* ---------- Écrans ---------- */
+function langBtn(){return `<button class="lang-btn" data-a="langPicker" aria-label="${esc(t('Langue de l’application'))}">${ic('globe','sm')}<span>${esc(String(LANG||'fr').slice(0,2).toUpperCase())}</span></button>`}
+function renderAuth(){
+  const st=ui.auth||(ui.auth={mode:'create',ch:'email',step:'form'}),err=st.err?`<p class="au-err" role="alert">${esc(st.err)}</p>`:'',busy=st.busy?'disabled':'';
+  const top=`<div class="au-top">${st.step==='form'&&!S.profile?`<button class="iconbtn" data-a="authBack" aria-label="${esc(t('Retour'))}">${ic('left')}</button>`:`<span class="au-logo">${logoMark(26,'currentColor')}<b>LIBRE</b></span>`}${langBtn()}</div>`;
+  let body='';
+  if(st.step==='form'){
+    const create=st.mode==='create';
+    body=`<h1>${esc(create?t('Crée ton compte'):t('Connexion'))}</h1>
+      <p class="au-sub">${esc(S.profile&&create?t('Pour continuer, crée ton compte. Tes données actuelles y seront transférées, chiffrées : personne d’autre que toi ne peut les lire.'):create?t('Il te permet de retrouver tes données sur un autre appareil. Elles sont chiffrées : personne d’autre que toi ne peut les lire.'):t('Avec ton e-mail ou ton numéro de téléphone.'))}</p>
+      <div class="seg au-ch" role="tablist">${[['email',t('E-mail')],['phone',t('Téléphone')]].map(([k,n])=>`<button role="tab" data-a="authCh" data-v="${k}" aria-pressed="${st.ch===k}">${esc(n)}</button>`).join('')}</div>
+      ${st.ch==='email'?`<div class="field"><label for="au-email">${esc(t('Adresse e-mail'))}</label><input id="au-email" type="email" autocomplete="email" inputmode="email" value="${esc(st.email||'')}" required></div>
+        <div class="field"><label for="au-pw">${esc(t('Mot de passe'))}</label><input id="au-pw" type="password" autocomplete="${create?'new-password':'current-password'}" minlength="10" required>${create?`<p class="small muted">${esc(t('Au moins 10 caractères.'))}</p>`:''}</div>`
+      :`<div class="field"><label for="au-phone">${esc(t('Numéro de téléphone'))}</label><input id="au-phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+41 79 123 45 67" value="${esc(st.phone||'')}" required><p class="small muted">${esc(t('Nous t’envoyons un code par SMS.'))}</p></div>`}
+      ${err}<button class="btn primary block" data-a="authSubmit" ${busy}>${esc(st.ch==='phone'?t('Recevoir un code'):create?t('Créer mon compte'):t('Se connecter'))}</button>
+      ${st.ch==='email'&&!create?`<button class="link au-link" data-a="authForgot">${esc(t('Mot de passe oublié ?'))}</button>`:''}
+      <button class="link au-link" data-a="authMode">${esc(create?t('J’ai déjà un compte'):t('Créer un compte'))}</button>`}
+  else if(st.step==='code'){
+    body=`<h1>${esc(t('Entre le code'))}</h1><p class="au-sub">${esc(t('Nous avons envoyé un code à 6 chiffres à {target}.',{target:st.target}))}</p>
+      ${st.reset?`<div class="field"><label for="au-code">${esc(t('Code'))}</label><input id="au-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*"></div><div class="field"><label for="au-pw2">${esc(t('Nouveau mot de passe'))}</label><input id="au-pw2" type="password" autocomplete="new-password" minlength="10"></div>`
+      :`<div class="field"><label for="au-code">${esc(t('Code'))}</label><input id="au-code" class="au-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*"></div>`}
+      ${err}<button class="btn primary block" data-a="authCode" ${busy}>${esc(t('Valider'))}</button><button class="link au-link" data-a="authResend">${esc(t('Renvoyer le code'))}</button>`}
+  else if(st.step==='forgot'){
+    body=`<h1>${esc(t('Mot de passe oublié'))}</h1><p class="au-sub">${esc(t('Indique ton adresse : tu recevras un code pour choisir un nouveau mot de passe.'))}</p>
+      <div class="field"><label for="au-email">${esc(t('Adresse e-mail'))}</label><input id="au-email" type="email" autocomplete="email" value="${esc(st.email||'')}"></div>${err}
+      <button class="btn primary block" data-a="authForgotSend" ${busy}>${esc(t('Recevoir un code'))}</button>`}
+  else if(st.step==='recovery'){
+    body=`<h1>${esc(t('Ta clé de récupération'))}</h1><p class="au-sub">${esc(t('Garde-la en lieu sûr (gestionnaire de mots de passe, papier). Elle est la seule façon de retrouver tes données sur un nouvel appareil si tu oublies ton mot de passe ou si tu te connectes par SMS. LIBRE ne peut pas la récupérer pour toi.'))}</p>
+      <p class="au-key num" id="au-rec">${esc(st.rec)}</p><button class="btn ghost block" data-a="authCopyRec">${ic('copy','sm')}${esc(t('Copier la clé'))}</button>
+      <label class="au-check"><input type="checkbox" id="au-saved"><span>${esc(t('J’ai noté ma clé de récupération'))}</span></label>
+      <button class="btn primary block" data-a="authRecDone">${esc(t('Continuer'))}</button>`}
+  else if(st.step==='unlock'){
+    body=`<h1>${esc(t('Ouvre tes données'))}</h1><p class="au-sub">${esc(t('Tes données sont chiffrées. Saisis ta clé de récupération pour les ouvrir sur cet appareil.'))}</p>
+      <div class="field"><label for="au-rk">${esc(t('Clé de récupération'))}</label><input id="au-rk" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-…"></div>${err}
+      <button class="btn primary block" data-a="authUnlock" ${busy}>${esc(t('Ouvrir mes données'))}</button>
+      <button class="link au-link danger" data-a="authFresh">${esc(t('J’ai perdu ma clé : recommencer sans mes anciennes données'))}</button>`}
+  return `<div class="auth fade-in">${top}<div class="au-body">${body}</div><p class="au-foot small">${ic('shield','sm')} ${esc(t('Données chiffrées sur ton appareil · aucune vente de données · aucune publicité'))}</p></div>`;
+}
+const val=id=>(document.getElementById(id)||{}).value||'';
+async function authRun(fn){const st=ui.auth;if(st.busy)return;st.err='';st.busy=true;document.querySelectorAll('.auth .btn.primary').forEach(x=>x.disabled=true);try{await fn()}catch(e){if(!e.code)console.error(e);acctErr(e.code||'server_error')}finally{if(ui.auth===st&&st.busy){st.busy=false;render();document.querySelectorAll('.auth .btn.primary').forEach(x=>x.disabled=false)}}}
+Object.assign(A,{
+  acctGo:el=>{ui.auth={mode:el.dataset.m||'create',ch:'email',step:'form'};render()},
+  authBack:()=>{ui.auth=null;ui.obStep=0;render()},
+  authCh:el=>{ui.auth.ch=el.dataset.v;ui.auth.err='';render()},
+  authMode:()=>{const st=ui.auth;st.mode=st.mode==='create'?'login':'create';st.err='';render()},
+  authForgot:()=>{const st=ui.auth;st.email=val('au-email');st.step='forgot';st.err='';render()},
+  authSubmit:()=>authRun(async()=>{const st=ui.auth;
+    if(st.ch==='phone'){st.phone=val('au-phone');await api('POST','/v1/auth/phone/start',{phone:st.phone,lang:LANG});Object.assign(st,{step:'code',target:st.phone,channel:'phone'});return}
+    st.email=val('au-email').trim();const pw=val('au-pw');
+    if(st.mode==='create'){await api('POST','/v1/auth/email/register',{email:st.email,password:pw,lang:LANG});Object.assign(st,{step:'code',target:st.email,channel:'email',secret:pw});return}
+    try{const r=await api('POST','/v1/auth/email/login',{email:st.email,password:pw});st.busy=false;await acctSignedIn(r,pw)}
+    catch(e){if(e.code==='email_unverified'){Object.assign(st,{step:'code',target:st.email,channel:'email',secret:pw});return}throw e}}),
+  authCode:()=>authRun(async()=>{const st=ui.auth,code=val('au-code').trim();let r;
+    if(st.reset){const pw=val('au-pw2');r=await api('POST','/v1/auth/email/reset',{email:st.email,code,password:pw});st.busy=false;return acctSignedIn(r,pw)}
+    r=st.channel==='phone'?await api('POST','/v1/auth/phone/verify',{phone:st.phone,code,lang:LANG}):await api('POST','/v1/auth/email/verify',{email:st.email,code});
+    st.busy=false;await acctSignedIn(r,st.channel==='email'?st.secret:null)}),
+  authResend:()=>authRun(async()=>{const st=ui.auth;
+    if(st.reset)await api('POST','/v1/auth/email/forgot',{email:st.email});else if(st.channel==='phone')await api('POST','/v1/auth/phone/start',{phone:st.phone,lang:LANG});else await api('POST','/v1/auth/email/resend',{email:st.email});
+    toast(t('Code renvoyé'),st.target)}),
+  authForgotSend:()=>authRun(async()=>{const st=ui.auth;st.email=val('au-email').trim();await api('POST','/v1/auth/email/forgot',{email:st.email});Object.assign(st,{step:'code',target:st.email,channel:'email',reset:true})}),
+  authCopyRec:()=>{try{navigator.clipboard.writeText(ui.auth.rec);toast(t('Clé copiée'),t('Colle-la dans un endroit sûr.'))}catch(e){}},
+  authRecDone:()=>{if(!$('#au-saved')||!$('#au-saved').checked){toast(t('Note ta clé'),t('Coche la case une fois ta clé mise en lieu sûr.'));return}ui.auth=null;if(!S.profile){ui.obStep=1}render()},
+  authUnlock:()=>authRun(()=>acctUnlock(val('au-rk'))),
+  authFresh:()=>confirmBox(t('Recommencer sans mes anciennes données ?'),t('Les données enregistrées dans ton compte seront remplacées par celles de cet appareil. Cette action est définitive.'),t('Recommencer'),()=>authRun(()=>acctFresh()),true),
+  // Mon compte
+  acctSync:async()=>{const a=acctGet();if(!a)return;try{await acctPull(true);await acctPush();toast(t('Synchronisé'),t('Tes données sont à jour sur ce compte.'))}catch(e){acctErr(e.code)}},
+  acctNewRec:()=>confirmBox(t('Créer une nouvelle clé de récupération ?'),t('L’ancienne clé ne fonctionnera plus.'),t('Créer'),async()=>{const a=acctGet();if(!a)return;const rec=newRecovery();a.keys=Object.assign({},a.keys,{rec:await wrapKey(a.dk,recNorm(rec))});acctSet(a);await acctPush();sheet(t('Ta clé de récupération'),`<div class="stack"><p class="muted">${esc(t('Garde-la en lieu sûr. Elle remplace l’ancienne.'))}</p><p class="au-key num">${esc(rec)}</p><button class="btn ghost block" data-a="copyText" data-v="${esc(rec)}">${ic('copy','sm')}${esc(t('Copier la clé'))}</button></div>`)}),
+  acctForget:()=>confirmBox(t('Se déconnecter ?'),t('Les modifications pas encore synchronisées seront perdues. Tes données restent dans ton compte.'),t('Se déconnecter'),()=>{acctWipe()},true),
+  copyText:el=>{try{navigator.clipboard.writeText(el.dataset.v);toast(t('Copié'),'')}catch(e){}},
+  acctEmail:()=>{const a=acctGet();sheet(a&&a.email?t('Modifier mon e-mail'):t('Ajouter un e-mail'),`<div class="stack"><div class="field"><label for="ae-email">${esc(t('Nouvelle adresse e-mail'))}</label><input id="ae-email" type="email" autocomplete="email"></div>${a&&!a.email?`<div class="field"><label for="ae-pw">${esc(t('Mot de passe'))}</label><input id="ae-pw" type="password" autocomplete="new-password" minlength="10"><p class="small muted">${esc(t('Au moins 10 caractères. Il servira à te connecter avec cette adresse.'))}</p></div>`:''}<button class="btn primary block" data-a="acctEmailSend">${esc(t('Recevoir un code'))}</button></div>`)},
+  acctEmailSend:async()=>{const a=acctGet(),email=val('ae-email').trim(),pw=val('ae-pw');try{await api('POST','/v1/me/email',{email,password:pw||undefined},a.token);ui.acctChange={kind:'email',target:email,pw};acctCodeSheet()}catch(e){acctErr(e.code)}},
+  acctPhone:()=>{sheet(t('Numéro de téléphone'),`<div class="stack"><div class="field"><label for="ap-phone">${esc(t('Nouveau numéro'))}</label><input id="ap-phone" type="tel" autocomplete="tel" placeholder="+41 79 123 45 67"></div><button class="btn primary block" data-a="acctPhoneSend">${esc(t('Recevoir un code'))}</button></div>`)},
+  acctPhoneSend:async()=>{const a=acctGet(),phone=val('ap-phone').trim();try{await api('POST','/v1/me/phone',{phone},a.token);ui.acctChange={kind:'phone',target:phone};acctCodeSheet()}catch(e){acctErr(e.code)}},
+  acctChangeConfirm:async()=>{const a=acctGet(),c=ui.acctChange,code=val('ac-code').trim();
+    try{const r=await api('POST',c.kind==='email'?'/v1/me/email/confirm':'/v1/me/phone/confirm',c.kind==='email'?{email:c.target,code}:{phone:c.target,code},a.token);
+      Object.assign(a,{email:r.user.email,phone:r.user.phone,ident:r.user.email||r.user.phone});if(c.kind==='email'&&c.pw)a.keys=Object.assign({},a.keys,{pw:await wrapKey(a.dk,c.pw)});acctSet(a);if(c.pw)acctPush();
+      closeSheet();render();toast(t('Enregistré'),c.target)}catch(e){acctErr(e.code)}},
+  acctLogout:()=>confirmBox(t('Se déconnecter ?'),t('Tes données restent dans ton compte. Elles seront effacées de cet appareil après la synchronisation.'),t('Se déconnecter'),async()=>{const a=acctGet();if(!a)return;
+    try{if(a.dirty){clearTimeout(ACCT.timer);await acctPush()}const b=acctGet();if(b&&b.dirty)throw Object.assign(new Error('network'),{code:'network'});await api('POST','/v1/auth/logout',{},a.token)}catch(e){if(e.status!==401)return acctErr(e.code||'network')}
+    acctWipe();toast(t('Déconnecté'),t('Tes données ont été effacées de cet appareil.'))}),
+  acctDelete:()=>confirmBox(t('Supprimer définitivement mon compte ?'),t('Ton compte et toutes les données enregistrées sur le serveur seront supprimés, ainsi que les données de cet appareil. Exporte une sauvegarde avant si tu veux les garder. Cette action est irréversible.'),t('Supprimer mon compte'),async()=>{const a=acctGet();if(!a)return;
+    try{await api('DELETE','/v1/me',{confirm:'DELETE'},a.token)}catch(e){if(e.status!==401)return acctErr(e.code||'network')}
+    acctWipe();toast(t('Compte supprimé'),t('Ton compte et tes données ont été supprimés.'))},true),
+});
+function acctCodeSheet(){const c=ui.acctChange;sheet(t('Entre le code'),`<div class="stack"><p class="muted">${esc(t('Nous avons envoyé un code à 6 chiffres à {target}.',{target:c.target}))}</p><div class="field"><label for="ac-code">${esc(t('Code'))}</label><input id="ac-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div><button class="btn primary block" data-a="acctChangeConfirm">${esc(t('Valider'))}</button></div>`)}
+/* Efface cet appareil (déconnexion, suppression du compte) : rappels annulés, état remis à zéro, langue conservée */
+function acctWipe(){clearTimeout(ACCT.timer);acctSet(null);try{ntCancelAll()}catch(e){}
+  try{Object.keys(localStorage).filter(k=>k.startsWith(KEY+'.')).forEach(k=>localStorage.removeItem(k))}catch(e){}
+  const l=S.prefs.lang;S=blank();S.prefs.lang=l;save();ui.auth=null;ui.obStep=0;ui.ob=null;ui.view='accueil';history.replaceState(null,'',location.pathname+location.search);closeSheet();render()}
+function acctCard(){const a=acctGet();
+  if(!ACCT.on&&!a)return `<div class="card stack"><p class="small muted">${esc(ACCT.probed?t('Le serveur de comptes n’est pas joignable depuis cette version (fichier ouvert hors ligne, aperçu ou hébergement sans serveur). Tes données restent sur cet appareil ; exporte des sauvegardes chiffrées pour les transférer.'):t('Vérification du serveur de comptes…'))}</p></div>`;
+  if(!a)return `<div class="card stack"><p class="small muted">${esc(t('Crée un compte pour retrouver tes données sur un autre appareil.'))}</p><button class="btn primary block" data-a="acctGo" data-m="create">${esc(t('Créer mon compte'))}</button></div>`;
+  if(a.expired)return `<div class="card stack"><p class="small"><b class="sensitive">${esc(a.ident)}</b></p><p class="small muted">${esc(t('Ta session a expiré. Reconnecte-toi pour reprendre la synchronisation : tes données sont toujours sur cet appareil.'))}</p><button class="btn primary block" data-a="acctGo" data-m="login">${esc(t('Se reconnecter'))}</button><button class="link danger" data-a="acctForget">${esc(t('Se déconnecter de cet appareil'))}</button></div>`;
+  const ago=a.last?durText(now()-a.last,true):'';
+  return `<div class="card stack acct-card">
+    <div class="li"><div class="grow"><b class="sensitive">${esc(a.email||'—')}</b><p class="small muted">${esc(t('E-mail'))}</p></div><button class="btn sm ghost" data-a="acctEmail">${esc(a.email?t('Modifier'):t('Ajouter'))}</button></div>
+    <div class="li"><div class="grow"><b class="sensitive">${esc(a.phone||'—')}</b><p class="small muted">${esc(t('Téléphone'))}</p></div><button class="btn sm ghost" data-a="acctPhone">${esc(a.phone?t('Modifier'):t('Ajouter'))}</button></div>
+    <p class="small muted">${ic('shield','sm')} ${esc(a.dirty?t('Modifications en attente de synchronisation.'):ago?t('Synchronisé il y a {t}.',{t:ago}):t('Synchronisé.'))}</p>
+    <button class="btn ghost block" data-a="acctSync">${ic('refresh','sm')}${esc(t('Synchroniser maintenant'))}</button>
+    <button class="btn quiet block" data-a="acctNewRec">${esc(t('Nouvelle clé de récupération'))}</button>
+    <button class="btn quiet block" data-a="acctLogout">${esc(t('Se déconnecter'))}</button>
+    <button class="link danger" data-a="acctDelete">${esc(t('Supprimer définitivement mon compte'))}</button></div>`}
+
+/* La langue choisie suit le compte (appliquée à la prochaine connexion, sur n'importe quel appareil) */
+function acctLang(code){const a=acctGet();if(!a||a.expired||!ACCT.on)return;api('PATCH','/v1/me',{lang:code},a.token).catch(()=>{})}
+window.ACCT_READY=true;
+
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(!f)return;if(HAPTIC_ON.has(el.dataset.a))haptic(HAPTIC_SUCCESS.has(el.dataset.a)?'success':'light');
   if(el.tagName==='INPUT')return; f(el,e)});
 document.addEventListener('change',e=>{const el=e.target;
@@ -7223,7 +7448,7 @@ function vaultWaitScreen(){const app=$('#app');document.body.classList.remove('l
 (async()=>{await vaultBoot();if(ui.vaultWait){try{applyFx();applyLocale()}catch(e){}await vaultGate()}
 if(WV_PENDING){try{applyFx();applyLocale()}catch(e){}await wvGate()}
 BOOTED=true;
-applyFx();applyLocale();route();fxReveal();
+applyFx();applyLocale();route();fxReveal();acctProbe();
 if(ui.vaultLost)setTimeout(()=>toast(t('Données introuvables'),t('Les données chiffrées de LIBRE ne peuvent pas être lues sur ce téléphone (par exemple après un changement d’appareil). Restaure ton fichier de sauvegarde depuis Profil.')),900);
 (()=>{const s=$('#splash');if(!s)return;if(!isInstalled()){s.remove();return}s.classList.add('on');setTimeout(()=>{s.classList.add('out');setTimeout(()=>s.remove(),RM()?0:420)},RM()?150:650)})();
 if(LOAD_ISSUE)setTimeout(()=>{const raw=(()=>{try{return localStorage.getItem(LOAD_ISSUE)}catch(e){return null}})();toast(t('Données illisibles'),t('Les données enregistrées sur cet appareil étaient endommagées. Une copie brute a été conservée.'),raw?{label:t('Télécharger'),fn:()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([raw],{type:'text/plain'}));a.download='libre-donnees-brutes.txt';a.click()}}:null)},800);
