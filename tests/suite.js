@@ -1000,11 +1000,11 @@ test('Soutien', 'Fiche interactive : gestes cochés, « Ça t’a aidé ? » enr
 });
 
 /* ---------- Refonte « Clairière » : navigation, journal guidé, lecture des données, bibliothèque par thèmes ---------- */
-test('Navigation', 'Barre Aujourd’hui · Soutien · [Aide] · Parcours (statistiques d’abord) · Journal ; l’aide immédiate au centre de la barre sur chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
+test('Navigation', 'Barre Aujourd’hui · Soutien · Parcours (statistiques d’abord) · Journal + bouton Aide séparé (verre liquide) sur chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'], name: 'Lou' })) }); await p.goto(base); await p.settle();
   for (const v of ['accueil', 'habitudes', 'stats', 'outils', 'journal']) {
     await p.go(v); await p.closeLayer();
-    const nav = await p.evaluate(() => [...document.querySelectorAll('nav .in > a')].map(x => x.getAttribute('href')).join('|'));
+    const nav = await p.evaluate(() => [...document.querySelectorAll('nav .lg-tabs > a')].map(x => x.getAttribute('href')).join('|'));
     assert.match(nav, /#accueil\|#outils\|#stats\|#journal/, v + ' : ' + nav);
     await p.click('nav .nav-help'); await p.waitForTimeout(300);
     assert.match(await p.textContent('#layer'), /Une envie forte/, v + ' : le bouton Aide ouvre l’aide immédiate'); await p.closeLayer();

@@ -2997,6 +2997,92 @@ html:not(.fx) body{background:var(--bg)}
 /* Bureau large : accueil en grille (bento) */
 @media (min-width:1180px){html:not(.fx) .hm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;align-items:start}
   html:not(.fx) .hm>*{grid-column:1/-1}html:not(.fx) .hm>.hs-mood,html:not(.fx) .hm>.hs-motiv{grid-column:auto}}
+/* ============================================================================================
+   VERRE LIQUIDE — barre de navigation façon Apple (iOS 26 / macOS 26) : matière très translucide qui
+   floute et sature ce qui passe dessous, liseré lumineux (spéculaire) plus vif en haut à gauche,
+   reflet doux, ombre portée légère ; onglet actif = goutte de verre qui glisse et s'étire.
+   Téléphone : capsule flottante + bouton rond séparé (Aide). Ordinateur : panneau flottant.
+   Lisibilité : teinte assez dense pour garder des contrastes AA quel que soit le contenu dessous.
+   « Réduire la transparence » du système : matière opaque.
+   ============================================================================================ */
+:root:not(.fx){--lg-tint:rgba(252,250,245,.66);--lg-ink:#14213A;--lg-sub:#3E4757;--lg-rim:rgba(255,255,255,.9);--lg-rim2:rgba(255,255,255,.35);--lg-drop:rgba(255,255,255,.62);--lg-shadow:0 18px 40px -14px rgba(16,27,48,.32),0 3px 10px rgba(16,27,48,.08);--lg-act:var(--accent-strong)}
+@media (prefers-color-scheme: dark){:root:not(.fx):not([data-theme="light"]){--lg-tint:rgba(22,30,46,.62);--lg-ink:#F2F4F1;--lg-sub:#C7CDD6;--lg-rim:rgba(255,255,255,.32);--lg-rim2:rgba(255,255,255,.08);--lg-drop:rgba(255,255,255,.14);--lg-shadow:0 18px 44px -14px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.3);--lg-act:#BFE3D0}}
+:root:not(.fx)[data-theme="dark"]{--lg-tint:rgba(22,30,46,.62);--lg-ink:#F2F4F1;--lg-sub:#C7CDD6;--lg-rim:rgba(255,255,255,.32);--lg-rim2:rgba(255,255,255,.08);--lg-drop:rgba(255,255,255,.14);--lg-shadow:0 18px 44px -14px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.3);--lg-act:#BFE3D0}
+/* La matière */
+html:not(.fx) body .lg-tabs,html:not(.fx) body #navWrap .nav-help,html:not(.fx) body.lgd #navWrap.nav{
+  position:relative;isolation:isolate;
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 55%),var(--lg-tint)!important;
+  -webkit-backdrop-filter:blur(16px) saturate(190%) brightness(1.04);backdrop-filter:blur(16px) saturate(190%) brightness(1.04);
+  border:0!important;box-shadow:var(--lg-shadow),inset 0 1px 0 var(--lg-rim),inset 0 -1px 0 var(--lg-rim2),inset 1px 0 0 var(--lg-rim2),inset -1px 0 0 var(--lg-rim2)!important}
+/* Liseré spéculaire : plus lumineux en haut à gauche et en bas à droite, comme la lumière sur une goutte */
+html:not(.fx) body .lg-tabs::before,html:not(.fx) body #navWrap .nav-help::before,html:not(.fx) body.lgd #navWrap.nav::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;pointer-events:none;z-index:2;
+  background:linear-gradient(135deg,var(--lg-rim),rgba(255,255,255,0) 32%,rgba(255,255,255,0) 68%,var(--lg-rim) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+/* Reflet doux */
+html:not(.fx) body .lg-tabs::after,html:not(.fx) body #navWrap .nav-help::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:radial-gradient(120% 70% at 25% -10%,rgba(255,255,255,.45),transparent 55%),radial-gradient(80% 60% at 100% 120%,rgba(255,255,255,.18),transparent 60%);opacity:.8}
+
+/* ---------- Téléphone : capsule flottante + bouton rond ---------- */
+@media (max-width:899px){
+  html:not(.fx) body #navWrap.nav{left:12px!important;right:12px!important;bottom:calc(12px + env(safe-area-inset-bottom,0px))!important;max-width:520px!important;margin:0 auto!important;
+    background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important;border:0!important;border-radius:0!important;padding:0!important;pointer-events:none}
+  html:not(.fx) body #navWrap .in{display:flex!important;align-items:center;gap:10px;padding:0!important;max-width:none!important;pointer-events:none}
+  html:not(.fx) body #navWrap .in>*{pointer-events:auto}
+  html:not(.fx) body .lg-tabs{flex:1;display:flex;align-items:stretch;gap:0;padding:5px;border-radius:999px;min-height:64px;transition:min-height .35s cubic-bezier(.2,.9,.25,1.15),padding .35s}
+  html:not(.fx) body .lg-tabs a{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px!important;border-radius:999px!important;
+    background:none!important;color:var(--lg-sub)!important;font-size:.66rem!important;font-weight:700!important;letter-spacing:.01em;text-decoration:none;transition:color .25s,transform .2s}
+  html:not(.fx) body .lg-tabs a .i{width:24px;height:24px;color:currentColor!important}
+  html:not(.fx) body .lg-tabs a[aria-current="page"]{color:var(--lg-act)!important}
+  html:not(.fx) body .lg-tabs a:active{transform:scale(.92)}
+  html:not(.fx) body #navWrap .nav-help{flex:none;width:64px;height:64px;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center;color:var(--lg-ink)!important;margin:0!important;transition:width .35s cubic-bezier(.2,.9,.25,1.15),height .35s}
+  html:not(.fx) body #navWrap .nav-help>i{width:44px!important;height:44px!important;margin:0!important;border-radius:50%!important;display:grid;place-items:center;
+    background:radial-gradient(circle at 35% 30%,#4E8A70,#2E5646 70%)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 14px -6px rgba(46,86,70,.8)!important}
+  html:not(.fx) body #navWrap .nav-help>i svg{width:24px;height:24px}
+  html:not(.fx) body #navWrap .nav-help>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  html:not(.fx) body #navWrap .nav-help:active{transform:scale(.92)}
+  /* Défilement vers le bas : la barre se fait discrète */
+  body.nav-min .lg-tabs{min-height:52px!important;padding:3px!important}
+  body.nav-min .lg-tabs a span{display:none}
+  body.nav-min #navWrap .nav-help{width:52px!important;height:52px!important}
+  body.nav-min #navWrap .nav-help>i{width:38px!important;height:38px!important}
+}
+/* La goutte (onglet actif) */
+.lg-ind{position:absolute;top:0;left:0;z-index:0;border-radius:999px;pointer-events:none;opacity:0;will-change:transform,width;
+  background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 60%),var(--lg-drop);
+  box-shadow:inset 0 1px 0 var(--lg-rim),inset 0 -1px 1px var(--lg-rim2),0 4px 12px -4px rgba(16,27,48,.22);
+  transition:transform .5s cubic-bezier(.3,1.4,.4,1),width .5s cubic-bezier(.3,1.4,.4,1),height .5s cubic-bezier(.3,1.4,.4,1),opacity .2s}
+.lg-ind.mv{animation:lgStretch .5s cubic-bezier(.3,1.2,.4,1)}
+@keyframes lgStretch{0%{scale:1 1}35%{scale:1.18 .88}70%{scale:.96 1.05}100%{scale:1 1}}
+@media (prefers-reduced-motion:reduce){.lg-ind{transition:opacity .2s}.lg-ind.mv{animation:none}}
+
+/* ---------- Ordinateur : panneau de verre flottant ---------- */
+@media (min-width:900px){
+  html:not(.fx) body #navWrap.nav{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 40%),var(--lg-tint)!important;color:var(--lg-ink)!important;
+    -webkit-backdrop-filter:blur(22px) saturate(190%) brightness(1.04);backdrop-filter:blur(22px) saturate(190%) brightness(1.04);border:0!important;
+    box-shadow:var(--lg-shadow),inset 0 1px 0 var(--lg-rim),inset 0 -1px 0 var(--lg-rim2),inset 1px 0 0 var(--lg-rim2),inset -1px 0 0 var(--lg-rim2)!important;border-radius:32px!important;overflow:visible auto}
+  html:not(.fx) body #navWrap.nav::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;pointer-events:none;
+    background:linear-gradient(150deg,var(--lg-rim),rgba(255,255,255,0) 25%,rgba(255,255,255,0) 75%,var(--lg-rim));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+  html:not(.fx) body .lg-tabs{display:flex;flex-direction:column;gap:2px;padding:0;background:none!important;box-shadow:none!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  html:not(.fx) body .lg-tabs::before,html:not(.fx) body .lg-tabs::after{display:none}
+  html:not(.fx) body .nav-brand,html:not(.fx) body .nav-brand span{color:var(--lg-ink)!important}
+  html:not(.fx) body .nav-col{background:var(--lg-drop);color:var(--lg-ink);box-shadow:inset 0 1px 0 var(--lg-rim)}
+  html:not(.fx) body .nav-search{background:var(--lg-drop);border:0;color:var(--lg-sub);box-shadow:inset 0 1px 0 var(--lg-rim),inset 0 -1px 0 var(--lg-rim2)}
+  html:not(.fx) body .nav-search kbd{background:rgba(127,140,160,.18);color:var(--lg-ink)}
+  html:not(.fx) body .nav-sec{color:var(--lg-sub)}
+  html:not(.fx) body #navWrap a,html:not(.fx) body .nav-hab{position:relative;z-index:1;color:var(--lg-ink)!important;background:none!important;margin:0!important;border-radius:16px!important}
+  html:not(.fx) body #navWrap a:hover,html:not(.fx) body .nav-hab:hover{background:rgba(127,140,160,.12)!important}
+  html:not(.fx) body #navWrap a[aria-current="page"]{color:var(--lg-act)!important;font-weight:750}
+  html:not(.fx) body #navWrap .in>a[aria-current="page"]{background:var(--lg-drop)!important;box-shadow:inset 0 1px 0 var(--lg-rim),0 4px 12px -4px rgba(16,27,48,.2)!important}
+  html:not(.fx) body #navWrap a[aria-current="page"]::before,html:not(.fx) body #navWrap a[aria-current="page"]::after{display:none!important}
+  html:not(.fx) body .lg-ind{border-radius:16px}
+  html:not(.fx) body .nav-hab small{background:rgba(127,140,160,.18);color:var(--lg-ink)}
+  html:not(.fx) body #navWrap .nav-help{order:50;margin-top:auto!important;border-radius:20px!important;color:var(--lg-ink)!important;min-height:58px;padding:9px!important;display:flex!important;align-items:center;gap:12px}
+  html:not(.fx) body #navWrap .nav-help>i{background:radial-gradient(circle at 35% 30%,#4E8A70,#2E5646 70%)!important;border-radius:14px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)!important}
+  html:not(.fx) body .nav-user{background:var(--lg-drop)!important;box-shadow:inset 0 1px 0 var(--lg-rim)}
+  html:not(.fx) body .nav-user b{color:var(--lg-ink)}html:not(.fx) body .nav-user small{color:var(--lg-sub)}
+}
+/* Réduire la transparence : matière opaque, même forme */
+@media (prefers-reduced-transparency:reduce){:root:not(.fx){--lg-tint:var(--card)}html:not(.fx) body .lg-tabs,html:not(.fx) body #navWrap .nav-help,html:not(.fx) body #navWrap.nav{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}}
 </style>
 </head>
 <body>
@@ -3459,7 +3545,7 @@ function renderCore(){
   else if(v==='evolution')html=viewEvolution();
   else html=viewHome();
   app.innerHTML=html;app.dataset.view=v;document.body.classList.add('lightbar');document.querySelectorAll('.ltabs,.htabs').forEach(r=>{const b=r.querySelector('[aria-pressed="true"]');if(b&&b.offsetLeft+b.offsetWidth>r.clientWidth)r.scrollLeft=b.offsetLeft-r.clientWidth/2+b.offsetWidth/2});
-  ensureChrome();applyHabitTheme();applyDiscreet();updateLive();syncSegs();if($('#ntStatus'))ntRefreshStatus();if($('#hkBox'))hkRender();
+  ensureChrome();lgPlace(true);applyHabitTheme();applyDiscreet();updateLive();syncSegs();if($('#ntStatus'))ntRefreshStatus();if($('#hkBox'))hkRender();
   if(ui.view!==ui.lastView){ui.lastView=ui.view;
     app.classList.remove('pg-in');void app.offsetWidth;app.classList.add('pg-in');
     reveal();
@@ -3480,6 +3566,17 @@ function topbar(title,back){
   return `<header class="pg-head" data-tone="${tone}"><div class="pg-bar">${lead}${bell}</div><h1 class="large-title pg-title">${esc(title)}</h1>${pageSub()}</header>`;
 }
 function refreshBell(){const b=$('#bellCount');if(!b)return;const u=S.notifs.filter(n=>!n.read).length;b.textContent=nf(u,0);b.hidden=!u}
+/* Verre liquide : la goutte qui marque l’onglet actif glisse de l’ancien onglet vers le nouveau en s’étirant */
+let LG_POS=null;
+function lgPlace(animate){const box=$('#navWrap .lg-tabs'),ind=box&&box.querySelector('.lg-ind'),a=box&&box.querySelector('a[aria-current="page"]');if(!ind)return;
+  if(!a){ind.style.opacity='0';return}const r={x:a.offsetLeft,y:a.offsetTop,w:a.offsetWidth,h:a.offsetHeight};
+  const set=p=>{ind.style.width=p.w+'px';ind.style.height=p.h+'px';ind.style.transform=`translate(${p.x}px,${p.y}px)`};
+  if(LG_POS&&animate&&!RM()&&(LG_POS.x!==r.x||LG_POS.y!==r.y)){ind.style.transition='none';set(LG_POS);void ind.offsetWidth;ind.style.transition='';ind.classList.add('mv');requestAnimationFrame(()=>set(r));setTimeout(()=>ind.classList.remove('mv'),520)}
+  else set(r);ind.style.opacity='1';LG_POS=r}
+window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
+/* Téléphone : la barre se réduit quand on fait défiler vers le bas, revient dès qu’on remonte */
+(()=>{let y0=0;window.addEventListener('scroll',()=>{const y=scrollY;if(innerWidth>=900){document.body.classList.remove('nav-min');return}
+  if(y>y0+10&&y>120)document.body.classList.add('nav-min');else if(y<y0-10||y<60)document.body.classList.remove('nav-min');if(Math.abs(y-y0)>10)y0=y},{passive:true})})();
 function ensureChrome(){
   if(!$('#navWrap')){
     const n=document.createElement('nav');n.id='navWrap';n.className='nav';document.body.appendChild(n);
@@ -3496,7 +3593,8 @@ function ensureChrome(){
   $('#navWrap').innerHTML=`<div class="in"><div class="nav-brand">${logoMark(24,'currentColor')}<span>LIBRE</span><button type="button" class="nav-col nav-x" data-a="navMini" aria-label="${esc(navMini?t('Déplier le menu'):t('Replier le menu'))}" aria-pressed="${navMini}">${ic(navMini?'right':'left','sm')}</button></div>
     <button type="button" class="nav-search nav-x" data-a="search" aria-label="${esc(t('Rechercher'))}">${ic('search','sm')}<span>${esc(t('Rechercher…'))}</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform||'')?'⌘':'Ctrl'} K</kbd></button>
     <p class="nav-sec nav-x">${esc(t('Navigation'))}</p>
-    ${tabs.map((x,i)=>(i===2?`<button type="button" class="nav-help" data-a="sos" aria-label="${esc(t('Aide immédiate : une envie, un moment difficile'))}"><i>${logoMark(26,'#fff')}</i><span>${esc(t('Aide'))}</span></button>`:'')+`<a href="#${x[0]}" ${c===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}
+    <div class="lg-tabs"><span class="lg-ind" aria-hidden="true"></span>${tabs.map(x=>`<a href="#${x[0]}" ${c===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}</div>
+    <button type="button" class="nav-help" data-a="sos" aria-label="${esc(t('Aide immédiate : une envie, un moment difficile'))}"><i>${logoMark(26,'#fff')}</i><span>${esc(t('Aide'))}</span></button>
     ${X.map(x=>`<a class="nav-x" href="#${x[0]}" ${ui.view===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}
     ${A0.length?`<p class="nav-sec nav-x">${esc(t('Mes suivis'))}</p>${A0.map(h=>`<button type="button" class="nav-hab nav-x" data-a="navHabit" data-id="${h.id}" style="${hcVars(h)}" title="${esc(hName(h))}"><span class="hc-dot" aria-hidden="true"></span><span class="grow">${esc(hName(h))}</span><small class="num">${RED(h)?esc(nf(qtyIn(h,addDays(sod(now()),-6),addDays(sod(now()),1)))):esc(nf(Math.floor((now()-curStart(h))/DAY),0)+' '+t('j'))}</small></button>`).join('')}`:''}
     ${S.profile?`<a class="nav-user nav-x" href="#profil"><span class="nav-av">${esc(((p.name||'?').trim()[0]||'?').toLocaleUpperCase(LOCALE))}</span><span class="grow"><b>${esc(p.name||'')}</b><small>${esc(t('Niveau {n}',{n:nf(L.n+1,0)}))} · ${esc(t(L.name))}</small></span></a>`:''}
@@ -7251,7 +7349,7 @@ const PLAN_SUG7={emotions:[N_('Stress'),N_('Tristesse'),N_('Colère'),N_('Solitu
  relapse:[N_('Me rappeler qu’une reprise n’efface pas ce que j’ai fait'),N_('Noter ce qui s’est passé dans mon journal, sans me juger'),N_('Appeler une personne de confiance'),N_('Reprendre mon plan dès le lendemain'),N_('En parler à un professionnel si cela se répète')]};
 
 const A_V7={
-  navMini:()=>{S.prefs.navMini=!S.prefs.navMini;save();ensureChrome()},
+  navMini:()=>{S.prefs.navMini=!S.prefs.navMini;save();ensureChrome();LG_POS=null;setTimeout(()=>lgPlace(false),320)},
   navHabit:el=>{ui.homeHabit=el.dataset.id;S.prefs.activeHabit=el.dataset.id;save();if(ui.view!=='accueil')location.hash='accueil';else render()},
   progStart:()=>{S.prog={start:sod(now()),done:{},note:{},past:[]};save();render();toast(t('Programme commencé'),t('Jour 1 : tes motivations.'))},
   progDay:el=>progSheet(+el.dataset.d),

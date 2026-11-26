@@ -15,3 +15,17 @@ dépoli, tableau de bord à sections). Toutes les fonctions, données et sauvega
 - Écran large (≥ 1180 px) : humeur et motivation côte à côte.
 
 Tests : suite complète + 2 tests « Interface » (ordinateur et téléphone). Contrastes AA et zones tactiles vérifiés.
+
+## Barre en verre liquide (façon Apple)
+
+| | Téléphone | Ordinateur |
+|---|---|---|
+| Forme | Capsule flottante (4 onglets) + bouton rond séparé pour l'Aide, comme le bouton de recherche d'iOS 26 | Panneau de verre flottant à gauche (recherche ⌘K, navigation, mes suivis, Aide, profil), repliable |
+| Matière | Très translucide : flou 16–22 px et saturation de ce qui passe dessous, liseré lumineux plus vif en haut à gauche et en bas à droite, reflet doux, ombre légère | Idem |
+| Onglet actif | Goutte de verre qui glisse vers le nouvel onglet en s'étirant (rebond), sans animation si « réduire les animations » est activé | Goutte verticale |
+| Défilement | La barre se réduit aux icônes quand on descend, revient quand on remonte | — |
+| Accessibilité | Teinte assez dense pour garder le texte lisible sur n'importe quel contenu ; « Réduire la transparence » rend la matière opaque | Idem |
+
+La vraie réfraction (déformation de l'image sous le verre) n'est pas reproduite : elle n'est possible sur le web que dans
+certains navigateurs (filtres SVG sur `backdrop-filter`) et dégraderait la lisibilité et les performances sur iPhone.
+L'effet est obtenu par le flou, la saturation, le liseré spéculaire et le reflet, qui fonctionnent partout.
