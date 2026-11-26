@@ -433,8 +433,8 @@ test('Apparence', 'Couleurs d’accent : contraste des boutons ≥ 4,5:1 en clai
 test('Apparence', 'Réglage : changer la couleur et activer les effets (verre), conservé après rechargement', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
   assert.ok(!(await p.evaluate(() => document.documentElement.classList.contains('fx'))), 'Horizon (sans effets) par défaut');
-  await p.go('profil'); await p.closeLayer(); await p.openFold('p-look'); await p.click('[data-a="setAccent"][data-v="indigo"]');
-  await p.click('label.switch:has([data-a="fxToggle"])'); await p.waitForTimeout(200);
+  await p.go('profil'); await p.closeLayer(); await p.openFold('p-look');
+  await p.click('label.switch:has([data-a="fxToggle"])'); await p.waitForTimeout(300); await p.openFold('p-look'); await p.click('[data-a="setAccent"][data-v="indigo"]'); await p.waitForTimeout(200);
   await p.reload(); await p.waitForSelector('#app[data-view]');
   const r = await p.evaluate(() => [document.documentElement.dataset.accent, document.documentElement.classList.contains('fx'), getComputedStyle(document.getElementById('amb')).display]);
   assert.deepEqual(r.slice(0, 2), ['indigo', true], JSON.stringify(r)); const pr = (await p.state()).prefs; assert.equal(pr.accent, 'indigo'); assert.equal(pr.look, 'verre'); noErr(p);
@@ -898,10 +898,10 @@ test('Parcours 11', 'Notifications refusées dans le téléphone : rien n’est 
   noErr(p);
 });
 
-test('Apparence', 'Identité « Souffle » par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
+test('Apparence', 'Identité « Envol » par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
   const st = profileState({}); st.prefs.fx = true;
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
-  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Souffle par défaut');
+  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Envol par défaut');
   await p.go('profil'); await p.openFold('p-look'); await p.evaluate(() => document.querySelector('input[data-a="fxToggle"]').click()); await p.waitForTimeout(200);
   assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), true, 'verre activé à la demande');
   assert.equal((await stateOf(p)).prefs.look, 'verre');
@@ -910,11 +910,47 @@ test('Apparence', 'Identité « Souffle » par défaut, y compris pour les profi
   noErr(p);
 });
 
+/* ---------- Couleur de chaque addiction ---------- */
+test('Apparence', 'Couleur par addiction : un suivi, plusieurs suivis, changement de sélection mémorisé, vues mélangées en couleur commune', async (b, base) => {
+  const brand = p => p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim().toUpperCase());
+  const one = await page(b, base, { init: seed(profileState({ types: ['alcool'] })) }); await one.goto(base); await one.settle();
+  assert.equal(await brand(one), '#B0521F', 'alcool : ambre'); assert.equal(await one.evaluate(() => document.documentElement.dataset.htheme), 'alcool');
+  const bg = await one.evaluate(() => getComputedStyle(document.querySelector('.hm-sos .hm-sos-ic, .btn.primary') || document.body).backgroundColor); assert.ok(bg);
+  noErr(one); await one.ctx.close();
+  const st = profileState({ types: ['cigarette', 'alcool', 'jeux_argent'] });
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
+  assert.equal(await brand(p), '#2E7D62', 'cigarettes : vert sauge');
+  const dots = await p.evaluate(() => [...document.querySelectorAll('[data-a="homeHabit"]')].map(x => getComputedStyle(x).getPropertyValue('--hc').trim().toUpperCase()));
+  assert.deepEqual(dots, ['#2E7D62', '#B0521F', '#245BB0'], 'chaque suivi garde sa couleur');
+  await p.click('[data-a="homeHabit"] >> nth=2'); await p.waitForTimeout(200); assert.equal(await brand(p), '#245BB0', 'jeux d’argent : bleu profond');
+  assert.equal((await stateOf(p)).prefs.activeHabit, 'h2');
+  await p.reload(); await p.waitForSelector('#app[data-view]'); await p.waitForTimeout(300); assert.equal(await brand(p), '#245BB0', 'mémorisé après réouverture');
+  await p.go('stats'); assert.equal(await p.evaluate(() => document.documentElement.dataset.htheme || ''), '', 'statistiques « Tout » : couleur commune');
+  await p.click('[data-a="filter"][data-k="h1"]'); await p.waitForTimeout(150); assert.equal(await brand(p), '#B0521F', 'statistiques filtrées : couleur du suivi');
+  await p.go('habitudes'); const cards = await p.evaluate(() => [...document.querySelectorAll('.hc-card')].map(c => getComputedStyle(c).getPropertyValue('--hc').trim().toUpperCase()));
+  assert.deepEqual(cards, ['#2E7D62', '#B0521F', '#245BB0']);
+  noErr(p);
+});
+
+test('Apparence', 'Couleur par addiction : personnalisée, conservée après réouverture, désactivable ; contrastes AA de toutes les palettes (clair et sombre)', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle();
+  await p.go('profil'); await p.closeLayer(); await p.openFold('p-look'); await p.click('[data-a="setHcol"][data-h="h0"][data-v="ecrans"]'); await p.waitForTimeout(200);
+  await p.reload(); await p.waitForSelector('#app[data-view]'); await p.waitForTimeout(300);
+  assert.equal(await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim().toUpperCase()), '#0F7480');
+  await p.go('profil'); await p.openFold('p-look'); await p.click('label.switch:has([data-a="habitThemeToggle"])'); await p.waitForTimeout(200);
+  assert.equal(await p.evaluate(() => document.documentElement.dataset.htheme || ''), '', 'désactivé : couleur commune de LIBRE');
+  const bad = await p.evaluate(() => { const L = h => { const c = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).map(v => v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; };
+    const R = (a, b) => { const x = L(a), y = L(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }; const out = [];
+    for (const [k, P] of Object.entries(window.LIBRE_PALETTES)) { [[R('#FFFFFF', P[1]), 'blanc sur bouton'], [R(P[2], '#FFFFFF'), 'texte sur carte'], [R(P[2], '#F4F3F9'), 'texte sur fond'], [R(P[2], P[3]), 'texte sur nuance douce'], [R('#FFFFFF', P[4]), 'blanc sur dégradé foncé'], [R('#FFFFFF', P[5]), 'blanc sur dégradé moyen'], [R('#FFFFFF', P[6]), 'blanc sur dégradé clair'], [R('#0C0B1C', P[7]), 'sombre : texte sur bouton'], [R(P[7], '#171630'), 'sombre : texte sur carte'], [R(P[7], P[8]), 'sombre : texte sur nuance']].forEach(([r, n]) => { if (r < 4.5) out.push(`${k} ${n} ${r.toFixed(2)}`); }); }
+    return out; });
+  assert.deepEqual(bad, []); noErr(p);
+});
+
 /* ---------- Refonte « Envol » : aide triée par besoin, moment à risque, ressources ---------- */
 test('Aide', 'Triage : « De quoi as-tu besoin ? » propose 4 besoins ; chacun mène au bon outil (aide guidée, respiration, proche, urgences)', async (b, base) => {
   const st = profileState({ types: ['cigarette'] }); st.contacts = [{ name: 'Sam', phone: '0790000000' }];
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
-  const open = async () => { await p.closeLayer(); await p.click('.pg-head .top-help'); await p.waitForTimeout(300); };
+  const open = async () => { await p.closeLayer(); await p.click('nav .nav-help'); await p.waitForTimeout(300); };
   await open(); assert.match(await p.textContent('#layer'), /De quoi as-tu besoin/); assert.equal(await p.locator('.qs-t').count(), 4);
   assert.equal(await p.getAttribute('.qs-t.qs-call', 'href'), 'tel:0790000000');
   await p.click('.qs-t-main'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Qu’est-ce que tu ressens/);
@@ -964,13 +1000,13 @@ test('Soutien', 'Fiche interactive : gestes cochés, « Ça t’a aidé ? » enr
 });
 
 /* ---------- Refonte « Clairière » : navigation, journal guidé, lecture des données, bibliothèque par thèmes ---------- */
-test('Navigation', 'Barre Aujourd’hui · Soutien · Parcours (statistiques d’abord) · Journal ; bouton « Aide » dans l’en-tête de chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
+test('Navigation', 'Barre Aujourd’hui · Soutien · [Aide] · Parcours (statistiques d’abord) · Journal ; l’aide immédiate au centre de la barre sur chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'], name: 'Lou' })) }); await p.goto(base); await p.settle();
   for (const v of ['accueil', 'habitudes', 'stats', 'outils', 'journal']) {
     await p.go(v); await p.closeLayer();
     const nav = await p.evaluate(() => [...document.querySelectorAll('nav .in > a')].map(x => x.getAttribute('href')).join('|'));
     assert.match(nav, /#accueil\|#outils\|#stats\|#journal/, v + ' : ' + nav);
-    await p.click('.pg-head .top-help'); await p.waitForTimeout(300);
+    await p.click('nav .nav-help'); await p.waitForTimeout(300);
     assert.match(await p.textContent('#layer'), /Une envie forte/, v + ' : le bouton Aide ouvre l’aide immédiate'); await p.closeLayer();
   }
   assert.equal((await p.textContent('.avatar-btn')).trim(), 'L');

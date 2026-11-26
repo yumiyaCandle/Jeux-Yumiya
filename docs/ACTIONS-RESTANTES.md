@@ -27,8 +27,8 @@ Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente auc
 
 ## 2 bis. Signature et fichiers Android
 
-- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-SOUFFLE-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `015418f0eacbf2bccf02a8742cbdd45129e82cc0fa99d86db7a504581d747d3e`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+- `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-COMPLET.zip`, qui ne contient que le projet).
+  Empreinte SHA-256 : `ca19be4052a2d5bc7f820f7441f9d7bab210d666e884ec39886af15ad03af37c`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
@@ -85,6 +85,11 @@ pays de distribution : `RESSOURCES-AIDE.md` (46 confirmés par une source offici
 - Rouvrir des langues après traduction (`LANGUES.md`).
 - Garder ou non le support iPad (captures iPad à fournir si gardé).
 - Pays de distribution (les numéros d'aide affichés en dépendent).
+
+## 15. Envol + couleur par addiction
+
+- Vérifier sur iPhone et Android le rendu des dégradés par addiction et le fondu lors du changement de suivi.
+- Logo Envol à inclure dans la recherche de marque (le logo « Souffle » est abandonné).
 
 ## 14. Après la refonte « Souffle »
 

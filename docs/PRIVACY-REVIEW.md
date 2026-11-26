@@ -83,3 +83,8 @@ Nouvelle donnée facultative `tools.sitLog` : quelle fiche d'accompagnement a é
 Sur l'appareil seulement, chiffrée dans les apps, incluse dans l'export, effacée par « Tout effacer », limitée aux 200 dernières
 entrées. Sert uniquement à « Ce qui t'aide », désactivable (« Conseils personnalisés »). Politique de confidentialité mise à jour
 (fr, en). Déclarations des stores inchangées (aucune collecte).
+
+## 10. Couleur par addiction
+
+Trois préférences d'affichage : couleurs activées ou non, palette choisie par suivi, dernier suivi sélectionné. Sur l'appareil,
+chiffrées dans les apps, incluses dans l'export. Aucune donnée de santé nouvelle.

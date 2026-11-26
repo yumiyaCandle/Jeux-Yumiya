@@ -338,3 +338,17 @@ Bloc CSS « SOUFFLE » à la fin de `libre/index.html`. Palette, rôles et justi
 | Aide immédiate | Plein écran sauge très clair ; besoins sur surfaces blanches ; principal en sauge plein |
 | Message de confirmation | Fond sauge foncé, texte blanc, trait pêche |
 | Humeurs | `#C07A5E`, `#D8AA86`, `#B9B3A6`, `#8DB59F`, `#4C7A66`, toujours avec leur libellé |
+
+## Envol + couleur par addiction (identité par défaut, 26 novembre 2026)
+
+Le design system Envol (section plus haut) redevient le style par défaut. Les couleurs de marque y deviennent des variables posées
+par `applyHabitTheme()` à partir de la palette du suivi consulté (`HPAL` dans `libre/index.html`) :
+
+| Variable | Rôle | Commun (indigo LIBRE) |
+|---|---|---|
+| `--accent`, `--accent-strong`, `--accent-soft`, `--accent-ink` | Action, texte coloré, nuance douce, texte sur action | `#4B3FD8`, `#3A2FBF`, `#E9E6FF`, blanc |
+| `--g1`, `--g2`, `--g3` | Dégradé des bandeaux, du compteur, de « J'ai une envie », du bouton Aide, de l'aide immédiate | `#1E1A55`, `#33299A`, `#4A3BB8` |
+| `--tone-*` | Bandeaux d'en-tête (toutes sections) | Teintes Envol par section |
+| `--hc`, `--hcd` (sur un élément) | Couleur d'un suivi précis dans une vue qui en montre plusieurs (pastille, liseré) | — |
+
+Palettes, règles d'attribution et contrastes : `REFONTE-COULEURS.md`.

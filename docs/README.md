@@ -2,7 +2,8 @@
 
 | Document | Contenu |
 |---|---|
-| [REFONTE-SOUFFLE.md](REFONTE-SOUFFLE.md) | **Refonte « Souffle »** (dernière) : palette sauge, ivoire, bleu-vert et pêche avec la fonction de chaque couleur, accueil centré sur la personne, « Parcours », « Mon kit », aide immédiate apaisée ; comparaisons (`ux/souffle/`), tests |
+| [REFONTE-COULEURS.md](REFONTE-COULEURS.md) | **Style Envol + couleur par addiction** (actuel) : 10 palettes, ce qui change et ce qui reste commun, plusieurs suivis, personnalisation, contrastes, tests ; illustrations (`ux/couleurs/`) |
+| [REFONTE-SOUFFLE.md](REFONTE-SOUFFLE.md) | **Refonte « Souffle »** (remplacée) : palette sauge, ivoire, bleu-vert et pêche avec la fonction de chaque couleur, accueil centré sur la personne, « Parcours », « Mon kit », aide immédiate apaisée ; comparaisons (`ux/souffle/`), tests |
 | [REFONTE-ENCRE.md](REFONTE-ENCRE.md) | **Refonte « Encre »** : direction éditoriale papier/encre/safran, navigation à 4 onglets, centre de soutien avec 7 accompagnements par situation, éléments remplacés et pourquoi, tests ; comparaisons (`ux/encre/`) |
 | [REFONTE-ENVOL.md](REFONTE-ENVOL.md) | **Reconstruction « Envol »** : nouvelle identité, nouvelle organisation des pages et de la navigation, aide triée par besoin, moment à risque ; comparaisons sur trois colonnes (`ux/envol/`), tests, limites |
 | [REFONTE-CLAIRIERE.md](REFONTE-CLAIRIERE.md) | **Refonte « Clairière »** : nouvelle identité, navigation, bienvenue, journal, statistiques, bibliothèque ; avant/après (`ux/clairiere/`), tests, limites |
