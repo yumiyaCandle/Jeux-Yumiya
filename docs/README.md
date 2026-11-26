@@ -2,7 +2,8 @@
 
 | Document | Contenu |
 |---|---|
-| [LIBRE-11.md](LIBRE-11.md) | **Interface actuelle « Allégée »** : 4 onglets (Aujourd’hui, Mon plan, Progrès, Journal) et Aide ; accueil en 4 éléments ; Jour J ; retarder l’envie de 10 min ; fonctions retirées de l’affichage (données gardées) ; méthode unslop |
+| [LIBRE-12.md](LIBRE-12.md) | **Jour et nuit** : thème au choix ou selon l’heure (7 h – 20 h), rappels du Jour J, signaux d’alerte, objectif d’épargne, revue web-design-guidelines |
+| [LIBRE-11.md](LIBRE-11.md) | **Interface « Allégée »** : 4 onglets (Aujourd’hui, Mon plan, Progrès, Journal) et Aide ; accueil en 4 éléments ; Jour J ; retarder l’envie de 10 min ; fonctions retirées de l’affichage (données gardées) ; méthode unslop |
 | [LIBRE-9.md](LIBRE-9.md) | **Tableau de bord** : analyse de la vidéo d'inspiration et transposition (vue d'ensemble, stratégies en colonnes, déclencheurs, économies et relevé) |
 | [LIBRE-8.md](LIBRE-8.md) | **Interface « Verre » (remplacée par LIBRE 11)** : barre latérale en verre, héros de la semaine, carte du jour, tuiles avec variation, graphiques ; inspirations |
 | [LIBRE-7.md](LIBRE-7.md) | **Version actuelle « Nuit & Sauge »** : identité bleu nuit/sauge/crème, accueil en sections, Mon coach, programme de 30 jours, récompenses, motivations, comprendre mon addiction, mon évolution, plan de prévention ; données, sécurité, tests |

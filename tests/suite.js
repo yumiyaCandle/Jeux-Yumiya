@@ -1410,4 +1410,45 @@ test('LIBRE 11', 'Aide : quatre choix (envie, retarder, respirer, appeler) et «
   noErr(p);
 });
 
+/* ---------- LIBRE 12 : thème, Jour J, signaux d'alerte, objectif d'épargne ---------- */
+test('LIBRE 12', 'Thème : jour, nuit, ou selon l’heure (plage modifiable) ; choix gardé après rechargement', async (b, base) => {
+  const h = new Date().getHours(), st = profileState(); st.prefs.theme = 'heure'; st.prefs.dayFrom = h; st.prefs.dayTo = Math.min(24, h + 1);
+  const p = await page(b, base, { init: seed(st), colorScheme: 'dark' }); await p.goto(base); await p.settle();
+  assert.equal(await p.evaluate(() => document.documentElement.dataset.theme), 'light', 'heure comprise dans la plage de jour : thème clair');
+  await p.go('profil'); await p.openFold('p-look'); await p.click('[data-a="setTheme"][data-v="dark"]'); await p.waitForTimeout(200);
+  assert.equal(await p.evaluate(() => document.documentElement.dataset.theme), 'dark');
+  await p.reload(); await p.settle(); assert.equal((await p.state()).prefs.theme, 'dark'); assert.equal(await p.evaluate(() => document.documentElement.dataset.theme), 'dark');
+  await p.go('profil'); await p.openFold('p-look'); await p.click('[data-a="setTheme"][data-v=""]'); await p.waitForTimeout(200);
+  assert.equal(await p.evaluate(() => document.documentElement.dataset.theme || ''), '', 'retour au thème du téléphone');
+  noErr(p);
+});
+
+test('LIBRE 12', 'Jour J demain : rappel sur l’accueil avec les étapes restantes', async (b, base) => {
+  const d = new Date(Date.now() + 864e5), iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const st = profileState(); st.plan = { quit: { date: iso, prep: [true] } };
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
+  const txt = await p.textContent('.h11 .qb'); assert.match(txt, /Demain, c’est ton Jour J/); assert.match(txt, /2 étapes à préparer/);
+  noErr(p);
+});
+
+test('LIBRE 12', 'Signaux d’alerte : choisis et ajoutés dans Mon plan, rappelés dans l’Aide', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle(); await p.go('outils');
+  await p.click('[data-a="signsSheet"]'); await p.click('#layer [data-a="signToggle"][data-v="Je dors mal"]'); await p.waitForTimeout(150);
+  await p.fill('#signIn', 'Je pense au bar en rentrant'); await p.click('[data-a="signAdd"]'); await p.waitForTimeout(150);
+  assert.deepEqual((await p.state()).plan.signs, ['Je dors mal', 'Je pense au bar en rentrant']);
+  await p.closeLayer(); await p.click('nav .nav-help'); await p.waitForSelector('#layer .qs-signs');
+  assert.match(await p.textContent('#layer .qs-signs'), /Je dors mal · Je pense au bar en rentrant/);
+  noErr(p);
+});
+
+test('LIBRE 12', 'Objectif d’épargne : progression calculée sur les vraies économies, modifiable et supprimable', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ days: 20 })) }); await p.goto(base); await p.settle(); await p.go('progres');
+  await p.click('[data-a="saveGoal"]'); await p.fill('#sgName', 'Un week-end'); await p.fill('#sgAmt', '50'); await p.click('[data-a="saveGoalSave"]'); await p.waitForTimeout(200);
+  assert.deepEqual((await p.state()).plan.goalSave, { name: 'Un week-end', amount: 50 });
+  const txt = await p.textContent('.sg'); assert.match(txt, /Un week-end/); assert.match(txt, /Objectif atteint/, '20 jours à 30 par semaine (environ 86) dépassent 50');
+  assert.equal(await p.getAttribute('.sg-bar', 'aria-valuenow'), '100');
+  await p.click('.sg [data-a="saveGoal"]'); await p.click('[data-a="saveGoalDel"]'); await p.waitForTimeout(150);
+  assert.equal((await p.state()).plan.goalSave, undefined); noErr(p);
+});
+
 module.exports = { T };
