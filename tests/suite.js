@@ -1394,4 +1394,46 @@ test('Interface', 'Téléphone : la barre du bas garde 4 onglets et l’Aide ; l
   assert.equal(vis, 5); noErr(p);
 });
 
+/* ---------- LIBRE 9 « Tableau de bord » ---------- */
+test('Tableau de bord', 'Vue d’ensemble : chiffres clés justes, période 3/6/12 mois, bulle au toucher, moments marquants qui ouvrent une fiche', async (b, base) => {
+  const st = v7State(); st.unlocked = { 'h0:3': Date.now() - 2 * D_ };
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('apercu');
+  assert.equal(await p.locator('.pills a').count(), 10); assert.equal(await p.getAttribute('.pills a[aria-current="page"]', 'href'), '#apercu');
+  assert.match(await p.textContent('.kps'), /jours sans consommation ce mois-ci/);
+  await p.click('[data-a="ovRange"][data-v="26"]'); assert.equal(await p.getAttribute('[data-a="ovRange"][data-v="26"]', 'aria-pressed'), 'true');
+  const box = await p.locator('.ac svg').boundingBox(); await p.mouse.move(box.x + box.width * 0.9, box.y + box.height / 2); await p.waitForTimeout(150);
+  assert.ok(await p.isVisible('.ac-bub'), 'bulle visible'); assert.match(await p.textContent('.ac-bub'), /cigarette/);
+  assert.ok(await p.locator('.mt').count() >= 3); await p.click('.mt-terra'); await p.waitForSelector('#layer .ih'); assert.match(await p.textContent('#layer'), /Stress/); noErr(p);
+});
+test('Tableau de bord', 'Stratégies (ordinateur) : ajouter, idée en un toucher, essayer, avancer d’étape (et glisser-déposer), « Ça m’aide » rejoint le plan', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()), viewport: { width: 1280, height: 900 } }); await p.goto(base); await p.settle(); await p.go('strategies');
+  await p.fill('#bdNew', 'Boire un thé après le repas'); await p.click('[data-a="bdAdd"]'); await p.waitForTimeout(100);
+  await p.click('[data-a="bdSug"][data-tool="breath"]'); await p.waitForTimeout(100);
+  let B = (await p.state()).board.cards; assert.equal(B.length, 2); assert.ok(B.every(c => c.stage === 'try'));
+  const id = B[0].id; await p.click(`[data-a="bdOpen"][data-id="${id}"]`); await p.click('[data-a="bdTry"]'); await p.waitForTimeout(100);
+  B = (await p.state()).board.cards; assert.equal(B[0].tries, 1); assert.equal(B[0].stage, 'test', 'un essai fait passer en test');
+  await p.click(`#layer [data-a="bdMove"][data-v="works"]`); await p.waitForTimeout(150);
+  const s = await p.state(); assert.equal(s.board.cards[0].stage, 'works'); assert.ok(s.plan.strategies.includes('Boire un thé après le repas'), 'ajoutée au plan');
+  await p.locator(`[data-a="bdOpen"][data-id="${s.board.cards[1].id}"]`).dragTo(p.locator('.bd-col[data-stage="no"]')); await p.waitForTimeout(200);
+  assert.equal((await p.state()).board.cards[1].stage, 'no', 'glisser-déposer'); noErr(p);
+});
+test('Tableau de bord', 'Déclencheurs : annuaire calculé (fréquence, intensité, part traversée) et fiche avec historique, plan « si… alors… » prérempli', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('declencheurs');
+  const first = await p.textContent('.tg >> nth=0'); assert.match(first, /Stress/); assert.match(first, /3 fois en 30 jours/); assert.match(first, /Intensité 7,5\/10/); assert.match(first, /50 % traversées/);
+  await p.click('.tg >> nth=0'); await p.waitForSelector('#layer .ih-t'); assert.equal(await p.locator('#layer .ih-t').count(), 3);
+  await p.click('[data-a="trigPlan"]'); await p.waitForTimeout(300); assert.ok(await p.$('#layer'), 'outil de plan ouvert'); noErr(p);
+});
+test('Tableau de bord', 'Économies : total, mois, courbe, dépenses, relevé du mois avec tampon et choix du mois ; rien n’est envoyé', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('economies');
+  assert.match(await p.textContent('.kps'), /économisés au total/); assert.ok(await p.$('.ac svg'));
+  await p.click('[data-a="releve"]'); await p.waitForSelector('#layer .rl'); assert.match(await p.textContent('#layer .rl'), /Total économisé/); assert.ok(await p.$('#layer .rl-stamp'));
+  await p.click('[data-a="releveM"][data-v="1"]'); await p.waitForTimeout(150); assert.equal(await p.getAttribute('[data-a="releveM"][data-v="1"]', 'aria-pressed'), 'true');
+  assert.deepEqual(p.external, []); noErr(p);
+});
+test('Données', 'Tableau des stratégies abîmé dans une sauvegarde : ignoré sans erreur', async (b, base) => {
+  const st = profileState(); st.board = { cards: [{ id: 'x', t: 'ok', stage: 'try' }, { id: 1, t: 'bad', stage: 'zzz' }, 'nope'] };
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('strategies');
+  assert.equal((await p.state()).board.cards.length, 1); noErr(p);
+});
+
 module.exports = { T };
