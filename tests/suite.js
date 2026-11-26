@@ -818,6 +818,28 @@ test('Parcours 1', 'Découverte : objectif « mieux comprendre », difficultés 
   noErr(p);
 });
 
+test('Inscription', 'Jeux d’argent (100 par mois) et pornographie (0) : économies justes au plan, raisons adaptées aux addictions choisies', async (b, base) => {
+  const p = await page(b, base); await p.goto(base); await p.click('[data-a="obNext"]').catch(() => {}); let reasons = '', ready = '';
+  for (let n = 0; n < 120; n++) {
+    await p.waitForTimeout(150);
+    const txt = await p.evaluate(() => document.body.innerText);
+    if (/Ton plan est prêt/.test(txt)) { ready = await p.textContent('.q'); break; }
+    if (/Pourquoi tu fais ça/.test(txt)) { reasons = await p.textContent('.q'); await p.click('[data-a="obReason"] >> nth=0').catch(() => {}); await p.waitForTimeout(150); await p.click('#obCta:not([disabled])').catch(() => {}); continue; }
+    if (await p.$('[data-a="obToggleType"]')) { for (const k of ['jeux_argent', 'porno']) { const sel = `[data-a="obToggleType"][data-k="${k}"]`; if (await p.getAttribute(sel, 'aria-pressed') !== 'true') { await p.click(sel); await p.waitForTimeout(120); } } }
+    if (await p.$('[data-a="obPick"][data-p="h.jeux_argent.qtyPer"][data-v="mois"][aria-pressed="false"]')) { await p.click('[data-a="obPick"][data-p="h.jeux_argent.qtyPer"][data-v="mois"]'); continue; }
+    for (const i of await p.$$('input[data-ob]')) { const k = await i.getAttribute('data-ob'), ty = await i.getAttribute('type'), v = await i.inputValue(); if (!(await i.isVisible()) || (v && !(k === 'h.jeux_argent.qty' && v !== '100'))) continue;
+      await i.fill(k === 'name' ? 'Joé' : ty === 'datetime-local' ? '2026-11-10T20:00' : k === 'h.jeux_argent.qty' ? '100' : k === 'h.porno.budget' ? '0' : '3').catch(() => {}); }
+    if (/quel est ton objectif/i.test(txt) && !(await p.$('[data-a="obPick"][data-p*="goal"][aria-pressed="true"]'))) { await p.click('[data-a="obPick"][data-p*="goal"][data-v="arreter"]').catch(() => {}); await p.waitForTimeout(450); continue; }
+    let clk = 0; for (const a of ['obSince', 'obLast']) { if ((await p.$$(`[data-a="${a}"]`)).length && !(await p.$(`[data-a="${a}"][aria-pressed="true"]`))) { await p.click(`[data-a="${a}"] >> nth=0`).catch(() => {}); clk = 1; } } if (clk) { await p.waitForTimeout(450); continue; }
+    await p.click('#obCta:not([disabled])', { timeout: 500 }).catch(() => {});
+  }
+  assert.match(ready, /Par mois\s*100\b/, 'économies par mois = 100 : ' + ready.replace(/\s+/g, ' ').slice(0, 600));
+  assert.match(ready, /Par an\s*1\D?199\b/, 'économies par an ≈ 1199');
+  assert.match(reasons, /Rembourser mes dettes/); assert.match(reasons, /Mon estime de moi/);
+  assert.doesNotMatch(reasons, /Mieux respirer|Faire du sport|Mon apparence/, 'pas de raisons liées au tabac');
+  noErr(p);
+});
+
 test('Suivi', 'Réduction : le bloc principal montre la moyenne sur 7 jours et ce qui reste, jamais un compteur « jours sans »', async (b, base) => {
   const D = 864e5, st = profileState({ types: ['alcool'], days: 20 }); Object.assign(st.habits[0], { goal: 'diminuer', limit: 2, limitPer: 'jour', qty: 4 });
   st.logs = [{ id: 'a', habitId: 'h0', type: 'alcool', ts: Date.now() - 60e3, qty: 1 }, { id: 'b', habitId: 'h0', type: 'alcool', ts: Date.now() - 2 * D, qty: 3 }];
