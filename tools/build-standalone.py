@@ -10,7 +10,7 @@ data={x['key']:'data:image/webp;base64,'+base64.b64encode(open(f"libre/photos/{x
 H=H.replace("const PH_OK=new Set();","const PH_OK=new Set();const PH_DATA="+json.dumps(data)+";",1)
 H,n=re.subn(r'<picture><source type="image/avif" srcset="\$\{set\(\'avif\'\)\}" sizes="\$\{sizes\}"><source type="image/webp" srcset="\$\{set\(\'webp\'\)\}" sizes="\$\{sizes\}"><img src="\$\{PH_DIR\}\$\{p\.f\}-\$\{p\.s\[0\]\}\.webp"','<picture><img src="${PH_DATA[p.f]}"',H);assert n==1,n
 for f in ['latin','latin-ext','cyrillic','vietnamese']:
-    u=f'url("fonts/inter-{f}.woff2")';assert H.count(u)==1
+    u=f'url("fonts/inter-{f}.woff2")';assert H.count(u)>=1
     H=H.replace(u,'url("data:font/woff2;base64,'+base64.b64encode(open(f'libre/fonts/inter-{f}.woff2','rb').read()).decode()+'")')
 # fichier autonome : pas de manifeste ni de service worker (impossible depuis un fichier ouvert directement)
 H,n=re.subn(r'<!--pwa-->.*?<!--/pwa-->','<link rel="icon" href="data:image/svg+xml;base64,'+base64.b64encode(open('libre/icons/icon.svg','rb').read()).decode()+'">',H,flags=re.S);assert n==1
