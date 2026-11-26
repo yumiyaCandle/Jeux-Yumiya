@@ -34,10 +34,11 @@ a{color:var(--accent)}
 
 <article id="fr" lang="fr">
 <h1>Politique de confidentialité de LIBRE</h1>
-<p class="muted">Version du 21 novembre 2026. S’applique à l’application LIBRE pour iPhone et Android, et à la version web.</p>
+<p class="muted">Version du 26 novembre 2026. S’applique à l’application LIBRE pour iPhone et Android, et à la version web.</p>
 
-<div class="box"><b>En bref.</b> LIBRE n’a ni serveur, ni compte, ni publicité, ni outil de mesure d’audience.
-Tout ce que tu enregistres reste sur ton appareil. Personne, pas même l’éditeur de LIBRE, n’y a accès.</div>
+<div class="box"><b>En bref.</b> LIBRE te demande de créer un compte (e-mail ou numéro de téléphone) pour retrouver tes données sur un autre appareil.
+Tes données de suivi sont <b>chiffrées sur ton appareil avant tout envoi</b> : le serveur n’en garde qu’une copie illisible, que ni l’éditeur ni l’hébergeur ne peuvent lire.
+Aucune vente de données, aucune publicité, aucun outil de mesure d’audience. Tu peux exporter et supprimer ton compte et tes données à tout moment.</div>
 
 <h2>1. Qui est responsable ?</h2>
 <p>Éditeur : <b>[NOM OU SOCIÉTÉ À COMPLÉTER]</b>, [ADRESSE À COMPLÉTER].
@@ -64,8 +65,17 @@ Contact pour toute question sur cette politique : <b>[ADRESSE E-MAIL À COMPLÉT
 </ul>
 <p>Le verrouillage par code cache l’application aux regards ; ce n’est pas un chiffrement.</p>
 
+<h2>3 bis. Ton compte LIBRE</h2>
+<ul>
+<li><b>Ce que le serveur connaît</b> : ton adresse e-mail ou ton numéro de téléphone, une empreinte de ton mot de passe (scrypt, jamais le mot de passe lui-même), ta langue, les dates de création et de dernière connexion, et des jetons de session (seule leur empreinte est enregistrée).</li>
+<li><b>Ce que le serveur ne peut pas lire</b> : tout ton suivi (habitudes, consommations, journal, humeur, contacts, réglages…). Ces données sont chiffrées sur ton appareil (AES-256-GCM) avec une clé aléatoire. Cette clé n’est envoyée qu’enveloppée par ton mot de passe et par ta <b>clé de récupération</b> (PBKDF2-SHA-256, 600 000 itérations). Conséquence : si tu perds à la fois ton mot de passe et ta clé de récupération, personne ne peut récupérer ces données.</li>
+<li><b>Codes de vérification</b> : pour confirmer ton adresse ou ton numéro, un code à 6 chiffres t’est envoyé par e-mail ou par SMS. Il est valable 10 minutes et n’est conservé que sous forme d’empreinte.</li>
+<li><b>Sécurité</b> : connexions chiffrées (HTTPS), comptes séparés (chaque compte n’accède qu’à ses propres données), limitation des tentatives, sessions révoquées en cas de changement de mot de passe. Les journaux techniques ne contiennent ni adresse, ni numéro, ni contenu.</li>
+<li><b>Hébergement</b> : [HÉBERGEUR ET PAYS À COMPLÉTER].</li>
+</ul>
+
 <h2>4. Transmission à des tiers</h2>
-<p>LIBRE ne transmet aucune donnée personnelle, ni à l’éditeur, ni à un serveur, ni à un partenaire. LIBRE ne contient aucun service tiers :
+<p>LIBRE ne vend aucune donnée et n’en transmet aucune à des fins publicitaires. Pour faire fonctionner le compte, deux prestataires reçoivent uniquement le strict nécessaire : le service d’envoi d’e-mails [À COMPLÉTER] (ton adresse et le code) et le service d’envoi de SMS [À COMPLÉTER] (ton numéro et le code). Ils agissent comme sous-traitants. S’ils sont situés hors de Suisse, le transfert se fait avec les garanties prévues par la loi (LPD art. 16 et 17). Tes données de suivi ne leur sont jamais transmises. LIBRE ne contient aucun autre service tiers :
 pas de publicité, pas de mesure d’audience, pas de rapport de plantage, pas de réseau social. La police et les photos sont incluses dans l’application.</p>
 <p>Seules des actions que tu fais toi-même peuvent faire sortir des informations de ton appareil : ouvrir un lien vers une source ou un site d’aide (le site visité reçoit alors ta visite comme n’importe quelle page web),
 appeler un numéro d’aide, ou partager un fichier de sauvegarde ou un bilan.</p>
@@ -85,7 +95,8 @@ Ce fichier t’appartient : tu décides où le ranger. LIBRE ne conserve pas son
 <p>Sur Android, la sauvegarde automatique du système est désactivée pour LIBRE, car le fichier chiffré serait illisible sur un autre appareil. Pour changer de téléphone, exporte une sauvegarde puis restaure-la.</p>
 
 <h2>8. Durée de conservation et suppression</h2>
-<p>Tes données restent sur ton appareil tant que tu ne les supprimes pas. Pour tout effacer : Profil › Tes données › Effacer toutes mes données. Pour te protéger d’une erreur, LIBRE garde alors une <b>copie de sécurité</b> de l’état précédent sur l’appareil ; l’écran d’accueil la propose et permet de la supprimer (« Supprimer cette copie »). Une copie est aussi gardée avant chaque restauration d’une sauvegarde ; tu peux la supprimer depuis Profil › Tes données.</p>
+<p><b>Compte</b> : Profil › Mon compte › « Supprimer définitivement mon compte » supprime immédiatement ton compte, tes sessions et la copie chiffrée de tes données sur le serveur, ainsi que les données de l’appareil. « Se déconnecter » efface les données de l’appareil ; elles restent dans ton compte.</p>
+<p>Sur l’appareil, tes données restent tant que tu ne les supprimes pas. Pour tout effacer de l’appareil : Profil › Sauvegarde et récupération › Effacer toutes mes données. Pour te protéger d’une erreur, LIBRE garde alors une <b>copie de sécurité</b> de l’état précédent sur l’appareil ; l’écran d’accueil la propose et permet de la supprimer (« Supprimer cette copie »). Une copie est aussi gardée avant chaque restauration d’une sauvegarde ; tu peux la supprimer depuis Profil › Tes données.</p>
 <p>Désinstaller l’application supprime ses données du téléphone. Sur iPhone, la clé de chiffrement peut rester dans le trousseau après la désinstallation : seule, elle ne permet de lire aucune donnée. Dans un navigateur, effacer les données du site supprime aussi celles de LIBRE.
 Les fichiers de sauvegarde que tu as exportés ne sont pas supprimés automatiquement : supprime-les toi-même si tu le souhaites.</p>
 
@@ -98,11 +109,11 @@ Les fichiers de sauvegarde que tu as exportés ne sont pas supprimés automatiqu
 <p>LIBRE ne demande ni la localisation, ni les contacts, ni l’appareil photo, ni le micro.</p>
 
 <h2>10. Tes droits</h2>
-<p>Comme l’éditeur ne reçoit aucune donnée, il ne peut ni les consulter, ni les corriger, ni les supprimer à ta place : tu en as le contrôle complet dans l’application (consultation, export, correction, suppression).
-Pour toute question, écris à l’adresse indiquée au point 1. Selon ton pays, tu peux aussi contacter l’autorité de protection des données (en Suisse : PFPDT ; en France : CNIL).</p>
+<p>Selon la loi suisse sur la protection des données (LPD) et, si elle s’applique, le RGPD, tu as le droit d’accéder à tes données, de les faire corriger, de les recevoir dans un format courant et de les faire supprimer. Tu exerces ces droits directement dans l’application : export (Profil › Sauvegarde et récupération), modification de ton e-mail ou numéro (Profil › Mon compte), suppression du compte. Comme tes données de suivi sont chiffrées de bout en bout, l’éditeur ne peut ni les lire, ni les exporter à ta place.
+Pour toute question, écris à l’adresse indiquée au point 1. Tu peux aussi contacter l’autorité de protection des données (en Suisse : PFPDT ; en France : CNIL).</p>
 
 <h2>11. Mineurs</h2>
-<p>LIBRE s’adresse aux adultes. Elle ne collecte aucune donnée et ne vérifie pas l’âge.</p>
+<p>LIBRE s’adresse aux adultes. Elle ne vérifie pas l’âge.</p>
 
 <h2>12. Avertissement santé</h2>
 <p>LIBRE est une application d’accompagnement et d’information. Elle ne pose pas de diagnostic et ne remplace pas un médecin. En cas d’urgence, appelle les secours.</p>
@@ -113,10 +124,11 @@ Pour toute question, écris à l’adresse indiquée au point 1. Selon ton pays,
 
 <article id="en" lang="en" hidden>
 <h1>LIBRE Privacy Policy</h1>
-<p class="muted">Version of 21 November 2026. Applies to the LIBRE app for iPhone and Android, and to the web version.</p>
+<p class="muted">Version of 26 November 2026. Applies to the LIBRE app for iPhone and Android, and to the web version.</p>
 
-<div class="box"><b>In short.</b> LIBRE has no server, no account, no advertising and no analytics.
-Everything you record stays on your device. Nobody, not even LIBRE’s publisher, can access it.</div>
+<div class="box"><b>In short.</b> LIBRE asks you to create an account (email or phone number) so you can find your data on another device.
+Your tracking data is <b>encrypted on your device before anything is sent</b>: the server only keeps an unreadable copy that neither the publisher nor the host can read.
+No data sold, no advertising, no analytics. You can export and delete your account and your data at any time.</div>
 
 <h2>1. Who is responsible?</h2>
 <p>Publisher: <b>[NAME OR COMPANY – TO BE COMPLETED]</b>, [ADDRESS – TO BE COMPLETED].
@@ -143,8 +155,17 @@ Contact for any question about this policy: <b>[E-MAIL ADDRESS – TO BE COMPLET
 </ul>
 <p>The lock code hides the app from view; it is not encryption.</p>
 
+<h2>3a. Your LIBRE account</h2>
+<ul>
+<li><b>What the server knows</b>: your email address or phone number, a hash of your password (scrypt, never the password itself), your language, creation and last sign-in dates, and session tokens (only their hash is stored).</li>
+<li><b>What the server cannot read</b>: all your tracking (habits, uses, journal, mood, contacts, settings…). This data is encrypted on your device (AES-256-GCM) with a random key. That key is only sent wrapped by your password and by your <b>recovery key</b> (PBKDF2-SHA-256, 600,000 iterations). As a result, if you lose both your password and your recovery key, nobody can recover this data.</li>
+<li><b>Verification codes</b>: to confirm your address or number, a 6-digit code is sent by email or SMS. It is valid for 10 minutes and only stored as a hash.</li>
+<li><b>Security</b>: encrypted connections (HTTPS), separate accounts (each account can only access its own data), rate limiting, sessions revoked when the password changes. Technical logs contain no address, number or content.</li>
+<li><b>Hosting</b>: [HOST AND COUNTRY TO BE COMPLETED].</li>
+</ul>
+
 <h2>4. Sharing with third parties</h2>
-<p>LIBRE does not transmit any personal data, to the publisher, to a server or to any partner. LIBRE contains no third-party service:
+<p>LIBRE sells no data and shares none for advertising. To run the account, two providers receive only what is strictly necessary: the email sending service [TO BE COMPLETED] (your address and the code) and the SMS sending service [TO BE COMPLETED] (your number and the code). They act as processors. If they are located outside Switzerland, transfers use the safeguards required by law (FADP art. 16 and 17). Your tracking data is never sent to them. LIBRE contains no other third-party service:
 no advertising, no analytics, no crash reporting, no social network. The font and photos are bundled with the app.</p>
 <p>Information can only leave your device through actions you take yourself: opening a link to a source or help website (that site then receives your visit like any web page),
 calling a helpline, or sharing a backup file or a report.</p>
@@ -164,7 +185,8 @@ The file is yours: you decide where to keep it. LIBRE does not keep its password
 <p>On Android, automatic system backup is turned off for LIBRE, because the encrypted file would be unreadable on another device. To change phones, export a backup and restore it.</p>
 
 <h2>8. Retention and deletion</h2>
-<p>Your data stays on your device until you delete it. To erase everything: Profile › Your data › Erase all my data. To protect you from a mistake, LIBRE then keeps a <b>safety copy</b> of the previous state on the device; the welcome screen offers it and lets you delete it (“Delete this copy”). A copy is also kept before each backup restore; you can delete it from Profile › Your data.</p>
+<p><b>Account</b>: Profile › My account › “Permanently delete my account” immediately deletes your account, your sessions and the encrypted copy of your data on the server, as well as the data on the device. “Sign out” erases the data from the device; it stays in your account.</p>
+<p>On the device, your data stays until you delete it. To erase everything from the device: Profile › Backup and recovery › Erase all my data. To protect you from a mistake, LIBRE then keeps a <b>safety copy</b> of the previous state on the device; the welcome screen offers it and lets you delete it (“Delete this copy”). A copy is also kept before each backup restore; you can delete it from Profile › Your data.</p>
 <p>Uninstalling the app deletes its data from the phone. On iPhone, the encryption key may remain in the Keychain after uninstalling: on its own, it cannot read any data. In a browser, clearing the site’s data also deletes LIBRE’s data.
 Backup files you exported are not deleted automatically: delete them yourself if you wish.</p>
 
@@ -177,11 +199,11 @@ Backup files you exported are not deleted automatically: delete them yourself if
 <p>LIBRE does not ask for location, contacts, camera or microphone.</p>
 
 <h2>10. Your rights</h2>
-<p>Since the publisher receives no data, it cannot view, correct or delete it on your behalf: you have full control in the app (view, export, correct, delete).
-For any question, write to the address in section 1. Depending on your country, you can also contact your data protection authority.</p>
+<p>Under the Swiss Federal Act on Data Protection (FADP) and, where it applies, the GDPR, you have the right to access your data, have it corrected, receive it in a common format and have it deleted. You exercise these rights directly in the app: export (Profile › Backup and recovery), change your email or number (Profile › My account), delete the account. Because your tracking data is end-to-end encrypted, the publisher can neither read nor export it on your behalf.
+For any question, write to the address in section 1. You can also contact your data protection authority.</p>
 
 <h2>11. Minors</h2>
-<p>LIBRE is intended for adults. It collects no data and does not verify age.</p>
+<p>LIBRE is intended for adults. It does not verify age.</p>
 
 <h2>12. Health disclaimer</h2>
 <p>LIBRE is a support and information app. It does not diagnose and does not replace a doctor. In an emergency, call emergency services.</p>

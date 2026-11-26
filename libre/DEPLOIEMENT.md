@@ -17,7 +17,9 @@ L’installation ne fonctionne **qu’une fois le dossier publié en HTTPS**. Ta
    `https://<compte>.github.io/<depot>/libre/`.
 4. Ouvrir cette adresse sur le téléphone, puis dans LIBRE : **Profil › Installer sur ton téléphone**.
 
-Toute autre hébergement statique HTTPS convient (Netlify, Cloudflare Pages, un serveur web) : il suffit de publier le contenu du dossier `libre/` tel quel.
+Toute autre hébergement statique HTTPS convient (Netlify, Cloudflare Pages, un serveur web) : il suffit de publier le contenu du dossier `libre/` tel quel. **Sur un hébergement statique, les comptes ne sont pas disponibles** (l'app reste en mode local et l'indique).
+
+**Avec comptes** : héberger le serveur `server/` (Node 22) derrière HTTPS avec `STATIC_DIR=libre` : l'app et l'API sont alors servies à la même adresse, et le compte devient obligatoire. Voir `server/README.md`.
 
 ## Vérifier que l’installation fonctionne
 
@@ -37,7 +39,7 @@ Si des photos sont ajoutées ou renommées, mettre aussi à jour la liste `CORE`
 
 ## Données et confidentialité
 
-- Aucune donnée personnelle ne quitte l’appareil : pas de serveur, pas de compte, pas de mesure d’audience.
+- Sans serveur de comptes : aucune donnée personnelle ne quitte l’appareil. Avec le serveur : seule une copie chiffrée de bout en bout est envoyée (illisible pour le serveur). Jamais de mesure d’audience ni de publicité.
 - Le site d’hébergement voit seulement les demandes de fichiers (comme pour tout site web), jamais les données saisies dans LIBRE.
 - Les photos, la police et les icônes sont servies depuis le même site : aucune requête vers Pexels ou un autre service.
 - Changer d’appareil : Profil › Tes données › « Exporter un fichier », puis « Restaurer un fichier » sur le nouvel appareil.

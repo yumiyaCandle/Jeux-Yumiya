@@ -467,7 +467,7 @@ test('Apparence', 'Ton chemin (bloc principal) : chaque texte lisible sur son fo
   for (const cs of ['light', 'dark']) for (const acc of ['vert', 'lagon', 'indigo', 'corail', 'sombre']) {
     const st = profileState({ days: 27 }); if (acc === 'sombre') st.prefs.hero = 'sombre'; else { st.prefs.accent = acc; st.prefs.hero = 'couleur'; }
     const p = await page(b, base, { colorScheme: cs, init: seed(st) }); await p.goto(base); await p.settle();
-    const pts = await p.evaluate(() => { const h = document.querySelector('.hm-hero'); h.scrollIntoView({ block: 'center' }); const out = [];
+    const pts = await p.evaluate(() => { const h = document.querySelector('.hm-hero'); const dd = h.closest('details'); if (dd) dd.open = true; h.scrollIntoView({ block: 'center' }); const out = [];
       h.querySelectorAll('dt,dd,.hm-since,.hm-k,.hm-sub,.hm-step,.hm-days .num,.hm-u').forEach(e => { const r = e.getBoundingClientRect(); if (!r.width) return; const c = getComputedStyle(e).color.match(/\d+(\.\d+)?/g).slice(0, 3).map(Number); out.push([r.left + 2, r.top + r.height / 2, c]); });
       h.querySelectorAll('*').forEach(e => e.style.setProperty('color', 'transparent', 'important')); h.querySelectorAll('svg,.hm-orbs,.hm-pill,.hm-rec').forEach(e => e.style.visibility = 'hidden'); return out; });
     await p.waitForTimeout(120); const buf = await p.screenshot();
@@ -1217,6 +1217,87 @@ test('Suivi', 'Après un écart : le total des jours sans est mis en avant, pas 
     assert.match(await p.textContent('.hm-hero .hm-slip'), lang === 'fr' ? /ne t’enlève rien/ : /takes nothing away/);
     assert.ok(await p.$('.hm-hero [data-a="lapse"]'), 'lien « Comprendre ce moment »'); noErr(p); await p.ctx.close();
   }
+});
+
+/* ---------- Mise à jour « simplicité » : chiffres, recherche, mode discret, historique, favoris, rappels ---------- */
+const D_ = 864e5;
+const dashState = () => { const st = profileState({ types: ['cigarette', 'alcool'], days: 20 }); st.habits[0].trackStart = Date.now() - 20 * D_;
+  st.logs = [{ id: 'a1', habitId: 'h0', ts: Date.now() - 6 * D_ - 3600e3, qty: 2 }, { id: 'a2', habitId: 'h1', ts: Date.now() - 2 * D_, qty: 3 }];
+  st.habits[1].goal = 'diminuer'; st.habits[1].limit = 10; st.habits[1].limitPer = 'semaine'; return st; };
+test('Accueil en chiffres', 'Les cartes donnent les bons chiffres et s’adaptent à l’addiction (arrêt / réduction)', async (b, base) => {
+  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
+  const cards = async () => p.evaluate(() => Object.fromEntries([...document.querySelectorAll('.dash-c')].map(c => [c.dataset.k, c.querySelector('.dash-v').textContent.trim()])));
+  let c = await cards();
+  assert.equal(c.days, '6', 'jours depuis la dernière consommation'); assert.ok(c.saved && /CHF|€/.test(c.saved), 'économies affichées (budget renseigné)');
+  assert.ok(c.avoided, 'quantité évitée (cigarettes)'); assert.equal(c.success, '20/21', 'jours sans consommation / jours suivis');
+  assert.ok(!c.time, 'pas de « temps regagné » pour le tabac');
+  assert.match(await p.textContent('.dash-day'), /Aucune consommation aujourd’hui/);
+  assert.equal(await p.locator('.dash-spark svg circle').count() + await p.locator('.dash-spark svg rect.sp-use').count() + await p.locator('.dash-spark svg rect.sp-off').count(), 14, '14 jours dans le mini-graphique');
+  await p.click('[data-a="homeHabit"][data-id="h1"]'); await p.waitForTimeout(200); c = await cards();
+  assert.ok(!c.days, 'réduction : pas de compteur « jours sans »'); assert.equal(c.goal.replace(/\s/g, ''), '3/10', 'limite de la semaine'); 
+  for (const a of ['logForm', 'journalForm', 'sos', 'recap']) assert.ok(await p.$(`.dash-quick [data-a="${a}"]`), 'accès rapide ' + a);
+  assert.ok(!(await p.isVisible('.day-more .trow')), 'conseil du jour replié derrière « En savoir plus »'); noErr(p);
+});
+test('Accueil en chiffres', 'Personnaliser : masquer une carte et changer l’ordre, mémorisé après rechargement', async (b, base) => {
+  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
+  await p.click('[data-a="dashEdit"]'); await p.uncheck('input[data-a="dashToggle"][data-k="saved"]'); await p.click('[data-a="dashUp"][data-k="success"]');
+  await p.closeLayer(); await p.reload(); await p.settle();
+  const keys = await p.evaluate(() => [...document.querySelectorAll('.dash-c')].map(c => c.dataset.k));
+  assert.ok(!keys.includes('saved'), 'carte masquée'); assert.ok(keys.indexOf('success') < keys.indexOf('best'), 'ordre changé'); noErr(p);
+});
+test('Recherche', 'La recherche trouve articles, exercices, SOS et réglages, et y mène en un toucher', async (b, base) => {
+  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
+  for (const v of ['accueil', 'stats', 'journal', 'outils', 'profil']) { await p.go(v); assert.ok(await p.$('[data-a="search"]'), 'bouton recherche sur ' + v); }
+  await p.click('[data-a="search"]'); await p.fill('#sQ', 'respiration'); await p.waitForTimeout(150);
+  assert.match(await p.textContent('#sR'), /Respiration lente/); await p.click('#sR [data-go="tool"][data-id="breath"]'); await p.waitForTimeout(300);
+  assert.ok(await p.$('#layer .full, #layer .sheet'), 'exercice ouvert'); await p.closeLayer();
+  await p.click('[data-a="search"]'); await p.click('[data-a="sCat"][data-k="notif"]'); await p.fill('#sQ', 'rappel'); await p.waitForTimeout(150);
+  await p.click('#sR [data-go="goFold"]'); await p.waitForFunction(() => document.getElementById('app').dataset.view === 'profil');
+  assert.ok(await p.evaluate(() => document.querySelector('[data-fold="p-notif"]').open), 'rubrique Notifications ouverte');
+  await p.click('[data-a="search"]'); await p.fill('#sQ', 'zzzzqq'); await p.waitForTimeout(150); assert.match(await p.textContent('#sR'), /Aucun résultat/); noErr(p);
+});
+test('Mode discret', 'Masque les noms des addictions et brouille les chiffres ; mémorisé', async (b, base) => {
+  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
+  await p.click('.tacts [data-a="discreet"]'); await p.closeLayer(); await p.waitForTimeout(200);
+  const txt = await p.textContent('#app'); assert.ok(!/Cigarettes|Alcool/.test(txt), 'noms masqués'); assert.match(txt, /Suivi 1/);
+  assert.match(await p.evaluate(() => getComputedStyle(document.querySelector('.dash-v')).filter), /blur/);
+  await p.reload(); await p.settle(); assert.ok(await p.evaluate(() => document.body.classList.contains('discreet'))); noErr(p);
+});
+test('Historique', 'La frise liste consommations, étapes et début du suivi, avec filtres', async (b, base) => {
+  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
+  await p.click('[data-a="timeline"]'); await p.waitForSelector('.tl');
+  const t = await p.textContent('.tl'); assert.match(t, /Début du suivi/); assert.match(t, /Une semaine|Premier jour/); assert.match(t, /2 cigarettes/);
+  await p.click('[data-a="tlFilter"][data-k="log"]'); assert.ok(!/Début du suivi/.test(await p.textContent('#tlBox'))); noErr(p);
+});
+test('Favoris', 'Un article ajouté aux favoris apparaît en tête de la bibliothèque et dans la recherche', async (b, base) => {
+  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle(); await p.go('biblio');
+  const id = await p.evaluate(() => document.querySelector('[data-a="article"]').dataset.id); await p.click(`[data-a="article"][data-id="${id}"]`);
+  await p.click('[data-a="favArt"]'); assert.equal(await p.getAttribute('[data-a="favArt"]', 'aria-pressed'), 'true'); await p.closeLayer(); await p.go('accueil'); await p.go('biblio');
+  assert.match(await p.textContent('#app'), /Mes favoris/);
+  await p.click('[data-a="search"]'); await p.click('[data-a="sCat"][data-k="fav"]'); await p.waitForTimeout(100); assert.ok(await p.$(`#sR [data-id="${id}"]`)); noErr(p);
+});
+test('Notifications', 'Nouveaux rappels (résumé, encouragement, inactivité) : choix, heure, programmés sans culpabiliser', async (b, base) => {
+  const st = dashState(); st.prefs.nt = { enabled: true, system: true, discreet: false, items: { summary: { on: true, time: '21:00', days: [0, 1, 2, 3, 4, 5, 6] }, encourage: { on: true, time: '18:30', days: [0, 1, 2, 3, 4, 5, 6] }, inactive: { on: true, time: '19:00', days: [0, 1, 2, 3, 4, 5, 6], n: '5' } } };
+  st.logs.push({ id: 'a3', habitId: 'h0', ts: Date.now() - D_, qty: 1 });
+  const p = await page(b, base, { init: seed(st), native: { platform: 'android' } }); await p.goto(base); await p.settle(); await p.waitForTimeout(1500);
+  const sch = await p.evaluate(() => window.__sched.map(n => ({ k: n.extra && n.extra.kind, body: n.body, at: +new Date(n.schedule.at) })));
+  const sum = sch.filter(n => n.k === 'summary'); assert.ok(sum.length >= 7, 'résumé quotidien programmé'); assert.match(sum[0].body, /jour.* sans cigarettes/);
+  const inc = sch.find(n => n.k === 'inactive'); assert.ok(inc && inc.at - Date.now() > 4 * D_, 'inactivité : après le nombre de jours choisi');
+  const enc = sch.find(n => n.k === 'encourage'); assert.ok(enc, 'encouragement après un écart récent');
+  for (const n of sch) assert.ok(!/échec|raté|honte|déçu/i.test(n.body), 'aucun texte culpabilisant : ' + n.body);
+  await p.go('profil'); await p.openFold('p-notif'); assert.match(await p.textContent('[data-fold="p-notif"]'), /Résumé du jour[\s\S]*Encouragement[\s\S]*Si je ne note rien/); noErr(p);
+});
+test('Profil', 'Le profil est rangé en 9 catégories', async (b, base) => {
+  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle(); await p.go('profil');
+  const ks = await p.evaluate(() => [...document.querySelectorAll('.pf-cat > details')].map(d => d.dataset.fold));
+  assert.deepEqual(ks, ['p-acct', 'p-habits', 'p-goals', 'p-notif', 'p-lang', 'p-data', 'p-backup', 'p-hk', 'p-help']);
+  await p.openFold('p-acct'); assert.match(await p.textContent('[data-fold="p-acct"]'), /pas joignable/, 'sans serveur : le compte est indiqué comme indisponible, rien n’est simulé'); noErr(p);
+});
+test('Langue', 'Le bouton de langue en haut de l’accueil change toute l’application immédiatement', async (b, base) => {
+  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
+  assert.equal((await p.textContent('.tact-lang')).trim(), 'FR'); await p.click('.tact-lang'); await p.click('[data-a="setLang"][data-l="de"]'); await p.closeLayer();
+  assert.equal((await p.textContent('.tact-lang')).trim(), 'DE'); assert.match(await p.textContent('.dash'), /Heute/);
+  await p.go('profil'); assert.match(await p.textContent('#app'), /Mein Konto/); await p.reload(); await p.settle(); assert.equal(await p.evaluate(() => document.documentElement.lang), 'de'); noErr(p);
 });
 
 module.exports = { T };

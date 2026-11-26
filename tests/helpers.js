@@ -77,7 +77,9 @@ async function page(browser, base, o = {}) {
   p.state = () => p.evaluate(() => { try { return JSON.parse(localStorage.getItem('libre.v1') || 'null'); } catch (e) { return null; } });
   p.vault = () => p.evaluate(() => JSON.parse(sessionStorage.getItem('__vault') || '{}'));
   p.go = async v => { await p.evaluate(v => { location.hash = v; }, v); await p.waitForFunction(v => document.getElementById('app').dataset.view === v, v, { timeout: 5000 }); await p.waitForTimeout(80); };
-  p.openFold = k => p.evaluate(k => { const d = document.querySelector(`details[data-fold="${k}"]`); if (d && !d.open) d.querySelector('summary').click(); }, k);
+  /* Profil réorganisé en catégories : la sauvegarde (ex-« Données ») est dans p-backup, l'aide dans p-help, les couleurs dans p-habits */
+  const FOLD_ALIAS = { 'p-data': ['p-data', 'p-backup'], 'p-safe': ['p-help'], 'p-look': ['p-habits'] };
+  p.openFold = k => p.evaluate(ks => ks.forEach(k => { const d = document.querySelector(`details[data-fold="${k}"]`); if (d && !d.open) d.querySelector('summary').click(); }), FOLD_ALIAS[k] || [k]);
   p.closeLayer = () => p.evaluate(() => { const l = document.getElementById('layer'); if (l) l.innerHTML = ''; document.querySelectorAll('.toast').forEach(t => t.remove()); });
   /* attend la fin du démarrage (badges, rappels, célébrations éventuelles) puis ferme ce qui s’est ouvert */
   p.settle = async () => { await p.waitForSelector('#app[data-view]'); await p.waitForTimeout(1500); await p.closeLayer(); };

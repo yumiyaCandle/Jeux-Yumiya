@@ -2,6 +2,8 @@
 
 | Document | Contenu |
 |---|---|
+| [MISE-A-JOUR-COMPTES.md](MISE-A-JOUR-COMPTES.md) | **Mise à jour actuelle** : accueil en chiffres, recherche globale, comptes (e-mail ou SMS, chiffrement de bout en bout, migration), langue, profil en 9 catégories, notifications, favoris, mode discret, historique ; ce qui demande une configuration externe |
+| [../server/README.md](../server/README.md) | Serveur de comptes : sécurité, variables, démarrage, points juridiques |
 | [REFONTE-COULEURS.md](REFONTE-COULEURS.md) | **Style Envol + couleur par addiction** (actuel) : 10 palettes, ce qui change et ce qui reste commun, plusieurs suivis, personnalisation, contrastes, tests ; illustrations (`ux/couleurs/`) |
 | [REFONTE-SOUFFLE.md](REFONTE-SOUFFLE.md) | **Refonte « Souffle »** (remplacée) : palette sauge, ivoire, bleu-vert et pêche avec la fonction de chaque couleur, accueil centré sur la personne, « Parcours », « Mon kit », aide immédiate apaisée ; comparaisons (`ux/souffle/`), tests |
 | [REFONTE-ENCRE.md](REFONTE-ENCRE.md) | **Refonte « Encre »** : direction éditoriale papier/encre/safran, navigation à 4 onglets, centre de soutien avec 7 accompagnements par situation, éléments remplacés et pourquoi, tests ; comparaisons (`ux/encre/`) |

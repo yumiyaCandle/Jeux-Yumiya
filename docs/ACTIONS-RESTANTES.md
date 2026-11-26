@@ -1,6 +1,24 @@
 # Ce que tu dois fournir ou faire toi-même
 
-Mis à jour le 22 novembre 2026 (transformation « Horizon »). Je n'invente aucune de ces informations.
+Mis à jour le 26 novembre 2026 (comptes utilisateurs). Je n'invente aucune de ces informations.
+
+## 0. Comptes utilisateurs : ce qui doit être configuré (nouveau, bloquant pour les comptes)
+
+Le serveur de comptes (`server/`) est écrit et testé, mais **rien n'est hébergé ni branché à de vrais fournisseurs**. Sans ces éléments,
+l'app fonctionne en mode local et le dit clairement ; aucun envoi n'est simulé en production (le serveur refuse de démarrer).
+
+| À fournir | Détail |
+|---|---|
+| Hébergement HTTPS | une machine ou un service qui exécute Node 22 derrière un proxy HTTPS, avec un disque sauvegardé pour la base SQLite. Idéalement en Suisse ou dans l'UE |
+| Nom de domaine | ex. `app.ton-domaine.ch` (app + API sur la même adresse, `STATIC_DIR=libre`) |
+| Fournisseur d'e-mails | compte compatible Resend + domaine d'envoi vérifié : `MAIL_PROVIDER=http`, `MAIL_API_KEY`, `MAIL_FROM` |
+| Fournisseur de SMS | compte Twilio + numéro d'envoi : `SMS_PROVIDER=twilio`, `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM` |
+| Apps natives | `python3 tools/set-api.py https://ton-domaine` puis reconstruire ; côté serveur `ALLOWED_ORIGINS=capacitor://localhost,https://localhost` |
+| Politique de confidentialité | compléter `[HÉBERGEUR ET PAYS À COMPLÉTER]` et les deux prestataires `[À COMPLÉTER]` (e-mail, SMS) |
+| Juridique | sous-traitance avec l'hébergeur et les fournisseurs, transferts hors de Suisse, analyse d'impact recommandée (données de santé) |
+
+Les clés ne doivent jamais être mises dans le dépôt ni dans l'archive : variables d'environnement ou gestionnaire de secrets de l'hébergeur.
+Voir `server/README.md`.
 
 ## 1. Informations légales
 

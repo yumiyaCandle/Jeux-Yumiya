@@ -21,6 +21,16 @@ Product › Archive › clic droit sur l'archive › « Generate Privacy Report 
 ni serveur, ni analytics, ni rapport de plantage. Santé Apple : les données lues restent sur l'appareil (résumés journaliers dans le coffre
 chiffré), jamais transmises.
 
+## 2 bis. Comptes (26 novembre 2026) : les déclarations des stores changent
+
+Avec le serveur de comptes, l'app **collecte** désormais : adresse e-mail et/ou numéro de téléphone (identifiants, liés à la personne),
+et stocke une copie **chiffrée de bout en bout** du suivi (le serveur ne peut pas la lire ; Apple et Google considèrent qu'une donnée
+chiffrée de bout en bout illisible par le développeur peut ne pas être déclarée comme « collectée », mais vérifie leur définition à jour).
+À déclarer : **Coordonnées (e-mail, téléphone)** — finalité « Fonctionnalité de l'app / gestion du compte », liées à l'identité, pas de suivi
+publicitaire ; suppression du compte disponible dans l'app (exigence Apple 5.1.1(v) et Google). Ne pas déclarer « Aucune donnée collectée ».
+Prestataires à mentionner : hébergeur, fournisseur e-mail, fournisseur SMS. Requêtes réseau de l'app : uniquement vers le serveur de comptes
+(`connect-src 'self'`, ou l'adresse ajoutée par `tools/set-api.py`), en HTTPS, avec un jeton de session ; aucune autre.
+
 ## 3. Communications réseau
 
 - Code de LIBRE : aucune requête automatique (test « aucune requête externe » au démarrage et pendant la navigation).

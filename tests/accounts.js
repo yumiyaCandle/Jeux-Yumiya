@@ -72,7 +72,7 @@ test('Connexion sur un autre appareil : mêmes données, puis modification synch
   await emailForm(p, 'login', 'camille@example.ch', 'un-mot-de-passe-solide'); await waitView(p, 'accueil');
   const s = await p.state(); assert.equal(s.profile.name, 'Camille'); assert.equal(s.habits.length, 2); assert.deepEqual(s.reasons, ['Ma santé', 'Mes enfants']);
   // Nouvelle raison sur l'appareil 2 → visible sur l'appareil 1 après synchronisation
-  await p.go('profil'); await click(p, '[data-a="reasonForm"]'); await p.fill('#rs', 'Respirer mieux'); await click(p, '[data-a="saveReason"]');
+  await p.go('profil'); await p.openFold('p-goals'); await click(p, '[data-a="reasonForm"]'); await p.fill('#rs', 'Respirer mieux'); await click(p, '[data-a="saveReason"]');
   await p.waitForFunction(() => { const a = JSON.parse(localStorage.getItem('libre.acct.v1')); return a.ver >= 2 && !a.dirty; }, null, { timeout: 15000 });
   const p1 = ctx.pA; await p1.go('profil'); await p1.openFold('p-acct'); await click(p1, '[data-a="acctSync"]');
   await p1.waitForFunction(() => JSON.parse(localStorage.getItem('libre.v1')).reasons.includes('Respirer mieux'), null, { timeout: 10000 });
