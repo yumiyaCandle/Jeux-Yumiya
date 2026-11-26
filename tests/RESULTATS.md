@@ -1,48 +1,48 @@
 # Résultats des tests automatisés
 
-Exécutés le 2026-11-26 14:40 UTC, Chromium (Playwright), serveur local.
+Exécutés le 2026-11-26 14:48 UTC, Chromium (Playwright), serveur local.
 
-**36 réussis · 73 échoués · 0 non exécutés** sur 109.
+**12 réussis · 102 échoués · 0 non exécutés** sur 114.
 
 | Groupe | Test | Résultat | Durée |
 |---|---|---|---|
 | Démarrage | L’accueil s’affiche sans erreur ni requête externe | réussi | 1.0 s |
 | Inscription | Créer un profil « cigarettes » de bout en bout, puis le retrouver après rechargement | réussi | 4.7 s |
 | Sécurité santé | Création d’un suivi « alcool » : l’avertissement de sevrage s’affiche avant de commencer, et pas pour les cigarettes | réussi | 6.4 s |
-| Suivi | Noter une consommation remet le compteur à zéro et persiste | réussi | 1.3 s |
+| Suivi | Noter une consommation remet le compteur à zéro et persiste | réussi | 1.2 s |
 | Suivi | Plusieurs addictions : changer l’addiction principale | réussi | 0.9 s |
-| Journal | Pagination par 30 et recherche sur toutes les entrées | réussi | 1.5 s |
+| Journal | Pagination par 30 et recherche sur toutes les entrées | réussi | 1.4 s |
 | Sécurité | Code PIN : PBKDF2 600 000, sel aléatoire, jamais en clair | réussi | 2.8 s |
-| Sécurité | Code PIN : 5 erreurs bloquent l’accès, même après rechargement | réussi | 7.6 s |
+| Sécurité | Code PIN : 5 erreurs bloquent l’accès, même après rechargement | réussi | 7.5 s |
 | Sécurité | Code PIN ancien format : accepté puis converti en PBKDF2 | réussi | 0.6 s |
-| Sécurité | Navigateur : chiffrement facultatif par mot de passe (rien en clair, mot de passe exigé, désactivation, oubli sans perte) | réussi | 5.8 s |
-| Sécurité | Navigateur chiffré : changer le mot de passe, et deux onglets ouverts qui ne s’écrasent pas | réussi | 6.5 s |
+| Sécurité | Navigateur : chiffrement facultatif par mot de passe (rien en clair, mot de passe exigé, désactivation, oubli sans perte) | réussi | 5.5 s |
+| Sécurité | Navigateur chiffré : changer le mot de passe, et deux onglets ouverts qui ne s’écrasent pas | réussi | 6.3 s |
 | Sauvegarde | Fichier chiffré modifié à la main : refusé, données actuelles intactes | réussi | 5.2 s |
-| Sauvegarde | Export chiffré : aucun texte lisible, mauvais mot de passe refusé, restauration exacte | réussi | 5.6 s |
-| Sauvegarde | Export sans mot de passe : demande une confirmation explicite | réussi | 2.3 s |
-| Sauvegarde | Fichier d’une version future, fichier corrompu, fichier hostile | réussi | 4.5 s |
-| Sauvegarde | Revenir à l’état d’avant une restauration | réussi | 3.8 s |
-| Sauvegarde | Effacer toutes les données | réussi | 2.8 s |
-| Natif | Coffre chiffré : migration des anciennes données, plus rien en clair | réussi | 1.3 s |
-| Natif | Coffre illisible : le fichier est mis de côté, jamais écrasé | réussi | 2.0 s |
-| Natif | Coffre momentanément inaccessible : LIBRE attend, n’écrit rien en clair, ne met rien de côté, puis rouvre les données | réussi | 1.1 s |
-| Natif | Version store : pas de mode démo, pas de service worker, pas d’installation PWA | réussi | 1.1 s |
-| Natif | Export et bilan : feuille de partage du système | réussi | 1.0 s |
-| Natif | Bouton Retour Android : ferme la fenêtre, revient en arrière, puis réduit l’app | réussi | 1.4 s |
-| Notifications | Rappels natifs : discrets, ≤ 60, dans le futur, aucun pendant la période calme | réussi | 2.9 s |
-| Santé Apple | Connexion, synchronisation sans doublon, déconnexion qui efface | réussi | 4.6 s |
-| Santé Apple | Navigateur : aucune fausse connexion proposée | réussi | 1.1 s |
-| Langues | Chaque langue : navigation traduite, aucune erreur | réussi | 9.6 s |
-| Langues | Lancement en 6 langues : seules les langues traduites sont proposées, les autres traductions restent dans le code | réussi | 2.1 s |
-| Langues | Formats régionaux : dates et devise | réussi | 0.6 s |
-| Accessibilité | Boutons et champs nommés, images décrites, sur tous les écrans | réussi | 1.8 s |
-| Accessibilité | Cibles tactiles d’au moins 24 px (WCAG 2.2) sur les actions principales | réussi | 0.8 s |
-| Affichage | Aucun débordement horizontal de 320 px à 1280 px, clair et sombre | réussi | 6.8 s |
-| Performance | 3 ans d’historique, 4 addictions : chaque écran s’affiche en moins de 1,5 s | réussi | 2.3 s |
-| Distribution | LIBRE.html autonome : fonctionne depuis un fichier, sans aucune requête externe | réussi | 0.8 s |
-| Distribution | PWA : service worker actif et fonctionnement hors ligne | réussi | 1.3 s |
-| Apparence | Couleurs d’accent : contraste des boutons ≥ 4,5:1 en clair et en sombre | réussi | 17.0 s |
-| Apparence | Réglage : changer la couleur et activer les effets (verre), conservé après rechargement | échoué : page.goto: Target page, context or browser has been closed Call log: [2m  - navigating to "http://127.0.0.1:34743/", waiting until "load"[22m | 0.4 s |
+| Sauvegarde | Export chiffré : aucun texte lisible, mauvais mot de passe refusé, restauration exacte | échoué : page.click: Target page, context or browser has been closed Call log: [2m  - waiting for locator('[data-a="exportFile"]')[22m | 2.1 s |
+| Sauvegarde | Export sans mot de passe : demande une confirmation explicite | échoué : browser.newContext: Target page, context or browser has been closed Browser logs:  | 0.0 s |
+| Sauvegarde | Fichier d’une version future, fichier corrompu, fichier hostile | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Sauvegarde | Revenir à l’état d’avant une restauration | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Sauvegarde | Effacer toutes les données | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Natif | Coffre chiffré : migration des anciennes données, plus rien en clair | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Natif | Coffre illisible : le fichier est mis de côté, jamais écrasé | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Natif | Coffre momentanément inaccessible : LIBRE attend, n’écrit rien en clair, ne met rien de côté, puis rouvre les données | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Natif | Version store : pas de mode démo, pas de service worker, pas d’installation PWA | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Natif | Export et bilan : feuille de partage du système | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Natif | Bouton Retour Android : ferme la fenêtre, revient en arrière, puis réduit l’app | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Notifications | Rappels natifs : discrets, ≤ 60, dans le futur, aucun pendant la période calme | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Santé Apple | Connexion, synchronisation sans doublon, déconnexion qui efface | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Santé Apple | Navigateur : aucune fausse connexion proposée | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Langues | Chaque langue : navigation traduite, aucune erreur | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Langues | Lancement en 6 langues : seules les langues traduites sont proposées, les autres traductions restent dans le code | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Langues | Formats régionaux : dates et devise | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Accessibilité | Boutons et champs nommés, images décrites, sur tous les écrans | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Accessibilité | Cibles tactiles d’au moins 24 px (WCAG 2.2) sur les actions principales | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Affichage | Aucun débordement horizontal de 320 px à 1280 px, clair et sombre | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Performance | 3 ans d’historique, 4 addictions : chaque écran s’affiche en moins de 1,5 s | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Distribution | LIBRE.html autonome : fonctionne depuis un fichier, sans aucune requête externe | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Distribution | PWA : service worker actif et fonctionnement hors ligne | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Apparence | Couleurs d’accent : contraste des boutons ≥ 4,5:1 en clair et en sombre | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Apparence | Réglage : changer la couleur et activer les effets (verre), conservé après rechargement | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
 | Apparence | Moins d’animations demandé par le système : aucune animation d’écran | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
 | Apparence | Option « verre » : animations d’ouverture, entrée des blocs, barres qui se transforment | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
 | Apparence | Ton chemin (bloc principal) : chaque texte lisible sur son fond réel (≥ 4,5:1 mesuré sur les pixels), clair et sombre, toutes les couleurs d’accent | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
@@ -115,25 +115,11 @@ Exécutés le 2026-11-26 14:40 UTC, Chromium (Playwright), serveur local.
 | Données | Anciennes sauvegardes sans les nouvelles rubriques, et rubriques corrompues : relues sans erreur ni perte | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
 | Interface | Ordinateur : barre latérale en verre (sections, suivis avec compteur, Ctrl+K, repli mémorisé), héros de la semaine et carte du jour calculés | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
 | Interface | Téléphone : la barre du bas garde 4 onglets et l’Aide ; les entrées de la barre latérale restent cachées | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
-
-## Mesures de charge
-
-12758 consommations, 1095 entrées de journal.
-
-| Écran | Temps (ms) |
-|---|---|
-| démarrage | 678 |
-| accueil | 67 |
-| habitudes | 360 |
-| stats | 244 |
-| calendrier | 49 |
-| bilans | 93 |
-| outils | 35 |
-| journal | 62 |
-| envies | 20 |
-| biblio | 25 |
-| sante | 29 |
-| profil | 383 |
+| Tableau de bord | Vue d’ensemble : chiffres clés justes, période 3/6/12 mois, bulle au toucher, moments marquants qui ouvrent une fiche | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Tableau de bord | Stratégies (ordinateur) : ajouter, idée en un toucher, essayer, avancer d’étape (et glisser-déposer), « Ça m’aide » rejoint le plan | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Tableau de bord | Déclencheurs : annuaire calculé (fréquence, intensité, part traversée) et fiche avec historique, plan « si… alors… » prérempli | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Tableau de bord | Économies : total, mois, courbe, dépenses, relevé du mois avec tampon et choix du mois ; rien n’est envoyé | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
+| Données | Tableau des stratégies abîmé dans une sauvegarde : ignoré sans erreur | échoué : browser.newContext: Target page, context or browser has been closed | 0.0 s |
 
 ## Non couvert ici
 

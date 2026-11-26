@@ -16,7 +16,7 @@ repris, entièrement transposés à l'accompagnement des addictions ; aucun écr
 | Annuaire + fiche avec historique en tuiles | Comprendre une relation dans le temps | Annuaire des déclencheurs + fiche (fréquence, intensité, part traversée, moment, historique en tuiles colorées, conseil, plan « si… alors… ») |
 | Facture avec tampon « Payé », Télécharger, Copier le lien | Document clair et partageable | Relevé d'économies mensuel avec tampon « Économisé / En cours », Imprimer/PDF, Copier le résumé (rien n'est envoyé) |
 | Pages Finance et Growth | Graphiques d'argent et de répartition | Économies : courbe cumulée, dépenses par semaine, répartition par addiction |
-| Fond blanc cassé, cartes très arrondies, tuiles nuit/rouge/vert/jaune | Chaleur et lisibilité | Crème et verre, tuiles nuit, terracotta, sauge et moutarde |
+| Fond blanc cassé, cartes très arrondies, tuiles très colorées | Chaleur et lisibilité | Crème et verre ; tuiles, colonnes, pastilles et historique dans les teintes de l’addiction affichée (vert sauge pour le tabac, ambre pour l’alcool…), comme la barre en verre liquide |
 
 ## Fonctionnalités (toutes calculées à partir des données réelles)
 
