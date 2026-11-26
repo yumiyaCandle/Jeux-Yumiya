@@ -920,9 +920,9 @@ test('Apparence', 'Couleur par addiction : un suivi, plusieurs suivis, changemen
   const st = profileState({ types: ['cigarette', 'alcool', 'jeux_argent'] });
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
   assert.equal(await brand(p), '#2E7D62', 'cigarettes : vert sauge');
-  const dots = await p.evaluate(() => [...document.querySelectorAll('[data-a="homeHabit"]')].map(x => getComputedStyle(x).getPropertyValue('--hc').trim().toUpperCase()));
+  const dots = await p.evaluate(() => [...document.querySelectorAll('.segc [data-a="homeHabit"]')].map(x => getComputedStyle(x).getPropertyValue('--hc').trim().toUpperCase()));
   assert.deepEqual(dots, ['#2E7D62', '#B0521F', '#245BB0'], 'chaque suivi garde sa couleur');
-  await p.click('[data-a="homeHabit"] >> nth=2'); await p.waitForTimeout(200); assert.equal(await brand(p), '#245BB0', 'jeux d’argent : bleu profond');
+  await p.click('.segc [data-a="homeHabit"] >> nth=2'); await p.waitForTimeout(200); assert.equal(await brand(p), '#245BB0', 'jeux d’argent : bleu profond');
   assert.equal((await stateOf(p)).prefs.activeHabit, 'h2');
   await p.reload(); await p.waitForSelector('#app[data-view]'); await p.waitForTimeout(300); assert.equal(await brand(p), '#245BB0', 'mémorisé après réouverture');
   await p.go('stats'); assert.equal(await p.evaluate(() => document.documentElement.dataset.htheme || ''), '', 'statistiques « Tout » : couleur commune');

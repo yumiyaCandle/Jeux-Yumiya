@@ -2736,7 +2736,7 @@ html:not(.fx) .qsos{background:radial-gradient(90% 55% at 100% 100%,rgba(127,168
 .hs-h h2{margin:0;font-size:1.32rem;color:var(--ink)}
 .hs-h .link{font-weight:650;min-height:44px;display:inline-flex;align-items:center}
 .hs-sub{margin:6px 0 0;font-size:.8rem;font-weight:750;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.hp-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.hp-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:10px}
 .hp-c{background:var(--card);border-radius:20px;padding:14px;box-shadow:var(--sh-1);display:flex;flex-direction:column;gap:3px;min-width:0}
 .hp-k{font-size:.78rem;font-weight:700;color:var(--muted)}
 .hp-v{font-family:var(--font-display);font-size:1.55rem;font-weight:800;letter-spacing:-.02em;line-height:1.1;overflow-wrap:anywhere}
@@ -2768,7 +2768,7 @@ html:not(.fx) .qsos{background:radial-gradient(90% 55% at 100% 100%,rgba(127,168
 .hnext li>*{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border:0;border-radius:16px;padding:12px 14px;box-shadow:var(--sh-1);color:var(--ink);text-decoration:none;font:inherit;text-align:start;cursor:pointer;min-height:56px}
 .hnext b{display:block;font-size:.95rem}.hnext .grow span{font-size:.8rem;color:var(--muted)}
 .hn-dot{width:10px;height:10px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 4px var(--accent-soft);flex:none}
-.hhab{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.hhab{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px}
 .hhab-c{display:flex;flex-direction:column;align-items:flex-start;gap:3px;background:var(--card);border:2px solid transparent;border-radius:18px;padding:14px;box-shadow:var(--sh-1);font:inherit;color:var(--ink);text-align:start;cursor:pointer;min-height:44px}
 .hhab-c.on{border-color:var(--hc,var(--accent))}
 .hhab-c b{font-size:.95rem}.hhab-c .num{font-family:var(--font-display);font-weight:800;font-size:1.2rem}.hhab-c small{color:var(--muted);font-size:.74rem}
@@ -2803,7 +2803,7 @@ html:not(.fx) .hm-head .hm-name{color:#BFD9CA!important}
 .tip p{margin:0;line-height:1.5}.tip-k{font-size:.78rem;font-weight:750;color:var(--accent-strong)}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chips .chip{white-space:normal}
-.sit-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.sit-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:8px}
 .sit-b{display:flex;align-items:center;gap:10px;min-height:52px;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--field);color:var(--ink);font:inherit;font-weight:650;text-align:start;cursor:pointer}
 .sit-b .i{color:var(--accent-strong);flex:none}
 /* Programme */
@@ -2814,7 +2814,7 @@ html:not(.fx) .hm-head .hm-name{color:#BFD9CA!important}
 .pg-open{background:var(--card);border-style:dashed}
 .pg-lock{opacity:.45;cursor:default}
 /* Récompenses */
-.bdg-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.bdg-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(140px,100%),1fr));gap:10px}
 .bdg{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:14px 10px;border-radius:18px;background:var(--field);border:1px solid var(--line);opacity:.75}
 .bdg.on{opacity:1;background:linear-gradient(160deg,var(--accent-soft),var(--card));border-color:color-mix(in srgb,var(--accent) 35%,var(--line))}
 .bdg-ic{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--line);color:var(--muted)}
@@ -2832,13 +2832,13 @@ html:not(.fx) .hm-head .hm-name{color:#BFD9CA!important}
 .mv-add input{flex:1 1 180px;min-height:46px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
 .mv-add input[type=date]{flex:0 1 160px}
 .mv-add .btn{min-height:46px}
-.mv-ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.mv-ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(120px,100%),1fr));gap:10px}
 .mv-ph figure{position:relative;margin:0;border-radius:16px;overflow:hidden;aspect-ratio:1}
 .mv-ph img{width:100%;height:100%;object-fit:cover;display:block}
 .mv-ph figure .iconbtn{position:absolute;top:6px;inset-inline-end:6px;background:rgba(14,24,41,.6);color:#fff}
 .mv-ph-add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;aspect-ratio:1;border-radius:16px;border:2px dashed var(--line);color:var(--accent-strong);font-weight:700;cursor:pointer;text-align:center;padding:8px}
 /* Comprendre */
-.cmp-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.cmp-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px}
 .cmp-b{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px;border-radius:20px;border:1px solid var(--line);background:var(--card);box-shadow:var(--sh-1);color:var(--ink);font:inherit;text-align:start;cursor:pointer;min-height:110px}
 .cmp-b b{font-family:var(--font-serif);font-size:1.08rem;font-weight:600;line-height:1.25}
 .cmp-b.mine{border-color:var(--accent)}.cmp-b .small{color:var(--accent-strong);font-weight:650}
@@ -2848,7 +2848,7 @@ html:not(.fx) .hm-head .hm-name{color:#BFD9CA!important}
 .cmp-s p{margin:0 0 8px;line-height:1.55}
 .cmp-n{margin:0;font-family:var(--font-serif);font-size:1.6rem;color:var(--sage);line-height:1;min-width:24px}
 /* Évolution */
-.ev-k{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.ev-k{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(140px,100%),1fr));gap:10px}
 .ev-k>div{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--sh-1);display:flex;flex-direction:column;gap:2px;min-width:0}
 .ev-k span{font-size:.78rem;font-weight:700;color:var(--muted)}
 .ev-k b{font-family:var(--font-display);font-size:1.5rem;font-weight:800;letter-spacing:-.02em;overflow-wrap:anywhere}
@@ -2866,10 +2866,9 @@ html:not(.fx) .hm-head .hm-name{color:#BFD9CA!important}
 :root[data-theme="dark"] .cmp-d.down{color:#E3A27A}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .cmp-d.down{color:#E3A27A}}
 /* Onglets Parcours : défilement horizontal propre avec 6 entrées */
-.ptabs{overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}.ptabs::-webkit-scrollbar{display:none}
-.ptabs a{white-space:nowrap;flex:0 0 auto;padding-inline:14px}
+.ptabs-x{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}.ptabs-x a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--card);box-shadow:var(--sh-1);color:var(--ink);font-weight:650;font-size:.86rem;text-decoration:none}.ptabs-x a[aria-current]{background:var(--accent);color:var(--accent-ink)}.ptabs-x .i{color:currentColor}
 /* Soutien : accompagnement */
-.hub-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.hub-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px}.hub-c,.cmp-b,.bdg,.hp-c,.ev-k>div,.hhab-c,.sit-b{overflow-wrap:anywhere;hyphens:auto}
 .hub-c{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:20px;background:var(--card);box-shadow:var(--sh-1);color:var(--ink);text-decoration:none;min-height:120px}
 .hub-c b{font-family:var(--font-serif);font-size:1.08rem;font-weight:600;line-height:1.25}
 .hub-c>span:last-child{font-size:.8rem;color:var(--muted)}
@@ -6788,12 +6787,17 @@ const MOTIV_MAX_PH=6;
 function MV(){if(!isObj(S.motiv))S.motiv={};const m=S.motiv;['future','quotes','bucket','memories','photos'].forEach(k=>{if(!isArr(m[k]))m[k]=[]});return m}
 function ACH(){if(!isObj(S.ach))S.ach={};return S.ach}
 const qtyIn=(h,a,b)=>logsOf(h.id).filter(l=>l.ts>=a&&l.ts<b).reduce((s,l)=>s+(+l.qty||0),0);
+/* Quantité par jour, calculée en une passe et gardée tant que les consommations ne changent pas */
+let DAYQ={key:'',m:{}};
+function dayQ(h,d){const L=S.logs,key=L.length+':'+(L.length?L[L.length-1].ts+':'+L[L.length-1].qty+':'+L[0].ts:'')+':'+S.habits.length;
+  if(DAYQ.key!==key){const m={};for(const l of L){if(!l.habitId)continue;const k=l.habitId+'|'+sod(l.ts);m[k]=(m[k]||0)+(+l.qty||0)}DAYQ={key,m}}
+  return DAYQ.m[h.id+'|'+d]||0}
 const usedDay=(h,d)=>logsOf(h.id).some(l=>l.ts>=d&&l.ts<addDays(d,1));
 function moodOf(d){/* humeur du jour : point d’humeur, sinon moyenne du journal */const ck=TS().checkins[dayKey(d)];if(ck&&ck.mood)return +ck.mood;
   const js=S.journal.filter(j=>j.ts>=d&&j.ts<addDays(d,1)&&+j.mood>0);return js.length?js.reduce((s,j)=>s+(+j.mood),0)/js.length:null}
 function moodAvg(a,b){const v=[];for(let d=sod(a);d<b;d=addDays(d,1)){const m=moodOf(d);if(m!=null)v.push(m)}return v.length?{avg:v.reduce((s,x)=>s+x,0)/v.length,n:v.length}:null}
 /* Jour réussi : sans consommation (arrêt) ou dans la limite du jour (réduction) */
-function dayOk(h,d){if(d<sod(h.trackStart))return null;const q=qtyIn(h,d,addDays(d,1));if(!RED(h))return q===0;const lim=+h.limit;if(h.limit===''||!lim)return null;
+function dayOk(h,d){if(d<sod(h.trackStart))return null;const q=dayQ(h,d);if(!RED(h))return q===0;const lim=+h.limit;if(h.limit===''||!lim)return null;
   return limPer(h)==='jour'?q<=lim:q<=lim/(PER_DAYS[limPer(h)]||1)}
 function okDays(h,a,b){let ok=0,n=0;for(let d=Math.max(sod(a),sod(h.trackStart));d<b&&d<=sod(now());d=addDays(d,1)){const r=dayOk(h,d);if(r==null)continue;n++;if(r)ok++}return {ok,n}}
 
@@ -6801,7 +6805,9 @@ function okDays(h,a,b){let ok=0,n=0;for(let d=Math.max(sod(a),sod(h.trackStart))
    Les points valorisent l’effort et la régularité, pas seulement l’abstinence.
    Ils sont recalculés à partir des données : une reprise ne retire rien. */
 const PTS=[['journal',10,N_('Entrées de journal')],['checkins',5,N_('Humeurs notées')],['held',15,N_('Envies traversées')],['sessions',5,N_('Exercices faits')],['plans',10,N_('Plans « si… alors… »')],['goals',10,N_('Petits objectifs réussis')],['prog',20,N_('Missions du programme')],['okdays',10,N_('Jours réussis')],['miles',25,N_('Étapes franchies')]];
-function effort(){const T=TS(),H=hist();let okd=0;S.habits.forEach(h=>{okd+=okDays(h,h.trackStart,addDays(sod(now()),1)).ok});
+let EFF_C={k:'',v:null};
+function effort(){const T=TS(),H=hist(),ck=[S.logs.length,S.journal.length,H.length,(T.sessions||[]).length,(T.plans||[]).length,Object.keys(T.checkins||{}).length,JSON.stringify(T.goals||{}).length,progDoneN(),Object.keys(S.unlocked||{}).length,S.habits.map(h=>h.id+h.trackStart+h.goal+h.limit).join(),dayKey()].join('|');if(EFF_C.k===ck)return EFF_C.v;EFF_C={k:ck,v:effort0(T,H)};return EFF_C.v}
+function effort0(T,H){let okd=0;S.habits.forEach(h=>{okd+=okDays(h,h.trackStart,addDays(sod(now()),1)).ok});
   return {journal:S.journal.length,checkins:Object.keys(T.checkins||{}).length,held:H.filter(e=>e.outcome==='held').length,sessions:(T.sessions||[]).length,plans:(T.plans||[]).length,
     goals:Object.values(T.goals||{}).reduce((s,o)=>s+Object.values(isObj(o)?o:{}).filter(Boolean).length,0),prog:progDoneN(),okdays:okd,miles:Object.keys(S.unlocked||{}).length}}
 function points(e){e=e||effort();return PTS.reduce((s,[k,p])=>s+(e[k]||0)*p,0)}
@@ -6955,7 +6961,7 @@ function dailyObjectives(){const out=[],T=TS(),dk=dayKey();
   return out}
 function objRow(o){return `<li class="obj ${o.done?'done':''}"><span class="obj-c" aria-hidden="true">${o.done?ic('check','sm'):''}</span><span class="grow">${esc(o.t)}</span>${o.done?`<span class="small muted">${esc(t('Fait'))}</span>`:`<button class="btn sm quiet" data-a="${o.a}" ${o.id?`data-id="${esc(o.id)}"`:''} ${o.d?`data-d="${o.d}"`:''}>${esc(o.k==='prog'?t('Voir'):o.k==='mood'?t('Noter'):t('C’est fait'))}</button>`}</li>`}
 function chRow(c){return `<li class="ch"><span class="ch-ic" aria-hidden="true">${ic(c.ic,'sm')}</span><span class="grow"><b>${esc(t(c.t))}</b><i class="ch-bar" style="--v:${c.cur/c.target}" aria-hidden="true"></i></span><span class="num ch-n">${nf(c.cur,0)}/${nf(c.target,0)}</span></li>`}
-function viewCoach(){const D=coachData(),rev=coachReview(D),tr=D.trig.slice(0,3),emo=D.emo[0]&&D.emo[0][0],tip=pickDaily().tip;
+function viewCoach(){const D=coachData(),rev=coachReview(D),tr=D.trig.filter(x=>x[1]>=2).slice(0,3),emo=D.emo[0]&&D.emo[0][0],tip=pickDaily().tip;
   const h=act()[0],rs=h?riskySlot(h):null,SLT=[t('le matin'),t('le midi'),t('l’après-midi'),t('le soir'),t('la nuit')];
   const acts=(EMO_ACT[emo]||EMO_ACT['Stress']).map(x=>t(x)).concat(planData().strategies.slice(0,2));
   return topbar(t('Mon coach'),'outils')+`<div class="v7 fade-in">
@@ -7725,8 +7731,8 @@ document.addEventListener('submit',e=>{const f=e.target;
 /* =====================================================================
    LIBRE v4 — Progrès, bilans, reprises, objectifs adaptatifs, verrouillage
    ===================================================================== */
-function progTabs(cur){const T=[['stats',t('Statistiques')],['evolution',t('Évolution')],['calendrier',t('Calendrier')],['bilans',t('Bilans')],['recompenses',t('Récompenses')],['habitudes',t('Mes suivis')]];
-  return `<nav class="ptabs segc" data-seg="prog" aria-label="${esc(t('Progrès'))}"><span class="segc-thumb" aria-hidden="true"></span>${T.map(([k,n])=>`<a href="#${k}" ${k===cur?'aria-current="page" tabindex="0"':'tabindex="-1"'}>${esc(n)}</a>`).join('')}</nav>`}
+function progTabs(cur){const T=[['stats',t('Statistiques')],['evolution',t('Évolution')],['calendrier',t('Calendrier')],['bilans',t('Bilans')]],X=[['recompenses','trophy',t('Récompenses')],['habitudes','target',t('Mes suivis')]];
+  return `<nav class="ptabs segc" data-seg="prog" aria-label="${esc(t('Progrès'))}"><span class="segc-thumb" aria-hidden="true"></span>${T.map(([k,n])=>`<a href="#${k}" ${k===cur?'aria-current="page" tabindex="0"':'tabindex="-1"'}>${esc(n)}</a>`).join('')}</nav><div class="ptabs-x">${X.map(([k,i_,n])=>`<a href="#${k}" ${k===cur?'aria-current="page"':''}>${ic(i_,'sm')}${esc(n)}</a>`).join('')}</div>`}
 
 /* ---------- Bilans : mois en cours, mois précédent, 12 mois, chemin parcouru ---------- */
 function monthRange(off){const d=new Date(now());return [new Date(d.getFullYear(),d.getMonth()+off,1).getTime(),new Date(d.getFullYear(),d.getMonth()+off+1,1).getTime()]}
