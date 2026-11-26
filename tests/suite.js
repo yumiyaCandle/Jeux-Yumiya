@@ -558,16 +558,6 @@ test('Journal', 'Modifier une entrée, filtrer par humeur et par mois', async (b
   assert.deepEqual(p.errors, []);
 });
 
-test('Outils', 'Favoris : ajouter un exercice, il apparaît en haut et reste après rechargement', async (b, base) => {
-  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle(); await p.go('outils'); await p.waitForTimeout(300);
-  await p.evaluate(() => document.querySelector('[data-a="favTool"][data-id="breath"]').click()); await p.waitForTimeout(150);
-  assert.match(await p.textContent('#app'), /Mes favoris/);
-  await p.reload(); await p.waitForSelector('#app[data-view]'); await p.go('outils'); await p.waitForTimeout(300);
-  assert.equal(await p.locator('[data-a="favTool"][data-id="breath"][aria-pressed="true"]').count() >= 1, true);
-  await p.evaluate(() => document.querySelector('[data-a="favTool"][data-id="breath"]').click()); await p.waitForTimeout(150);
-  assert.doesNotMatch(await p.textContent('#app'), /Mes favoris/);
-  assert.deepEqual(p.errors, []);
-});
 
 test('Suivi', 'Modifier puis supprimer un suivi : réglages enregistrés, suppression récupérable depuis la copie de sécurité', async (b, base) => {
   const st = profileState({ types: ['cigarette', 'alcool'] });
@@ -596,8 +586,8 @@ test('Outils', 'SOS et les 8 exercices s’ouvrent, se lancent et se ferment san
   assert.ok((await p.textContent('#layer')).trim().length > 40, 'SOS : étape suivante');
   await p.closeLayer();
   for (const id of ['urge', 'delay', 'triggers', 'breath', 'ground', 'stress', 'cbt', 'plan']) {
-    await p.go('outils'); await p.waitForTimeout(200);
-    await p.evaluate(id => document.querySelector(`[data-a="tool"][data-id="${id}"]`).click(), id); await p.waitForTimeout(400);
+    await p.go('outils'); await p.waitForTimeout(200); await p.click('[data-a="allTools"]'); await p.waitForTimeout(200);
+    await p.evaluate(id => document.querySelector(`#layer [data-a="tool"][data-id="${id}"]`).click(), id); await p.waitForTimeout(400);
     const txt = (await p.textContent('#layer')).trim(); assert.ok(txt.length > 30, 'exercice ouvert : ' + id);
     await p.evaluate(() => { const b = [...document.querySelectorAll('#layer .btn.primary')].find(x => x.offsetParent && !x.disabled); b && b.click(); }); await p.waitForTimeout(300);
     await p.closeLayer();
@@ -916,7 +906,7 @@ test('Parcours 11', 'Notifications refusées dans le téléphone : rien n’est 
   assert.equal((await p.evaluate(() => window.__sched.length)), 0, 'aucun rappel programmé sans permission');
   await p.go('accueil'); await p.click('[data-a="quickPlus"]'); await p.waitForTimeout(300);
   assert.equal((await p.vault()) ? true : true, true);
-  await p.click('.hm-sos'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Une envie forte/);
+  await p.click('.hm-sos'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Une envie monte/);
   noErr(p);
 });
 
@@ -969,11 +959,11 @@ test('Apparence', 'Couleur par addiction : personnalisée, conservée après ré
 });
 
 /* ---------- Refonte « Envol » : aide triée par besoin, moment à risque, ressources ---------- */
-test('Aide', 'Triage : « De quoi as-tu besoin ? » propose 4 besoins ; chacun mène au bon outil (aide guidée, respiration, proche, urgences)', async (b, base) => {
+test('Aide', 'Triage : « De quoi as-tu besoin ? » propose 5 choix ; chacun mène au bon outil (aide guidée, retarder, respiration, proche, urgences)', async (b, base) => {
   const st = profileState({ types: ['cigarette'] }); st.contacts = [{ name: 'Sam', phone: '0790000000' }];
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
   const open = async () => { await p.closeLayer(); await p.click('nav .nav-help'); await p.waitForTimeout(300); };
-  await open(); assert.match(await p.textContent('#layer'), /De quoi as-tu besoin/); assert.equal(await p.locator('.qs-t').count(), 4);
+  await open(); assert.match(await p.textContent('#layer'), /De quoi as-tu besoin/); assert.equal(await p.locator('.qs-t').count(), 5);
   assert.equal(await p.getAttribute('.qs-t.qs-call', 'href'), 'tel:0790000000');
   await p.click('.qs-t-main'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Qu’est-ce que tu ressens/);
   await open(); await p.click('.qs-t.qs-breath'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Inspire|Expire|respir/i);
@@ -993,14 +983,15 @@ test('Personnalisation', 'Moment à risque : signalé à l’heure où la person
 
 test('Soutien', 'Centre de soutien : maintenant, 7 situations (3 gestes, un exercice, un plan, une lecture), exercices, plans, orientation', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle(); await p.go('outils');
-  assert.equal(await p.locator('.cr-chip').count(), 7); assert.ok(await p.locator('.trows .tool-row').count() >= 8, 'tous les exercices');
-  await p.click('[data-a="situation"][data-k="stress"]'); await p.waitForTimeout(300);
+  await p.click('[data-a="allTools"]'); await p.waitForTimeout(200); assert.ok(await p.locator('#layer .trows .tool-row').count() >= 8, 'tous les exercices'); await p.closeLayer();
+  await p.click('[data-a="sitSheet"]'); await p.waitForTimeout(200); assert.equal(await p.locator('#layer .cr-chip').count(), 7);
+  await p.click('#layer [data-a="situation"][data-k="stress"]'); await p.waitForTimeout(300);
   assert.equal(await p.locator('.sit3-s li').count(), 3); assert.match(await p.textContent('#layer'), /pas un traitement/);
   await p.click('#layer [data-a="sitPlan"]'); await p.waitForTimeout(400);
   assert.match(await p.inputValue('#pl-if'), /stress/i, 'le modèle de plan correspondant est prérempli');
-  await p.closeLayer(); await p.click('[data-a="situation"][data-k="social"]'); await p.waitForTimeout(300); await p.click('#layer [data-a="sitRead"]');
+  await p.closeLayer(); await p.click('[data-a="sitSheet"]'); await p.waitForTimeout(200); await p.click('#layer [data-a="situation"][data-k="social"]'); await p.waitForTimeout(300); await p.click('#layer [data-a="sitRead"]');
   await p.waitForFunction(() => document.getElementById('app').dataset.view === 'biblio'); assert.match(await p.textContent('.lib3-head'), /Objectif/);
-  await p.go('outils'); await p.click('.cr-danger'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Tu n’es pas seul·e/);
+  await p.go('outils'); await p.click('.mp-danger'); await p.waitForTimeout(300); assert.match(await p.textContent('#layer'), /Tu n’es pas seul·e/);
   noErr(p);
 });
 
@@ -1008,7 +999,7 @@ test('Soutien', 'Centre de soutien : maintenant, 7 situations (3 gestes, un exer
 test('Soutien', 'Fiche interactive : gestes cochés, « Ça t’a aidé ? » enregistré, puis proposé dans « Ce qui t’aide » ; une reprise mène à la fiche de son déclencheur', async (b, base) => {
   const st = profileState({ types: ['cigarette'], days: 30 }); st.logs = [{ id: 'x', habitId: 'h0', type: 'cigarette', ts: Date.now() - 2 * 36e5, qty: 1 }];
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('outils');
-  await p.click('[data-a="situation"][data-k="seul"]'); await p.waitForTimeout(300);
+  await p.click('[data-a="sitSheet"]'); await p.waitForTimeout(200); await p.click('#layer [data-a="situation"][data-k="seul"]'); await p.waitForTimeout(300);
   assert.equal(await p.isVisible('#sit3fb'), false, 'la question vient après un geste');
   await p.click('.sit3-step >> nth=0'); await p.click('.sit3-step >> nth=1');
   assert.equal(await p.getAttribute('.sit3-step >> nth=0', 'aria-pressed'), 'true'); assert.equal(await p.isVisible('#sit3fb'), true);
@@ -1022,20 +1013,6 @@ test('Soutien', 'Fiche interactive : gestes cochés, « Ça t’a aidé ? » enr
 });
 
 /* ---------- Refonte « Clairière » : navigation, journal guidé, lecture des données, bibliothèque par thèmes ---------- */
-test('Navigation', 'Barre Aujourd’hui · Soutien · Parcours (statistiques d’abord) · Journal + bouton Aide séparé (verre liquide) sur chaque page ; le profil s’ouvre depuis l’avatar', async (b, base) => {
-  const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'], name: 'Lou' })) }); await p.goto(base); await p.settle();
-  for (const v of ['accueil', 'habitudes', 'stats', 'outils', 'journal']) {
-    await p.go(v); await p.closeLayer();
-    const nav = await p.evaluate(() => [...document.querySelectorAll('nav .lg-tabs > a')].map(x => x.getAttribute('href')).join('|'));
-    assert.match(nav, /#accueil\|#outils\|#stats\|#journal/, v + ' : ' + nav);
-    await p.click('nav .nav-help'); await p.waitForTimeout(300);
-    assert.match(await p.textContent('#layer'), /Une envie forte/, v + ' : le bouton Aide ouvre l’aide immédiate'); await p.closeLayer();
-  }
-  assert.equal((await p.textContent('.avatar-btn')).trim(), 'L');
-  await p.click('.avatar-btn'); await p.waitForFunction(() => document.getElementById('app').dataset.view === 'profil');
-  assert.equal(await p.getAttribute('.avatar-btn', 'aria-current'), 'page');
-  noErr(p);
-});
 
 test('Journal', 'Écriture guidée : une question du jour, émotions, pensée, intention pour demain ; tout est enregistré et réaffiché', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle(); await p.go('journal'); await p.closeLayer();
@@ -1246,27 +1223,6 @@ const D_ = 864e5;
 const dashState = () => { const st = profileState({ types: ['cigarette', 'alcool'], days: 20 }); st.habits[0].trackStart = Date.now() - 20 * D_;
   st.logs = [{ id: 'a1', habitId: 'h0', ts: Date.now() - 6 * D_ - 3600e3, qty: 2 }, { id: 'a2', habitId: 'h1', ts: Date.now() - 2 * D_, qty: 3 }];
   st.habits[1].goal = 'diminuer'; st.habits[1].limit = 10; st.habits[1].limitPer = 'semaine'; return st; };
-test('Accueil en chiffres', 'Les cartes donnent les bons chiffres et s’adaptent à l’addiction (arrêt / réduction)', async (b, base) => {
-  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
-  const cards = async () => p.evaluate(() => Object.fromEntries([...document.querySelectorAll('.dash-c')].map(c => [c.dataset.k, c.querySelector('.dash-v').textContent.trim()])));
-  let c = await cards();
-  assert.ok(!c.days, 'jours sans : affichés par le grand compteur, pas en double'); assert.equal((await p.textContent('.hm-hero .hm-days .num')).trim(), '6', 'jours depuis la dernière consommation'); assert.ok(c.saved && /CHF|€/.test(c.saved), 'économies affichées (budget renseigné)');
-  assert.ok(c.avoided, 'quantité évitée (cigarettes)'); assert.equal(c.success, '20/21', 'jours sans consommation / jours suivis');
-  assert.ok(!c.time, 'pas de « temps regagné » pour le tabac');
-  assert.match(await p.textContent('.dash-day'), /Aucune consommation aujourd’hui/);
-  assert.equal(await p.locator('.dash-spark svg circle').count() + await p.locator('.dash-spark svg rect.sp-use').count() + await p.locator('.dash-spark svg rect.sp-off').count(), 14, '14 jours dans le mini-graphique');
-  await p.click('[data-a="homeHabit"][data-id="h1"]'); await p.waitForTimeout(200); c = await cards();
-  assert.ok(!c.days, 'réduction : pas de compteur « jours sans »'); assert.equal(c.goal.replace(/\s/g, ''), '3/10', 'limite de la semaine'); 
-  for (const a of ['logForm', 'journalForm', 'sos']) assert.ok(await p.$(`.dash-quick [data-a="${a}"]`), 'accès rapide ' + a); assert.ok(await p.$('.dash-quick a[href="#coach"]'), 'accès au coach'); assert.ok(await p.$('.dash-foot [data-a="recap"]'), 'bilan de la semaine');
-  assert.ok(!(await p.isVisible('.day-more .trow')), 'conseil du jour replié derrière « En savoir plus »'); noErr(p);
-});
-test('Accueil en chiffres', 'Personnaliser : masquer une carte et changer l’ordre, mémorisé après rechargement', async (b, base) => {
-  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
-  await p.click('[data-a="dashEdit"]'); await p.uncheck('input[data-a="dashToggle"][data-k="saved"]'); await p.click('[data-a="dashUp"][data-k="success"]');
-  await p.closeLayer(); await p.reload(); await p.settle();
-  const keys = await p.evaluate(() => [...document.querySelectorAll('.dash-c')].map(c => c.dataset.k));
-  assert.ok(!keys.includes('saved'), 'carte masquée'); assert.ok(keys.indexOf('success') < keys.indexOf('best'), 'ordre changé'); noErr(p);
-});
 test('Recherche', 'La recherche trouve articles, exercices, SOS et réglages, et y mène en un toucher', async (b, base) => {
   const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
   for (const v of ['accueil', 'stats', 'journal', 'outils', 'profil']) { await p.go(v); assert.ok(await p.$('[data-a="search"]'), 'bouton recherche sur ' + v); }
@@ -1282,21 +1238,8 @@ test('Mode discret', 'Masque les noms des addictions et brouille les chiffres ; 
   const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
   await p.click('.tacts [data-a="discreet"]'); await p.closeLayer(); await p.waitForTimeout(200);
   const txt = await p.textContent('#app'); assert.ok(!/Cigarettes|Alcool/.test(txt), 'noms masqués'); assert.match(txt, /Suivi 1/);
-  assert.match(await p.evaluate(() => getComputedStyle(document.querySelector('.dash-v')).filter), /blur/);
+  assert.match(await p.evaluate(() => getComputedStyle(document.querySelector('.h11-st .num')).filter), /blur/);
   await p.reload(); await p.settle(); assert.ok(await p.evaluate(() => document.body.classList.contains('discreet'))); noErr(p);
-});
-test('Historique', 'La frise liste consommations, étapes et début du suivi, avec filtres', async (b, base) => {
-  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
-  await p.click('[data-a="timeline"]'); await p.waitForSelector('.tl');
-  const t = await p.textContent('.tl'); assert.match(t, /Début du suivi/); assert.match(t, /Une semaine|Premier jour/); assert.match(t, /2 cigarettes/);
-  await p.click('[data-a="tlFilter"][data-k="log"]'); assert.ok(!/Début du suivi/.test(await p.textContent('#tlBox'))); noErr(p);
-});
-test('Favoris', 'Un article ajouté aux favoris apparaît en tête de la bibliothèque et dans la recherche', async (b, base) => {
-  const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle(); await p.go('biblio');
-  const id = await p.evaluate(() => document.querySelector('[data-a="article"]').dataset.id); await p.click(`[data-a="article"][data-id="${id}"]`);
-  await p.click('[data-a="favArt"]'); assert.equal(await p.getAttribute('[data-a="favArt"]', 'aria-pressed'), 'true'); await p.closeLayer(); await p.go('accueil'); await p.go('biblio');
-  assert.match(await p.textContent('#app'), /Mes favoris/);
-  await p.click('[data-a="search"]'); await p.click('[data-a="sCat"][data-k="fav"]'); await p.waitForTimeout(100); assert.ok(await p.$(`#sR [data-id="${id}"]`)); noErr(p);
 });
 test('Notifications', 'Nouveaux rappels (résumé, encouragement, inactivité) : choix, heure, programmés sans culpabiliser', async (b, base) => {
   const st = dashState(); st.prefs.nt = { enabled: true, system: true, discreet: false, items: { summary: { on: true, time: '21:00', days: [0, 1, 2, 3, 4, 5, 6] }, encourage: { on: true, time: '18:30', days: [0, 1, 2, 3, 4, 5, 6] }, inactive: { on: true, time: '19:00', days: [0, 1, 2, 3, 4, 5, 6], n: '5' } } };
@@ -1318,7 +1261,7 @@ test('Profil', 'Le profil est rangé en 9 catégories', async (b, base) => {
 test('Langue', 'Le bouton de langue en haut de l’accueil change toute l’application immédiatement', async (b, base) => {
   const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
   assert.equal((await p.textContent('.tact-lang')).trim(), 'FR'); await p.click('.tact-lang'); await p.click('[data-a="setLang"][data-l="de"]'); await p.closeLayer();
-  assert.equal((await p.textContent('.tact-lang')).trim(), 'DE'); assert.match(await p.textContent('.dash'), /Heute/);
+  assert.equal((await p.textContent('.tact-lang')).trim(), 'DE'); assert.match(await p.textContent('.h11-week'), /Diese Woche/);
   await p.go('profil'); assert.match(await p.textContent('#app'), /Mein Konto/); await p.reload(); await p.settle(); assert.equal(await p.evaluate(() => document.documentElement.lang), 'de'); noErr(p);
 });
 
@@ -1329,35 +1272,6 @@ const v7State = () => { const N = Date.now(), st = profileState({ types: ['cigar
   st.journal = [{ id: 'j1', ts: N - D_, mood: 4, text: 'ok' }, { id: 'j2', ts: N - 3 * D_, mood: 2, text: 'dur' }];
   st.tools.history = [{ id: 'u1', ts: N - D_, habitId: 'h0', before: 7, after: 3, trigger: 'Stress', emotion: 'Stress', tool: 'sos5', outcome: 'held' }, { id: 'u2', ts: N - 4 * D_, habitId: 'h0', before: 8, after: 6, trigger: 'Stress', emotion: 'Stress', tool: 'sos5', outcome: 'used' }]; st.tools.histV = 1;
   st.tools.sessions = [{ ts: N - D_, tool: 'breath', sec: 120 }]; return st; };
-test('Mon coach', 'Bilan calculé sur les vraies données, objectifs du jour, défis, conseils selon les déclencheurs, avertissement', async (b, base) => {
-  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('coach');
-  const t = await p.textContent('#app');
-  assert.match(t, /Cigarettes : 5 jours depuis ta dernière consommation/); assert.match(t, /Alcool : 3 verres? ces 7 derniers jours|Alcool : 3 verres cette semaine contre 4/);
-  assert.match(t, /2 envies notées en 2 semaines, dont 1 traversées sans consommer/);
-  assert.match(t, /Déclencheur fréquent : Stress/); assert.match(t, /ne pose pas de diagnostic/);
-  assert.equal(await p.locator('.objs .obj').count(), 2, 'objectif du jour + humeur'); assert.equal(await p.locator('.chs .ch').count(), 3, '3 défis de la semaine');
-  await p.click('.objs [data-a="goalDone"]'); await p.waitForTimeout(200); assert.ok(await p.$('.objs .obj.done')); noErr(p);
-});
-test('Programme 30 jours', 'Démarrer, faire une mission avec une note, rattraper un jour, recommencer sans perdre les badges', async (b, base) => {
-  const st = v7State(); st.prog = { start: Date.now() - 3 * D_, done: {}, note: {} };
-  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('programme');
-  assert.match(await p.textContent('.v7-hero'), /Jour 4/); assert.equal(await p.locator('.pg-lock').count(), 26, 'jours futurs verrouillés');
-  await p.click('[data-a="progDay"][data-d="2"]'); await p.fill('#pg-note', 'Le stress du soir'); await p.click('[data-a="progDone"]'); await p.waitForTimeout(300);
-  let s = await p.state(); assert.ok(s.prog.done[2], 'jour manqué rattrapé'); assert.equal(s.prog.note[2], 'Le stress du soir');
-  for (const d of [1, 3, 4, 5].filter(d => d <= 4)) { await p.click(`[data-a="progDay"][data-d="${d}"]`); await p.click('[data-a="progDone"]'); await p.waitForTimeout(150); await p.closeLayer(); }
-  s = await p.state(); assert.equal(Object.keys(s.prog.done).length, 4);
-  await p.click('[data-a="progReset"]'); await p.click('#cfOk'); await p.waitForTimeout(200); s = await p.state();
-  assert.equal(Object.keys(s.prog.done).length, 0); assert.equal(s.prog.past[0].done, 4, 'historique du programme précédent conservé'); noErr(p);
-});
-test('Récompenses', 'Points d’effort recalculés, badges datés, une reprise ne retire rien, objectifs personnels', async (b, base) => {
-  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('recompenses');
-  const pts = await p.evaluate(() => +document.querySelector('.lvl .num b').textContent.replace(/\D/g, ''));
-  assert.ok(pts > 0, 'des points pour les efforts'); const s0 = await p.state(); assert.ok(s0.ach.journal1 && s0.ach.held1, 'badges d’effort obtenus et datés');
-  await p.go('accueil'); await p.click('[data-a="quickPlus"]'); await p.waitForTimeout(300); await p.closeLayer(); // reprise (arrêt)
-  await p.go('recompenses'); const s1 = await p.state(); assert.equal(s1.ach.journal1, s0.ach.journal1, 'badge conservé après une reprise');
-  const pts1 = await p.evaluate(() => +document.querySelector('.lvl .num b').textContent.replace(/\D/g, '')); assert.ok(pts1 >= pts - 10, 'les points ne fondent pas après une reprise');
-  assert.equal(await p.locator('.bdg').count(), 14); noErr(p);
-});
 test('Mes motivations', 'Ajouter objectifs, phrases, souvenirs datés, liste à accomplir, photo réduite ; affichage à l’accueil et accès depuis le SOS', async (b, base) => {
   const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('motivations');
   for (const [k, v] of [['future', 'Courir 10 km'], ['quotes', 'Un jour à la fois'], ['bucket', 'Voyage en Islande']]) { await p.fill(`form.mv-add[data-k="${k}"] input[type=text]`, v); await p.click(`form.mv-add[data-k="${k}"] [data-a="mvAdd"]`); await p.waitForTimeout(120); }
@@ -1366,8 +1280,8 @@ test('Mes motivations', 'Ajouter objectifs, phrases, souvenirs datés, liste à 
   await p.setInputFiles('#mvPhoto', { name: 'm.png', mimeType: 'image/png', buffer: png }); await p.waitForTimeout(500);
   const m = (await p.state()).motiv; assert.equal(m.future[0].t, 'Courir 10 km'); assert.ok(m.memories[0].d, 'souvenir daté'); assert.equal(m.photos.length, 1); assert.match(m.photos[0].src, /^data:image\/jpeg;base64,/);
   await p.click(`[data-a="mvDone"][data-id="${m.bucket[0].id}"]`); await p.waitForTimeout(100); assert.ok((await p.state()).motiv.bucket[0].done);
-  await p.go('accueil'); assert.ok(await p.$('.hmot img'), 'photo affichée à l’accueil');
-  await p.click('.dash-quick [data-a="sos"]'); await p.waitForSelector('.qs-motiv'); noErr(p);
+  await p.go('motivations'); assert.ok(await p.$('#app img'), 'photo affichée dans Mes raisons');
+  await p.click('nav .nav-help'); await p.waitForSelector('.qs-motiv'); noErr(p);
 });
 test('Comprendre mon addiction', '9 catégories, 6 rubriques, avertissement sevrage alcool, sources existantes, aide', async (b, base) => {
   const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('comprendre');
@@ -1376,13 +1290,6 @@ test('Comprendre mon addiction', '9 catégories, 6 rubriques, avertissement sevr
   assert.equal(await p.locator('.cmp-s').count(), 6); assert.ok(await p.$('.mwarn'), 'avertissement sevrage'); assert.ok(await p.locator('.srcs li').count() >= 3, 'sources');
   for (const k of ['tabac', 'nicotine', 'cannabis', 'jeu', 'reseaux', 'ecrans', 'jv', 'autres']) { await p.click('[data-a="compOpen"][data-k=""]'); await p.click(`[data-a="compOpen"][data-k="${k}"]`); await p.waitForTimeout(80); assert.ok(await p.locator('.srcs li').count() >= 2, k + ' : sources'); }
   noErr(p);
-});
-test('Mon évolution', 'Graphiques semaine et mois calculés, comparaison au mois précédent, envies, humeur, difficultés', async (b, base) => {
-  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('evolution');
-  assert.equal(await p.locator('.v7-chart').count(), 6); assert.equal(await p.locator('.v7-chart').first().locator('rect').count(), 8, '8 semaines');
-  const k = await p.evaluate(() => [...document.querySelectorAll('.ev-k>div')].map(d => d.textContent)); assert.ok(k.some(x => /Envies traversées\s*1/.test(x)), 'envies traversées : 1');
-  assert.match(await p.textContent('#app'), /Stress · 3/, 'déclencheurs : 1 consommation + 2 envies'); await p.click('[data-a="evHabit"][data-id="h1"]'); await p.waitForTimeout(150);
-  assert.match(await p.textContent('#app'), /Jours dans ta limite/); noErr(p);
 });
 test('Plan de prévention', 'Émotions, activités de remplacement et plan en cas de reprise enregistrés', async (b, base) => {
   const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('plan');
@@ -1393,22 +1300,21 @@ test('Plan de prévention', 'Émotions, activités de remplacement et plan en ca
 test('Données', 'Anciennes sauvegardes sans les nouvelles rubriques, et rubriques corrompues : relues sans erreur ni perte', async (b, base) => {
   const st = profileState({ name: 'Ancienne' }); st.prog = { start: 'x' }; st.motiv = { photos: [{ id: 'p', src: 'javascript:alert(1)' }], future: 'pas une liste' }; st.ach = { journal1: 'nan' };
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
-  for (const v of ['coach', 'programme', 'recompenses', 'motivations', 'comprendre', 'evolution', 'plan', 'accueil']) await p.go(v);
+  for (const [v, to] of [['coach', 'accueil'], ['programme', 'outils'], ['recompenses', 'progres'], ['motivations'], ['comprendre'], ['evolution', 'progres'], ['plan'], ['progres'], ['accueil']]) { await p.evaluate(x => { location.hash = x; }, v); await p.waitForFunction(x => document.getElementById('app').dataset.view === x, to || v, { timeout: 5000 }); }
   const s = await p.state(); assert.equal(s.profile.name, 'Ancienne'); assert.ok(!s.prog || isFinite(s.prog.start)); assert.equal((s.motiv && s.motiv.photos || []).length, 0, 'image non sûre rejetée');
   assert.ok(!await p.$('img[src^="javascript"]')); noErr(p);
 });
 
 /* ---------- LIBRE 8 « Verre » ---------- */
-test('Interface', 'Ordinateur : barre latérale en verre (sections, suivis avec compteur, Ctrl+K, repli mémorisé), héros de la semaine et carte du jour calculés', async (b, base) => {
+test('Interface', 'Ordinateur : barre latérale en verre (sections, suivis avec compteur, Ctrl+K, repli mémorisé), semaine calculée', async (b, base) => {
   const p = await page(b, base, { init: seed(v7State()), viewport: { width: 1440, height: 900 } }); await p.goto(base); await p.settle();
   assert.ok(await p.isVisible('.nav-search')); assert.equal(await p.locator('.nav-hab').count(), 2, 'un bouton par suivi');
   assert.match(await p.textContent('.nav-hab[data-id="h0"] small'), /^5\s*j$/, 'jours depuis la dernière consommation');
-  assert.match(await p.textContent('.gh'), /jours réussis/); assert.equal(await p.locator('.gd-w li').count(), 7);
-  assert.match(await p.textContent('.gd-top'), new RegExp(String(new Date().getDate())));
+  assert.match(await p.textContent('.h11-week'), /jours réussis/);
   await p.keyboard.press('Control+k'); await p.waitForSelector('#sQ'); await p.closeLayer();
   await p.click('.nav-hab[data-id="h1"]'); await p.waitForTimeout(200); assert.equal((await p.state()).prefs.activeHabit, 'h1');
   await p.click('[data-a="navMini"]'); await p.reload(); await p.settle(); assert.ok(await p.evaluate(() => document.body.classList.contains('nav-mini')), 'menu replié mémorisé');
-  await p.go('evolution'); assert.ok(await p.$('.nav .in>a[aria-current="page"][href="#evolution"]')); noErr(p);
+  await p.go('profil'); assert.ok(await p.$('.nav .in>a[aria-current="page"][href="#profil"]')); noErr(p);
 });
 test('Interface', 'Téléphone : la barre du bas garde 4 onglets et l’Aide ; les entrées de la barre latérale restent cachées', async (b, base) => {
   const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle();
@@ -1417,16 +1323,6 @@ test('Interface', 'Téléphone : la barre du bas garde 4 onglets et l’Aide ; l
 });
 
 /* ---------- LIBRE 9 « Tableau de bord » ---------- */
-test('Tableau de bord', 'Vue d’ensemble : chiffres clés justes, période 3/6/12 mois, bulle au toucher, moments marquants qui ouvrent une fiche', async (b, base) => {
-  const st = v7State(); st.unlocked = { 'h0:3': Date.now() - 2 * D_ };
-  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('apercu');
-  assert.equal(await p.locator('.pills a').count(), 10); assert.equal(await p.getAttribute('.pills a[aria-current="page"]', 'href'), '#apercu');
-  assert.match(await p.textContent('.kps'), /jours sans consommation ce mois-ci/);
-  await p.click('[data-a="ovRange"][data-v="26"]'); assert.equal(await p.getAttribute('[data-a="ovRange"][data-v="26"]', 'aria-pressed'), 'true');
-  const box = await p.locator('.ac svg').boundingBox(); await p.mouse.move(box.x + box.width * 0.9, box.y + box.height / 2); await p.waitForTimeout(150);
-  assert.ok(await p.isVisible('.ac-bub'), 'bulle visible'); assert.match(await p.textContent('.ac-bub'), /cigarette/);
-  assert.ok(await p.locator('.mt').count() >= 3); await p.click('.mt-terra'); await p.waitForSelector('#layer .ih'); assert.match(await p.textContent('#layer'), /Stress/); noErr(p);
-});
 test('Tableau de bord', 'Stratégies (ordinateur) : ajouter, idée en un toucher, essayer, avancer d’étape (et glisser-déposer), « Ça m’aide » rejoint le plan', async (b, base) => {
   const p = await page(b, base, { init: seed(v7State()), viewport: { width: 1280, height: 900 } }); await p.goto(base); await p.settle(); await p.go('strategies');
   await p.fill('#bdNew', 'Boire un thé après le repas'); await p.click('[data-a="bdAdd"]'); await p.waitForTimeout(100);
@@ -1445,17 +1341,73 @@ test('Tableau de bord', 'Déclencheurs : annuaire calculé (fréquence, intensit
   await p.click('.tg >> nth=0'); await p.waitForSelector('#layer .ih-t'); assert.equal(await p.locator('#layer .ih-t').count(), 3);
   await p.click('[data-a="trigPlan"]'); await p.waitForTimeout(300); assert.ok(await p.$('#layer'), 'outil de plan ouvert'); noErr(p);
 });
-test('Tableau de bord', 'Économies : total, mois, courbe, dépenses, relevé du mois avec tampon et choix du mois ; rien n’est envoyé', async (b, base) => {
+test('Tableau de bord', 'Économies : total, mois, courbe, dépenses ; rien n’est envoyé', async (b, base) => {
   const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('economies');
   assert.match(await p.textContent('.kps'), /économisés au total/); assert.ok(await p.$('.ac svg'));
-  await p.click('[data-a="releve"]'); await p.waitForSelector('#layer .rl'); assert.match(await p.textContent('#layer .rl'), /Total économisé/); assert.ok(await p.$('#layer .rl-stamp'));
-  await p.click('[data-a="releveM"][data-v="1"]'); await p.waitForTimeout(150); assert.equal(await p.getAttribute('[data-a="releveM"][data-v="1"]', 'aria-pressed'), 'true');
+  assert.equal(await p.$('[data-a="releve"]'), null, 'relevé imprimable retiré');
   assert.deepEqual(p.external, []); noErr(p);
 });
 test('Données', 'Tableau des stratégies abîmé dans une sauvegarde : ignoré sans erreur', async (b, base) => {
   const st = profileState(); st.board = { cards: [{ id: 'x', t: 'ok', stage: 'try' }, { id: 1, t: 'bad', stage: 'zzz' }, 'nope'] };
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('strategies');
   assert.equal((await p.state()).board.cards.length, 1); noErr(p);
+});
+
+/* ---------- LIBRE 11 : application allégée ---------- */
+test('LIBRE 11', 'Accueil en 4 éléments : compteur avec saisie du jour, semaine, une chose à faire, envie (aide + retarder 10 min) ; peu de texte', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
+  const blocks = await p.$$eval('#app .h11 > section', els => els.map(e => e.className));
+  assert.equal(blocks.length, 4, blocks.join(' | '));
+  const words = await p.evaluate(() => document.getElementById('app').innerText.split(/\s+/).filter(Boolean).length);
+  assert.ok(words < 160, 'trop de texte sur l’accueil : ' + words + ' mots');
+  await p.click('.h11 [data-a="quickPlus"]'); await p.waitForTimeout(300); assert.equal((await p.state()).logs.length, 1, 'consommation notée depuis le compteur');
+  await p.closeLayer(); await p.click('.h11 [data-a="delay10"]'); await p.waitForTimeout(400);
+  assert.match(await p.textContent('#layer'), /10:00|9:5\d/, 'le minuteur de 10 minutes démarre');
+  noErr(p);
+});
+
+test('LIBRE 11', 'Navigation : Aujourd’hui, Mon plan, Progrès, Journal ; les pages retirées mènent à leur nouvelle place', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
+  const tabs = await p.$$eval('nav .lg-tabs > a', a => a.map(x => x.textContent.trim()));
+  assert.deepEqual(tabs, ['Aujourd’hui', 'Mon plan', 'Progrès', 'Journal']);
+  for (const [from, to] of [['coach', 'accueil'], ['recompenses', 'progres'], ['programme', 'outils'], ['apercu', 'progres'], ['evolution', 'progres']]) {
+    await p.evaluate(v => { location.hash = v; }, from); await p.waitForFunction(v => document.getElementById('app').dataset.view === v, to, { timeout: 5000 });
+  }
+  noErr(p);
+});
+
+test('LIBRE 11', 'Mon plan : raisons, déclencheurs, ce qui m’aide, proches, comprendre ; Jour J enregistré avec sa préparation, gardé après rechargement', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle(); await p.go('outils');
+  const txt = await p.textContent('#app');
+  for (const k of ['Jour J', 'Mes raisons', 'Mes déclencheurs', 'Ce qui m’aide', 'Mes proches', 'Comprendre', 'Je suis en danger']) assert.ok(txt.includes(k), 'manque : ' + k);
+  await p.click('[data-a="quitDay"]'); await p.waitForSelector('#quitDate');
+  const d = new Date(Date.now() + 5 * 864e5), iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  await p.fill('#quitDate', iso); await p.click('[data-a="quitSave"]'); await p.waitForSelector('[data-a="quitPrep"]');
+  await p.click('[data-a="quitPrep"][data-i="0"]'); await p.waitForTimeout(200);
+  let s = await p.state(); assert.equal(s.plan.quit.date, iso); assert.equal(s.plan.quit.prep[0], true);
+  await p.reload(); await p.settle(); await p.go('outils');
+  assert.match(await p.textContent('#app'), /Dans 5 jours/);
+  await p.click('[data-a="contactsSheet"]'); await p.waitForSelector('#layer [data-a="contactForm"]');
+  noErr(p);
+});
+
+test('LIBRE 11', 'Progrès : trois chiffres, une courbe, les étapes franchies et les liens (calendrier, économies, bilan, statistiques)', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ days: 10 })) }); await p.goto(base); await p.settle(); await p.go('progres');
+  assert.equal((await p.$$('.pg11 .kp')).length, 3);
+  assert.ok(await p.$('.pg11 .ov-chart svg'), 'courbe affichée');
+  const ms = await p.$$eval('.pg-ms-l li', l => l.map(x => x.textContent.trim()));
+  assert.deepEqual(ms, ['Premier jour', 'Trois jours', 'Une semaine']);
+  for (const h of ['#calendrier', '#economies', '#bilans', '#stats']) assert.ok(await p.$(`.pg11 a[href="${h}"]`), 'lien ' + h);
+  noErr(p);
+});
+
+test('LIBRE 11', 'Aide : quatre choix (envie, retarder, respirer, appeler) et « Je suis en danger », sans liste d’exercices en plus', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
+  await p.click('.h11 [data-a="sos"]'); await p.waitForSelector('#layer .qs-tri');
+  const acts = await p.$$eval('#layer .qs-tri > *', e => e.map(x => x.dataset.a || (x.className.includes('qs-call') ? 'call' : '')));
+  assert.deepEqual(acts.slice(0, 3), ['s5Open', 'delay10', 'qsBreath']); assert.equal(acts[acts.length - 1], 'qsDanger'); assert.equal(acts.length, 5);
+  assert.equal(await p.$('#layer .qs-moretools'), null, 'plus de liste d’exercices');
+  noErr(p);
 });
 
 module.exports = { T };
