@@ -18,7 +18,7 @@ et aux motivations (bouton « Relire mes motivations » dans le SOS).
 ## Nouvelle identité
 
 - Bandeaux toujours **bleu nuit**, lueur **sauge**, fond **crème**, cartes blanc cassé.
-- Titres en **serif** (New York sur iPhone et Mac, Iowan/Palatino/Georgia ailleurs, sans police téléchargée), chiffres en Inter.
+- Titres et textes dans **une seule police, celle du logo LIBRE** (Inter, incluse dans l’app, sans téléchargement) : titres très gras (800), sous-titres 750, textes courants en Inter normal.
 - La couleur propre à chaque addiction ne colore plus que les accents (boutons, barres, anneaux) : l'identité reste commune.
 - Clair et sombre redéfinis ; contrastes vérifiés (AA) sur tous les écrans, y compris les nouveaux.
 - Animations d'apparition discrètes, désactivées si « réduire les animations » est activé.
