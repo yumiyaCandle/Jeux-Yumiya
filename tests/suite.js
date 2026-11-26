@@ -1228,14 +1228,14 @@ test('Accueil en chiffres', 'Les cartes donnent les bons chiffres et s’adapten
   const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
   const cards = async () => p.evaluate(() => Object.fromEntries([...document.querySelectorAll('.dash-c')].map(c => [c.dataset.k, c.querySelector('.dash-v').textContent.trim()])));
   let c = await cards();
-  assert.equal(c.days, '6', 'jours depuis la dernière consommation'); assert.ok(c.saved && /CHF|€/.test(c.saved), 'économies affichées (budget renseigné)');
+  assert.ok(!c.days, 'jours sans : affichés par le grand compteur, pas en double'); assert.equal((await p.textContent('.hm-hero .hm-days .num')).trim(), '6', 'jours depuis la dernière consommation'); assert.ok(c.saved && /CHF|€/.test(c.saved), 'économies affichées (budget renseigné)');
   assert.ok(c.avoided, 'quantité évitée (cigarettes)'); assert.equal(c.success, '20/21', 'jours sans consommation / jours suivis');
   assert.ok(!c.time, 'pas de « temps regagné » pour le tabac');
   assert.match(await p.textContent('.dash-day'), /Aucune consommation aujourd’hui/);
   assert.equal(await p.locator('.dash-spark svg circle').count() + await p.locator('.dash-spark svg rect.sp-use').count() + await p.locator('.dash-spark svg rect.sp-off').count(), 14, '14 jours dans le mini-graphique');
   await p.click('[data-a="homeHabit"][data-id="h1"]'); await p.waitForTimeout(200); c = await cards();
   assert.ok(!c.days, 'réduction : pas de compteur « jours sans »'); assert.equal(c.goal.replace(/\s/g, ''), '3/10', 'limite de la semaine'); 
-  for (const a of ['logForm', 'journalForm', 'sos', 'recap']) assert.ok(await p.$(`.dash-quick [data-a="${a}"]`), 'accès rapide ' + a);
+  for (const a of ['logForm', 'journalForm', 'sos']) assert.ok(await p.$(`.dash-quick [data-a="${a}"]`), 'accès rapide ' + a); assert.ok(await p.$('.dash-quick a[href="#coach"]'), 'accès au coach'); assert.ok(await p.$('.dash-foot [data-a="recap"]'), 'bilan de la semaine');
   assert.ok(!(await p.isVisible('.day-more .trow')), 'conseil du jour replié derrière « En savoir plus »'); noErr(p);
 });
 test('Accueil en chiffres', 'Personnaliser : masquer une carte et changer l’ordre, mémorisé après rechargement', async (b, base) => {
@@ -1298,6 +1298,82 @@ test('Langue', 'Le bouton de langue en haut de l’accueil change toute l’appl
   assert.equal((await p.textContent('.tact-lang')).trim(), 'FR'); await p.click('.tact-lang'); await p.click('[data-a="setLang"][data-l="de"]'); await p.closeLayer();
   assert.equal((await p.textContent('.tact-lang')).trim(), 'DE'); assert.match(await p.textContent('.dash'), /Heute/);
   await p.go('profil'); assert.match(await p.textContent('#app'), /Mein Konto/); await p.reload(); await p.settle(); assert.equal(await p.evaluate(() => document.documentElement.lang), 'de'); noErr(p);
+});
+
+/* ---------- LIBRE 7 : coach, programme, récompenses, motivations, comprendre, évolution, prévention ---------- */
+const v7State = () => { const N = Date.now(), st = profileState({ types: ['cigarette', 'alcool'], days: 40 });
+  st.habits[1].goal = 'diminuer'; st.habits[1].limit = 10; st.habits[1].limitPer = 'semaine';
+  st.logs = [{ id: 'c1', habitId: 'h0', ts: N - 5 * D_ - 3600e3, qty: 2, trigger: 'Stress' }, { id: 'a1', habitId: 'h1', ts: N - 2 * D_, qty: 3, trigger: 'Soirée / fête' }, { id: 'a2', habitId: 'h1', ts: N - 9 * D_, qty: 4, trigger: 'Soirée / fête' }];
+  st.journal = [{ id: 'j1', ts: N - D_, mood: 4, text: 'ok' }, { id: 'j2', ts: N - 3 * D_, mood: 2, text: 'dur' }];
+  st.tools.history = [{ id: 'u1', ts: N - D_, habitId: 'h0', before: 7, after: 3, trigger: 'Stress', emotion: 'Stress', tool: 'sos5', outcome: 'held' }, { id: 'u2', ts: N - 4 * D_, habitId: 'h0', before: 8, after: 6, trigger: 'Stress', emotion: 'Stress', tool: 'sos5', outcome: 'used' }]; st.tools.histV = 1;
+  st.tools.sessions = [{ ts: N - D_, tool: 'breath', sec: 120 }]; return st; };
+test('Mon coach', 'Bilan calculé sur les vraies données, objectifs du jour, défis, conseils selon les déclencheurs, avertissement', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('coach');
+  const t = await p.textContent('#app');
+  assert.match(t, /Cigarettes : 5 jours depuis ta dernière consommation/); assert.match(t, /Alcool : 3 verres? ces 7 derniers jours|Alcool : 3 verres cette semaine contre 4/);
+  assert.match(t, /2 envies notées en 2 semaines, dont 1 traversées sans consommer/);
+  assert.match(t, /Déclencheur fréquent : Stress/); assert.match(t, /ne pose pas de diagnostic/);
+  assert.equal(await p.locator('.objs .obj').count(), 2, 'objectif du jour + humeur'); assert.equal(await p.locator('.chs .ch').count(), 3, '3 défis de la semaine');
+  await p.click('.objs [data-a="goalDone"]'); await p.waitForTimeout(200); assert.ok(await p.$('.objs .obj.done')); noErr(p);
+});
+test('Programme 30 jours', 'Démarrer, faire une mission avec une note, rattraper un jour, recommencer sans perdre les badges', async (b, base) => {
+  const st = v7State(); st.prog = { start: Date.now() - 3 * D_, done: {}, note: {} };
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('programme');
+  assert.match(await p.textContent('.v7-hero'), /Jour 4/); assert.equal(await p.locator('.pg-lock').count(), 26, 'jours futurs verrouillés');
+  await p.click('[data-a="progDay"][data-d="2"]'); await p.fill('#pg-note', 'Le stress du soir'); await p.click('[data-a="progDone"]'); await p.waitForTimeout(300);
+  let s = await p.state(); assert.ok(s.prog.done[2], 'jour manqué rattrapé'); assert.equal(s.prog.note[2], 'Le stress du soir');
+  for (const d of [1, 3, 4, 5].filter(d => d <= 4)) { await p.click(`[data-a="progDay"][data-d="${d}"]`); await p.click('[data-a="progDone"]'); await p.waitForTimeout(150); await p.closeLayer(); }
+  s = await p.state(); assert.equal(Object.keys(s.prog.done).length, 4);
+  await p.click('[data-a="progReset"]'); await p.click('#cfOk'); await p.waitForTimeout(200); s = await p.state();
+  assert.equal(Object.keys(s.prog.done).length, 0); assert.equal(s.prog.past[0].done, 4, 'historique du programme précédent conservé'); noErr(p);
+});
+test('Récompenses', 'Points d’effort recalculés, badges datés, une reprise ne retire rien, objectifs personnels', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('recompenses');
+  const pts = await p.evaluate(() => +document.querySelector('.lvl .num b').textContent.replace(/\D/g, ''));
+  assert.ok(pts > 0, 'des points pour les efforts'); const s0 = await p.state(); assert.ok(s0.ach.journal1 && s0.ach.held1, 'badges d’effort obtenus et datés');
+  await p.go('accueil'); await p.click('[data-a="quickPlus"]'); await p.waitForTimeout(300); await p.closeLayer(); // reprise (arrêt)
+  await p.go('recompenses'); const s1 = await p.state(); assert.equal(s1.ach.journal1, s0.ach.journal1, 'badge conservé après une reprise');
+  const pts1 = await p.evaluate(() => +document.querySelector('.lvl .num b').textContent.replace(/\D/g, '')); assert.ok(pts1 >= pts - 10, 'les points ne fondent pas après une reprise');
+  assert.equal(await p.locator('.bdg').count(), 14); noErr(p);
+});
+test('Mes motivations', 'Ajouter objectifs, phrases, souvenirs datés, liste à accomplir, photo réduite ; affichage à l’accueil et accès depuis le SOS', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('motivations');
+  for (const [k, v] of [['future', 'Courir 10 km'], ['quotes', 'Un jour à la fois'], ['bucket', 'Voyage en Islande']]) { await p.fill(`form.mv-add[data-k="${k}"] input[type=text]`, v); await p.click(`form.mv-add[data-k="${k}"] [data-a="mvAdd"]`); await p.waitForTimeout(120); }
+  await p.fill('form.mv-add[data-k="memories"] input[type=text]', 'Fête de Léa'); await p.fill('form.mv-add[data-k="memories"] input[type=date]', '2026-10-03'); await p.click('form.mv-add[data-k="memories"] [data-a="mvAdd"]'); await p.waitForTimeout(150);
+  const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAFklEQVR4nGNk+M/AwMDAxMDAwMDAAAANHQEDKIOAzQAAAABJRU5ErkJggg==', 'base64');
+  await p.setInputFiles('#mvPhoto', { name: 'm.png', mimeType: 'image/png', buffer: png }); await p.waitForTimeout(500);
+  const m = (await p.state()).motiv; assert.equal(m.future[0].t, 'Courir 10 km'); assert.ok(m.memories[0].d, 'souvenir daté'); assert.equal(m.photos.length, 1); assert.match(m.photos[0].src, /^data:image\/jpeg;base64,/);
+  await p.click(`[data-a="mvDone"][data-id="${m.bucket[0].id}"]`); await p.waitForTimeout(100); assert.ok((await p.state()).motiv.bucket[0].done);
+  await p.go('accueil'); assert.ok(await p.$('.hmot img'), 'photo affichée à l’accueil');
+  await p.click('.dash-quick [data-a="sos"]'); await p.waitForSelector('.qs-motiv'); noErr(p);
+});
+test('Comprendre mon addiction', '9 catégories, 6 rubriques, avertissement sevrage alcool, sources existantes, aide', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('comprendre');
+  assert.equal(await p.locator('.cmp-b').count(), 9); assert.equal(await p.locator('.cmp-b.mine').count(), 2, 'les addictions suivies sont mises en avant');
+  await p.click('[data-a="compOpen"][data-k="alcool"]'); await p.waitForTimeout(150);
+  assert.equal(await p.locator('.cmp-s').count(), 6); assert.ok(await p.$('.mwarn'), 'avertissement sevrage'); assert.ok(await p.locator('.srcs li').count() >= 3, 'sources');
+  for (const k of ['tabac', 'nicotine', 'cannabis', 'jeu', 'reseaux', 'ecrans', 'jv', 'autres']) { await p.click('[data-a="compOpen"][data-k=""]'); await p.click(`[data-a="compOpen"][data-k="${k}"]`); await p.waitForTimeout(80); assert.ok(await p.locator('.srcs li').count() >= 2, k + ' : sources'); }
+  noErr(p);
+});
+test('Mon évolution', 'Graphiques semaine et mois calculés, comparaison au mois précédent, envies, humeur, difficultés', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('evolution');
+  assert.equal(await p.locator('.v7-chart').count(), 6); assert.equal(await p.locator('.v7-chart').first().locator('rect').count(), 8, '8 semaines');
+  const k = await p.evaluate(() => [...document.querySelectorAll('.ev-k>div')].map(d => d.textContent)); assert.ok(k.some(x => /Envies traversées\s*1/.test(x)), 'envies traversées : 1');
+  assert.match(await p.textContent('#app'), /Stress · 3/, 'déclencheurs : 1 consommation + 2 envies'); await p.click('[data-a="evHabit"][data-id="h1"]'); await p.waitForTimeout(150);
+  assert.match(await p.textContent('#app'), /Jours dans ta limite/); noErr(p);
+});
+test('Plan de prévention', 'Émotions, activités de remplacement et plan en cas de reprise enregistrés', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle(); await p.go('plan');
+  assert.match(await p.textContent('h1'), /plan de prévention/i);
+  for (const k of ['emotions', 'alts', 'relapse']) { const sug = p.locator(`.plan-sec [data-k="${k}"][data-a="plSug"], .plan-sec [data-a="plSug"][data-k="${k}"]`).first(); if (await sug.count()) await sug.click(); else { await p.fill(`.pl-add[data-k="${k}"] input`, 'Test ' + k); await p.press(`.pl-add[data-k="${k}"] input`, 'Enter'); } await p.waitForTimeout(120); }
+  const P = (await p.state()).plan; for (const k of ['emotions', 'alts', 'relapse']) assert.ok(P[k].length >= 1, k); noErr(p);
+});
+test('Données', 'Anciennes sauvegardes sans les nouvelles rubriques, et rubriques corrompues : relues sans erreur ni perte', async (b, base) => {
+  const st = profileState({ name: 'Ancienne' }); st.prog = { start: 'x' }; st.motiv = { photos: [{ id: 'p', src: 'javascript:alert(1)' }], future: 'pas une liste' }; st.ach = { journal1: 'nan' };
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
+  for (const v of ['coach', 'programme', 'recompenses', 'motivations', 'comprendre', 'evolution', 'plan', 'accueil']) await p.go(v);
+  const s = await p.state(); assert.equal(s.profile.name, 'Ancienne'); assert.ok(!s.prog || isFinite(s.prog.start)); assert.equal((s.motiv && s.motiv.photos || []).length, 0, 'image non sûre rejetée');
+  assert.ok(!await p.$('img[src^="javascript"]')); noErr(p);
 });
 
 module.exports = { T };
