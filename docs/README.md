@@ -2,6 +2,7 @@
 
 | Document | Contenu |
 |---|---|
+| [LIBRE-8.md](LIBRE-8.md) | **Interface actuelle « Verre »** : barre latérale en verre, héros de la semaine, carte du jour, tuiles avec variation, graphiques ; inspirations |
 | [LIBRE-7.md](LIBRE-7.md) | **Version actuelle « Nuit & Sauge »** : identité bleu nuit/sauge/crème, accueil en sections, Mon coach, programme de 30 jours, récompenses, motivations, comprendre mon addiction, mon évolution, plan de prévention ; données, sécurité, tests |
 | [MISE-A-JOUR-COMPTES.md](MISE-A-JOUR-COMPTES.md) | **Mise à jour actuelle** : accueil en chiffres, recherche globale, comptes (e-mail ou SMS, chiffrement de bout en bout, migration), langue, profil en 9 catégories, notifications, favoris, mode discret, historique ; ce qui demande une configuration externe |
 | [../server/README.md](../server/README.md) | Serveur de comptes : sécurité, variables, démarrage, points juridiques |

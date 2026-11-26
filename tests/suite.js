@@ -1376,4 +1376,22 @@ test('Données', 'Anciennes sauvegardes sans les nouvelles rubriques, et rubriqu
   assert.ok(!await p.$('img[src^="javascript"]')); noErr(p);
 });
 
+/* ---------- LIBRE 8 « Verre » ---------- */
+test('Interface', 'Ordinateur : barre latérale en verre (sections, suivis avec compteur, Ctrl+K, repli mémorisé), héros de la semaine et carte du jour calculés', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()), viewport: { width: 1440, height: 900 } }); await p.goto(base); await p.settle();
+  assert.ok(await p.isVisible('.nav-search')); assert.equal(await p.locator('.nav-hab').count(), 2, 'un bouton par suivi');
+  assert.match(await p.textContent('.nav-hab[data-id="h0"] small'), /^5\s*j$/, 'jours depuis la dernière consommation');
+  assert.match(await p.textContent('.gh'), /jours réussis/); assert.equal(await p.locator('.gd-w li').count(), 7);
+  assert.match(await p.textContent('.gd-top'), new RegExp(String(new Date().getDate())));
+  await p.keyboard.press('Control+k'); await p.waitForSelector('#sQ'); await p.closeLayer();
+  await p.click('.nav-hab[data-id="h1"]'); await p.waitForTimeout(200); assert.equal((await p.state()).prefs.activeHabit, 'h1');
+  await p.click('[data-a="navMini"]'); await p.reload(); await p.settle(); assert.ok(await p.evaluate(() => document.body.classList.contains('nav-mini')), 'menu replié mémorisé');
+  await p.go('evolution'); assert.ok(await p.$('.nav .in>a[aria-current="page"][href="#evolution"]')); noErr(p);
+});
+test('Interface', 'Téléphone : la barre du bas garde 4 onglets et l’Aide ; les entrées de la barre latérale restent cachées', async (b, base) => {
+  const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle();
+  const vis = await p.evaluate(() => [...document.querySelectorAll('#navWrap a, #navWrap button')].filter(x => x.offsetParent && x.getBoundingClientRect().width > 0).length);
+  assert.equal(vis, 5); noErr(p);
+});
+
 module.exports = { T };
