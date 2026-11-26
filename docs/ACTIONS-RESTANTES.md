@@ -46,7 +46,7 @@ Voir `server/README.md`.
 ## 2 bis. Signature et fichiers Android
 
 - `LIBRE-android-release-NON-SIGNE.aab` est **livré à part** (il n'est pas dans `LIBRE-COMPLET.zip`, qui ne contient que le projet).
-  Empreinte SHA-256 : `ca19be4052a2d5bc7f820f7441f9d7bab210d666e884ec39886af15ad03af37c`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
+  Empreinte SHA-256 : `fb687c95bd1b448edb14c9dbbb226d3e8b6df6c957b99154e1877a5aff2b8fc5`. Il est construit mais **non signé** : signe-le avec ta clé d'upload
   (Android Studio › Build › Generate Signed Bundle) avant de l'envoyer sur Google Play. Tu peux aussi le reconstruire toi-même
   (`RELEASE-PROCESS.md`).
 - `LIBRE-android-debug.apk` (livré à part) : pour essayer sur un téléphone Android, jamais pour le store.
