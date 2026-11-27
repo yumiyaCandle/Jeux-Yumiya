@@ -4520,6 +4520,18 @@ html:not(.fx)::view-transition-new(libre-nav){animation:none}
 @media (prefers-reduced-motion:reduce){html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind{transition:opacity .2s!important}html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.mv{animation:none!important}}
 
 html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs::before,html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs::after{display:none!important}
+
+/* Goutte saisie : elle grossit comme une loupe, plus claire, ombre plus haute ; l'onglet survolé prend la couleur */
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs{touch-action:none;user-select:none;-webkit-user-select:none}
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a{-webkit-user-drag:none;user-select:none}
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind.drag{scale:1.14 1.1;transition:scale .25s cubic-bezier(.3,1.4,.5,1),opacity .2s!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.35))!important;-webkit-backdrop-filter:blur(2px) saturate(180%) brightness(1.08)!important;backdrop-filter:blur(2px) saturate(180%) brightness(1.08)!important;
+  box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.7),0 14px 30px -10px rgba(15,18,23,.45)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a.lg-hot{color:var(--accent-strong)!important}
+@media (hover:hover) and (min-width:900px){html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs{cursor:grab}html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs:has(.drag){cursor:grabbing}}
+
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a{position:relative!important;z-index:2!important}
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind{z-index:0!important}
 </style>
 </head>
 <body>
@@ -5019,6 +5031,35 @@ function lgPlace(animate){const box=$('#navWrap .lg-tabs'),ind=box&&box.querySel
   if(LG_POS&&animate&&!RM()&&(LG_POS.x!==r.x||LG_POS.y!==r.y)){ind.style.transition='none';set(LG_POS);void ind.offsetWidth;ind.style.transition='';ind.classList.add('mv');requestAnimationFrame(()=>set(r));setTimeout(()=>ind.classList.remove('mv'),520)}
   else set(r);ind.style.opacity='1';LG_POS=r}
 window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
+/* LIBRE 19 : la goutte se saisit au doigt ou à la souris, comme sur iOS (apple-design §2-6).
+   Elle suit le pointeur 1:1 (en loupe), résiste au-delà des bords, puis au lâcher file vers l'onglet visé par l'élan
+   (projection de la vitesse), en repartant de sa position actuelle. Un simple appui reste un clic normal. */
+(()=>{let st=null,eat=false;const rub=(o,d,c=.55)=>(o*d*c)/(d+c*Math.abs(o));
+  const proj=v=>(v/1000)*.99/(1-.99);
+  const tabsOf=b=>[...b.querySelectorAll(':scope>a')];
+  document.addEventListener('pointerdown',e=>{const b=e.target.closest&&e.target.closest('#navWrap .lg-tabs');if(!b||e.button>0||RM()||FX())return;
+    const ind=b.querySelector('.lg-ind'),cur=b.querySelector(':scope>a[aria-current="page"]');if(!ind||!cur||ind.style.opacity==='0')return;
+    const V=innerWidth>=900,base={x:cur.offsetLeft,y:cur.offsetTop,w:cur.offsetWidth,h:cur.offsetHeight};
+    const r=b.getBoundingClientRect(),pp=V?e.clientY-r.top:e.clientX-r.left,start=V?base.y:base.x,half=V?base.h/2:base.w/2;
+    const onDrop=pp>=start&&pp<=start+(V?base.h:base.w);
+    st={b,ind,V,base,id:e.pointerId,p0:V?e.clientY:e.clientX,grab:onDrop?pp-start:half,moved:false,hist:[],pos:start}},{passive:true});
+  document.addEventListener('pointermove',e=>{if(!st||e.pointerId!==st.id)return;const c=st.V?e.clientY:e.clientX;
+    if(!st.moved){if(Math.abs(c-st.p0)<8)return;st.moved=true;st.ind.classList.add('drag');st.ind.style.transition='none';try{st.b.setPointerCapture(st.id)}catch(_){}}
+    const r=st.b.getBoundingClientRect(),size=st.V?st.base.h:st.base.w,max=(st.V?st.b.clientHeight:st.b.clientWidth)-size;
+    let pos=(c-(st.V?r.top:r.left))-st.grab;if(pos<0)pos=rub(pos,size);else if(pos>max)pos=max+rub(pos-max,size);
+    st.pos=pos;st.ind.style.transform=st.V?`translate(${st.base.x}px,${pos}px)`:`translate(${pos}px,${st.base.y}px)`;
+    const t=performance.now();st.hist.push([t,pos]);while(st.hist.length>5)st.hist.shift();
+    const mid=pos+size/2;tabsOf(st.b).forEach(a=>{const a0=st.V?a.offsetTop:a.offsetLeft,a1=a0+(st.V?a.offsetHeight:a.offsetWidth);a.classList.toggle('lg-hot',mid>=a0&&mid<a1)})});
+  const end=e=>{if(!st||e.pointerId!==st.id)return;const S0=st;st=null;tabsOf(S0.b).forEach(a=>a.classList.remove('lg-hot'));if(!S0.moved)return;
+    eat=true;setTimeout(()=>eat=false,350);S0.ind.classList.remove('drag');
+    const h=S0.hist,v=h.length>1?(h[h.length-1][1]-h[0][1])/Math.max(1,h[h.length-1][0]-h[0][0])*1000:0;
+    const size=S0.V?S0.base.h:S0.base.w,target=S0.pos+proj(v)+size/2;
+    let best=null,bd=1e9;tabsOf(S0.b).forEach(a=>{const c=(S0.V?a.offsetTop+a.offsetHeight/2:a.offsetLeft+a.offsetWidth/2),d=Math.abs(c-target);if(d<bd){bd=d;best=a}});
+    LG_POS=S0.V?{x:S0.base.x,y:S0.pos,w:S0.base.w,h:S0.base.h}:{x:S0.pos,y:S0.base.y,w:S0.base.w,h:S0.base.h};S0.ind.style.transition='';
+    const href=best&&best.getAttribute('href');if(href&&href!==location.hash){haptic&&haptic();location.hash=href}else lgPlace(true)};
+  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+  document.addEventListener('click',e=>{if(eat&&e.target.closest&&e.target.closest('#navWrap .lg-tabs')){e.preventDefault();e.stopPropagation();eat=false}},true)})();
+
 /* Téléphone : la barre se réduit quand on fait défiler vers le bas, revient dès qu’on remonte */
 (()=>{let y0=0;window.addEventListener('scroll',()=>{const y=scrollY;if(innerWidth>=900){document.body.classList.remove('nav-min');return}
   if(y>y0+10&&y>120)document.body.classList.add('nav-min');else if(y<y0-10||y<60)document.body.classList.remove('nav-min');if(Math.abs(y-y0)>10)y0=y},{passive:true})})();
