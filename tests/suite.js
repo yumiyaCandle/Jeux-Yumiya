@@ -1395,7 +1395,8 @@ test('LIBRE 11', 'Progrès : trois chiffres, une courbe, les étapes franchies e
   const p = await page(b, base, { init: seed(profileState({ days: 10 })) }); await p.goto(base); await p.settle(); await p.go('progres');
   assert.equal((await p.$$('.pg11 .kp')).length, 3);
   assert.ok(await p.$('.pg11 .ov-chart svg'), 'courbe affichée');
-  const ms = await p.$$eval('.pg-ms-l li', l => l.map(x => x.textContent.trim()));
+  const ms = await p.$$eval('.pg-ms-l li:not(.next)', l => l.map(x => x.textContent.trim()));
+  assert.match(await p.textContent('.pg-ms-l li.next'), /Deux semaines/, 'la prochaine étape apparaît en jeton à venir');
   assert.deepEqual(ms, ['Premier jour', 'Trois jours', 'Une semaine']);
   for (const h of ['#calendrier', '#economies', '#bilans', '#stats']) assert.ok(await p.$(`.pg11 a[href="${h}"]`), 'lien ' + h);
   noErr(p);
