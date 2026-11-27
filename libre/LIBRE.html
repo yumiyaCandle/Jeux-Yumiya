@@ -54,6 +54,8 @@
   --lg-ctl:linear-gradient(155deg,rgba(255,255,255,.62),rgba(255,255,255,.26));
   /* Lentille : le choix actif d'un sélecteur, d'un onglet ou d'un interrupteur, un verre plus clair posé sur le verre */
   --lg-lens:linear-gradient(155deg,rgba(255,255,255,.98),rgba(255,255,255,.74));
+  /* Fenêtres : un verre épais, presque opaque (on lit la fenêtre, pas ce qui est derrière) */
+  --sheet-bg:rgba(246,246,242,.95);
   --lg-lens-sh:inset 1.5px 1.5px 0 -.5px #fff,inset -1px -1px 0 -.5px rgba(255,255,255,.75),inset 0 0 0 .5px rgba(21,33,31,.08),0 1px 2px rgba(21,33,31,.08),0 8px 18px -8px rgba(21,33,31,.32);
   --shadow-1:0 1px 2px rgba(21,33,31,.05),0 6px 18px -10px rgba(21,33,31,.14);
   --shadow-2:0 2px 6px rgba(21,33,31,.06),0 18px 40px -18px rgba(21,33,31,.28);
@@ -89,6 +91,7 @@ html.safe-top{--safe-t:env(safe-area-inset-top,0px)}
   --lg-drop:0 1px 2px rgba(0,0,0,.35),0 18px 40px -20px rgba(0,0,0,.7);
   --lg-ctl:linear-gradient(155deg,rgba(255,255,255,.14),rgba(255,255,255,.05));
   --lg-lens:linear-gradient(155deg,rgba(255,255,255,.28),rgba(255,255,255,.11));
+  --sheet-bg:rgba(15,27,30,.95);
   --lg-lens-sh:inset 1px 1px 0 -.5px rgba(255,255,255,.6),inset -1px -1px 0 -.5px rgba(255,255,255,.2),inset 0 0 0 .5px rgba(255,255,255,.1),0 8px 18px -8px rgba(0,0,0,.65);
 }}
 :root[data-theme="dark"]{
@@ -109,6 +112,7 @@ html.safe-top{--safe-t:env(safe-area-inset-top,0px)}
   --lg-drop:0 1px 2px rgba(0,0,0,.35),0 18px 40px -20px rgba(0,0,0,.7);
   --lg-ctl:linear-gradient(155deg,rgba(255,255,255,.14),rgba(255,255,255,.05));
   --lg-lens:linear-gradient(155deg,rgba(255,255,255,.28),rgba(255,255,255,.11));
+  --sheet-bg:rgba(15,27,30,.95);
   --lg-lens-sh:inset 1px 1px 0 -.5px rgba(255,255,255,.6),inset -1px -1px 0 -.5px rgba(255,255,255,.2),inset 0 0 0 .5px rgba(255,255,255,.1),0 8px 18px -8px rgba(0,0,0,.65);
 }
 @media (prefers-reduced-transparency:reduce){:root{--glass:var(--surface-solid);--glass-strong:var(--surface-solid);--surface:var(--surface-solid);--glass-blur:none;--lg-fill:var(--surface-solid);--lg-ctl:var(--surface-solid);--lg-blur:none}}
@@ -404,8 +408,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;heigh
 }
 
 /* ---------- 8. Fenêtres, aide guidée, notifications ---------- */
-.backdrop{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(5,12,13,.38);animation:fade var(--t) var(--ease)}
-.sheet{width:100%;max-width:560px;max-height:92vh;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:var(--r-sheet) var(--r-sheet) 0 0;padding:6px var(--gutter) calc(24px + var(--safe-b));background:var(--glass-strong);animation:sheetIn .38s var(--ease) both;transform-origin:50% 100%}
+.backdrop{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center;background:rgba(5,12,13,.45);animation:fade var(--t) var(--ease)}
+.sheet{width:100%;max-width:560px;max-height:92vh;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;border-radius:var(--r-sheet) var(--r-sheet) 0 0;padding:6px var(--gutter) calc(24px + var(--safe-b));background:var(--sheet-bg);animation:sheetIn .38s var(--ease) both;transform-origin:50% 100%}
 .sheet .grab{width:36px;height:5px;border-radius:5px;background:var(--line-2);margin:4px auto 10px}
 .sheet-h{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s4)}
 .sheet-h h2{font-size:20px}
@@ -748,7 +752,7 @@ svg text{fill:var(--ink-3);font-family:var(--font);font-size:11px;font-variant-n
 /* ---------- 10. Mouvement et accessibilité ---------- */
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-@keyframes sheetIn{from{opacity:.4;transform:translateY(40px) scale(.98);-webkit-backdrop-filter:blur(0);backdrop-filter:blur(0)}to{opacity:1;transform:none}}
+@keyframes sheetIn{from{transform:translateY(40px) scale(.98)}to{transform:none}}
 @keyframes toastIn{from{opacity:0;transform:translate(-50%,-16px) scale(.96)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes toastOut{to{opacity:0;transform:translate(-50%,-10px)}}
 @keyframes lgStretch{40%{border-radius:40%/999px}}
@@ -3167,8 +3171,10 @@ window.addEventListener('resize',()=>{if(!S.profile)drawScene()});
 
 /* ============ Feuilles ============ */
 function sheet(title,html,onMount){
-  const L=$('#layer');
+  const L=$('#layer'),had=!!(L&&L.querySelector('.sheet'));
   L.innerHTML=`<div class="backdrop" data-a="closeBg"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="grab"></div><div class="sheet-h"><h2>${esc(title)}</h2><button class="iconbtn" style="color:var(--ink)" data-a="close" aria-label="${esc(t('Fermer'))}">${ic('x')}</button></div>${html}</div></div>`;
+  /* Fenêtre déjà ouverte (étape suivante d'un parcours) : le contenu change sans rejouer l'apparition, pour éviter le fondu transparent */
+  if(had)L.querySelectorAll('.backdrop,.sheet').forEach(x=>{x.style.animation='none'});
   if(onMount)onMount(L);
   const sh=L.querySelector('.sheet');
   if(!ui.sheetPrev||!document.contains(ui.sheetPrev))ui.sheetPrev=document.activeElement&&document.activeElement!==document.body?document.activeElement:null;
@@ -3363,7 +3369,7 @@ function drawSos(){
     <div class="card stack">${helpLines(true)}</div>
     <p class="small muted">${esc(t('Si le lien d’appel ne s’ouvre pas, compose le numéro affiché.'))}</p>`;
   else body=sosToolsHtml()+TIPS.map(([a,b])=>`<div class="card"><b>${esc(t(a))}</b><p class="small muted" style="margin-top:4px">${esc(t(b))}</p></div>`).join('')+`<div class="card"><p class="small">${esc(t('Si tu ressens des symptômes physiques inquiétants (tremblements forts, confusion, malaise), appelle les urgences de ton pays.'))} <button class="link" data-a="helpCountryPick">${esc(t('Numéros d’aide'))}</button></p></div>`;
-  $('#layer').innerHTML=`<div class="full" role="dialog" aria-modal="true" aria-label="${esc(t('SOS envie'))}"><div class="in stack">
+  const hadFull=!!$('#layer .full'); $('#layer').innerHTML=`<div class="full" role="dialog" aria-modal="true" aria-label="${esc(t('SOS envie'))}"><div class="in stack">
     <div class="row between"><span class="logo">${logoMark(24)}${esc(t('SOS'))}</span><button class="iconbtn" data-a="sosClose" aria-label="${esc(t('Fermer'))}">${ic('x')}</button></div>
     <div><h1 style="color:#fff">${esc(t('Respire. Tu as le temps.'))}</h1><p class="muted" style="margin-top:6px">${esc(t('Une envie varie en intensité et, le plus souvent, finit par baisser. Tu n’as rien à décider dans les prochaines minutes.'))}</p></div>
     <div class="field"><label for="sos-int" class="small">${t('Intensité de l’envie : <b id="sos-iv" class="num">{n}</b>/10',{n:nf(s.intensity,0)})}</label><input type="range" id="sos-int" min="0" max="10" value="${s.intensity}"></div>
@@ -3371,7 +3377,7 @@ function drawSos(){
     <div class="stack fade-in">${body}</div>
     <button class="btn primary block" data-a="sosOk" style="margin-top:6px">${ic('check')}${esc(t('L’envie est passée, j’ai tenu'))}</button>
     <div class="actions"><button class="btn ghost sm" data-a="sosJournal">${ic('book','sm')}${esc(t('Noter dans le journal'))}</button><button class="btn ghost sm" data-a="sosLog">${esc(t('J’ai consommé'))}</button></div>
-  </div></div>`;
+  </div></div>`; if(hadFull){const f=$('#layer .full');if(f)f.style.animation='none'}
   const r=$('#sos-int');if(r)r.oninput=()=>{s.intensity=+r.value;$('#sos-iv').textContent=nf(+r.value,0)};
 }
 function toggleBreath(){

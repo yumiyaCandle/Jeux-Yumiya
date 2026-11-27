@@ -133,6 +133,7 @@ Skills : `/find-skills` a été utilisé. Le CLI `npx skills find` ne renvoie ri
   - la légende utilise les mêmes couleurs ;
   - les tuiles de chiffres sont en verre.
 - **Mon plan** : chaque ligne est un panneau de verre, comme dans Profil.
+- **Fenêtres** : verre épais presque opaque (95 %) et voile de fond plus marqué. Le contenu d’une fenêtre déjà ouverte (étape suivante de la présentation, d’un exercice, du SOS) change sans rejouer l’apparition. Avant, chaque étape repartait d’un fondu transparent où les textes se superposaient sur iPhone. L’apparition ne fait plus que glisser, sans partir de la transparence.
 - **Barre du haut de l’accueil** : boutons resserrés pour que le logo garde sa place.
 
 ## Vérifications
