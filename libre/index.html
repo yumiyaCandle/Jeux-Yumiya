@@ -494,6 +494,8 @@ svg text{fill:var(--ink-3);font-family:var(--font);font-size:11px;font-variant-n
 .b-base{stroke:var(--line-2);stroke-width:1;shape-rendering:crispEdges}
 .ac-goal,line.ref{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 3}
 .ac-y,.b-y{fill:var(--ink-3);font-size:11px}
+/* Liseré couleur de fond : un repère ou une valeur reste lisible si un trait passe dessous */
+.ac-y,.b-y,.b-v,.g-v,.ac-x,.b-l{paint-order:stroke;stroke:var(--surface-solid);stroke-width:3px;stroke-linejoin:round}
 .ac-x,.b-l{fill:var(--ink-3);font-size:11px}
 .ac-line,.ch-line,.tline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ac-area{fill:var(--accent);fill-opacity:.1;stroke:none}
@@ -5643,7 +5645,7 @@ function monthB(off){const d=new Date(sod(now()));d.setDate(1);d.setMonth(d.getM
 
 /* ---------------- Vue d'ensemble ---------------- */
 function areaChart(vals,labels,goal,fmt,aria){const W=320,H=150,P=22,n=vals.length,top=niceTop(Math.max(1,...vals.filter(v=>v!=null),goal||0));
-  /* Graphique principal (règles dataviz) : ligne 2 px, voile à 10 %, grille fine pleine avec 3 repères ronds, valeur affichée seulement au dernier point */
+  /* Graphique principal (règles dataviz) : ligne 2 px, voile à 10 %, grille fine pleine avec 3 repères ronds, point final marqué ; la valeur exacte de chaque semaine s'affiche au toucher (le total est dans le titre) */
   const X=i=>P+i*(W-P*2)/Math.max(1,n-1),Y=v=>H-24-(v/top)*(H-44);
   const pts=vals.map((v,i)=>v==null?null:[X(i),Y(v),i]).filter(Boolean);if(pts.length<2)return `<p class="muted small">${esc(t('Pas encore assez de données pour tracer la courbe.'))}</p>`;
   let d=`M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i],cx=(x0+x1)/2;d+=` C${cx.toFixed(1)},${y0.toFixed(1)} ${cx.toFixed(1)},${y1.toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)}`}
@@ -5654,7 +5656,7 @@ function areaChart(vals,labels,goal,fmt,aria){const W=320,H=150,P=22,n=vals.leng
     ${[0,.5,1].map(f=>{const y=(H-24-f*(H-44)).toFixed(1);return `<line x1="${P}" x2="${W-P}" y1="${y}" y2="${y}" class="ac-grid"/>${f?`<text x="${P}" y="${(+y-4).toFixed(1)}" class="ac-y">${esc(fmt(top*f))}</text>`:''}`}).join('')}
     ${gy!=null?`<line x1="${P}" x2="${W-P}" y1="${gy.toFixed(1)}" y2="${gy.toFixed(1)}" class="ac-goal"/>`:''}
     <path d="${area}" class="ac-area"/><path d="${d}" class="ac-line"/>
-    <circle cx="${L[0].toFixed(1)}" cy="${L[1].toFixed(1)}" r="4.5" class="ac-end"/><text x="${(L[0]-8).toFixed(1)}" y="${(pts.some(q=>q[0]>=L[0]-90&&q[1]<L[1]-6)||L[1]<28?Math.min(H-30,L[1]+18):L[1]-10).toFixed(1)}" text-anchor="end" class="ac-endl">${esc(fmt(vals[L[2]]))}</text>
+    <circle cx="${L[0].toFixed(1)}" cy="${L[1].toFixed(1)}" r="4.5" class="ac-end"/>
     ${xs.map(i=>`<text x="${(i===0?P:i===n-1?W-P:X(i)).toFixed(1)}" y="${H-6}" text-anchor="${anc(i)}" class="ac-x">${esc(labels[i])}</text>`).join('')}
     <g class="ac-tip" style="display:none"><line class="ac-vl" y1="10" y2="${H-24}"/><circle r="4.5" class="ac-dot"/></g>
     <rect x="0" y="0" width="${W}" height="${H}" fill="transparent" class="ac-hit"/></svg><div class="ac-bub" hidden></div></figure>`}
