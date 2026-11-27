@@ -1,6 +1,6 @@
 ---
 name: LIBRE
-description: "Verre de mer : chaque jour tenu polit un galet de verre à la couleur de l'addiction."
+description: "Verre de mer : une interface calme et givrée, une teinte par addiction, un chiffre clair par écran."
 colors:
   wet-sand: "#F1F0EB"
   wet-sand-deep: "#E8E7E1"
@@ -186,14 +186,14 @@ components:
 
 **Creative North Star: "Le verre de mer"**
 
-Un éclat coupant devient, avec le temps et la mer, une pierre lisse, givrée et lumineuse. LIBRE 21 « Verre de mer » raconte le changement d'une habitude avec ce seul objet : un galet de verre par addiction, littéralement poli par les jours tenus. Ce monde remplace l'apparence LIBRE 19 « Verre » et l'organisation visuelle LIBRE 20 ; il n'est issu d'aucun monde de catalogue.
+Un éclat coupant devient, avec le temps et la mer, une pierre lisse, givrée et lumineuse. LIBRE 21 « Verre de mer » raconte le changement d'une habitude avec sobriété : une teinte de verre par addiction et un chiffre clair. (Le galet de verre des premières versions de LIBRE 21 a été retiré, jugé peu professionnel par la personne propriétaire.) Ce monde remplace l'apparence LIBRE 19 « Verre » et l'organisation visuelle LIBRE 20 ; il n'est issu d'aucun monde de catalogue.
 
-Le sol est du sable mouillé le jour (blanc gris chaud) et une mer de nuit en mode sombre (encre bleu-vert profonde). Le verre est le seul matériau : des volets givrés au bord supérieur clair qui flottent au-dessus du contenu, jamais empilés sur du verre. Chaque addiction possède une seule teinte de verre (sa couleur historique), utilisée pour son galet, sa ligne de progression et ses sélections, nulle part ailleurs. Un seul corail est réservé à l'Aide. Police système, chiffres tabulaires, grands numéraux calmes.
+Le sol est du sable mouillé le jour (blanc gris chaud) et une mer de nuit en mode sombre (encre bleu-vert profonde). Le verre est le seul matériau : des volets givrés au bord supérieur clair qui flottent au-dessus du contenu, jamais empilés sur du verre. Chaque addiction possède une seule teinte de verre (sa couleur historique), utilisée pour sa ligne de progression et ses sélections, nulle part ailleurs. Un seul corail est réservé à l'Aide. Police système, chiffres tabulaires, grands numéraux calmes.
 
 La densité est celle d'une app iOS de réglages au calme : une colonne de 640 px maximum, des groupes givrés à un seul niveau, des lignes de 56 px séparées par des filets. Le mouvement est amorti sans rebond ; rien ne boucle sauf l'exercice de respiration. LIBRE refuse explicitement la pile de cartes blanches des apps de bien-être et le tableau de bord clinique.
 
 **Key Characteristics:**
-- Un objet focal par écran : le galet et son chiffre sur l'accueil, posés sur le sable, sans carte.
+- Un objet focal par écran : sur l'accueil, la carte du suivi avec son grand chiffre.
 - Verre réservé à la couche flottante (barre d'onglets, en-tête, fenêtres, notifications) ; le contenu repose sur des groupes givrés.
 - Une teinte par addiction, injectée par JS ; un corail unique pour l'Aide.
 - Police système (SF Pro Text pour le texte, SF Pro Rounded pour titres et chiffres), chiffres tabulaires.
@@ -205,7 +205,7 @@ La densité est celle d'une app iOS de réglages au calme : une colonne de 640 p
 Des neutres de sable teintés vers l'écume, une encre algue, une teinte de verre variable par addiction et un corail d'alerte unique.
 
 ### Primary
-- **Teinte de l'addiction** (`--accent`, par défaut Écume `foam-tint`) : couleur du galet, de la barre de progression, du bouton « + », des puces sélectionnées, du jour réussi dans la semaine et le calendrier, des lignes de graphiques. Elle est remplacée à l'exécution par `applyHabitTheme()` à partir de la table `HPAL` : `--accent` (teinte), `--accent-strong` (texte et contours, version foncée), `--accent-soft` (fond des pastilles d'icône), `--accent-ink` (texte posé sur la teinte). En mode sombre, la variante claire de chaque famille prend le relais (`foam-tint-night` pour l'écume).
+- **Teinte de l'addiction** (`--accent`, par défaut Écume `foam-tint`) : couleur de la barre de progression, du bouton « + », des puces sélectionnées, du jour réussi dans la semaine et le calendrier, des lignes de graphiques. Elle est remplacée à l'exécution par `applyHabitTheme()` à partir de la table `HPAL` : `--accent` (teinte), `--accent-strong` (texte et contours, version foncée), `--accent-soft` (fond des pastilles d'icône), `--accent-ink` (texte posé sur la teinte). En mode sombre, la variante claire de chaque famille prend le relais (`foam-tint-night` pour l'écume).
 - **Familles de teintes** (`tint-libre`, `tint-tabac`, `tint-alcool`, `tint-cannabis`, `tint-argent`, `tint-ecrans`, `tint-jeu`, `tint-subst`, `tint-achats`, `tint-intime`) : Bleu nuit et sauge, Vert sauge, Ambre, Vert naturel, Bleu profond, Turquoise, Bleu électrique, Ardoise, Prune, Rose brique. Chacune a sa variante forte, douce et nocturne dans `HPAL` (voir le fichier annexe pour les rampes).
 
 ### Secondary
@@ -223,7 +223,7 @@ Des neutres de sable teintés vers l'écume, une encre algue, une teinte de verr
 - **États** (`ok-green`, `warn-amber`, `danger-red`) : réussite et interrupteurs actifs, dépassement, suppression.
 
 ### Named Rules
-**La règle d'une teinte par addiction.** La couleur d'une addiction apparaît sur son galet, sa progression et ses sélections, et nulle part ailleurs : surfaces, typographie, icônes de navigation et logo restent ceux de LIBRE.
+**La règle d'une teinte par addiction.** La couleur d'une addiction apparaît sur sa pastille, sa progression et ses sélections, et nulle part ailleurs : surfaces, typographie, icônes de navigation et logo restent ceux de LIBRE.
 
 **La règle du corail unique.** Le corail appartient à l'Aide. Aucun autre élément, ni décor ni accent, ne le porte.
 
@@ -237,9 +237,9 @@ Des neutres de sable teintés vers l'écume, une encre algue, une teinte de verr
 **Character:** La police système, sans fonte chargée : la version arrondie porte les chiffres et les titres avec douceur, la version texte porte la lecture. Les chiffres sont toujours tabulaires.
 
 ### Hierarchy
-- **Display** (600, 68 px, interligne 0,95, -0,04em, tabulaire) : le nombre de jours ou la moyenne hebdomadaire à côté du galet ; 52 px sous 360 px de large.
+- **Display** (600, 68 px, interligne 0,95, -0,04em, tabulaire) : le nombre de jours ou la moyenne hebdomadaire dans la carte de l'accueil ; 52 px sous 360 px de large.
 - **Headline** (700, 34 px, 1,12) : grand titre des pages ; 30 px sous 360 px. Le titre de bienvenue monte à 44 px, les titres du questionnaire et de l'aide guidée à 30 px.
-- **Greeting** (600, 24 px, 1,2) : la salutation de l'accueil, volontairement discrète pour laisser le galet et le chiffre former la paire focale.
+- **Greeting** (600, 24 px, 1,2) : la salutation de l'accueil, volontairement discrète pour laisser le chiffre principal dominer.
 - **Title** (600, 22 px, 1,25) : titres de sections ; 20 px dans les groupes et fenêtres.
 - **Figure** (600, 28 px, 1,1, tabulaire) : chiffres clés du suivi ; 17 à 24 px dans les tuiles et faits.
 - **Body** (400, 17 px, 1,47) : texte courant, lignes de liste (500 pour l'intitulé), champs.
@@ -256,7 +256,7 @@ Des neutres de sable teintés vers l'écume, une encre algue, une teinte de verr
 
 Une colonne unique centrée de 640 px maximum avec une gouttière de 20 px (16 px sous 360 px), sur une grille de 4 pt (`s1` à `s12`). Les blocs d'une page sont espacés de 16 px ; l'accueil respire davantage (32 px entre sections). Le bas de page réserve la hauteur de la barre d'onglets (64 px) plus 40 px et la zone de sécurité.
 
-Premier écran de l'accueil : date et salutation en petit, puis le galet (environ 42 % de la largeur, au moins 128 px ; 96 px sous 360 px) en grille à deux colonnes avec le chiffre principal et la prochaine étape, puis une seule ligne d'action (noter / envie).
+Premier écran de l'accueil : date et salutation en petit, puis une carte unique (nom du suivi et pastille de mode, chiffre principal de 64 px, prochaine étape sur une ligne avec sa barre, ligne « Aujourd'hui » avec − / +), puis le bandeau « J'ai une envie » et deux liens discrets. Les chiffres détaillés sont dans Progrès.
 
 À partir de 1024 px, la barre d'onglets devient une barre latérale de verre de 280 px (repliable à 96 px, icônes seules) et le contenu s'élargit jusqu'à 1120 px (1200 px dès 1360 px). Les fenêtres passent du bas de l'écran au centre dès 700 px. Les grilles de raccourcis passent de 2 à 1 colonne sous 440 px et de 2 à 3 colonnes au-delà de 700 px.
 
@@ -276,7 +276,7 @@ Profondeur hybride : la couche flottante est en verre (flou et saturation de l'a
 
 ## Shapes
 
-Des formes douces et continues : capsules (999 px) pour toutes les commandes tactiles (boutons, puces, sélecteurs, barre d'onglets, bandeau d'aide), coins de 20 px pour les groupes, 16 px pour les lignes cliquables isolées, 12 px pour les champs, 9 px pour les pastilles d'icône de 32 px, 28 px pour le haut des fenêtres. Les contours sont des filets de 0,5 px, jamais des bordures épaisses. La seule forme irrégulière du système est le galet : un éclat à sept côtés dont les angles s'arrondissent avec la progression.
+Des formes douces et continues : capsules (999 px) pour toutes les commandes tactiles (boutons, puces, sélecteurs, barre d'onglets, bandeau d'aide), coins de 20 px pour les groupes, 16 px pour les lignes cliquables isolées, 12 px pour les champs, 9 px pour les pastilles d'icône de 32 px, 28 px pour le haut des fenêtres. Les contours sont des filets de 0,5 px, jamais des bordures épaisses.
 
 ## Components
 
@@ -312,7 +312,7 @@ Lignes style réglages de 56 px minimum, pastille d'icône de 32 px en teinte do
 - **Error:** encart `help-coral-soft` à texte `danger-red`, coins 12 px. Interrupteurs iOS 51 × 31 px, vert `ok-green` quand actifs.
 
 ### Navigation
-Barre d'onglets en verre, capsule de 64 px à 12 px des bords, cinq onglets : Aujourd'hui, Progrès, Aide (au centre), Mon plan, Profil. Icônes 24 px, libellés 11 px en `kelp-ink-2` ; l'onglet courant passe en `--accent-strong` et un indicateur de verre teinté (14 % de la teinte) glisse derrière lui en 0,42 s avec un léger étirement. L'Aide est un disque corail de 34 px, la seule couleur chaude de la barre. Sur ordinateur, barre latérale de verre avec la marque, la recherche, les suivis (petits galets) et un bouton Aide corail en capsule.
+Barre d'onglets en verre, capsule de 64 px à 12 px des bords, cinq onglets : Aujourd'hui, Progrès, Aide (au centre), Mon plan, Profil. Icônes 24 px, libellés 11 px en `kelp-ink-2` ; l'onglet courant passe en `--accent-strong` et un indicateur de verre teinté (14 % de la teinte) glisse derrière lui en 0,42 s avec un léger étirement. L'Aide est un disque corail de 34 px, la seule couleur chaude de la barre.
 
 ### Sheets
 Fenêtres qui montent du bas : verre fort, coins de 28 px en haut, poignée de 36 × 5 px, voile `rgba(5,12,13,.38)`. Entrée unique par matérialisation (translation de 40 px, échelle 0,98 et flou qui se dissipe, 0,38 s).
@@ -320,11 +320,11 @@ Fenêtres qui montent du bas : verre fort, coins de 28 px en haut, poignée de 3
 ### Help band
 Le bandeau « J'ai une envie » de l'accueil : capsule corail de 64 px, pastille d'icône de 44 px à 18 % de blanc, titre 600 17 px et sous-ligne 14 px. C'est l'action forte de l'accueil.
 
-### Le galet (composant signature)
-Un SVG de verre en `currentColor` (la teinte de l'addiction, variante nocturne en mode sombre), généré par `pebbleSVG(h, polish)` à partir d'une graine propre à chaque suivi. Le poli (`polishOf`) va de 0,06 à 1 : en abstinence, logarithme des jours tenus sur une année ; en réduction ou compréhension, part des jours réussis de la semaine. Plus le poli monte, plus les angles s'arrondissent, plus la surface se givre moins et plus la lumière intérieure et la tranche claire grandissent. Il apparaît en grand sur l'accueil (entrée par un simple « pop » de 0,6 s), à 48 px dans la liste des suivis et à 18 px dans le sélecteur de suivi et la barre latérale. Le bienvenue l'utilise comme visuel principal.
+### Carte du suivi (accueil)
+Un seul panneau de verre de 24 px de rayon : nom du suivi et pastille de mode (Arrêt, Réduction, Observation) teintée à 12 %, chiffre principal 64 px tabulaire, prochaine étape sur une ligne avec une barre de 6 px dans la teinte, puis la ligne « Aujourd'hui » séparée par un filet. Pas d'illustration : le chiffre est le contenu.
 
 ### Étapes (médailles)
-Disques de verre teinté de 44 à 52 px : contour de la teinte à 45 % pour une étape franchie, fond plein de la teinte pour la plus haute ; étape à venir en `--surface-2` avec filet. Pas d'imitation de métal.
+Disques de verre teinté de 44 à 52 px portant le nombre (jours ou mois) : contour de la teinte à 45 % pour une étape franchie, fond plein de la teinte pour la plus haute ; étape à venir en `--surface-2` avec filet. Pas d'imitation de métal.
 
 ### Plein écran nocturne
 Aide guidée, respiration, verrou et récits utilisent toujours la mer de nuit (`night-sea`) avec un voile de teinte à 16 %, même en thème clair. La sphère de respiration est la seule animation en boucle du système.
@@ -332,7 +332,7 @@ Aide guidée, respiration, verrou et récits utilisent toujours la mer de nuit (
 ## Do's and Don'ts
 
 ### Do:
-- **Do** garder un seul objet focal et une seule action forte par écran (le galet et la ligne « noter / envie » sur l'accueil).
+- **Do** garder un seul objet focal et une seule action forte par écran (la carte du suivi et « J'ai une envie » sur l'accueil).
 - **Do** prendre la teinte d'une addiction uniquement dans `--accent`, `--accent-strong`, `--accent-soft`, `--accent-ink` (injectées par `applyHabitTheme`), jamais en valeur codée.
 - **Do** réserver le corail (`--help`) à l'Aide et aux urgences.
 - **Do** poser le verre (`--glass`, flou 24 px, tranche `--glass-edge`) uniquement sur la couche flottante ; le contenu va dans des groupes givrés de 20 px.

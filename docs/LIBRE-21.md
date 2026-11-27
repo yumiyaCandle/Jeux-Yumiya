@@ -4,13 +4,13 @@ Refonte intégrale de l’identité et de l’interface. Elle remplace LIBRE 19 
 
 ## Direction
 
-**Le changement comme un verre de mer** : un éclat coupant devient, avec le temps, lisse, givré et lumineux. Chaque addiction est représentée par son galet, de sa couleur, que les jours tenus polissent.
+**Le changement comme un verre de mer** : une interface calme et givrée, une teinte par addiction, un chiffre clair par écran.
 
 - Sol : sable mouillé le jour (`#F1F0EB`), mer de nuit en sombre (`#0A1315`).
 - Matière : le verre, réservé à la couche qui flotte (barre d’onglets, en-tête, fenêtres, notifications) ; les panneaux de contenu portent seulement la tranche lumineuse du verre (bord supérieur clair). Jamais de verre empilé sur du verre.
-- Couleur : celle de l’addiction (galet, barre de progression, sélection) ; un seul corail réservé à l’Aide.
+- Couleur : celle de l’addiction (pastille, barre de progression, sélection, médailles) ; un seul corail réservé à l’Aide.
 - Typographie : police du système (San Francisco sur iPhone), variante arrondie pour les titres et les chiffres, chiffres tabulaires.
-- Mouvement : un seul geste par écran (l’arrivée du galet, la montée d’une feuille), aucune boucle sauf l’exercice de respiration ; rien quand le système demande moins d’animations.
+- Mouvement : un seul geste par écran (la montée d’une feuille), aucune boucle sauf l’exercice de respiration ; rien quand le système demande moins d’animations.
 
 Fiche produit : `PRODUCT.md`. Contrat de direction : `.impeccable/surfaces/libre-index-html.md`. Système de design documenté : `DESIGN.md`.
 
@@ -29,14 +29,14 @@ Cinq onglets : **Aujourd’hui · Progrès · Aide (au centre, en corail) · Mon
 - Ordinateur : barre latérale de verre, repliable ; colonne de contenu lisible (≈ 740 px).
 
 ### Écrans
-- **Aujourd’hui** reconstruit autour du galet : le chiffre principal à côté, la prochaine étape dessous, puis la ligne « Aujourd’hui » qui se note d’un geste. Salutation plus discrète. Chiffres en une ligne sur le sable (plus de cartes). Un jour difficile : une seule suggestion à la fois.
-- **Bienvenue** : un galet poli remplace le grand logo.
+- **Aujourd’hui** simplifié en quatre blocs : une carte du suivi (nom, mode Arrêt/Réduction/Observation, grand chiffre, prochaine étape sur une ligne, ligne « Aujourd’hui » avec − / +), le bandeau « J’ai une envie » avec deux liens discrets, le panneau du jour, la semaine. Les chiffres détaillés (économies, envies traversées…) sont dans **Progrès**. Un jour difficile : une seule suggestion à la fois.
+- **Progrès** : un seul bouton « Noter » ouvre le choix (consommation, envie, humeur…).
+- **Bienvenue** : le logo LIBRE, sobre.
 - Toutes les vues (26) restylées avec les mêmes composants : groupes, lignes, repliables, champs, interrupteurs, sélecteurs segmentés, fenêtres, aide guidée, verrou.
 
 ## Fonctionnalités
 
 ### Ajoutées
-- **Le galet** (signature) : `pebbleSVG()` dessine un éclat de verre à 7 côtés, propre à chaque suivi ; `polishOf()` mesure le chemin (arrêt : jours depuis le début, sur une échelle logarithmique d’un an ; réduction ou observation : part des jours tenus de la semaine). Plus le chemin avance, plus le verre est clair, lisse et lumineux. Petits galets dans le sélecteur de suivi, la barre latérale et la liste des suivis. Décoratif : le chiffre et la barre de progression restent le contenu accessible.
 - **Ton année** (Progrès) : 52 barres fines, une par semaine, hauteur = jours tenus (sans consommer, ou dans la limite) ; total, meilleure semaine, semaine en cours. Données réelles uniquement (calcul `okDays`). Inspirée d’un composant de 21st.dev (« Heat Strip »), réécrite sans framework.
 - **Affichage sobre** : l’interrupteur « Effets visuels » (Profil › Apparence) coupe le flou, rend les surfaces opaques et supprime les animations d’écran.
 
@@ -45,10 +45,14 @@ Cinq onglets : **Aujourd’hui · Progrès · Aide (au centre, en corail) · Mon
 - Les panneaux « Pour toi, maintenant » ne s’ajoutent plus à une situation « journée difficile » (une seule suggestion).
 
 ### Retirées
+- **Le galet de verre** (`pebbleSVG`, `polishOf`), d’abord pensé comme signature : jugé peu professionnel par la personne propriétaire, il est retiré partout (accueil, bienvenue, listes, barre latérale). Aucune donnée n’en dépendait.
+- **Cartes de chiffres de l’accueil** : déplacées, pas supprimées ; les mêmes chiffres sont dans Progrès.
 - **Photos d’illustration** (banque d’images Pexels : une soignante masquée, un sablier, une main qui écrit) : génériques, sans lien avec la personne. Les fichiers restent dans `libre/photos/` ; un drapeau (`PHOTOS_ON`) permet de les réafficher. Les photos personnelles de « Mes motivations » ne sont pas concernées.
 - **Police Inter** : remplacée par la police du système.
 
 ### Corrigées
+- Graphiques : un libellé de date près du bord n’est plus coupé.
+- Médailles des étapes : le nombre (jours ou mois) est de nouveau affiché.
 - Les listes « Jour de… à… » du thème « selon l’heure » n’étaient reliées à aucune action : elles fonctionnent.
 - Libellés de graphiques illisibles (8,5 px) : au moins 11 px réels, et les libellés qui se chevauchent sont masqués.
 - Couleur de thème du navigateur (barre d’état) alignée sur le thème clair ou sombre réellement affiché.
@@ -68,8 +72,8 @@ Un réviseur indépendant, sans l’historique de la refonte, a examiné les cap
   - deux ont été contestées, avec justification acceptée par le réviseur :
     - l’onglet Comprendre est intégré à Mon plan, car la navigation pouvait être repensée ;
     - les chiffres et l’accès rapide de l’accueil sont gardés, car ils sont demandés dans le brief LIBRE 20 ;
-  - les six autres ont été appliquées : sur-titre retiré, salutation réduite, petits galets dans les listes, médailles en verre plutôt qu’en faux métal, lumière du galet, en-tête allégé.
-- **Deuxième passage** : verdict « fix ». Une seule action forte par écran, le galet, les médailles et le mode sombre sont réglés. Il reste deux points : le verre des panneaux en clair, et la ligne de 4 chiffres. Les deux ont été retravaillés ensuite : dégradé de lumière et tranche marquée pour l’un, grille 2 × 2 pour l’autre.
+  - les six autres ont été appliquées : sur-titre retiré, salutation réduite, pastilles dans les listes, médailles en verre plutôt qu’en faux métal, en-tête allégé.
+- **Deuxième passage** : verdict « fix ». Une seule action forte par écran, les médailles et le mode sombre sont réglés. Il reste deux points : le verre des panneaux en clair, et la ligne de 4 chiffres. Les deux ont été retravaillés ensuite : dégradé de lumière et tranche marquée pour l’un, grille 2 × 2 pour l’autre.
 - **Ce dernier ajustement n’a pas été revu une troisième fois.** En clair, sur fond de sable uni, un panneau de verre reste proche d’une carte claire : c’est la limite de la matière quand rien ne passe derrière.
 
 ## Skills utilisés

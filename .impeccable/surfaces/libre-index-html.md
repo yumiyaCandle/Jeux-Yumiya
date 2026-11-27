@@ -11,16 +11,16 @@ Mode: Operate. Audience: adults changing a habit, alone, phone in one hand, ofte
 
 ## Direction contract
 
-THESIS: Change as sea glass: a sharp shard becomes smooth, frosted and luminous with time. LIBRE refuses the wellness-app card stack and the clinical dashboard; it shows one object per addiction that is literally polished by the days held.
+THESIS: Change as sea glass: a sharp shard becomes smooth, frosted and luminous with time. LIBRE refuses the wellness-app card stack and the clinical dashboard; it shows one calm card per addiction with one clear figure.
 
-OWN-WORLD: Ground of wet sand by day (warm grey-white) and sea at night (deep blue-green ink) by dark mode. Glass is the only material: frosted panes with a bright upper edge, never stacked on glass. Each addiction owns one glass tint (its existing colour) used for its pebble, its progress line and its selection, nowhere else. One coral for Help. System font, tabular figures, large calm numerals.
+OWN-WORLD: Ground of wet sand by day (warm grey-white) and sea at night (deep blue-green ink) by dark mode. Glass is the only material: frosted panes with a bright upper edge, never stacked on glass. Each addiction owns one glass tint (its existing colour) used for its dot, its progress line and its selection, nowhere else. One coral for Help. System font, tabular figures, large calm numerals.
 
-STORY: The visitor sees their pebble and the one next step, understands where they are in the journey, and reaches Help, logging or learning from a stable tab bar.
+STORY: The visitor sees their main figure and the one next step, understands where they are in the journey, and reaches Help, logging or learning from a stable tab bar.
 
-FIRST VIEWPORT: Today tab. Top: date and greeting line, small. Centre: the addiction's glass pebble (about 40% width) with the main figure beside it (days or weekly average) and the next milestone. Below: one primary action row (log / craving). Tab bar bottom: Today, Progress, Help (coral, centre), My plan, Profile. Learn (Comprendre) lives inside My plan, which already linked it: the person explicitly allowed the navigation to be rethought (answer "Libre de la repenser"), and the prevention plan is the daily tool that earns a tab.
+FIRST VIEWPORT: Today tab. Top: date and greeting line, small. Centre: one glass card for the tracked habit (name, mode pill, main figure, next milestone on one line, today's row). Below: the coral craving band and two quiet links. Tab bar bottom: Today, Progress, Help (coral, centre), My plan, Profile. Learn (Comprendre) lives inside My plan, which already linked it: the person explicitly allowed the navigation to be rethought (answer "Libre de la repenser"), and the prevention plan is the daily tool that earns a tab.
 
 FORM: candidate 7 of the ordered list was assigned (transit wayfinding); the person chose the pick, candidate 1, sea glass. seed:0f142cab9867fb1f
 
-SIGNATURE: the pebble: an SVG glass stone in the addiction tint whose surface smooths, frosts and gains inner light as progress toward the next milestone grows; it reappears small in lists and the tab for each tracked habit. Motion grammar: critically damped settles, one materialize (blur + scale) for sheets, nothing loops except the breathing exercise.
+SIGNATURE: the addiction tint carried only by the progress line, the selection and the milestone discs (the glass pebble was removed at the owner's request: judged unprofessional; do not reintroduce it). Motion grammar: critically damped settles, one materialize (blur + scale) for sheets, nothing loops except the breathing exercise.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

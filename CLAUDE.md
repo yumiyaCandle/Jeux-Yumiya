@@ -13,7 +13,7 @@
 
 Outils à utiliser réellement : `/find-skills`, `/apple-design`, `/unslop`, `/21st:21st-ui` ; installés pour LIBRE 21 : `impeccable`, `accessibility`, `performance`, `webapp-testing`.
 
-Interface et organisation actuelles : **LIBRE 21 « Verre de mer »**, décrite dans [docs/LIBRE-21.md](docs/LIBRE-21.md). Système de design : [DESIGN.md](DESIGN.md) ; fiche produit : [PRODUCT.md](PRODUCT.md) ; contrat de direction : `.impeccable/surfaces/libre-index-html.md`. Onglets : Aujourd’hui, Progrès, Aide (au centre), Mon plan (avec Comprendre), Profil. Le galet de verre (`pebbleSVG`) est la signature : il ne doit pas devenir décoratif ailleurs.
+Interface et organisation actuelles : **LIBRE 21 « Verre de mer »**, décrite dans [docs/LIBRE-21.md](docs/LIBRE-21.md). Système de design : [DESIGN.md](DESIGN.md) ; fiche produit : [PRODUCT.md](PRODUCT.md) ; contrat de direction : `.impeccable/surfaces/libre-index-html.md`. Onglets : Aujourd’hui, Progrès, Aide (au centre), Mon plan (avec Comprendre), Profil. Le galet de verre a été retiré à la demande de la personne propriétaire (jugé peu professionnel) : ne pas le réintroduire. L’accueil reste sobre : une carte (suivi, mode, chiffre, prochaine étape, ligne du jour), l’action « J’ai une envie », puis le reste.
 
 Feuille de style : **une seule**, en tête de `libre/index.html`, organisée par sections (jetons → base → verre → typographie → groupes → commandes → navigation → fenêtres → écrans → mouvement). Modifier la règle existante plutôt qu’ajouter une couche qui surcharge ; pas de `!important` sauf nécessité réelle.
 

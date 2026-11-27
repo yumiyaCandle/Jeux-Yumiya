@@ -355,7 +355,7 @@ test('Langues', 'Lancement en 6 langues : seules les langues traduites sont prop
 test('Langues', 'Formats régionaux : dates et devise', async (b, base) => {
   const st = profileState({ lang: 'de' }); st.prefs.currency = 'CHF';
   const p = await page(b, base, { locale: 'de-CH', init: seed(st) }); await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]');
-  const txt = await p.textContent('#app'); assert.match(txt, /CHF/); noErr(p);
+  await p.go('progres'); const txt = await p.textContent('#app'); assert.match(txt, /CHF/); noErr(p);
 });
 
 /* ---------- Accessibilité et affichage ---------- */
@@ -918,7 +918,7 @@ test('Apparence', 'LIBRE 21 : un ancien profil réglé sur « verre » (LIBRE 8)
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
   assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'plus de style « verre » à part : le verre est partout');
   assert.ok(await p.evaluate(() => !!document.documentElement.dataset.htheme), 'la couleur de l’addiction s’applique');
-  assert.ok(await p.$('.hm-hero .pb-stone svg'), 'le galet est affiché'); noErr(p);
+  assert.ok(await p.$('.hm-hero .hm-days .num'), 'le compteur principal est affiché'); noErr(p);
 });
 
 /* ---------- Couleur de chaque addiction ---------- */
@@ -1237,7 +1237,7 @@ test('Mode discret', 'Masque les noms des addictions et brouille les chiffres ; 
   const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
   await p.click('.tacts [data-a="discreet"]'); await p.closeLayer(); await p.waitForTimeout(200);
   const txt = await p.textContent('#app'); assert.ok(!/Cigarettes|Alcool/.test(txt), 'noms masqués'); assert.match(txt, /Suivi 1/);
-  assert.match(await p.evaluate(() => getComputedStyle(document.querySelector('.h20-c .num')).filter), /blur/);
+  assert.match(await p.evaluate(() => getComputedStyle(document.querySelector('.hm-days .num')).filter), /blur/);
   await p.reload(); await p.settle(); assert.ok(await p.evaluate(() => document.body.classList.contains('discreet'))); noErr(p);
 });
 test('Notifications', 'Nouveaux rappels (résumé, encouragement, inactivité) : choix, heure, programmés sans culpabiliser', async (b, base) => {
@@ -1310,7 +1310,7 @@ test('Interface', 'Ordinateur : barre latérale en verre (sections, suivis avec 
   const p = await page(b, base, { init: seed(v7State()), viewport: { width: 1440, height: 900 } }); await p.goto(base); await p.settle();
   assert.ok(await p.isVisible('.nav-search')); assert.equal(await p.locator('.nav-hab').count(), 2, 'un bouton par suivi');
   assert.match(await p.textContent('.nav-hab[data-id="h0"] small'), /^5\s*j$/, 'jours depuis la dernière consommation');
-  assert.match(await p.textContent('.h20-cards'), /jours sans consommer cette semaine/);
+  assert.ok(await p.$('.h11-week .wk'), 'la semaine est calculée et affichée');
   await p.keyboard.press('Control+k'); await p.waitForSelector('#sQ'); await p.closeLayer();
   await p.click('.nav-hab[data-id="h1"]'); await p.waitForTimeout(200); assert.equal((await p.state()).prefs.activeHabit, 'h1');
   await p.click('[data-a="navMini"]'); await p.reload(); await p.settle(); assert.ok(await p.evaluate(() => document.body.classList.contains('nav-mini')), 'menu replié mémorisé');
@@ -1357,7 +1357,7 @@ test('Données', 'Tableau des stratégies abîmé dans une sauvegarde : ignoré 
 test('LIBRE 11', 'Accueil : compteur avec saisie du jour, chiffres, humeur et objectif du jour, accès rapide (envie, aide, ajouter), semaine ; peu de texte', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
   const blocks = await p.$$eval('#app .h11 > section', els => els.map(e => e.className));
-  assert.equal(blocks.length, 5, blocks.join(' | ')); // compteur, chiffres, aujourd'hui (humeur + objectif du jour), accès rapide, aperçu de la semaine
+  assert.equal(blocks.length, 4, blocks.join(' | ')); // LIBRE 21.1 : compteur, accès rapide, aujourd'hui (humeur + objectif du jour), semaine — les chiffres vivent dans Progrès //), accès rapide, aperçu de la semaine
   const words = await p.evaluate(() => document.getElementById('app').innerText.split(/\s+/).filter(Boolean).length);
   // LIBRE 20 : le brief ajoute salutation, objectif, humeur, objectif du jour et accès rapide ; le plafond reste bas
   assert.ok(words < 175, 'trop de texte sur l’accueil : ' + words + ' mots');
@@ -1478,10 +1478,10 @@ test('LIBRE 20', 'Scénario 2 — envie : M’aider maintenant, situation « J�
 test('LIBRE 20', 'Scénario 3 — suivi : noter une consommation et une envie, les chiffres et graphiques se mettent à jour, l’historique est gardé', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle();
   await p.click('nav .lg-tabs a[href="#progres"]'); await p.waitForSelector('#app[data-view="progres"]');
-  assert.match(await p.textContent('#app'), /Progrès/); assert.equal(await p.locator('.sa-it').count(), 6, 'six façons de noter');
-  await p.click('.sa-it[data-a="qaCrave"]'); await p.click('[data-a="qaTrig"][data-v="Stress"]'); await p.click('[data-a="qaCraveSave"]'); await p.waitForTimeout(200);
+  assert.match(await p.textContent('#app'), /Progrès/); await p.click('.sa-one'); await p.waitForSelector('#layer .qa'); assert.equal(await p.locator('#layer .qa-it').count(), 6, 'six façons de noter');
+  await p.click('#layer .qa-it[data-a="qaCrave"]'); await p.click('[data-a="qaTrig"][data-v="Stress"]'); await p.click('[data-a="qaCraveSave"]'); await p.waitForTimeout(200);
   let s = await p.state(); const cr = (s.tools.history || []).filter(e => e.trigger === 'Stress' && e.before === 6); assert.equal(cr.length, 1, 'envie enregistrée avec son intensité et son déclencheur');
-  await p.click('.sa-it[data-a="logForm"]'); await p.waitForSelector('#layer .sheet'); await p.evaluate(() => { const b = [...document.querySelectorAll('#layer .btn.primary')].find(x => x.offsetParent); b && b.click(); }); await p.waitForTimeout(300);
+  await p.closeLayer(); await p.click('.sa-one'); await p.click('#layer .qa-it[data-a="logForm"]'); await p.waitForSelector('#layer .sheet'); await p.evaluate(() => { const b = [...document.querySelectorAll('#layer .btn.primary')].find(x => x.offsetParent); b && b.click(); }); await p.waitForTimeout(300);
   s = await p.state(); assert.ok(s.logs.length >= 1, 'consommation enregistrée');
   await p.closeLayer(); await p.go('progres'); assert.ok(await p.locator('.st20').count() === 2, 'graphiques moral et envies');
   assert.doesNotMatch(await p.textContent('.st20:nth-of-type(2), .st20 >> nth=1'), /Rien de noté/, 'l’intensité de l’envie apparaît');

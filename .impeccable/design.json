@@ -379,7 +379,7 @@
     "typographyMeta": {
       "display": {
         "displayName": "Chiffre principal",
-        "purpose": "Nombre de jours ou moyenne hebdomadaire à côté du galet ; 52 px sous 360 px."
+        "purpose": "Nombre de jours ou moyenne hebdomadaire dans la carte de l'accueil ; 52 px sous 360 px."
       },
       "headline": {
         "displayName": "Grand titre",
@@ -490,11 +490,6 @@
         "purpose": "Indicateur de l'onglet courant."
       },
       {
-        "name": "pebble-pop",
-        "value": "0.6s scale(.9) vers 1, opacité",
-        "purpose": "Apparition du galet de l'accueil."
-      },
-      {
         "name": "breathe",
         "value": "scale(.72) et 1 en alternance",
         "purpose": "Seule animation en boucle : l'exercice de respiration."
@@ -509,7 +504,7 @@
       {
         "name": "compact",
         "value": "360px",
-        "purpose": "Gouttière 16 px, galet 96 px, chiffre 52 px."
+        "purpose": "Gouttière 16 px, chiffre 52 px."
       },
       {
         "name": "narrow",
@@ -552,21 +547,11 @@
         "--hp6"
       ],
       "mapping": "jour : accent=P[1], strong=P[2], soft=P[3], ink=#FFFFFF ; nuit : accent=strong=P[7], soft=P[8], ink=#0C0B1C",
-      "perHabit": "--hc (P[1]) et --hcd (P[7]) posés sur les galets et pastilles de chaque suivi"
+      "perHabit": "--hc (P[1]) et --hcd (P[7]) posés sur les pastilles de chaque suivi"
     },
     "signature": {
-      "name": "pebble",
-      "functions": [
-        "pebbleSVG(h, polish, opt)",
-        "polishOf(h)"
-      ],
-      "polish": "0,06 à 1 ; abstinence : log(1+jours)/log(366) ; réduction ou compréhension : jours réussis / jours de la semaine (minimum 0,08)",
-      "sizes": {
-        "home": "minmax(128px,42%) ; 96px sous 360px ; 34% sur ordinateur",
-        "list": "48px",
-        "mini": "18px",
-        "welcome": "min(56vw,220px)"
-      }
+      "name": "addiction-tint",
+      "note": "Galet de verre (pebbleSVG, polishOf) retiré à la demande de la personne propriétaire : la teinte de l'addiction ne porte que la progression, la sélection et les médailles."
     }
   },
   "components": [
@@ -633,21 +618,13 @@
       "description": "Capsule de verre flottante à cinq onglets, Aide corail au centre.",
       "html": "<nav class=\"ds-tabs\"><a href=\"#\" aria-current=\"page\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 11l8-7 8 7v9H4z\"/></svg><span>Aujourd’hui</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"M5 20V10M12 20V4M19 20v-7\"/></svg><span>Progrès</span></a><a href=\"#\" class=\"ds-help\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 12h4l3-8 4 16 3-8h4\"/></svg><span>Aide</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\"><circle cx=\"12\" cy=\"12\" r=\"8\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg><span>Mon plan</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 20c1.5-4 5-5 8-5s6.5 1 8 5\"/></svg><span>Profil</span></a></nav>",
       "css": ".ds-tabs{display:flex;max-width:420px;height:64px;padding:5px;border-radius:999px;background:var(--glass,rgba(250,250,247,.62));-webkit-backdrop-filter:saturate(170%) blur(24px);backdrop-filter:saturate(170%) blur(24px);box-shadow:inset 0 1px 0 var(--glass-edge,rgba(255,255,255,.85)),inset 0 0 0 .5px rgba(21,33,31,.07),0 2px 6px rgba(21,33,31,.06),0 18px 40px -18px rgba(21,33,31,.28);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif}.ds-tabs a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:999px;color:var(--ink-2,#4A5754);text-decoration:none;font:600 11px/1.1 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;transition:color .22s cubic-bezier(.22,1,.36,1)}.ds-tabs a svg{width:24px;height:24px}.ds-tabs a[aria-current=\"page\"]{color:var(--accent-strong,#246352);background:color-mix(in srgb,var(--accent,#2F7A66) 14%,transparent)}.ds-tabs a:hover{color:var(--ink,#15211F)}.ds-tabs a:focus-visible{outline:2px solid var(--accent-strong,#246352);outline-offset:-2px}.ds-tabs a.ds-help{color:var(--help,#A8341F)}.ds-tabs a.ds-help svg{width:34px;height:34px;padding:6px;margin-top:-4px;border-radius:999px;background:var(--help,#A8341F);color:var(--help-ink,#FFFFFF)}"
-    },
-    {
-      "name": "Le galet",
-      "kind": "custom",
-      "refersTo": "pebble",
-      "description": "Composant signature : galet de verre SVG en currentColor, poli par la progression (ici poli 0,6), avec le chiffre principal.",
-      "html": "<div class=\"ds-pb\"><div class=\"ds-pb-stone\"><svg viewBox=\"0 0 100 100\" aria-hidden=\"true\" focusable=\"false\"><defs><linearGradient id=\"pgds\" x1=\"18%\" y1=\"10%\" x2=\"82%\" y2=\"92%\"><stop offset=\"0\" style=\"stop-color:color-mix(in srgb,currentColor 55%,#fff)\"/><stop offset=\".55\" style=\"stop-color:currentColor\"/><stop offset=\"1\" style=\"stop-color:color-mix(in srgb,currentColor 78%,#04100d)\"/></linearGradient><filter id=\"pfds\" x=\"-30%\" y=\"-30%\" width=\"160%\" height=\"160%\"><feGaussianBlur stdDeviation=\"2.6\"/></filter><clipPath id=\"pcds\"><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\"/></clipPath></defs><ellipse cx=\"50\" cy=\"91\" rx=\"31.6\" ry=\"4\" fill=\"#06120f\" opacity=\".14\" filter=\"url(#pfds)\"/><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"url(#pgds)\" opacity=\"0.90\"/><g clip-path=\"url(#pcds)\"><rect width=\"100\" height=\"100\" fill=\"#fff\" opacity=\"0.16\"/><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\" opacity=\"0.29\" filter=\"url(#pfds)\"/><ellipse cx=\"34\" cy=\"30\" rx=\"18\" ry=\"9\" fill=\"#fff\" opacity=\"0.18\" filter=\"url(#pfds)\" transform=\"rotate(-18 34 30)\"/><ellipse cx=\"54\" cy=\"56\" rx=\"20.0\" ry=\"14.2\" fill=\"#fff\" opacity=\"0.17\" filter=\"url(#pfds)\"/><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2.2\" opacity=\"0.55\" transform=\"translate(0 1.6)\" style=\"mix-blend-mode:soft-light\"/></g><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"none\" stroke=\"color-mix(in srgb,currentColor 55%,#04100d)\" stroke-opacity=\".35\" stroke-width=\".6\"/><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.72\" stroke-width=\"1.22\" stroke-dasharray=\"0 0\" clip-path=\"inset(0 0 55% 0)\"/></svg></div><div><div class=\"ds-pb-n\">42</div><div class=\"ds-pb-u\">jours sans tabac</div><div class=\"ds-pb-next\">Prochaine étape : <b>2 mois</b></div><div class=\"ds-hb\"><i style=\"width:60%\"></i></div></div></div>",
-      "css": ".ds-pb{display:grid;grid-template-columns:minmax(128px,42%) 1fr;align-items:center;gap:20px;max-width:420px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;color:var(--ink,#15211F)}.ds-pb-stone{aspect-ratio:1;color:var(--accent,#2E7D62)}.ds-pb-stone svg{width:100%;height:100%;overflow:visible}.ds-pb-n{font:600 68px/.95 ui-rounded,'SF Pro Rounded',-apple-system,system-ui,sans-serif;letter-spacing:-.04em;font-variant-numeric:tabular-nums}.ds-pb-u{margin-top:6px;font-size:17px}.ds-pb-next{margin-top:8px;font-size:15px;color:var(--ink-2,#4A5754)}.ds-pb-next b{color:var(--ink,#15211F);font-weight:600}.ds-hb{margin-top:8px;height:5px;border-radius:5px;background:var(--line,rgba(21,33,31,.09));overflow:hidden}.ds-hb i{display:block;height:100%;border-radius:inherit;background:var(--accent,#2E7D62)}"
     }
   ],
   "narrative": {
     "northStar": "Le verre de mer",
-    "overview": "**Creative North Star: \"Le verre de mer\"**\n\nUn éclat coupant devient, avec le temps et la mer, une pierre lisse, givrée et lumineuse. LIBRE 21 « Verre de mer » raconte le changement d'une habitude avec ce seul objet : un galet de verre par addiction, littéralement poli par les jours tenus. Ce monde remplace l'apparence LIBRE 19 « Verre » et l'organisation visuelle LIBRE 20 ; il n'est issu d'aucun monde de catalogue.\n\nLe sol est du sable mouillé le jour (blanc gris chaud) et une mer de nuit en mode sombre (encre bleu-vert profonde). Le verre est le seul matériau : des volets givrés au bord supérieur clair qui flottent au-dessus du contenu, jamais empilés sur du verre. Chaque addiction possède une seule teinte de verre (sa couleur historique), utilisée pour son galet, sa ligne de progression et ses sélections, nulle part ailleurs. Un seul corail est réservé à l'Aide. Police système, chiffres tabulaires, grands numéraux calmes.\n\nLa densité est celle d'une app iOS de réglages au calme : une colonne de 640 px maximum, des groupes givrés à un seul niveau, des lignes de 56 px séparées par des filets. Le mouvement est amorti sans rebond ; rien ne boucle sauf l'exercice de respiration. LIBRE refuse explicitement la pile de cartes blanches des apps de bien-être et le tableau de bord clinique.",
+    "overview": "**Creative North Star: \"Le verre de mer\"**\n\nUn éclat coupant devient, avec le temps et la mer, une pierre lisse, givrée et lumineuse. LIBRE 21 « Verre de mer » raconte le changement d'une habitude avec sobriété : une teinte de verre par addiction et un chiffre clair. Ce monde remplace l'apparence LIBRE 19 « Verre » et l'organisation visuelle LIBRE 20 ; il n'est issu d'aucun monde de catalogue.\n\nLe sol est du sable mouillé le jour (blanc gris chaud) et une mer de nuit en mode sombre (encre bleu-vert profonde). Le verre est le seul matériau : des volets givrés au bord supérieur clair qui flottent au-dessus du contenu, jamais empilés sur du verre. Chaque addiction possède une seule teinte de verre (sa couleur historique), utilisée pour sa ligne de progression et ses sélections, nulle part ailleurs. Un seul corail est réservé à l'Aide. Police système, chiffres tabulaires, grands numéraux calmes.\n\nLa densité est celle d'une app iOS de réglages au calme : une colonne de 640 px maximum, des groupes givrés à un seul niveau, des lignes de 56 px séparées par des filets. Le mouvement est amorti sans rebond ; rien ne boucle sauf l'exercice de respiration. LIBRE refuse explicitement la pile de cartes blanches des apps de bien-être et le tableau de bord clinique.",
     "keyCharacteristics": [
-      "Un objet focal par écran : le galet et son chiffre sur l'accueil, posés sur le sable, sans carte.",
+      "Un objet focal par écran : sur l'accueil, la carte du suivi avec son grand chiffre.",
       "Verre réservé à la couche flottante (barre d'onglets, en-tête, fenêtres, notifications) ; le contenu repose sur des groupes givrés.",
       "Une teinte par addiction, injectée par JS ; un corail unique pour l'Aide.",
       "Police système (SF Pro Text pour le texte, SF Pro Rounded pour titres et chiffres), chiffres tabulaires.",
@@ -657,7 +634,7 @@
     "rules": [
       {
         "name": "La règle d'une teinte par addiction",
-        "body": "La couleur d'une addiction apparaît sur son galet, sa progression et ses sélections, et nulle part ailleurs : surfaces, typographie, icônes de navigation et logo restent ceux de LIBRE.",
+        "body": "La couleur d'une addiction apparaît sur sa pastille, sa progression et ses sélections, et nulle part ailleurs : surfaces, typographie, icônes de navigation et logo restent ceux de LIBRE.",
         "section": "colors"
       },
       {
@@ -692,7 +669,7 @@
       }
     ],
     "dos": [
-      "**Do** garder un seul objet focal et une seule action forte par écran (le galet et la ligne « noter / envie » sur l'accueil).",
+      "**Do** garder un seul objet focal et une seule action forte par écran (la carte du suivi et « J'ai une envie » sur l'accueil).",
       "**Do** prendre la teinte d'une addiction uniquement dans `--accent`, `--accent-strong`, `--accent-soft`, `--accent-ink` (injectées par `applyHabitTheme`), jamais en valeur codée.",
       "**Do** réserver le corail (`--help`) à l'Aide et aux urgences.",
       "**Do** poser le verre (`--glass`, flou 24 px, tranche `--glass-edge`) uniquement sur la couche flottante ; le contenu va dans des groupes givrés de 20 px.",
