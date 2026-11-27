@@ -106,6 +106,8 @@ Langue de l’application : liste groupée façon Réglages (langues de l’appa
 
 Jour / nuit : un bouton lune/soleil remplace l’œil en haut de l’accueil ; un toucher bascule le thème (fondu doux, gardé après rechargement). Le mode discret reste dans Profil › Confidentialité. Le verre clair est rendu plus translucide, avec une tranche plus nette et une lumière de fond plus présente, pour être aussi lisible comme verre que le sombre.
 
+Progrès : les raccourcis (journal, calendrier, économies, bilan, statistiques, objectifs) sont des tuiles de verre, deux par ligne, avec une icône dans un carré de verre teinté ; ce carré est repris pour toutes les icônes de liste.
+
 Corrigé en même temps : les listes de cases à choix multiples de l’inscription (« Qu’est-ce qui est le plus difficile », « Pourquoi tu fais ça ? ») étaient rognées en cercle, parce qu’elles recevaient le style des sélecteurs à goutte.
 
 ## Vérifications

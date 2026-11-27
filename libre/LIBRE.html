@@ -280,6 +280,17 @@ details.fold[open] .fold-b{animation:rise var(--t) var(--ease) both}
 .lang-item[aria-selected="true"] b{font-weight:600}
 .lang-ck{color:var(--accent-strong);display:grid;place-items:center;flex:none}
 .lang-item:active{background:var(--surface-2)}
+/* Icônes de liste : petit carré de verre teinté de la couleur de l'addiction */
+.mp-row .mp-ic{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none;color:var(--accent-strong);background:linear-gradient(155deg,color-mix(in srgb,var(--accent) 24%,transparent),color-mix(in srgb,var(--accent) 10%,transparent));box-shadow:inset 1px 1px 0 -.5px rgba(255,255,255,.7),inset -1px -1px 0 -.5px rgba(255,255,255,.25),inset 0 0 0 .5px color-mix(in srgb,var(--accent) 25%,transparent)}
+/* Progrès : les raccourcis (journal, calendrier, économies…) en tuiles de verre, deux par ligne */
+.pg11>.mp-list{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);padding:0;background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;overflow:visible;border-radius:0}
+.pg11>.mp-list>.mp-row{flex-direction:column;align-items:flex-start;justify-content:space-between;gap:var(--s3);min-height:112px;padding:var(--s4);border-radius:22px;background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim),var(--lg-drop);transition:transform var(--t-fast) var(--ease),box-shadow var(--t) var(--ease)}
+.pg11>.mp-list>.mp-row::before{display:none}
+.pg11>.mp-list>.mp-row>svg:last-child{position:absolute;top:var(--s4);right:var(--s3);color:var(--ink-3);width:16px;height:16px}
+.pg11>.mp-list>.mp-row .grow{flex:none}
+.pg11>.mp-list>.mp-row b{font:600 15px/1.3 var(--font);color:var(--ink)}
+.pg11>.mp-list>.mp-row:active{transform:scale(.97);background:var(--lg-fill)}
+.pg11>.mp-list>.mp-row:hover{box-shadow:var(--lg-rim),var(--lg-drop),inset 0 0 0 1px color-mix(in srgb,var(--accent) 30%,transparent)}
 /* Puces de choix */
 .chips,.cr-chips,.s5-chips,.seg.wrap,.chips-lg,.pills{display:flex;flex-wrap:wrap;gap:var(--s2)}
 .chip,.seg.wrap>button,.chips-lg>button,.pills>button,.cr-chip,.s5-chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;color:var(--ink);font:500 16px/1.2 var(--font);background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim);transition:background-color var(--t) var(--ease),color var(--t) var(--ease),transform var(--t-fast) var(--ease)}
