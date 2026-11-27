@@ -1515,4 +1515,22 @@ test('LIBRE 21', 'Engagement du jour : le matin on s’engage, le soir on répon
   s = await p.state(); assert.equal(s.tools.pledges[k[0]].kept, true); assert.equal(s.logs.length, st.logs.length, 'aucune consommation ajoutée'); noErr(p);
 });
 
+test('LIBRE 21', 'Goutte de verre : presser l’onglet actif puis glisser change d’onglet ; un simple toucher marche toujours', async (b, base) => {
+  const p = await page(b, base, { init: seed(profileState({ types: ['cigarette', 'alcool'] })) }); await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]'); await p.closeLayer();
+  const r = await p.evaluate(async () => { const a = document.querySelector('#navWrap .lg-tabs a[aria-current="page"]'), t = document.querySelector('#navWrap .lg-tabs a[href="#progres"]'), ra = a.getBoundingClientRect(), rt = t.getBoundingClientRect();
+    const fire = (ty, x, tg) => (tg || a).dispatchEvent(new PointerEvent(ty, { bubbles: true, cancelable: true, pointerId: 9, clientX: x, clientY: ra.top + 10, button: 0, isPrimary: true }));
+    fire('pointerdown', ra.left + ra.width / 2); const lift = document.querySelector('.lg-ind').classList.contains('lift');
+    const steps = 8, dx = (rt.left + rt.width / 2) - (ra.left + ra.width / 2); for (let i = 1; i <= steps; i++) fire('pointermove', ra.left + ra.width / 2 + dx * i / steps, document);
+    fire('pointerup', ra.left + ra.width / 2 + dx, document); await new Promise(r => setTimeout(r, 500)); return { lift, hash: location.hash, lifted: !!document.querySelector('.lg-ind.lift') }; });
+  assert.ok(r.lift, 'la goutte se soulève à la pression'); assert.equal(r.hash, '#progres'); assert.ok(!r.lifted, 'la goutte se repose');
+  await p.click('#navWrap .lg-tabs a[href="#aide"]'); await p.waitForSelector('#app[data-view="aide"]'); noErr(p);
+});
+test('LIBRE 21', 'Inscription : les cases à choix multiples ne sont jamais rognées', async (b, base) => {
+  const p = await page(b, base); await p.goto(base); await p.waitForSelector('[data-a="obNext"]'); await p.click('[data-a="obNext"]');
+  const bad = await p.evaluate(async () => { const out = []; for (let k = 0; k < 30; k++) { const box = document.querySelector('.q-body .chips-lg'); if (box) { const R = box.getBoundingClientRect(); box.querySelectorAll('button').forEach(x => { const r = x.getBoundingClientRect(); if (r.left < R.left - 1 || r.right > R.right + 1 || r.top < R.top - 1 || r.bottom > R.bottom + 1) out.push(x.textContent) }); if (getComputedStyle(box).overflowX !== 'visible') out.push('overflow ' + getComputedStyle(box).overflowX); return { seen: true, out } }
+      const inp = document.querySelector('input.big-in'); if (inp && !inp.value) { inp.value = inp.type === 'number' ? '30' : 'Camille'; inp.dispatchEvent(new Event('input', { bubbles: true })) }
+      const pick = document.querySelector('.q-body [data-a="obToggleType"]:not([aria-pressed="true"]), .q-body .opt'); const cta = document.querySelector('#obCta'); if (cta && cta.disabled && pick) pick.click(); const c2 = document.querySelector('#obCta'); if (!c2 || c2.disabled) return { seen: false, out: ['bloqué'] }; c2.click(); await new Promise(r => setTimeout(r, 120)) } return { seen: false, out: ['introuvable'] } });
+  assert.ok(bad.seen, 'étape à cases atteinte'); assert.deepEqual(bad.out, []); noErr(p);
+});
+
 module.exports = { T };

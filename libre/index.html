@@ -250,18 +250,24 @@ details.fold[open] .fold-b{animation:rise var(--t) var(--ease) both}
 .iconbtn:hover{background:var(--surface-2)}
 .badges{display:flex;gap:6px;flex-wrap:wrap}
 .pill,.hm-pill,.bdg,.lang-badge,.nt-badge,.demo-tag,.tok{display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:2px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font:600 12px/1.2 var(--font);white-space:nowrap}
+/* Goutte manipulable (onglets, sélecteurs) : presser le choix actif la soulève en lentille de verre claire, qui passe au-dessus des libellés */
+.lg-tabs>a[aria-current="page"],:is(.seg:not(.wrap):not(.chips-lg),.hpick)>[aria-pressed="true"]{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.lg-tabs>a{-webkit-user-drag:none}
+.seg-drop.lift,.lg-ind.lift{z-index:2;background:color-mix(in srgb,var(--surface-solid) 28%,transparent);-webkit-backdrop-filter:saturate(210%) brightness(1.1);backdrop-filter:saturate(210%) brightness(1.1);box-shadow:inset 1.5px 1.5px 0 -.5px rgba(255,255,255,.95),inset -1.5px -1.5px 0 -.5px rgba(255,255,255,.55),inset 0 0 14px rgba(255,255,255,.22),0 12px 26px -10px rgba(0,0,0,.38)}
+.lg-tabs>a.drop-hov{color:var(--accent-strong)}
+:is(.seg,.hpick)>button.drop-hov{color:var(--ink)}
 /* Puces de choix */
 .chips,.cr-chips,.s5-chips,.seg.wrap,.chips-lg,.pills{display:flex;flex-wrap:wrap;gap:var(--s2)}
 .chip,.seg.wrap>button,.chips-lg>button,.pills>button,.cr-chip,.s5-chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;color:var(--ink);font:500 16px/1.2 var(--font);background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim);transition:background-color var(--t) var(--ease),color var(--t) var(--ease),transform var(--t-fast) var(--ease)}
 :is(.chip,.seg.wrap>button,.chips-lg>button,.pills>button,.cr-chip)[aria-pressed="true"],.chip.on{background:var(--accent);color:var(--accent-ink);box-shadow:none}
 .chips-lg>button{flex:1 1 auto;min-height:48px}
 /* Sélecteur segmenté (avec goutte placée par segDrops) */
-.seg:not(.wrap),.hpick,.ltabs,.qseg,.sos-tabs{position:relative;display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim);width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none}
-.seg:not(.wrap)::-webkit-scrollbar{display:none}
-.seg:not(.wrap)>button,.hpick>button,.ltabs>button,.qseg>button,.sos-tabs>button{position:relative;z-index:1;flex:1 0 auto;min-height:34px;padding:0 14px;border-radius:999px;font:500 15px/1 var(--font);color:var(--ink-2);white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
-.seg:not(.wrap)>button[aria-pressed="true"],.hpick>button[aria-pressed="true"],.seg>[aria-selected="true"],.seg>[aria-checked="true"]{color:var(--ink);font-weight:600}
+.seg:not(.wrap):not(.chips-lg),.hpick,.ltabs,.sos-tabs{position:relative;display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim);width:fit-content;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.seg:not(.wrap):not(.chips-lg)::-webkit-scrollbar{display:none}
+.seg:not(.wrap):not(.chips-lg)>button,.hpick>button,.ltabs>button,.sos-tabs>button{position:relative;z-index:1;flex:1 0 auto;min-height:34px;padding:0 14px;border-radius:999px;font:500 15px/1 var(--font);color:var(--ink-2);white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.seg:not(.wrap):not(.chips-lg)>button[aria-pressed="true"],.hpick>button[aria-pressed="true"],.seg>[aria-selected="true"],.seg>[aria-checked="true"]{color:var(--ink);font-weight:600}
 .seg-drop{position:absolute;top:0;left:0;z-index:0;border-radius:999px;background:var(--surface-solid);box-shadow:inset 1px 1px 0 -.5px rgba(255,255,255,.9),0 1px 2px rgba(21,33,31,.1),0 6px 14px -8px rgba(21,33,31,.3);transition:transform var(--t) var(--ease),width var(--t) var(--ease);pointer-events:none}
-.seg:not(.wrap):not(.has-drop)>button[aria-pressed="true"]{background:var(--surface-solid);box-shadow:0 1px 3px rgba(21,33,31,.12)}
+.seg:not(.wrap):not(.chips-lg):not(.has-drop)>button[aria-pressed="true"]{background:var(--surface-solid);box-shadow:0 1px 3px rgba(21,33,31,.12)}
 @media (max-width:440px){.ln-tabs{display:grid!important;grid-template-columns:1fr 1fr;border-radius:18px!important;width:100%}.ln-tabs>button{border-radius:15px!important}.ln-tabs>.seg-drop{border-radius:15px!important}}
 /* Champs */
 .field{display:flex;flex-direction:column;gap:6px}
@@ -1587,10 +1593,47 @@ function lgPlace(animate){const box=$('#navWrap .lg-tabs'),ind=box&&box.querySel
   if(LG_POS&&animate&&!RM()&&(LG_POS.x!==r.x||LG_POS.y!==r.y)){ind.style.transition='none';set(LG_POS);void ind.offsetWidth;ind.style.transition='';ind.classList.add('mv');requestAnimationFrame(()=>set(r));setTimeout(()=>ind.classList.remove('mv'),520)}
   else set(r);ind.style.opacity='1';LG_POS=r}
 window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
+/* LIBRE 21.2 · Goutte de verre manipulable, comme la barre d'onglets d'iOS 26.
+   Presser le choix actif soulève la goutte (une lentille de verre claire) ; la faire glisser la déplace sous le doigt
+   (largeur ajustée à l'élément le plus proche, bords souples) ; la lâcher choisit cet élément. Un simple toucher garde son comportement.
+   Fonctionne sur la barre d'onglets et sur tous les sélecteurs à choix unique (suivis, périodes, filtres). */
+(()=>{let D=null,skipUntil=0;
+  const isCont=c=>c&&(c.matches('#navWrap .lg-tabs')||c.matches(SEGD_Q));
+  const isAct=x=>x.matches('[aria-pressed="true"],[aria-checked="true"],[aria-selected="true"],[aria-current="page"]');
+  const items=c=>[...c.children].filter(x=>x.matches('a,button')&&x.offsetWidth);
+  const nearest=(its,cx)=>{let b=its[0],bd=1e9;its.forEach(t=>{const m=Math.abs(t.offsetLeft+t.offsetWidth/2-cx);if(m<bd){bd=m;b=t}});return b};
+  const put=(x,w,sc)=>{D.d.style.width=w+'px';D.d.style.height=D.h+'px';D.d.style.transform=`translate(${x.toFixed(1)}px,${D.y}px) scale(${RM()?1:sc})`;D.x=x;D.w=w};
+  document.addEventListener('pointerdown',e=>{if(e.button||D)return;const it=e.target.closest&&e.target.closest('a,button'),c=it&&it.parentElement;
+    if(!isCont(c)||!isAct(it))return;const d=c.querySelector(':scope>.seg-drop,:scope>.lg-ind');if(!d||d.style.opacity==='0')return;
+    D={c,d,it,id:e.pointerId,x0:e.clientX,cx0:it.offsetLeft+it.offsetWidth/2,y:it.offsetTop,h:it.offsetHeight,moved:false,hov:it,nav:c.matches('.lg-tabs')};
+    d.classList.add('lift');d.style.transition='transform .2s var(--ease),width .2s var(--ease),opacity .2s';put(it.offsetLeft,it.offsetWidth,1.06)},true);
+  document.addEventListener('pointermove',e=>{if(!D||e.pointerId!==D.id)return;const dx=e.clientX-D.x0;if(!D.moved&&Math.abs(dx)<6)return;
+    if(!D.moved){D.moved=true;D.d.style.transition='width .14s var(--ease),transform .06s linear';try{D.c.setPointerCapture(D.id)}catch(_){}}
+    const its=items(D.c),lo=its[0].offsetLeft,last=its[its.length-1],hi=last.offsetLeft+last.offsetWidth;
+    const cx=D.cx0+dx,b=nearest(its,Math.max(lo,Math.min(hi,cx))),w=b.offsetWidth;let x=cx-w/2;
+    if(x<lo)x=lo-(lo-x)*.22;if(x+w>hi)x=hi-w+(x+w-hi)*.22;
+    if(b!==D.hov){D.hov.classList.remove('drop-hov');b.classList.add('drop-hov');D.hov=b}
+    put(x,w,1.14)},{passive:true});
+  const end=e=>{if(!D||(e&&e.pointerId!==D.id))return;const d=D.d,b=D.hov,moved=D.moved,c=D.c,nav=D.nav,cur={x:D.x,y:D.y,w:D.w,h:D.h};
+    b.classList.remove('drop-hov');d.classList.remove('lift');d.style.transition='';
+    if(moved&&e&&e.type==='pointerup'){skipUntil=Date.now()+450;
+      if(nav){LG_POS=cur}else{const list=[...document.querySelectorAll(SEGD_Q)],i=list.indexOf(c);SEGD_POS.set((c.getAttribute('aria-label')||c.className)+'|'+i+'|'+ui.view,cur);d.dataset.at=''}
+      put(b.offsetLeft,b.offsetWidth,1);if(!isAct(b))setTimeout(()=>b.click(),0)}
+    else put(D.it.offsetLeft,D.it.offsetWidth,1);
+    D=null};
+  document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
+  /* un lien pressé lancerait le glisser-déposer natif du navigateur (qui coupe les mouvements du pointeur) */
+  document.addEventListener('dragstart',e=>{const c=e.target.closest&&e.target.closest('a,button');if(c&&isCont(c.parentElement))e.preventDefault()},true);
+  /* le clic natif qui suit un glisser ne doit pas rechoisir l'ancien élément */
+  document.addEventListener('click',e=>{if(e.isTrusted&&Date.now()<skipUntil){skipUntil=0;e.preventDefault();e.stopPropagation()}},true);
+})();
+
 /* LIBRE 19 · Sélecteurs en verre liquide : une goutte glisse et s'étire d'un choix à l'autre (Cigarettes/Alcool, 3/6/12 mois…).
    Elle part de l'ancien choix (gardé en mémoire même si l'écran est redessiné) et se pose avec un ressort. */
 const SEGD_POS=new Map();
-function segDrops(){if(FX())return;document.querySelectorAll('#app :is(.seg:not(.wrap),.hpick),header.pg-head :is(.seg:not(.wrap),.hpick)').forEach((c,i)=>{
+/* Sélecteurs à goutte : choix unique uniquement (les listes de cases à choix multiples, .chips-lg, n'en ont pas) */
+const SEGD_Q='#app :is(.seg:not(.wrap):not(.chips-lg),.hpick),header.pg-head :is(.seg:not(.wrap):not(.chips-lg),.hpick)';
+function segDrops(){if(FX())return;document.querySelectorAll(SEGD_Q).forEach((c,i)=>{
   const act=c.querySelector(':scope>:is([aria-pressed="true"],[aria-checked="true"],[aria-selected="true"],[aria-current="page"])');
   let d=c.querySelector(':scope>.seg-drop');if(!act){if(d)d.style.opacity='0';return}
   if(!d){d=document.createElement('span');d.className='seg-drop';d.setAttribute('aria-hidden','true');c.prepend(d)}
@@ -2878,7 +2921,7 @@ function renderQ(){
     ${risky?`<div class="notice">${ic('info')}<span>${esc(t('Si tu bois beaucoup chaque jour, ou si tu prends des médicaments ou drogues avec dépendance physique, parle à un médecin avant d’arrêter : le sevrage peut être dangereux.'))}</span></div>`:''}
     <p class="small muted" style="display:flex;gap:8px;align-items:center">${ic('shield','sm')}${esc(t('Tout reste privé sur ton téléphone. Si tu consommes, ton compteur repart, mais tes records restent.'))}</p>`}
   /* Sections lisibles : Toi · Tes habitudes · Ta motivation · Ton plan */
-  const SEC=[[t('Toi'),['name','age','sex','body']],[t('Tes habitudes'),['habits','label','goal','since','qty','budget','limit','last']],[t('Ton accompagnement'),['hard','support']],[t('Ta motivation'),['reasons']],[t('Ton plan'),['ready']]];
+  const SEC=[[t('Toi'),['name','age','sex','body']],[t('Tes habitudes'),['habits','label','goal','since','qty','budget','limit','last']],[t('Ton accompagnement'),['hard','diff','support']],[t('Ta motivation'),['reasons']],[t('Ton plan'),['ready']]];
   const si=SEC.findIndex(x=>x[1].includes(ty));
   const segs=SEC.map((x,i)=>{const ids=steps.map((s,j)=>[s.split(':')[0],j]).filter(([s])=>x[1].includes(s)).map(([,j])=>j);const a=ids[0],b=ids[ids.length-1],cur=ui.obStep-1;const f=cur>b?1:cur<a?0:(cur-a+1)/(b-a+1);return `<span class="qseg ${i===si?'on':''}"><i style="width:${Math.round(f*100)}%"></i></span>`}).join('');
   const hIdx=k?o.types.indexOf(k):-1;

@@ -88,6 +88,16 @@ Demande : plus de graphiques, plus précis, avec de vrais chiffres et moins de t
   - la teinte de l’addiction, diffuse et fixe, que le verre floute au défilement. Elle était déjà prévue, mais un fond opaque sur `body` la masquait.
   - Désactivée en affichage sobre et quand le système demande moins de transparence.
 
+### Goutte de verre manipulable (LIBRE 21.2)
+Comme la barre d’onglets d’iOS 26 :
+- presser le choix actif (onglet du bas, sélecteur de suivi, période 3/6/12 mois, filtres) soulève la goutte en lentille de verre claire ;
+- la faire glisser la déplace sous le doigt : elle prend la largeur de l’élément le plus proche et résiste aux bords ;
+- la lâcher choisit cet élément ;
+- un simple toucher garde son comportement ;
+- avec moins d’animations demandé par le système, la goutte bouge sans effet de loupe.
+
+Corrigé en même temps : les listes de cases à choix multiples de l’inscription (« Qu’est-ce qui est le plus difficile », « Pourquoi tu fais ça ? ») étaient rognées en cercle, parce qu’elles recevaient le style des sélecteurs à goutte.
+
 ## Vérifications
 
 - `node tests/run.js` : 116 tests (dont les 5 scénarios de LIBRE 20). Tests adaptés : navigation LIBRE 21, effets visuels désactivables, ancien profil « verre ».
