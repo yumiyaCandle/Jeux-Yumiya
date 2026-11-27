@@ -3662,6 +3662,231 @@ html:not(.fx) #app .sg-bar i{background:var(--accent)!important}
 html:not(.fx) #app .kps .kp:nth-child(n) .kp-ic{background:color-mix(in srgb,var(--accent) 14%,var(--card))!important;color:var(--accent-strong)!important}
 
 html:not(.fx) #app .pg11 :is([href],[data-a]) .mp-ic,html:not(.fx) #app .sg-new .mp-ic,html:not(.fx) #app .cr-rec .mp-ic{background:color-mix(in srgb,var(--accent) 14%,var(--card))!important;color:var(--accent-strong)!important}
+
+/* =====================================================================================================
+   LIBRE 17 « Natif » — interface reconstruite sur les codes d'iOS (direction C choisie)
+   apple-design : familiarité (Apple Santé, Réglages), police du système, grands titres, listes groupées,
+   barre d'onglets standard, matières seulement pour la barre ; unslop : une seule teinte d'interface
+   (couleur du suivi), couleurs des icônes réservées aux catégories comme dans Réglages.
+   Couche finale : elle s'applique par-dessus les couches précédentes (html:not(.fx) body …).
+   ===================================================================================================== */
+html:root:not(.fx){--bg:#F2F2F7;--card:#FFFFFF;--field:rgba(118,118,128,.12);--beige:rgba(118,118,128,.12);--line:rgba(60,60,67,.18);--ink:#000000;--muted:#6C6C70;
+  --sep:rgba(60,60,67,.29);--tint:var(--accent-strong);--font-brand:-apple-system,"SF Pro Text","SF Pro",system-ui,"Segoe UI",Roboto,"Inter",sans-serif;--font-display:-apple-system,"SF Pro Display","SF Pro",system-ui,"Segoe UI",Roboto,"Inter",sans-serif;--font-title:var(--font-display);--font-serif:var(--font-display)}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]){--bg:#000000;--card:#1C1C1E;--field:rgba(118,118,128,.24);--beige:rgba(118,118,128,.24);--line:rgba(84,84,88,.6);--ink:#FFFFFF;--muted:#A8A8AF;--sep:rgba(84,84,88,.65)}}
+html:root:not(.fx)[data-theme="dark"]{--bg:#000000;--card:#1C1C1E;--field:rgba(118,118,128,.24);--beige:rgba(118,118,128,.24);--line:rgba(84,84,88,.6);--ink:#FFFFFF;--muted:#A8A8AF;--sep:rgba(84,84,88,.65)}
+
+html:not(.fx) body{background:var(--bg)!important;color:var(--ink)!important;font-family:var(--font-brand)!important;font-size:17px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+html:not(.fx) body :is(h1,h2,h3,p,span,b,strong,a,button,input,select,textarea,label,li,dt,dd,small,em){font-family:inherit}
+html:not(.fx) body .medal::after,html:not(.fx) body .medal>em{font-family:var(--font-display)!important}
+html:not(.fx) body :is(.logo,.pg-logo,.nav-brand>span,.au-logo,.w4-brand,.welcome4 h1,.brand){font-family:var(--font-display)!important}
+
+/* En-tête : barre de navigation iOS (boutons en teinte, sans fond) + grand titre */
+html:not(.fx) body header.pg-head{padding:8px 16px 4px!important;margin:0!important}
+html:not(.fx) body header.pg-head .pg-bar :is(button,a):not(.logo){background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:var(--tint)!important;min-width:44px;min-height:44px}
+html:not(.fx) body header.pg-head .pg-bar :is(button,a) svg{color:var(--tint)!important}
+html:not(.fx) body header.pg-head .pg-bar .logo,html:not(.fx) body header.pg-head .pg-bar .logo *{color:var(--ink)!important}
+html:not(.fx) body header.pg-head .pg-back,html:not(.fx) body header.pg-head .pg-back span{color:var(--tint)!important;background:none!important;box-shadow:none!important}
+html:not(.fx) body :is(.hm-hello,.pg-title,.large-title){font-family:var(--font-display)!important;font-size:34px!important;line-height:41px!important;font-weight:700!important;letter-spacing:.012em!important;color:var(--ink)!important;margin:4px 0 4px!important}
+html:not(.fx) body header.pg-head :is(p,.hm-line,.hm-line span){color:var(--muted)!important;font-size:15px!important;line-height:20px!important}
+
+/* Contenu : marges iOS (16 px), groupes espacés de 20 px */
+html:not(.fx) body #app :is(.h11,.mp,.pg11,.v7){padding-left:16px!important;padding-right:16px!important}
+html:not(.fx) body #app .h11{gap:20px!important}
+
+/* Cartes : blanc pur, coins 12, aucune ombre ni bordure */
+html:not(.fx) body #app :is(.h11-week,.h11-todo,.v7-sec,.kp,.card,.sg,.gd,.dash-c:not(.dash-c1)){background:var(--card)!important;border-radius:12px!important;box-shadow:none!important;border:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html:not(.fx) body #app .h11 .hm-k,html:not(.fx) body #app .mp-h,html:not(.fx) body #app .kp-l{font-size:13px!important;font-weight:400!important;color:var(--muted)!important;text-transform:none!important;letter-spacing:0!important}
+
+/* Compteur : carte blanche façon Apple Santé — catégorie en couleur, grand chiffre, jeton en badge */
+html:not(.fx) body #app .h11 .hm-hero{background:var(--card)!important;color:var(--ink)!important;box-shadow:none!important;border-radius:12px!important;padding:16px!important;gap:12px!important}
+html:not(.fx) body #app .h11 .hm-hero *:not(svg):not(path):not(circle):not(.medal):not(.medal *){color:var(--ink)!important}
+html:not(.fx) body #app .h11 .hm-hero :is(.hm-since,.hm-sub,.hm-slip,.hm-red-sub){color:var(--muted)!important}
+html:not(.fx) body #app .h11 .hm-hero .hm-k{color:var(--tint)!important;font-size:15px!important;font-weight:600!important;text-transform:none!important;letter-spacing:0!important;display:flex;align-items:center;gap:6px}
+html:not(.fx) body #app .h11 .hm-hero .hm-pill{background:none!important;color:var(--tint)!important;padding:0!important;font-weight:600!important}
+html:not(.fx) body #app .h11 .hm-hero .hm-pill::after{content:" ·"}
+html:not(.fx) body #app .h11 .hm-days .num{font-family:var(--font-display)!important;font-size:56px!important;font-weight:600!important;letter-spacing:-.01em!important;line-height:1!important;color:var(--ink)!important}
+html:not(.fx) body #app .h11 .hm-days .hm-u{font-size:17px!important;color:var(--muted)!important;font-weight:400!important}
+html:not(.fx) body #app .h11 .hm-hero .hb{background:var(--field)!important;height:8px;border-radius:4px}
+html:not(.fx) body #app .h11 .hm-hero .hb i{background:var(--accent)!important}
+html:not(.fx) body #app .hm-medal{top:14px!important;right:14px!important;width:84px!important}
+html:not(.fx) body #app .hm-medal .medal{--sz:68px}
+html:not(.fx) body #app .hm-medal>span:last-child{color:var(--muted)!important;font-size:12px!important}
+html:not(.fx) body #app .h11 .hm-hero:has(.hm-medal) .hm-main{padding-right:92px!important}
+html:not(.fx) body #app .medal.ghost{box-shadow:inset 0 0 0 2px var(--sep)!important}
+html:not(.fx) body #app .medal.ghost::after,html:not(.fx) body #app .medal.ghost>em{color:var(--muted)!important}
+html:not(.fx) body #app .h11-log{border-top:.5px solid var(--sep)!important;padding-top:12px!important}
+html:not(.fx) body #app .h11-log .grow,html:not(.fx) body #app .h11-log .grow b{color:var(--ink)!important}
+html:not(.fx) body #app .h11-log .btn.quiet{background:none!important;color:var(--tint)!important;box-shadow:none!important;padding:0 8px!important;font-weight:400!important;font-size:17px!important}
+html:not(.fx) body #app .h11-log .hm-step2 button{background:var(--field)!important;color:var(--ink)!important;border-radius:50%!important;box-shadow:none!important;width:44px;height:44px}
+
+/* Chiffres de la semaine */
+html:not(.fx) body #app .h11-st b{color:var(--ink)!important;font-size:28px!important;font-weight:600!important;font-family:var(--font-display)!important}
+html:not(.fx) body #app .h11-st>div:nth-child(1) b{color:var(--ink)!important}
+html:not(.fx) body #app .h11-st span{color:var(--muted)!important;font-size:13px!important}
+html:not(.fx) body #app .h11-links .link,html:not(.fx) body #app .link{color:var(--tint)!important;font-weight:400!important}
+html:not(.fx) body .wk li.ok i{background:var(--accent)!important;border-radius:4px}
+html:not(.fx) body .wk i{border-radius:4px!important;height:24px!important}
+html:not(.fx) body .wk li.fu i{background:var(--field)!important;box-shadow:none!important}
+html:not(.fx) body .wk li.no i{background:transparent!important;box-shadow:inset 0 0 0 2px var(--sep)!important}
+
+/* « Aujourd'hui » : rangées iOS */
+html:not(.fx) body #app .h11-do{background:none!important;box-shadow:none!important;padding:8px 0!important;color:var(--ink)!important;font-weight:400!important;border-top:.5px solid var(--sep);border-radius:0!important}
+html:not(.fx) body #app .h11-todo .ck-moods button{background:var(--field)!important;box-shadow:none!important;border-radius:10px!important}
+
+/* Aide : une liste groupée, l'envie en premier avec son icône rouge */
+html:not(.fx) body #app .h11-help{gap:0!important;background:var(--card);border-radius:12px;overflow:hidden}
+html:not(.fx) body #app .h11-help>:is(.hm-sos,.h11-delay,.hm-risk){background:var(--card)!important;color:var(--ink)!important;border-radius:0!important;box-shadow:none!important;min-height:52px;padding:10px 16px!important;justify-content:flex-start!important;font-weight:400!important;font-size:17px}
+html:not(.fx) body #app .h11-help .hm-sos *{color:var(--ink)!important}
+html:not(.fx) body #app .h11-help .hm-sos .grow>span{color:var(--muted)!important;font-size:13px}
+html:not(.fx) body #app .h11-help .hm-sos .hm-sos-ic{background:#FF3B30!important;border-radius:7px!important;width:29px!important;height:29px!important;display:grid;place-items:center;box-shadow:none!important}
+html:not(.fx) body #app .h11-help .hm-sos .hm-sos-ic svg{color:#fff!important;width:18px;height:18px}
+html:not(.fx) body #app .h11-help .hm-sos>svg:last-child{color:#C4C4C7!important}
+html:not(.fx) body #app .h11-help .h11-delay{border-top:.5px solid var(--sep)!important;color:var(--tint)!important;gap:12px!important}
+html:not(.fx) body #app .h11-help .h11-delay svg{color:var(--tint)!important}
+
+/* Listes groupées (Mon plan, Progrès) : rangées collées, séparateur décalé, coins arrondis au groupe */
+html:not(.fx) body #app :is(.mp,.mp-ex,.mp-list){gap:0!important}
+html:not(.fx) body #app .mp-row{background:var(--card)!important;border-radius:0!important;margin:0!important;box-shadow:none!important;border:0!important;min-height:52px!important;padding:8px 16px!important;gap:14px!important;position:relative;filter:none!important}
+html:not(.fx) body #app .mp-row:hover{background:var(--card)!important}
+html:not(.fx) body #app .mp-row:active{background:var(--field)!important}
+html:not(.fx) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:has(+ .mp-row)::after{content:"";position:absolute;left:59px;right:0;bottom:0;height:.5px;background:var(--sep)}
+html:not(.fx) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:not(.mp-row + .mp-row){border-top-left-radius:12px!important;border-top-right-radius:12px!important}
+html:not(.fx) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:not(:has(+ .mp-row)){border-bottom-left-radius:12px!important;border-bottom-right-radius:12px!important;margin-bottom:20px!important}
+html:not(.fx) body #app .mp-row b{font-weight:400!important;font-size:17px!important;color:var(--ink)!important}
+html:not(.fx) body #app .mp-row .grow>span{font-size:13px!important;color:var(--muted)!important}
+html:not(.fx) body #app .mp-row>svg:last-child{color:#C4C4C7!important}
+html:not(.fx) body #app .mp-h{margin:0 0 6px 16px!important}
+html:not(.fx) body #app .mp-danger b{color:#D70015!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) body #app .mp-danger b{color:#FF6961!important}}
+html:root:not(.fx)[data-theme="dark"] body #app .mp-danger b{color:#FF6961!important}
+
+/* Icônes : carrés de couleur à coins arrondis, pictogramme blanc — comme Réglages */
+html:not(.fx) body #app :is(.mp-ic,.kp-ic){width:29px!important;height:29px!important;border-radius:7px!important;color:#fff!important;background-image:none!important;box-shadow:none!important;display:grid!important;place-items:center;flex:none}
+html:not(.fx) body #app :is(.mp-ic,.kp-ic) svg{width:18px!important;height:18px!important;color:#fff!important}
+html:not(.fx) body #app [data-a="quitDay"] .mp-ic{background:#5856D6!important}
+html:not(.fx) body #app [href="#motivations"] .mp-ic{background:#FF2D55!important}
+html:not(.fx) body #app [href="#declencheurs"] .mp-ic{background:#FF9500!important}
+html:not(.fx) body #app [href="#plan"] .mp-ic{background:#34C759!important}
+html:not(.fx) body #app [data-a="signsSheet"] .mp-ic{background:#FFCC00!important}
+html:not(.fx) body #app [data-a="contactsSheet"] .mp-ic{background:#007AFF!important}
+html:not(.fx) body #app [data-a="sitSheet"] .mp-ic{background:#AF52DE!important}
+html:not(.fx) body #app [href="#comprendre"] .mp-ic{background:#32ADE6!important}
+html:not(.fx) body #app [data-a="tool"][data-id="breath"] .mp-ic{background:#30B0C7!important}
+html:not(.fx) body #app [data-a="tool"][data-id="ground"] .mp-ic{background:#5AC8FA!important}
+html:not(.fx) body #app [data-a="tool"][data-id="urge"] .mp-ic{background:#FF9500!important}
+html:not(.fx) body #app [data-a="allTools"] .mp-ic{background:#8E8E93!important}
+html:not(.fx) body #app .mp-danger .mp-ic{background:#FF3B30!important}
+html:not(.fx) body #app .cr-rec .mp-ic{background:#34C759!important}
+html:not(.fx) body #app .pg11 [href="#calendrier"] .mp-ic{background:#FF3B30!important}
+html:not(.fx) body #app .pg11 [href="#economies"] .mp-ic{background:#34C759!important}
+html:not(.fx) body #app .pg11 [href="#bilans"] .mp-ic{background:#007AFF!important}
+html:not(.fx) body #app .pg11 [href="#stats"] .mp-ic{background:#5856D6!important}
+html:not(.fx) body #app .sg-new .mp-ic{background:#FF9500!important}
+html:not(.fx) body #app .kps .kp:nth-child(1) .kp-ic{background:#FF3B30!important}
+html:not(.fx) body #app .kps .kp:nth-child(2) .kp-ic{background:#34C759!important}
+html:not(.fx) body #app .kps .kp:nth-child(3) .kp-ic{background:#AF52DE!important}
+
+/* Progrès : chiffres façon Santé */
+html:not(.fx) body #app .kp{padding:12px 16px!important;gap:12px}
+html:not(.fx) body #app .kp b,html:not(.fx) body #app .kp .kp-v,html:not(.fx) body #app .ov-big{font-family:var(--font-display)!important;font-weight:600!important;color:var(--ink)!important}
+html:not(.fx) body #app .pg-ms-l li{color:var(--ink)!important}
+
+/* Contrôle segmenté iOS */
+html:not(.fx) body :is(#app,header.pg-head) :is(.seg,.segc,.hpick,.pills,[role="radiogroup"]){background:var(--field)!important;border-radius:9px!important;padding:2px!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;gap:0!important}
+html:not(.fx) body :is(#app,header.pg-head) :is(.seg,.segc,.hpick,.pills) :is(button,a){border-radius:7px!important;background:transparent!important;color:var(--ink)!important;box-shadow:none!important;font-size:13px!important;font-weight:500!important;min-height:32px;border:0!important}
+html:not(.fx) body :is(#app,header.pg-head) :is(.seg,.segc,.hpick,.pills) :is([aria-pressed="true"],[aria-checked="true"],[aria-current="page"],[aria-selected="true"]){background:var(--card)!important;box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04)!important;font-weight:600!important}
+html:not(.fx) body #app .seg.wrap{border-radius:10px!important}
+html:not(.fx) body #app .chips-lg button{border-radius:16px!important;background:var(--field)!important}
+html:not(.fx) body #app .chips-lg button[aria-pressed="true"]{background:var(--tint)!important;color:var(--accent-ink)!important}
+
+/* Boutons iOS */
+html:not(.fx) body #app .btn{border-radius:12px!important;font-weight:600!important;font-size:17px!important;min-height:50px;box-shadow:none!important}
+html:not(.fx) body #app .btn.sm{min-height:34px;font-size:15px!important;border-radius:8px!important}
+html:not(.fx) body #app .btn.primary{background:var(--tint)!important;color:var(--accent-ink)!important}
+html:not(.fx) body #app .btn:not(.primary):not(.danger){background:var(--field)!important;color:var(--tint)!important}
+html:not(.fx) body .sheet .btn.primary{background:var(--tint)!important;color:var(--accent-ink)!important;border-radius:12px!important;box-shadow:none!important}
+
+/* Fenêtres : feuille iOS */
+html:not(.fx) body .sheet{background:var(--bg)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:12px 12px 0 0!important;box-shadow:0 -1px 0 var(--sep)!important}
+
+/* Barre d'onglets iOS (téléphone) : pleine largeur, matière translucide, filet en haut ; l'Aide est le 5e onglet, en rouge */
+@media (max-width:899px){
+  html:not(.fx) body #navWrap.nav,html:not(.fx) body.lgd #navWrap.nav{left:0!important;right:0!important;bottom:0!important;max-width:none!important;margin:0!important;border-radius:0!important;padding:0 0 env(safe-area-inset-bottom,0px)!important;
+    background:rgba(249,249,249,.94)!important;-webkit-backdrop-filter:blur(20px) saturate(180%)!important;backdrop-filter:blur(20px) saturate(180%)!important;box-shadow:0 -.5px 0 var(--sep)!important;border:0!important}
+  html:not(.fx) body #navWrap.nav::before,html:not(.fx) body #navWrap.nav::after,html:not(.fx) body #navWrap .nav-help::before,html:not(.fx) body #navWrap .nav-help::after{display:none!important}
+  html:not(.fx) body #navWrap .in{gap:0!important}
+  html:not(.fx) body #navWrap .lg-tabs{background:none!important;box-shadow:none!important;padding:0!important;min-height:49px!important;border-radius:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;flex:4 1 0}
+  html:not(.fx) body #navWrap .lg-ind{display:none!important}
+  html:not(.fx) body #navWrap .lg-tabs>a{color:#8E8E93!important;background:none!important;box-shadow:none!important;font-size:10px!important;font-weight:500!important;padding-top:6px!important;gap:2px!important}
+  html:not(.fx) body #navWrap .lg-tabs>a svg{width:24px!important;height:24px!important}
+  html:not(.fx) body #navWrap .lg-tabs>a[aria-current="page"]{color:var(--tint)!important}
+  html:not(.fx) body #navWrap .nav-help{flex:1 1 0!important;width:auto!important;height:49px!important;border-radius:0!important;background:none!important;box-shadow:none!important;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding-top:6px!important;color:#FF3B30!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  html:not(.fx) body #navWrap .nav-help>i{width:24px!important;height:24px!important;background:none!important;box-shadow:none!important;color:#FF3B30!important}
+  html:not(.fx) body #navWrap .nav-help>i svg{width:24px!important;height:24px!important}
+  html:not(.fx) body #navWrap .nav-help>i svg *{stroke:#FF3B30!important}
+  html:not(.fx) body #navWrap .nav-help>span{position:static!important;width:auto!important;height:auto!important;overflow:visible!important;clip:auto!important;font-size:10px!important;font-weight:500!important;color:#D70015!important}
+  html:not(.fx) body.nav-min #navWrap .lg-tabs{min-height:49px!important}
+  html:not(.fx) body #app{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+}
+@media (max-width:899px) and (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) body #navWrap.nav{background:rgba(22,22,24,.94)!important}html:root:not(.fx):not([data-theme="light"]) body #navWrap .nav-help>span{color:#FF6961!important}}
+@media (max-width:899px){html:root:not(.fx)[data-theme="dark"] body #navWrap.nav{background:rgba(22,22,24,.94)!important}html:root:not(.fx)[data-theme="dark"] body #navWrap .nav-help>span{color:#FF6961!important}}
+
+/* Barre latérale (ordinateur, iPad) : liste source iOS */
+@media (min-width:900px){
+  html:not(.fx) body #navWrap.nav{background:var(--bg)!important;box-shadow:.5px 0 0 var(--sep)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:0!important}
+  html:not(.fx) body #navWrap .lg-tabs>a,html:not(.fx) body #navWrap a.nav-x,html:not(.fx) body #navWrap .nav-hab{border-radius:10px!important;color:var(--ink)!important;box-shadow:none!important;background:none!important}
+  html:not(.fx) body #navWrap .lg-tabs>a[aria-current="page"],html:not(.fx) body #navWrap a.nav-x[aria-current="page"]{background:var(--tint)!important;color:var(--accent-ink)!important}
+  html:not(.fx) body #navWrap .lg-ind{display:none!important}
+  html:not(.fx) body #navWrap .nav-help{border-radius:10px!important;background:#FF3B30!important;color:#fff!important;box-shadow:none!important}
+  html:not(.fx) body #navWrap .nav-help>i{background:none!important;box-shadow:none!important}
+}
+
+/* LIBRE 17 : finitions */
+html:not(.fx) body header.pg-head .pg-bar{flex-wrap:nowrap!important;gap:0!important;align-items:center}
+html:not(.fx) body header.pg-head .pg-bar>:not(.logo){margin-left:auto}
+html:not(.fx) body header.pg-head .pg-bar :is(button,a):not(.logo){min-width:40px!important;width:auto!important;padding:0 6px!important}
+html:not(.fx) body header.pg-head .pg-bar :is(.tacts,.top-acts,div){display:flex;flex-wrap:nowrap;gap:0!important}
+html:not(.fx) body #app .h11 .hm-side{display:block!important}
+html:not(.fx) body #app .h11 .hm-side .hm-k{color:var(--muted)!important;font-size:13px!important;font-weight:400!important;margin:0 0 6px!important}
+html:not(.fx) body #app .h11 .hm-side :is(.hm-step,.hm-sub){display:block;text-align:start!important}
+html:not(.fx) body #app .h11 .hm-side .hm-step{font-size:17px!important;font-weight:600!important;margin-top:8px!important}
+html:not(.fx) body #app .h11 .hm-side .hm-sub{font-size:13px!important}
+
+html:root:not(.fx) body,html:root:not(.fx)[data-theme] body{background:var(--bg)!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) body{background:var(--bg)!important}}
+html:not(.fx) body #app .h11 .hm-hero .btn,html:not(.fx) body #app .h11-log .btn{background:none!important;color:var(--tint)!important;box-shadow:none!important;min-height:44px;padding:0 4px!important;font-weight:400!important}
+
+/* LIBRE 17 : l'Aide (SOS) en natif */
+html:not(.fx) body .qsos{background:var(--bg)!important;color:var(--ink)!important}
+html:not(.fx) body .qsos *:not(svg):not(path):not(circle):not(.qs-dot){color:inherit}
+html:not(.fx) body .qsos :is(.qs-h1,h1){font-family:var(--font-display)!important;font-size:34px!important;line-height:41px!important;font-weight:700!important;color:var(--ink)!important}
+html:not(.fx) body .qsos .qs-sub{color:var(--muted)!important;font-size:17px!important}
+html:not(.fx) body .qsos .qs-tri{gap:0!important;background:var(--card);border-radius:12px;overflow:hidden}
+html:not(.fx) body .qsos .qs-tri>.qs-t{background:var(--card)!important;color:var(--ink)!important;border-radius:0!important;box-shadow:none!important;border:0!important;min-height:60px;padding:10px 16px!important;position:relative}
+html:not(.fx) body .qsos .qs-tri>.qs-t+.qs-t::before{content:"";position:absolute;left:59px;right:0;top:0;height:.5px;background:var(--sep)}
+html:not(.fx) body .qsos .qs-t b{font-weight:400!important;font-size:17px!important;color:var(--ink)!important}
+html:not(.fx) body .qsos .qs-t span span{color:var(--muted)!important;font-size:13px!important}
+html:not(.fx) body .qsos .qs-t>i{width:29px!important;height:29px!important;border-radius:7px!important;display:grid!important;place-items:center;background:#8E8E93!important;color:#fff!important;box-shadow:none!important;flex:none}
+html:not(.fx) body .qsos .qs-t>i svg{color:#fff!important;width:18px;height:18px}
+html:not(.fx) body .qsos .qs-t-main>i{background:#FF9500!important}
+html:not(.fx) body .qsos .qs-t[data-a="delay10"]>i{background:#5856D6!important}
+html:not(.fx) body .qsos .qs-breath>i.qs-dot{background:#30B0C7!important;animation:none!important}
+html:not(.fx) body .qsos .qs-call>i,html:not(.fx) body .qsos .qs-t[data-a="qsCall"]>i{background:#34C759!important}
+html:not(.fx) body .qsos .qs-t-danger>i{background:#FF3B30!important}
+html:not(.fx) body .qsos .qs-t-danger b{color:#D70015!important}
+html:not(.fx) body .qsos .qs-t>svg:last-child{color:#C4C4C7!important}
+html:not(.fx) body .qsos .qs-em,html:not(.fx) body .qsos .qs-em-row>*{background:var(--card)!important;color:var(--ink)!important;box-shadow:none!important;border:0!important;border-radius:10px!important}
+html:not(.fx) body .qsos .qs-signs{background:var(--card)!important;color:var(--ink)!important;border-radius:12px!important}
+html:not(.fx) body .qsos .qs-signs b{color:var(--ink)!important}
+html:not(.fx) body .qsos :is(.qs-help,.qs-motiv){background:var(--card)!important;color:var(--tint)!important;border-radius:12px!important;box-shadow:none!important;border:0!important}
+html:not(.fx) body .qsos .qs-alert{background:var(--card)!important;color:#D70015!important;border-radius:12px!important;box-shadow:none!important;border:0!important}
+html:not(.fx) body .qsos :is(.sos-x,.qs-close,[data-a="sosClose"]){color:var(--tint)!important}
+html:not(.fx) body .qsos .logo,html:not(.fx) body .qsos .logo *{color:var(--ink)!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) body .qsos :is(.qs-t-danger b,.qs-alert){color:#FF6961!important}}
+html:root:not(.fx)[data-theme="dark"] body .qsos :is(.qs-t-danger b,.qs-alert){color:#FF6961!important}
+
+html:not(.fx) body .qsos svg [stroke="#fff"],html:not(.fx) body .qsos svg [stroke="#FFF"]{stroke:var(--ink)!important}
+html:not(.fx) body .qsos svg [fill="#fff"],html:not(.fx) body .qsos svg [fill="#FFF"]{fill:var(--ink)!important}
 </style>
 </head>
 <body>

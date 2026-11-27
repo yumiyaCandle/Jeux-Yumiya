@@ -2,7 +2,8 @@
 
 | Document | Contenu |
 |---|---|
-| [LIBRE-16.md](LIBRE-16.md) | **Interface actuelle « Jetons »** : second passage /unslop ; jeton d’étape bronze/argent/or, verre réservé à la navigation, une seule teinte d’icônes |
+| [LIBRE-17.md](LIBRE-17.md) | **Interface actuelle « Natif »** : reconstruite sur les codes d’iOS (direction C choisie parmi trois) |
+| [LIBRE-16.md](LIBRE-16.md) | **Interface « Jetons »** : second passage /unslop ; jeton d’étape bronze/argent/or, verre réservé à la navigation, une seule teinte d’icônes |
 | [LIBRE-13.md](LIBRE-13.md) | **Interface « Carnet »** : passage /unslop complet (plus de bandeau ni de tuiles, rampe encre, semaine cochée, lignes réglées, titre = la date) |
 | [LIBRE-12.md](LIBRE-12.md) | **Jour et nuit** : thème au choix ou selon l’heure (7 h – 20 h), rappels du Jour J, signaux d’alerte, objectif d’épargne, revue web-design-guidelines |
 | [LIBRE-11.md](LIBRE-11.md) | **Interface « Allégée »** : 4 onglets (Aujourd’hui, Mon plan, Progrès, Journal) et Aide ; accueil en 4 éléments ; Jour J ; retarder l’envie de 10 min ; fonctions retirées de l’affichage (données gardées) ; méthode unslop |
