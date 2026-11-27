@@ -615,10 +615,15 @@ svg text{fill:var(--ink-3);font-family:var(--font);font-size:11px;font-variant-n
 /* Questionnaire */
 .q{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;gap:var(--s5);padding:calc(var(--s3) + var(--safe-t)) 0 calc(var(--s5) + var(--safe-b))}
 .q-top{display:flex;align-items:center;gap:var(--s3)}
-.q-step,.q-secs{flex:1;display:flex;gap:4px}
-.q-step>*,.q-secs>*{flex:1;height:4px;border-radius:4px;background:var(--line);overflow:hidden}
-.q-step>.on,.q-step>.done,.q-secs>.on,.q-secs>.done,.q-secs i{background:var(--accent)}
-.q-tag{font:600 13px/1.3 var(--font);color:var(--ink-3);text-align:center}
+.q-secs{flex:1;display:flex;gap:4px}
+.q-secs>*{flex:1;height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.q-secs>.on,.q-secs>.done,.q-secs i{background:var(--accent)}
+/* Repère texte sous la barre : petit et discret ; le contenu part du haut (aucun étirement vertical) */
+.q-step{flex:none;margin-top:calc(-1 * var(--s2));font:500 13px/1.3 var(--font);color:var(--ink-3)}
+.q-step b{font-weight:600;color:var(--ink-2)}
+.q-step b:empty{display:none}
+.q-body{flex:1 0 auto}
+.q-tag{display:inline-flex;align-items:center;justify-content:center;gap:6px;font:600 13px/1.3 var(--font);color:var(--ink-3)}
 .q-body{display:flex;flex-direction:column;gap:var(--s4);flex:1}
 .q-body>h1,.q h1{font:700 30px/1.15 var(--font-round);letter-spacing:-.022em}
 .opts,.opts2,.choice-grid,.goal-grid{display:flex;flex-direction:column;gap:var(--s2)}
@@ -628,6 +633,9 @@ svg text{fill:var(--ink-3);font-family:var(--font);font-size:11px;font-variant-n
 .opt[aria-pressed="true"],.choice[aria-pressed="true"],.opt.on,.opt[aria-checked="true"]{background:var(--accent-soft);box-shadow:inset 0 0 0 2px var(--accent)}
 .opt-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);flex:none}
 .ob-cta,#obCta{margin-top:auto;position:sticky;bottom:calc(var(--s3) + var(--safe-b))}
+/* Le bouton fixé en bas ne recouvre pas la liste : un voile du fond passe derrière lui */
+.q>.ob-cta{z-index:2;bottom:0;margin-inline:calc(-1 * var(--gutter));margin-bottom:calc(-1 * (var(--s5) + var(--safe-b)));padding:var(--s6) var(--gutter) calc(var(--s3) + var(--safe-b));background:linear-gradient(to bottom,transparent,var(--bg) 40%)}
+.q>.ob-cta #obCta{position:static}
 #obCta{width:100%}
 /* Comptes */
 .auth,.au-body{display:flex;flex-direction:column;gap:var(--s4)}
@@ -2868,7 +2876,7 @@ function renderQ(){
   const segs=SEC.map((x,i)=>{const ids=steps.map((s,j)=>[s.split(':')[0],j]).filter(([s])=>x[1].includes(s)).map(([,j])=>j);const a=ids[0],b=ids[ids.length-1],cur=ui.obStep-1;const f=cur>b?1:cur<a?0:(cur-a+1)/(b-a+1);return `<span class="qseg ${i===si?'on':''}"><i style="width:${Math.round(f*100)}%"></i></span>`}).join('');
   const hIdx=k?o.types.indexOf(k):-1;
   return `<div class="q" data-step="${id}"><div class="q-top"><button class="iconbtn" data-a="obBack" aria-label="${esc(t('Retour'))}">${ic('left')}</button><div class="q-secs" role="progressbar" aria-valuemin="1" aria-valuemax="${steps.length}" aria-valuenow="${ui.obStep}" aria-label="${esc(t('Étape {n} sur {total}',{n:nf(ui.obStep,0),total:nf(steps.length,0)}))}">${segs}</div><button class="iconbtn" data-a="langPicker" aria-label="${esc(t('Langue de l’application'))}">${ic('globe','sm')}</button></div>
-    <p class="q-step"><b>${esc(si>=0?SEC[si][0]:'')}</b> · ${esc(t('Étape {n} sur {total}',{n:nf(ui.obStep,0),total:nf(steps.length,0)}))}</p>
+    <p class="q-step">${si>=0?`<b>${esc(SEC[si][0])}</b> · `:''}${esc(t('Étape {n} sur {total}',{n:nf(ui.obStep,0),total:nf(steps.length,0)}))}</p>
     <div class="q-body fade-in">${h&&ty!=='label'?`<span class="q-tag">${ic(TYPES[k].ic,'sm')}${esc(TYPES[k].named&&h.label?h.label:typeLabel(k))}${o.types.length>1?` · ${esc(t('{n} sur {total}',{n:nf(hIdx+1,0),total:nf(o.types.length,0)}))}`:''}</span>`:''}<h1>${esc(q)}</h1>${sub?`<p class="sub">${esc(sub)}</p>`:''}${body}</div>
     <div class="ob-cta"><button class="btn primary block" id="obCta" data-a="obNext" ${obValid(id)?'':'disabled'}>${esc(cta)}</button></div></div>`;
 }
