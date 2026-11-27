@@ -11,11 +11,13 @@
 - l'Aide (SOS) particulièrement soignée ;
 - des animations qui ont une raison d'être.
 
-Outils à utiliser réellement : `/find-skills`, `/apple-design`, `/unslop`, `/21st:21st-ui`.
+Outils à utiliser réellement : `/find-skills`, `/apple-design`, `/unslop`, `/21st:21st-ui` ; installés pour LIBRE 21 : `impeccable`, `accessibility`, `performance`, `webapp-testing`.
 
-Interface actuelle : **LIBRE 19 « Verre »**, décrite dans [docs/LIBRE-19.md](docs/LIBRE-19.md). Elle applique le verre liquide sur toute l'app et garde les couleurs par addiction, à la demande de la personne propriétaire. Elle se pose sur LIBRE 18 « Aube » ([docs/LIBRE-18.md](docs/LIBRE-18.md)).
+Interface et organisation actuelles : **LIBRE 21 « Verre de mer »**, décrite dans [docs/LIBRE-21.md](docs/LIBRE-21.md). Système de design : [DESIGN.md](DESIGN.md) ; fiche produit : [PRODUCT.md](PRODUCT.md) ; contrat de direction : `.impeccable/surfaces/libre-index-html.md`. Onglets : Aujourd’hui, Progrès, Aide (au centre), Mon plan (avec Comprendre), Profil. Le galet de verre (`pebbleSVG`) est la signature : il ne doit pas devenir décoratif ailleurs.
 
-Organisation actuelle : **LIBRE 20**, avec 5 onglets (Accueil, M’aider, Mon suivi, Comprendre, Profil), décrite dans [docs/LIBRE-20.md](docs/LIBRE-20.md). Le brief de reconstruction fonctionnelle est résumé dans ce document.
+Feuille de style : **une seule**, en tête de `libre/index.html`, organisée par sections (jetons → base → verre → typographie → groupes → commandes → navigation → fenêtres → écrans → mouvement). Modifier la règle existante plutôt qu’ajouter une couche qui surcharge ; pas de `!important` sauf nécessité réelle.
+
+Historique : LIBRE 20 (5 onglets, [docs/LIBRE-20.md](docs/LIBRE-20.md)), LIBRE 19 « Verre » ([docs/LIBRE-19.md](docs/LIBRE-19.md)), LIBRE 18 « Aube » ([docs/LIBRE-18.md](docs/LIBRE-18.md)). Copie autonome de LIBRE 20 : `livraison/archive/LIBRE-20-avant-refonte.html`.
 
 Préférences exprimées après le brief :
 - un rendu professionnel ;

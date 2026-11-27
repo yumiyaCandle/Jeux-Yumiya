@@ -1,0 +1,714 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-27T17:42:49+00:00",
+  "title": "Design System: LIBRE",
+  "extensions": {
+    "colorMeta": {
+      "wet-sand": {
+        "role": "neutral",
+        "displayName": "Sable mouillé",
+        "tonalRamp": [
+          "#0A1315",
+          "#132124",
+          "#2F3A38",
+          "#5C6865",
+          "#93A19E",
+          "#C9CCC6",
+          "#E8E7E1",
+          "#F1F0EB"
+        ]
+      },
+      "wet-sand-deep": {
+        "role": "neutral",
+        "displayName": "Sable mouillé profond"
+      },
+      "foam-paper": {
+        "role": "neutral",
+        "displayName": "Papier d'écume"
+      },
+      "on-tint-white": {
+        "role": "neutral",
+        "displayName": "Blanc sur teinte"
+      },
+      "frosted-pane": {
+        "role": "neutral",
+        "displayName": "Volet givré"
+      },
+      "glass-pane": {
+        "role": "neutral",
+        "displayName": "Verre",
+        "darkCounterpart": "night-glass"
+      },
+      "glass-pane-strong": {
+        "role": "neutral",
+        "displayName": "Verre fort"
+      },
+      "glass-edge": {
+        "role": "neutral",
+        "displayName": "Tranche de verre"
+      },
+      "kelp-ink": {
+        "role": "neutral",
+        "displayName": "Encre algue"
+      },
+      "kelp-ink-2": {
+        "role": "neutral",
+        "displayName": "Encre algue secondaire"
+      },
+      "kelp-ink-3": {
+        "role": "neutral",
+        "displayName": "Encre algue tertiaire"
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Filet"
+      },
+      "hairline-2": {
+        "role": "neutral",
+        "displayName": "Filet appuyé"
+      },
+      "night-sea": {
+        "role": "neutral",
+        "displayName": "Mer de nuit"
+      },
+      "night-sea-2": {
+        "role": "neutral",
+        "displayName": "Mer de nuit profonde"
+      },
+      "night-paper": {
+        "role": "neutral",
+        "displayName": "Papier de nuit"
+      },
+      "night-glass": {
+        "role": "neutral",
+        "displayName": "Verre de nuit"
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Écume de nuit"
+      },
+      "night-ink-2": {
+        "role": "neutral",
+        "displayName": "Écume de nuit secondaire"
+      },
+      "night-ink-3": {
+        "role": "neutral",
+        "displayName": "Écume de nuit tertiaire"
+      },
+      "foam-tint": {
+        "role": "primary",
+        "displayName": "Écume (teinte par défaut)",
+        "tonalRamp": [
+          "#0F2E26",
+          "#173A2F",
+          "#1C5444",
+          "#246352",
+          "#2F7A66",
+          "#2A6A55",
+          "#7FD0B6",
+          "#DCEFE8"
+        ]
+      },
+      "foam-tint-strong": {
+        "role": "primary",
+        "displayName": "Écume forte"
+      },
+      "foam-tint-soft": {
+        "role": "primary",
+        "displayName": "Écume douce"
+      },
+      "foam-tint-night": {
+        "role": "primary",
+        "displayName": "Écume de nuit"
+      },
+      "help-coral": {
+        "role": "secondary",
+        "displayName": "Corail d'aide",
+        "tonalRamp": [
+          "#1A0703",
+          "#3A1C16",
+          "#6E2414",
+          "#8C2C1A",
+          "#A8341F",
+          "#D0583F",
+          "#FF8C76",
+          "#F6E1DC"
+        ]
+      },
+      "help-coral-soft": {
+        "role": "secondary",
+        "displayName": "Corail d'aide doux"
+      },
+      "help-coral-night": {
+        "role": "secondary",
+        "displayName": "Corail d'aide de nuit"
+      },
+      "ok-green": {
+        "role": "neutral",
+        "displayName": "Vert réussite"
+      },
+      "warn-amber": {
+        "role": "neutral",
+        "displayName": "Ambre dépassement"
+      },
+      "danger-red": {
+        "role": "neutral",
+        "displayName": "Rouge suppression"
+      },
+      "tint-libre": {
+        "role": "primary",
+        "displayName": "Bleu nuit et sauge",
+        "canonical": "#3D6B57",
+        "tonalRamp": [
+          "#101B30",
+          "#1E362D",
+          "#1C3050",
+          "#2E5646",
+          "#2C4D5C",
+          "#3D6B57",
+          "#9CC7B1",
+          "#E2EDE6"
+        ],
+        "variants": {
+          "strong": "#2E5646",
+          "soft": "#E2EDE6",
+          "night": "#9CC7B1",
+          "nightSoft": "#1E362D"
+        },
+        "source": "HPAL['libre'] dans libre/index.html"
+      },
+      "tint-tabac": {
+        "role": "primary",
+        "displayName": "Vert sauge",
+        "canonical": "#2E7D62",
+        "tonalRamp": [
+          "#0F2E26",
+          "#173A2F",
+          "#1C5444",
+          "#236150",
+          "#2A6A55",
+          "#2E7D62",
+          "#6FD1A9",
+          "#DDF0E7"
+        ],
+        "variants": {
+          "strong": "#236150",
+          "soft": "#DDF0E7",
+          "night": "#6FD1A9",
+          "nightSoft": "#173A2F"
+        },
+        "source": "HPAL['tabac'] dans libre/index.html"
+      },
+      "tint-alcool": {
+        "role": "primary",
+        "displayName": "Ambre",
+        "canonical": "#B0521F",
+        "tonalRamp": [
+          "#3A1608",
+          "#3E2414",
+          "#6E2F12",
+          "#8E3F14",
+          "#8E4119",
+          "#B0521F",
+          "#F0A070",
+          "#FBE7DA"
+        ],
+        "variants": {
+          "strong": "#8E3F14",
+          "soft": "#FBE7DA",
+          "night": "#F0A070",
+          "nightSoft": "#3E2414"
+        },
+        "source": "HPAL['alcool'] dans libre/index.html"
+      },
+      "tint-cannabis": {
+        "role": "primary",
+        "displayName": "Vert naturel",
+        "canonical": "#4F7A1F",
+        "tonalRamp": [
+          "#1A2A0C",
+          "#2A3A16",
+          "#33521A",
+          "#3F6318",
+          "#466A22",
+          "#4F7A1F",
+          "#A8D46A",
+          "#E6F0D6"
+        ],
+        "variants": {
+          "strong": "#3F6318",
+          "soft": "#E6F0D6",
+          "night": "#A8D46A",
+          "nightSoft": "#2A3A16"
+        },
+        "source": "HPAL['cannabis'] dans libre/index.html"
+      },
+      "tint-argent": {
+        "role": "primary",
+        "displayName": "Bleu profond",
+        "canonical": "#245BB0",
+        "tonalRamp": [
+          "#0E1E40",
+          "#1C2C4A",
+          "#1D3D7A",
+          "#1D4A8F",
+          "#2A55A0",
+          "#245BB0",
+          "#8DB4F5",
+          "#E0EAF8"
+        ],
+        "variants": {
+          "strong": "#1D4A8F",
+          "soft": "#E0EAF8",
+          "night": "#8DB4F5",
+          "nightSoft": "#1C2C4A"
+        },
+        "source": "HPAL['argent'] dans libre/index.html"
+      },
+      "tint-ecrans": {
+        "role": "primary",
+        "displayName": "Turquoise",
+        "canonical": "#0F7480",
+        "tonalRamp": [
+          "#062A30",
+          "#163A3E",
+          "#0D4E57",
+          "#0B5E68",
+          "#126670",
+          "#0F7480",
+          "#6FD3DC",
+          "#D8F0F2"
+        ],
+        "variants": {
+          "strong": "#0B5E68",
+          "soft": "#D8F0F2",
+          "night": "#6FD3DC",
+          "nightSoft": "#163A3E"
+        },
+        "source": "HPAL['ecrans'] dans libre/index.html"
+      },
+      "tint-jeu": {
+        "role": "primary",
+        "displayName": "Bleu électrique",
+        "canonical": "#3D4FD6",
+        "tonalRamp": [
+          "#141A55",
+          "#23285A",
+          "#25309A",
+          "#3141B4",
+          "#3443BE",
+          "#3D4FD6",
+          "#9AA6FF",
+          "#E3E7FF"
+        ],
+        "variants": {
+          "strong": "#3141B4",
+          "soft": "#E3E7FF",
+          "night": "#9AA6FF",
+          "nightSoft": "#23285A"
+        },
+        "source": "HPAL['jeu'] dans libre/index.html"
+      },
+      "tint-subst": {
+        "role": "primary",
+        "displayName": "Ardoise",
+        "canonical": "#3F6A85",
+        "tonalRamp": [
+          "#142430",
+          "#22323E",
+          "#284558",
+          "#335670",
+          "#365C74",
+          "#3F6A85",
+          "#9DC0D8",
+          "#E1EBF2"
+        ],
+        "variants": {
+          "strong": "#335670",
+          "soft": "#E1EBF2",
+          "night": "#9DC0D8",
+          "nightSoft": "#22323E"
+        },
+        "source": "HPAL['subst'] dans libre/index.html"
+      },
+      "tint-achats": {
+        "role": "primary",
+        "displayName": "Prune",
+        "canonical": "#8A3F7E",
+        "tonalRamp": [
+          "#2E1028",
+          "#3A2034",
+          "#56224C",
+          "#70326A",
+          "#743368",
+          "#8A3F7E",
+          "#DFA2D2",
+          "#F3E1F0"
+        ],
+        "variants": {
+          "strong": "#70326A",
+          "soft": "#F3E1F0",
+          "night": "#DFA2D2",
+          "nightSoft": "#3A2034"
+        },
+        "source": "HPAL['achats'] dans libre/index.html"
+      },
+      "tint-intime": {
+        "role": "primary",
+        "displayName": "Rose brique",
+        "canonical": "#9A3F55",
+        "tonalRamp": [
+          "#321019",
+          "#3E2028",
+          "#5C2232",
+          "#7E3245",
+          "#7A3044",
+          "#9A3F55",
+          "#EFA3B5",
+          "#F7E0E6"
+        ],
+        "variants": {
+          "strong": "#7E3245",
+          "soft": "#F7E0E6",
+          "night": "#EFA3B5",
+          "nightSoft": "#3E2028"
+        },
+        "source": "HPAL['intime'] dans libre/index.html"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Chiffre principal",
+        "purpose": "Nombre de jours ou moyenne hebdomadaire à côté du galet ; 52 px sous 360 px."
+      },
+      "headline": {
+        "displayName": "Grand titre",
+        "purpose": "Titres de page ; 30 px sous 360 px."
+      },
+      "greeting": {
+        "displayName": "Salutation",
+        "purpose": "Salutation de l'accueil, discrète."
+      },
+      "title": {
+        "displayName": "Titre de section",
+        "purpose": "Titres de sections ; 20 px dans groupes et fenêtres."
+      },
+      "figure": {
+        "displayName": "Chiffre clé",
+        "purpose": "Chiffres du suivi, tabulaires."
+      },
+      "body": {
+        "displayName": "Texte courant",
+        "purpose": "Lecture, lignes de liste, champs."
+      },
+      "label": {
+        "displayName": "Libellé",
+        "purpose": "Libellés de champs et de chiffres, casse normale."
+      },
+      "caption": {
+        "displayName": "Note",
+        "purpose": "Notes de calcul, sources, métadonnées."
+      },
+      "tab": {
+        "displayName": "Onglet",
+        "purpose": "Libellés de la barre d'onglets."
+      }
+    },
+    "shadows": [
+      {
+        "name": "rest",
+        "value": "0 1px 2px rgba(21,33,31,.05),0 6px 18px -10px rgba(21,33,31,.14)",
+        "purpose": "Groupes de contenu (--shadow-1). Nuit : 0 1px 2px rgba(0,0,0,.3)."
+      },
+      {
+        "name": "float",
+        "value": "0 2px 6px rgba(21,33,31,.06),0 18px 40px -18px rgba(21,33,31,.28)",
+        "purpose": "Couche flottante : barre d'onglets, fenêtres, notifications (--shadow-2). Nuit : 0 18px 44px -18px rgba(0,0,0,.7)."
+      },
+      {
+        "name": "glass-edge",
+        "value": "inset 0 1px 0 var(--glass-edge),inset 0 0 0 .5px var(--line)",
+        "purpose": "Tranche lumineuse en haut de chaque volet, flottant ou givré."
+      },
+      {
+        "name": "help-glow",
+        "value": "0 10px 24px -14px rgba(120,30,15,.55)",
+        "purpose": "Ombre corail sous le bandeau d'aide de l'accueil uniquement."
+      },
+      {
+        "name": "segment-drop",
+        "value": "0 1px 3px rgba(21,33,31,.12),inset 0 0 0 .5px var(--line)",
+        "purpose": "Goutte opaque du segment actif."
+      }
+    ],
+    "materials": [
+      {
+        "name": "glass",
+        "value": "background:var(--glass);backdrop-filter:saturate(170%) blur(24px)",
+        "purpose": "Couche flottante uniquement ; remplacé par --surface-solid opaque sous prefers-reduced-transparency et html.calm."
+      },
+      {
+        "name": "ambient-light",
+        "value": "linear-gradient(180deg,color-mix(in srgb,var(--accent) 9%,var(--bg)) 0%,var(--bg) 100%) sur 60vh",
+        "purpose": "Seule lumière d'ambiance (body::before) ; 16 % sur fond mer de nuit en plein écran."
+      },
+      {
+        "name": "backdrop",
+        "value": "rgba(5,12,13,.38)",
+        "purpose": "Voile sous les fenêtres."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.22,1,.36,1)",
+        "purpose": "Courbe unique, amortie sans rebond."
+      },
+      {
+        "name": "t-fast",
+        "value": "0.14s",
+        "purpose": "Pression (échelle 0,97)."
+      },
+      {
+        "name": "t",
+        "value": "0.22s",
+        "purpose": "Changements d'état, goutte du segmenté."
+      },
+      {
+        "name": "t-slow",
+        "value": "0.36s",
+        "purpose": "Entrée de page (rise 8 px)."
+      },
+      {
+        "name": "sheet-materialize",
+        "value": "0.38s translateY(40px) scale(.98) + flou qui se dissipe",
+        "purpose": "Seule entrée des fenêtres."
+      },
+      {
+        "name": "tab-indicator",
+        "value": "0.42s transform/width, étirement lgStretch",
+        "purpose": "Indicateur de l'onglet courant."
+      },
+      {
+        "name": "pebble-pop",
+        "value": "0.6s scale(.9) vers 1, opacité",
+        "purpose": "Apparition du galet de l'accueil."
+      },
+      {
+        "name": "breathe",
+        "value": "scale(.72) et 1 en alternance",
+        "purpose": "Seule animation en boucle : l'exercice de respiration."
+      },
+      {
+        "name": "reduced",
+        "value": "animation:none; transition 0s",
+        "purpose": "prefers-reduced-motion et html.calm coupent toute animation."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact",
+        "value": "360px",
+        "purpose": "Gouttière 16 px, galet 96 px, chiffre 52 px."
+      },
+      {
+        "name": "narrow",
+        "value": "440px",
+        "purpose": "Raccourcis sur une colonne."
+      },
+      {
+        "name": "sheet-center",
+        "value": "700px",
+        "purpose": "Fenêtres centrées ; raccourcis sur trois colonnes."
+      },
+      {
+        "name": "strategy-cols",
+        "value": "900px",
+        "purpose": "Colonnes de stratégies côte à côte."
+      },
+      {
+        "name": "desktop",
+        "value": "1024px",
+        "purpose": "Barre latérale de verre 280 px (96 px repliée), contenu jusqu'à 1120 px."
+      },
+      {
+        "name": "wide",
+        "value": "1360px",
+        "purpose": "Contenu jusqu'à 1200 px."
+      }
+    ],
+    "runtimeTheme": {
+      "function": "applyHabitTheme()",
+      "table": "HPAL",
+      "vars": [
+        "--accent",
+        "--accent-strong",
+        "--accent-soft",
+        "--accent-ink",
+        "--hp1",
+        "--hp2",
+        "--hp3",
+        "--hp5",
+        "--hp6"
+      ],
+      "mapping": "jour : accent=P[1], strong=P[2], soft=P[3], ink=#FFFFFF ; nuit : accent=strong=P[7], soft=P[8], ink=#0C0B1C",
+      "perHabit": "--hc (P[1]) et --hcd (P[7]) posés sur les galets et pastilles de chaque suivi"
+    },
+    "signature": {
+      "name": "pebble",
+      "functions": [
+        "pebbleSVG(h, polish, opt)",
+        "polishOf(h)"
+      ],
+      "polish": "0,06 à 1 ; abstinence : log(1+jours)/log(366) ; réduction ou compréhension : jours réussis / jours de la semaine (minimum 0,08)",
+      "sizes": {
+        "home": "minmax(128px,42%) ; 96px sous 360px ; 34% sur ordinateur",
+        "list": "48px",
+        "mini": "18px",
+        "welcome": "min(56vw,220px)"
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Bouton principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "L'unique action forte d'un écran.",
+      "html": "<button class=\"ds-btn-primary\">Noter ma journée</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 22px;border:0;border-radius:999px;background:var(--ink,#15211F);color:var(--bg,#F1F0EB);font:600 17px/1.2 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;letter-spacing:-.01em;cursor:pointer;transition:transform .14s cubic-bezier(.22,1,.36,1),background-color .22s cubic-bezier(.22,1,.36,1)}.ds-btn-primary:active{transform:scale(.97)}.ds-btn-primary:focus-visible{outline:2px solid var(--accent-strong,#246352);outline-offset:3px}"
+    },
+    {
+      "name": "Bouton teinté",
+      "kind": "button",
+      "refersTo": "button-accent",
+      "description": "Action liée au suivi, dans la teinte de l'addiction.",
+      "html": "<button class=\"ds-btn-accent\">Ajouter</button>",
+      "css": ".ds-btn-accent{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 22px;border:0;border-radius:999px;background:var(--accent,#2F7A66);color:var(--accent-ink,#FFFFFF);font:600 17px/1.2 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;letter-spacing:-.01em;cursor:pointer;transition:transform .14s cubic-bezier(.22,1,.36,1),background-color .22s cubic-bezier(.22,1,.36,1)}.ds-btn-accent:active{transform:scale(.97)}.ds-btn-accent:focus-visible{outline:2px solid var(--accent-strong,#246352);outline-offset:3px}"
+    },
+    {
+      "name": "Bouton discret",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Actions secondaires : capsule vide à filet.",
+      "html": "<button class=\"ds-btn-quiet\">Plus tard</button>",
+      "css": ".ds-btn-quiet{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 22px;border:0;border-radius:999px;background:transparent;color:var(--ink,#15211F);font:600 17px/1.2 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;letter-spacing:-.01em;cursor:pointer;transition:transform .14s cubic-bezier(.22,1,.36,1),background-color .22s cubic-bezier(.22,1,.36,1)}.ds-btn-quiet{box-shadow:inset 0 0 0 1px var(--line-2,rgba(21,33,31,.16))}.ds-btn-quiet:hover{background:var(--surface-2,rgba(20,32,30,.045))}.ds-btn-quiet:active{transform:scale(.97)}.ds-btn-quiet:focus-visible{outline:2px solid var(--accent-strong,#246352);outline-offset:3px}"
+    },
+    {
+      "name": "Bandeau d'aide",
+      "kind": "custom",
+      "refersTo": "help-band",
+      "description": "« J'ai une envie » : la seule action corail de l'accueil.",
+      "html": "<button class=\"ds-sos\"><span class=\"ds-sos-ic\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 12h4l3-8 4 16 3-8h4\"/></svg></span><span><b>J'ai une envie</b><small>Aide guidée en quelques minutes</small></span></button>",
+      "css": ".ds-sos{display:flex;align-items:center;gap:12px;width:100%;max-width:420px;min-height:64px;padding:10px 16px 10px 10px;border:0;border-radius:999px;background:var(--help,#A8341F);color:var(--help-ink,#FFFFFF);text-align:start;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;cursor:pointer;box-shadow:0 10px 24px -14px rgba(120,30,15,.55);transition:transform .14s cubic-bezier(.22,1,.36,1)}.ds-sos:active{transform:scale(.97)}.ds-sos:focus-visible{outline:2px solid var(--help,#A8341F);outline-offset:3px}.ds-sos-ic{width:44px;height:44px;border-radius:999px;display:grid;place-items:center;background:rgba(255,255,255,.18);flex:none}.ds-sos b{display:block;font:600 17px/1.2 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif}.ds-sos small{display:block;font-size:14px;opacity:.92}"
+    },
+    {
+      "name": "Puces de choix",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Choix multiples ; la sélection prend la teinte.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Stress</button><button class=\"ds-chip\" aria-pressed=\"false\">Ennui</button><button class=\"ds-chip\" aria-pressed=\"false\">Soirée</button></div>",
+      "css": ".ds-chips{display:flex;flex-wrap:wrap;gap:8px}.ds-chip{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border:0;border-radius:999px;background:var(--surface,rgba(255,255,255,.72));color:var(--ink,#15211F);font:500 16px/1.2 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;box-shadow:inset 0 0 0 .5px var(--line-2,rgba(21,33,31,.16));cursor:pointer;transition:background-color .22s cubic-bezier(.22,1,.36,1),transform .14s cubic-bezier(.22,1,.36,1)}.ds-chip[aria-pressed=\"true\"]{background:var(--accent,#2F7A66);color:var(--accent-ink,#FFFFFF);box-shadow:none}.ds-chip:active{transform:scale(.97)}.ds-chip:focus-visible{outline:2px solid var(--accent-strong,#246352);outline-offset:3px}"
+    },
+    {
+      "name": "Champ",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Champ opaque à filet ; le focus prend la teinte forte.",
+      "html": "<label class=\"ds-field\"><span>Ce qui m'aide</span><input class=\"ds-input\" placeholder=\"Marcher dix minutes\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:6px;max-width:360px;font:600 15px/1.3 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;color:var(--ink-2,#4A5754)}.ds-input{width:100%;min-height:50px;padding:12px 16px;border:0;border-radius:12px;background:var(--surface-solid,#FBFBF8);color:var(--ink,#15211F);font:400 17px/1.3 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;box-shadow:inset 0 0 0 1px var(--line-2,rgba(21,33,31,.16));caret-color:var(--accent-strong,#246352);transition:box-shadow .22s cubic-bezier(.22,1,.36,1)}.ds-input:focus{outline:none;box-shadow:inset 0 0 0 2px var(--accent-strong,#246352)}.ds-input::placeholder{color:var(--ink-3,#5C6865)}"
+    },
+    {
+      "name": "Groupe et lignes",
+      "kind": "card",
+      "refersTo": "group",
+      "description": "Groupe givré à un seul niveau, lignes de 56 px séparées par un filet.",
+      "html": "<div class=\"ds-group\"><a class=\"ds-row\" href=\"#\"><span class=\"ds-ic\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"8\"/><path d=\"M12 8v4l3 2\"/></svg></span><span class=\"ds-g\"><b>Rappels</b><small>Tous les soirs à 21 h</small></span><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"m9 6 6 6-6 6\"/></svg></a><a class=\"ds-row\" href=\"#\"><span class=\"ds-ic\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"M5 12h14M12 5v14\"/></svg></span><span class=\"ds-g\"><b>Mes raisons</b><small>3 raisons notées</small></span><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"m9 6 6 6-6 6\"/></svg></a></div>",
+      "css": ".ds-group{max-width:420px;padding:4px 0;border-radius:20px;background:var(--surface,rgba(255,255,255,.72));box-shadow:inset 0 1px 0 var(--glass-edge,rgba(255,255,255,.85)),inset 0 0 0 .5px var(--line,rgba(21,33,31,.09)),0 1px 2px rgba(21,33,31,.05),0 6px 18px -10px rgba(21,33,31,.14);overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif}.ds-row{position:relative;display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 16px;color:var(--ink,#15211F);text-decoration:none}.ds-row+.ds-row::before{content:\"\";position:absolute;top:0;left:60px;right:0;height:.5px;background:var(--line-2,rgba(21,33,31,.16))}.ds-row:hover,.ds-row:active{background:var(--surface-2,rgba(20,32,30,.045))}.ds-row:focus-visible{outline:2px solid var(--accent-strong,#246352);outline-offset:-2px}.ds-row>svg{color:var(--ink-3,#5C6865)}.ds-ic{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--accent-soft,#DCEFE8);color:var(--accent-strong,#246352)}.ds-g{flex:1;display:flex;flex-direction:column;gap:2px}.ds-g b{font:500 17px/1.3 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif}.ds-g small{font-size:14px;color:var(--ink-2,#4A5754)}"
+    },
+    {
+      "name": "Barre d'onglets",
+      "kind": "nav",
+      "refersTo": "tab-bar",
+      "description": "Capsule de verre flottante à cinq onglets, Aide corail au centre.",
+      "html": "<nav class=\"ds-tabs\"><a href=\"#\" aria-current=\"page\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 11l8-7 8 7v9H4z\"/></svg><span>Aujourd’hui</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><path d=\"M5 20V10M12 20V4M19 20v-7\"/></svg><span>Progrès</span></a><a href=\"#\" class=\"ds-help\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 12h4l3-8 4 16 3-8h4\"/></svg><span>Aide</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\"><circle cx=\"12\" cy=\"12\" r=\"8\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg><span>Mon plan</span></a><a href=\"#\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 20c1.5-4 5-5 8-5s6.5 1 8 5\"/></svg><span>Profil</span></a></nav>",
+      "css": ".ds-tabs{display:flex;max-width:420px;height:64px;padding:5px;border-radius:999px;background:var(--glass,rgba(250,250,247,.62));-webkit-backdrop-filter:saturate(170%) blur(24px);backdrop-filter:saturate(170%) blur(24px);box-shadow:inset 0 1px 0 var(--glass-edge,rgba(255,255,255,.85)),inset 0 0 0 .5px rgba(21,33,31,.07),0 2px 6px rgba(21,33,31,.06),0 18px 40px -18px rgba(21,33,31,.28);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif}.ds-tabs a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:999px;color:var(--ink-2,#4A5754);text-decoration:none;font:600 11px/1.1 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;transition:color .22s cubic-bezier(.22,1,.36,1)}.ds-tabs a svg{width:24px;height:24px}.ds-tabs a[aria-current=\"page\"]{color:var(--accent-strong,#246352);background:color-mix(in srgb,var(--accent,#2F7A66) 14%,transparent)}.ds-tabs a:hover{color:var(--ink,#15211F)}.ds-tabs a:focus-visible{outline:2px solid var(--accent-strong,#246352);outline-offset:-2px}.ds-tabs a.ds-help{color:var(--help,#A8341F)}.ds-tabs a.ds-help svg{width:34px;height:34px;padding:6px;margin-top:-4px;border-radius:999px;background:var(--help,#A8341F);color:var(--help-ink,#FFFFFF)}"
+    },
+    {
+      "name": "Le galet",
+      "kind": "custom",
+      "refersTo": "pebble",
+      "description": "Composant signature : galet de verre SVG en currentColor, poli par la progression (ici poli 0,6), avec le chiffre principal.",
+      "html": "<div class=\"ds-pb\"><div class=\"ds-pb-stone\"><svg viewBox=\"0 0 100 100\" aria-hidden=\"true\" focusable=\"false\"><defs><linearGradient id=\"pgds\" x1=\"18%\" y1=\"10%\" x2=\"82%\" y2=\"92%\"><stop offset=\"0\" style=\"stop-color:color-mix(in srgb,currentColor 55%,#fff)\"/><stop offset=\".55\" style=\"stop-color:currentColor\"/><stop offset=\"1\" style=\"stop-color:color-mix(in srgb,currentColor 78%,#04100d)\"/></linearGradient><filter id=\"pfds\" x=\"-30%\" y=\"-30%\" width=\"160%\" height=\"160%\"><feGaussianBlur stdDeviation=\"2.6\"/></filter><clipPath id=\"pcds\"><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\"/></clipPath></defs><ellipse cx=\"50\" cy=\"91\" rx=\"31.6\" ry=\"4\" fill=\"#06120f\" opacity=\".14\" filter=\"url(#pfds)\"/><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"url(#pgds)\" opacity=\"0.90\"/><g clip-path=\"url(#pcds)\"><rect width=\"100\" height=\"100\" fill=\"#fff\" opacity=\"0.16\"/><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"7\" opacity=\"0.29\" filter=\"url(#pfds)\"/><ellipse cx=\"34\" cy=\"30\" rx=\"18\" ry=\"9\" fill=\"#fff\" opacity=\"0.18\" filter=\"url(#pfds)\" transform=\"rotate(-18 34 30)\"/><ellipse cx=\"54\" cy=\"56\" rx=\"20.0\" ry=\"14.2\" fill=\"#fff\" opacity=\"0.17\" filter=\"url(#pfds)\"/><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2.2\" opacity=\"0.55\" transform=\"translate(0 1.6)\" style=\"mix-blend-mode:soft-light\"/></g><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"none\" stroke=\"color-mix(in srgb,currentColor 55%,#04100d)\" stroke-opacity=\".35\" stroke-width=\".6\"/><path d=\"M96.5 51.7 C98.2 60.3 91.3 68.2 83.7 73.6 C76.0 78.9 61.1 84.6 50.4 83.9 C39.8 83.2 26.3 75.6 19.7 69.4 C13.0 63.1 6.8 54.3 10.4 46.4 C14.0 38.4 30.8 25.7 41.3 21.6 C51.8 17.4 64.4 16.2 73.6 21.2 C82.8 26.2 94.9 43.0 96.5 51.7Z\" fill=\"none\" stroke=\"#fff\" stroke-opacity=\"0.72\" stroke-width=\"1.22\" stroke-dasharray=\"0 0\" clip-path=\"inset(0 0 55% 0)\"/></svg></div><div><div class=\"ds-pb-n\">42</div><div class=\"ds-pb-u\">jours sans tabac</div><div class=\"ds-pb-next\">Prochaine étape : <b>2 mois</b></div><div class=\"ds-hb\"><i style=\"width:60%\"></i></div></div></div>",
+      "css": ".ds-pb{display:grid;grid-template-columns:minmax(128px,42%) 1fr;align-items:center;gap:20px;max-width:420px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,sans-serif;color:var(--ink,#15211F)}.ds-pb-stone{aspect-ratio:1;color:var(--accent,#2E7D62)}.ds-pb-stone svg{width:100%;height:100%;overflow:visible}.ds-pb-n{font:600 68px/.95 ui-rounded,'SF Pro Rounded',-apple-system,system-ui,sans-serif;letter-spacing:-.04em;font-variant-numeric:tabular-nums}.ds-pb-u{margin-top:6px;font-size:17px}.ds-pb-next{margin-top:8px;font-size:15px;color:var(--ink-2,#4A5754)}.ds-pb-next b{color:var(--ink,#15211F);font-weight:600}.ds-hb{margin-top:8px;height:5px;border-radius:5px;background:var(--line,rgba(21,33,31,.09));overflow:hidden}.ds-hb i{display:block;height:100%;border-radius:inherit;background:var(--accent,#2E7D62)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Le verre de mer",
+    "overview": "**Creative North Star: \"Le verre de mer\"**\n\nUn éclat coupant devient, avec le temps et la mer, une pierre lisse, givrée et lumineuse. LIBRE 21 « Verre de mer » raconte le changement d'une habitude avec ce seul objet : un galet de verre par addiction, littéralement poli par les jours tenus. Ce monde remplace l'apparence LIBRE 19 « Verre » et l'organisation visuelle LIBRE 20 ; il n'est issu d'aucun monde de catalogue.\n\nLe sol est du sable mouillé le jour (blanc gris chaud) et une mer de nuit en mode sombre (encre bleu-vert profonde). Le verre est le seul matériau : des volets givrés au bord supérieur clair qui flottent au-dessus du contenu, jamais empilés sur du verre. Chaque addiction possède une seule teinte de verre (sa couleur historique), utilisée pour son galet, sa ligne de progression et ses sélections, nulle part ailleurs. Un seul corail est réservé à l'Aide. Police système, chiffres tabulaires, grands numéraux calmes.\n\nLa densité est celle d'une app iOS de réglages au calme : une colonne de 640 px maximum, des groupes givrés à un seul niveau, des lignes de 56 px séparées par des filets. Le mouvement est amorti sans rebond ; rien ne boucle sauf l'exercice de respiration. LIBRE refuse explicitement la pile de cartes blanches des apps de bien-être et le tableau de bord clinique.",
+    "keyCharacteristics": [
+      "Un objet focal par écran : le galet et son chiffre sur l'accueil, posés sur le sable, sans carte.",
+      "Verre réservé à la couche flottante (barre d'onglets, en-tête, fenêtres, notifications) ; le contenu repose sur des groupes givrés.",
+      "Une teinte par addiction, injectée par JS ; un corail unique pour l'Aide.",
+      "Police système (SF Pro Text pour le texte, SF Pro Rounded pour titres et chiffres), chiffres tabulaires.",
+      "Mode sombre « mer de nuit » complet, et plein écran nocturne pour l'aide guidée quel que soit le thème.",
+      "Transparence et mouvement réductibles (préférences système et mode « Affichage sobre »)."
+    ],
+    "rules": [
+      {
+        "name": "La règle d'une teinte par addiction",
+        "body": "La couleur d'une addiction apparaît sur son galet, sa progression et ses sélections, et nulle part ailleurs : surfaces, typographie, icônes de navigation et logo restent ceux de LIBRE.",
+        "section": "colors"
+      },
+      {
+        "name": "La règle du corail unique",
+        "body": "Le corail appartient à l'Aide. Aucun autre élément, ni décor ni accent, ne le porte.",
+        "section": "colors"
+      },
+      {
+        "name": "La règle de la lumière unique",
+        "body": "La seule lumière d'ambiance est un voile de la teinte de l'addiction (9 % mêlé au sable) sur les 60 % supérieurs de la page, comme vu à travers un verre ; aucun autre dégradé de fond.",
+        "section": "colors"
+      },
+      {
+        "name": "La règle des chiffres calmes",
+        "body": "Tout nombre affiché porte `font-variant-numeric: tabular-nums` et la police arrondie ; un chiffre ne clignote, ne compte ni ne pulse jamais.",
+        "section": "typography"
+      },
+      {
+        "name": "La règle sans sur-titre",
+        "body": "La hiérarchie se lit dans le titre lui-même : pas de sur-titre décoratif, pas de capitales espacées. Seul le logotype LIBRE porte un espacement large (0,16em).",
+        "section": "typography"
+      },
+      {
+        "name": "La règle du verre qui flotte",
+        "body": "Le flou (`saturate(170%) blur(24px)`) est réservé à ce qui flotte au-dessus du contenu. Jamais de verre posé sur du verre.",
+        "section": "elevation"
+      },
+      {
+        "name": "La règle de la transparence réductible",
+        "body": "Avec `prefers-reduced-transparency` ou l'« Affichage sobre », tout verre devient `foam-paper` opaque et le flou disparaît ; la hiérarchie doit rester lisible sans lui.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** garder un seul objet focal et une seule action forte par écran (le galet et la ligne « noter / envie » sur l'accueil).",
+      "**Do** prendre la teinte d'une addiction uniquement dans `--accent`, `--accent-strong`, `--accent-soft`, `--accent-ink` (injectées par `applyHabitTheme`), jamais en valeur codée.",
+      "**Do** réserver le corail (`--help`) à l'Aide et aux urgences.",
+      "**Do** poser le verre (`--glass`, flou 24 px, tranche `--glass-edge`) uniquement sur la couche flottante ; le contenu va dans des groupes givrés de 20 px.",
+      "**Do** donner aux commandes principales 44 à 50 px de haut (boutons, puces, lignes de 56 px) ; aucune cible sous 24 px, contrôlée par `npm run -s check:targets`.",
+      "**Do** écrire chaque nombre en police arrondie et chiffres tabulaires.",
+      "**Do** utiliser la courbe `cubic-bezier(.22,1,.36,1)` (0,14 / 0,22 / 0,36 s) pour toute transition, et couper toute animation sous `prefers-reduced-motion` et en « Affichage sobre ».",
+      "**Do** vérifier chaque surface en sable mouillé et en mer de nuit, et sans transparence."
+    ],
+    "donts": [
+      "**Don't** empiler des cartes blanches ni imbriquer une carte ombrée dans une autre.",
+      "**Don't** poser du verre sur du verre.",
+      "**Don't** ajouter de dégradé de fond autre que le voile de teinte unique en haut de page.",
+      "**Don't** utiliser la teinte d'une addiction sur les surfaces, la typographie courante, le logo ou les icônes de navigation au repos.",
+      "**Don't** faire boucler, pulser ou rebondir une animation ; seule la respiration boucle.",
+      "**Don't** ajouter de sur-titres décoratifs ni de libellés en capitales espacées.",
+      "**Don't** imiter le métal, le bois ou toute autre matière que le verre."
+    ]
+  }
+}

@@ -2,7 +2,8 @@
 
 | Document | Contenu |
 |---|---|
-| [LIBRE-20.md](LIBRE-20.md) | **Organisation actuelle** : 5 onglets, M’aider maintenant, Mon suivi, Comprendre, inscription enrichie |
+| [LIBRE-21.md](LIBRE-21.md) | **Version actuelle « Verre de mer »** : feuille de style unique, galet, onglets Aujourd’hui / Progrès / Aide / Mon plan / Profil, Ton année |
+| [LIBRE-20.md](LIBRE-20.md) | Organisation précédente : 5 onglets, M’aider maintenant, Mon suivi, Comprendre, inscription enrichie |
 | [LIBRE-19.md](LIBRE-19.md) | **Interface actuelle « Verre »** : verre liquide sur toute l'app, couleurs par addiction |
 | [LIBRE-18.md](LIBRE-18.md) | Interface « Aube », base de LIBRE 19 : refonte visuelle complète (scènes de nuit, horizon, une action forte par écran) |
 | [LIBRE-17.md](LIBRE-17.md) | Interface précédente « Natif » : reconstruite sur les codes d’iOS (direction C choisie parmi trois) |

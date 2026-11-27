@@ -17,7 +17,7 @@ OWN-WORLD: Ground of wet sand by day (warm grey-white) and sea at night (deep bl
 
 STORY: The visitor sees their pebble and the one next step, understands where they are in the journey, and reaches Help, logging or learning from a stable tab bar.
 
-FIRST VIEWPORT: Today tab. Top: date and greeting line, small. Centre: the addiction's glass pebble (about 40% width) with the main figure beside it (days or weekly average) and the next milestone. Below: one primary action row (log / craving). Tab bar bottom: Today, Progress, Help (coral, centre), Learn, Me.
+FIRST VIEWPORT: Today tab. Top: date and greeting line, small. Centre: the addiction's glass pebble (about 40% width) with the main figure beside it (days or weekly average) and the next milestone. Below: one primary action row (log / craving). Tab bar bottom: Today, Progress, Help (coral, centre), My plan, Profile. Learn (Comprendre) lives inside My plan, which already linked it: the person explicitly allowed the navigation to be rethought (answer "Libre de la repenser"), and the prevention plan is the daily tool that earns a tab.
 
 FORM: candidate 7 of the ordered list was assigned (transit wayfinding); the person chose the pick, candidate 1, sea glass. seed:0f142cab9867fb1f
 
