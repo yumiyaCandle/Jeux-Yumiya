@@ -256,7 +256,7 @@ details.fold[open] .fold-b{animation:rise var(--t) var(--ease) both}
 .badges{display:flex;gap:6px;flex-wrap:wrap}
 .pill,.hm-pill,.bdg,.lang-badge,.nt-badge,.demo-tag,.tok{display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:2px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);font:600 12px/1.2 var(--font);white-space:nowrap}
 /* Goutte manipulable (onglets, sélecteurs) : presser le choix actif la soulève en lentille de verre claire, qui passe au-dessus des libellés */
-.lg-tabs>a[aria-current="page"],:is(.seg:not(.wrap):not(.chips-lg),.hpick)>[aria-pressed="true"]{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.lg-tabs>a[aria-current="page"],:is(.seg:not(.wrap):not(.chips-lg),.hpick)>[aria-pressed="true"],.segc>[aria-checked="true"]{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .lg-tabs>a{-webkit-user-drag:none}
 .seg-drop.lift,.lg-ind.lift{z-index:2;background:color-mix(in srgb,var(--surface-solid) 28%,transparent);-webkit-backdrop-filter:saturate(210%) brightness(1.1);backdrop-filter:saturate(210%) brightness(1.1);box-shadow:inset 1.5px 1.5px 0 -.5px rgba(255,255,255,.95),inset -1.5px -1.5px 0 -.5px rgba(255,255,255,.55),inset 0 0 14px rgba(255,255,255,.22),0 12px 26px -10px rgba(0,0,0,.38)}
 .lg-tabs>a.drop-hov{color:var(--accent-strong)}
@@ -272,7 +272,7 @@ details.fold[open] .fold-b{animation:rise var(--t) var(--ease) both}
 .seg:not(.wrap):not(.chips-lg)>button,.hpick>button,.ltabs>button,.sos-tabs>button{position:relative;z-index:1;flex:1 0 auto;min-height:34px;padding:0 14px;border-radius:999px;font:500 15px/1 var(--font);color:var(--ink-2);white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .seg:not(.wrap):not(.chips-lg)>button[aria-pressed="true"],.hpick>button[aria-pressed="true"],.seg>[aria-selected="true"],.seg>[aria-checked="true"]{color:var(--ink);font-weight:600}
 .seg-drop{position:absolute;top:0;left:0;z-index:0;border-radius:999px;background:var(--lg-lens);box-shadow:var(--lg-lens-sh);transition:transform var(--t) var(--ease),width var(--t) var(--ease);pointer-events:none}
-.seg:not(.wrap):not(.chips-lg):not(.has-drop)>button[aria-pressed="true"]{background:var(--lg-lens);box-shadow:var(--lg-lens-sh)}
+.seg:not(.wrap):not(.chips-lg):not(.has-drop)>button[aria-pressed="true"],.hpick:not(.has-drop)>button[aria-pressed="true"]{background:var(--lg-lens);box-shadow:var(--lg-lens-sh)}
 @media (max-width:440px){.ln-tabs{display:grid!important;grid-template-columns:1fr 1fr;border-radius:18px!important;width:100%}.ln-tabs>button{border-radius:15px!important}.ln-tabs>.seg-drop{border-radius:15px!important}}
 /* Champs */
 .field{display:flex;flex-direction:column;gap:6px}
@@ -429,10 +429,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;heigh
 .hb.over i{background:var(--warn)}
 .hm-side .hm-step{display:block;margin-top:var(--s2)}
 .hm-medal,.hm-orbs,.hz,.hzArc{display:none}
-.segc{display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--surface-2);box-shadow:inset 0 0 0 .5px var(--line);margin-top:var(--s4);width:fit-content;max-width:100%;overflow-x:auto}
-.segc>button{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 14px;border-radius:999px;font:500 15px/1 var(--font);color:var(--ink-2);white-space:nowrap}
+.segc{position:relative;display:flex;gap:2px;padding:3px;border-radius:999px;background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim);margin-top:var(--s4);width:fit-content;max-width:100%;overflow-x:auto}
+.segc>button{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 14px;border-radius:999px;font:500 15px/1 var(--font);color:var(--ink-2);white-space:nowrap}
 .segc>button::before{content:"";width:8px;height:8px;border-radius:999px;background:var(--hc,var(--accent))}
-.segc>button[aria-checked="true"]{background:var(--surface-solid);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(21,33,31,.12)}
+.segc>button[aria-checked="true"]{color:var(--ink);font-weight:600}
+/* Sans goutte (pas encore mise en page) : le choix porte lui-même la lentille */
+.segc:not(.has-drop)>button[aria-checked="true"]{background:var(--lg-lens);box-shadow:var(--lg-lens-sh)}
 .segc-thumb{display:none}
 /* Aujourd'hui : la ligne qui se note en un geste */
 div.td{display:flex;align-items:center;gap:var(--s3);margin-top:var(--s5);padding:10px 10px 10px var(--s4);border-radius:var(--r-group);background:var(--surface);box-shadow:inset 0 0 0 .5px var(--line),var(--shadow-1)}
@@ -1607,6 +1609,10 @@ function lgPlace(animate){const box=$('#navWrap .lg-tabs'),ind=box&&box.querySel
   if(LG_POS&&animate&&!RM()&&(LG_POS.x!==r.x||LG_POS.y!==r.y)){ind.style.transition='none';set(LG_POS);void ind.offsetWidth;ind.style.transition='';ind.classList.add('mv');requestAnimationFrame(()=>set(r));setTimeout(()=>ind.classList.remove('mv'),520)}
   else set(r);ind.style.opacity='1';LG_POS=r}
 window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
+/* Les gouttes sont recalculées quand la mise en page change sans re-rendu : polices chargées, retour sur l'app, redimensionnement */
+(()=>{const again=()=>{try{SEGD_POS.clear();document.querySelectorAll('.seg-drop').forEach(d=>{d.dataset.at=''});segDrops();lgPlace(false)}catch(e){}};
+  try{document.fonts&&document.fonts.ready.then(again)}catch(e){}window.addEventListener('load',again);window.addEventListener('resize',again);window.addEventListener('pageshow',again);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)again()})})();
 /* LIBRE 21.2 · Goutte de verre manipulable, comme la barre d'onglets d'iOS 26.
    Presser le choix actif soulève la goutte (une lentille de verre claire) ; la faire glisser la déplace sous le doigt
    (largeur ajustée à l'élément le plus proche, bords souples) ; la lâcher choisit cet élément. Un simple toucher garde son comportement.
@@ -1646,10 +1652,12 @@ window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
    Elle part de l'ancien choix (gardé en mémoire même si l'écran est redessiné) et se pose avec un ressort. */
 const SEGD_POS=new Map();
 /* Sélecteurs à goutte : choix unique uniquement (les listes de cases à choix multiples, .chips-lg, n'en ont pas) */
-const SEGD_Q='#app :is(.seg:not(.wrap):not(.chips-lg),.hpick),header.pg-head :is(.seg:not(.wrap):not(.chips-lg),.hpick)';
+const SEGD_Q='#app :is(.seg:not(.wrap):not(.chips-lg),.hpick,.segc),header.pg-head :is(.seg:not(.wrap):not(.chips-lg),.hpick,.segc)';
 function segDrops(){if(FX())return;document.querySelectorAll(SEGD_Q).forEach((c,i)=>{
   const act=c.querySelector(':scope>:is([aria-pressed="true"],[aria-checked="true"],[aria-selected="true"],[aria-current="page"])');
-  let d=c.querySelector(':scope>.seg-drop');if(!act){if(d)d.style.opacity='0';return}
+  let d=c.querySelector(':scope>.seg-drop');if(!act){if(d)d.style.opacity='0';c.classList.remove('has-drop');return}
+  /* pas encore mis en page (largeur nulle) : le choix garde sa propre lentille, on réessaie un peu plus tard */
+  if(!act.offsetWidth){c.classList.remove('has-drop');if(d)d.style.opacity='0';clearTimeout(segDrops.t);segDrops.t=setTimeout(()=>{try{segDrops()}catch(e){}},250);return}
   if(!d){d=document.createElement('span');d.className='seg-drop';d.setAttribute('aria-hidden','true');c.prepend(d)}
   const key=(c.getAttribute('aria-label')||c.className)+'|'+i+'|'+ui.view,r={x:act.offsetLeft,y:act.offsetTop,w:act.offsetWidth,h:act.offsetHeight},o=SEGD_POS.get(key);
   const set=p=>{d.style.width=p.w+'px';d.style.height=p.h+'px';d.style.transform=`translate(${p.x}px,${p.y}px)`};
