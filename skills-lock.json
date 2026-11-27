@@ -22,6 +22,13 @@
       "skillPath": "skills/performance/SKILL.md",
       "computedHash": "06902ebc4a8b91bfb8d1a99a03f186f0535b03d1a776ef751206104ef9b86c4c"
     },
+    "ux-writing": {
+      "source": "content-designer/ux-writing-skill",
+      "commit": "98cacde4ba2dd10ed28df43a8d53eef1e321c539",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "6de71e9765142c33f55389eb1f4dd73cd08cb562b24167634878da1b5d2ad91c"
+    },
     "webapp-testing": {
       "source": "anthropics/skills",
       "commit": "e4bb5d960d87126ff3b3a8af1a104b7db67560ba",

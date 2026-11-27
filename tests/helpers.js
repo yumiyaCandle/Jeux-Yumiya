@@ -68,6 +68,8 @@ async function page(browser, base, o = {}) {
   const ctx = await browser.newContext({ viewport: o.viewport || { width: 390, height: 844 }, locale: o.locale || 'fr-CH', colorScheme: o.colorScheme || 'light',
     reducedMotion: 'reduce', acceptDownloads: true, ...(o.timezoneId ? { timezoneId: o.timezoneId } : {}) });
   if (o.native) await ctx.addInitScript(nativeMock(), o.native);
+  /* la présentation des onglets (première ouverture) a son propre test ; ailleurs elle ne doit pas recouvrir l’écran */
+  if (!o.tour) await ctx.addInitScript(() => { window.__LIBRE_NO_TOUR = 1; });
   if (o.init) await ctx.addInitScript(o.init.fn, o.init.arg);
   const p = await ctx.newPage();
   p.errors = []; p.external = [];

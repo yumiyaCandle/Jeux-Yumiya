@@ -1542,4 +1542,22 @@ test('LIBRE 21', 'Bouton jour / nuit en haut de l’accueil : bascule le thème 
   await p.closeLayer(); await p.click('.tacts [data-a="themeFlip"]'); await p.waitForTimeout(300);
   assert.equal(await p.evaluate(() => document.documentElement.dataset.theme), 'light'); noErr(p);
 });
+test('LIBRE 21', 'Présentation des onglets : s’ouvre une seule fois à la première visite, se revoit depuis Profil', async (b, base) => {
+  const p = await page(b, base, { tour: true, init: seed(profileState({})) }); await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]');
+  await p.waitForSelector('.tour'); assert.match(await p.textContent('.tour'), /Aujourd’hui/);
+  await p.click('[data-a="tourGo"][data-v="1"]'); assert.match(await p.textContent('.tour'), /Progrès/);
+  await p.click('.tour [data-a="tourGo"][data-v="0"]'); await p.click('.tour [data-a="tourEnd"]');
+  assert.equal((await p.state()).prefs.tourDone, true);
+  await p.reload(); await p.waitForSelector('#app[data-view="accueil"]'); await p.waitForTimeout(1200); assert.ok(!(await p.$('.tour')), 'pas une deuxième fois');
+  await p.go('profil'); await p.evaluate(() => document.querySelector('[data-a="tourOpen"]').click()); await p.waitForSelector('.tour'); noErr(p);
+});
+test('LIBRE 21', 'Ma carte pour les moments difficiles : raisons, plan « si… alors », proches (appel et message), aide guidée', async (b, base) => {
+  const st = profileState({}); st.reasons = ['Ma santé', 'Mes enfants']; st.contacts = [{ name: 'Alex', phone: '+41 79 000 00 00' }]; st.tools.plans = [{ id: 'p1', ts: Date.now(), if: 'on me propose une cigarette', then: 'je dis non merci et je bois un verre d’eau' }];
+  const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle(); await p.go('aide'); await p.closeLayer();
+  await p.click('[data-a="crisisCard"]'); await p.waitForSelector('.cc');
+  const txt = await p.textContent('.cc'); assert.match(txt, /Mes enfants/); assert.match(txt, /Si on me propose une cigarette, alors je dis non merci/); assert.match(txt, /Alex/);
+  assert.equal(await p.getAttribute('.cc a[href^="tel:"]', 'href'), 'tel:+41790000000'); assert.ok(await p.$('.cc a[href^="sms:"]'));
+  assert.ok(await p.$('.cc [data-a="s5Open"]')); noErr(p);
+});
+
 module.exports = { T };

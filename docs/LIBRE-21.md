@@ -110,6 +110,19 @@ Progrès : les raccourcis (journal, calendrier, économies, bilan, statistiques,
 
 Corrigé en même temps : les listes de cases à choix multiples de l’inscription (« Qu’est-ce qui est le plus difficile », « Pourquoi tu fais ça ? ») étaient rognées en cercle, parce qu’elles recevaient le style des sélecteurs à goutte.
 
+## Comprendre l’app dès la première visite, et agir au bon moment (LIBRE 21.3)
+Skills : `/find-skills` a été utilisé. Le CLI `npx skills find` ne renvoie rien, même pour « react » ; l’API de skills.sh, elle, répond. Elle a permis d’installer et de lire `content-designer/ux-writing-skill@ux-writing`, un skill d’écriture des textes d’interface. Ses règles ont été appliquées : titres qui orientent, une phrase utile par écran, verbes d’action, ton accueillant et court.
+- **Présentation des onglets** :
+  - cinq écrans courts à la première ouverture, un par onglet (Aujourd’hui, Progrès, Aide, Mon plan, Profil), chacun avec une icône, une phrase sur ce qu’on y trouve et un point de progression ;
+  - le dernier écran donne l’astuce de la goutte qu’on fait glisser ;
+  - « Passer », « Retour », « Suivant », « Commencer » ;
+  - présentation enregistrée une fois vue (`prefs.tourDone`), à revoir dans Profil › Assistance › « Revoir la présentation ».
+- **Sous-titres** : Progrès (« Tes jours, tes économies et tes envies, semaine après semaine ») et Mon plan (« Ce que tu prépares à l’avance pour les moments difficiles »).
+- **Ma carte pour les moments difficiles** (Aide, en tête, et Mon plan, en tête) :
+  - un seul écran qui réunit ce que la personne a préparé : ses raisons, ses trois derniers plans « si… alors », ses proches avec « Appeler » et « Message », le bouton de l’aide guidée et les numéros d’aide du pays choisi ;
+  - c’est le principe de la carte d’adaptation (« coping card ») des thérapies cognitivo-comportementales ;
+  - aucune donnée inventée : s’il manque un élément, un bouton propose de le créer.
+
 ## Vérifications
 
 - `node tests/run.js` : 116 tests (dont les 5 scénarios de LIBRE 20). Tests adaptés : navigation LIBRE 21, effets visuels désactivables, ancien profil « verre ».
