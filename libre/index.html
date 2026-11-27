@@ -41,7 +41,7 @@
   --accent:#2F7A66; --accent-strong:#246352; --accent-soft:#DCEFE8; --accent-ink:#FFFFFF;
   --hp1:#2F7A66; --hp2:#246352; --hp3:#DCEFE8; --hp5:#1C5444; --hp6:#2A6A55;
   /* Aide : corail, une seule couleur réservée */
-  --help:#B93C29; --help-ink:#FFFFFF; --help-soft:#F6E1DC;
+  --help:#A8341F; --help-ink:#FFFFFF; --help-soft:#F6E1DC;
   --ok:#2E7A4F; --warn:#9A5B00; --danger:#B3261E;
   /* Verre */
   --glass:rgba(250,250,247,.62); --glass-strong:rgba(250,250,247,.8);
@@ -910,6 +910,19 @@ body.discreet #app .num:hover,body.discreet #app .num:focus{filter:none}
   body.nav-mini .nav .nav-help{width:48px;padding:0}
   body.nav-mini .nav .nav-help i{display:grid}
 }
+/* Ordinateur : colonne de contenu lisible (≈ 740 px) à côté de la barre latérale, onglets sans verre propre */
+@media (min-width:1024px){
+  #app{max-width:1120px;margin:0;padding-left:calc(280px + 48px);padding-right:48px}
+  body.nav-mini #app{max-width:940px}
+  .nav .lg-tabs{background:none;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .nav-user{gap:10px}.nav-user .grow{display:flex;flex-direction:column;line-height:1.2}.nav-user small{color:var(--ink-2)}
+  .pb{grid-template-columns:minmax(160px,34%) 1fr}
+}
+@media (min-width:1360px){#app{max-width:1200px}}
+/* Rythme vertical commun à l'intérieur de chaque page (16 px entre blocs) */
+#app>div:not(.lock):not(.hm):not(.welcome4):not(.q){display:flex;flex-direction:column;gap:var(--s4)}
+#app>div:not(.lock):not(.hm)>*{margin-top:0;margin-bottom:0;min-width:0}
+.sa{display:flex;flex-direction:column;gap:var(--s2)}
 
 </style>
 </head>
@@ -1680,21 +1693,27 @@ function polishOf(h){if(!h)return 0;
   const d=Math.max(0,(now()-curStart(h))/DAY);return Math.max(.06,Math.min(1,Math.log(1+d)/Math.log(366)))}
 function pebbleSVG(h,polish,opt){opt=opt||{};const id=String(h&&h.id||'x')+(opt.k||'');
   let seed=0;for(const c of id)seed=(seed*31+c.charCodeAt(0))>>>0;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
-  const p=Math.max(0,Math.min(1,+polish||0)),n=9,pts=[];
-  for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+(rnd()-.5)*.5,r=38*(1+(1-p)*.3*(rnd()-.45));pts.push([50+Math.cos(a)*r*1.12,53+Math.sin(a)*r*.9])}
-  const k=.04+.3*p;let d='M'+pts[0][0].toFixed(1)+' '+pts[0][1].toFixed(1);
+  /* Un éclat plat à 7 côtés : les côtés restent presque droits, ce sont les angles que la mer arrondit */
+  const p=Math.max(0,Math.min(1,+polish||0)),n=7,pts=[];
+  for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+(rnd()-.5)*.55,r=37*(1+(.12+.3*(1-p))*(rnd()-.5));pts.push([50+Math.cos(a)*r*1.15,52+Math.sin(a)*r*.86])}
+  const k=.07+.16*p;let d='M'+pts[0][0].toFixed(1)+' '+pts[0][1].toFixed(1);
   for(let i=0;i<n;i++){const p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
     const c1=[p1[0]+(p2[0]-p0[0])*k,p1[1]+(p2[1]-p0[1])*k],c2=[p2[0]-(p3[0]-p1[0])*k,p2[1]-(p3[1]-p1[1])*k];
     d+=` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`}
-  d+='Z';const g='pg'+id.replace(/[^\w]/g,''),f='pf'+id.replace(/[^\w]/g,'');
+  d+='Z';const u=id.replace(/[^\w]/g,''),g='pg'+u,f='pf'+u,c='pc'+u;
   return `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><defs>
-    <radialGradient id="${g}" cx="38%" cy="32%" r="78%"><stop offset="0" style="stop-color:color-mix(in srgb,currentColor 35%,#fff)"/><stop offset=".55" style="stop-color:currentColor"/><stop offset="1" style="stop-color:color-mix(in srgb,currentColor 70%,#06120f)"/></radialGradient>
-    <filter id="${f}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.2"/></filter></defs>
-    <ellipse cx="50" cy="92" rx="${(30+6*p).toFixed(1)}" ry="4.5" fill="#06120f" opacity=".16" filter="url(#${f})"/>
-    <path d="${d}" fill="url(#${g})" opacity="${(.72+.2*p).toFixed(2)}"/>
-    <path d="${d}" fill="#fff" opacity="${((1-p)*.22).toFixed(2)}"/>
-    <ellipse cx="38" cy="36" rx="${(10+8*p).toFixed(1)}" ry="${(6+5*p).toFixed(1)}" fill="#fff" opacity="${(.18+.42*p).toFixed(2)}" filter="url(#${f})"/>
-    <path d="${d}" fill="none" stroke="#fff" stroke-opacity="${(.35+.3*p).toFixed(2)}" stroke-width=".9"/></svg>`}
+    <linearGradient id="${g}" x1="18%" y1="10%" x2="82%" y2="92%"><stop offset="0" style="stop-color:color-mix(in srgb,currentColor 55%,#fff)"/><stop offset=".55" style="stop-color:currentColor"/><stop offset="1" style="stop-color:color-mix(in srgb,currentColor 78%,#04100d)"/></linearGradient>
+    <filter id="${f}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="2.6"/></filter>
+    <clipPath id="${c}"><path d="${d}"/></clipPath></defs>
+    <ellipse cx="50" cy="91" rx="${(28+6*p).toFixed(1)}" ry="4" fill="#06120f" opacity=".14" filter="url(#${f})"/>
+    <path d="${d}" fill="url(#${g})" opacity="${(.8+.16*p).toFixed(2)}"/>
+    <g clip-path="url(#${c})">
+      <rect width="100" height="100" fill="#fff" opacity="${(.06+.26*(1-p)).toFixed(2)}"/>
+      <path d="${d}" fill="none" stroke="#fff" stroke-width="7" opacity="${(.16+.22*p).toFixed(2)}" filter="url(#${f})"/>
+      <ellipse cx="34" cy="30" rx="18" ry="9" fill="#fff" opacity="${(.08+.16*p).toFixed(2)}" filter="url(#${f})" transform="rotate(-18 34 30)"/>
+    </g>
+    <path d="${d}" fill="none" stroke="#fff" stroke-opacity="${(.4+.25*p).toFixed(2)}" stroke-width=".8"/></svg>`}
+
 function viewHome(){
   const p=S.profile,A0=act();
   if(!S.habits.length)return homeHead(p)+`<div class="hm"><section class="hm-p hm-empty"><h2>${esc(t('Ajoute ta première habitude'))}</h2><p class="muted">${esc(t('Choisis ce que tu veux arrêter ou réduire pour lancer ton compteur.'))}</p><button class="btn primary" data-a="habitForm">${esc(t('Ajouter une habitude'))}</button></section></div>`;
@@ -2752,9 +2771,9 @@ function renderOnboarding(){
   if(!ui.ob)ui.ob={name:'',age:'',sex:'',height:'',ft:'',inch:'',weight:'',types:[],h:{},reasons:[],hard:[],recs:true,remind:true};
   const st=ui.obStep,ls=langStatus(LANG);
   if(st===0)return `<div class="welcome4">
-    <div class="w4-top"><span class="w4-brand">${logoMark(26,'#fff')}<span>LIBRE</span></span>
+    <div class="w4-top"><span class="w4-brand">${logoMark(26,'currentColor')}<span>LIBRE</span></span>
       <button class="w4-lang" data-a="langPicker" aria-label="${esc(t('Langue de l’application'))}">${ic('globe','sm')}<span>${esc(langLabel(LANG))}</span></button></div>
-    <div class="w4-hero"><div class="w4-mark" aria-hidden="true">${logoMark(88,'#fff')}</div>
+    <div class="w4-hero"><div class="w4-mark" aria-hidden="true">${pebbleSVG({id:'libre-bienvenue'},.82,{k:'w'})}</div>
       <h1>LIBRE</h1><p class="w4-tag">${esc(t('Chaque jour, un pas vers ta liberté.'))}</p><p class="w4-welcome">${esc(t('Bienvenue sur LIBRE. Ici, tu peux avancer à ton rythme, sans jugement.'))}</p></div>
     ${ls!=='full'?`<p class="small w4-note">${esc(t('{lang} n’est pas encore traduite. LIBRE s’affiche en anglais en attendant. Tu peux choisir une autre langue avec le bouton en haut.',{lang:langLabel(LANG)}))}</p>`:''}
     <ul class="w4-feat">
