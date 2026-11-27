@@ -65,8 +65,10 @@
   --r-ctl:12px; --r-row:16px; --r-group:20px; --r-sheet:28px;
   --ease:cubic-bezier(.22,1,.36,1); --t-fast:.14s; --t:.22s; --t-slow:.36s;
   --tab-h:64px;
-  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:0px;
 }
+/* La zone de sécurité du haut n'est ajoutée qu'en plein écran (classe posée par le script) */
+html.safe-top{--safe-t:env(safe-area-inset-top,0px)}
 /* Mer de nuit */
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
@@ -604,7 +606,7 @@ svg text{fill:var(--ink-3);font-family:var(--font);font-size:11px;font-variant-n
 .w4-feat li i{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-strong);flex:none}
 .w4-feat b{display:block;font-weight:600}
 .w4-feat span{font-size:15px;color:var(--ink-2)}
-.w4-cta{display:flex;flex-direction:column;gap:10px;margin-top:auto;position:sticky;bottom:0;padding:var(--s4) 0 var(--safe-b);background:linear-gradient(transparent,var(--bg) 24%)}
+.w4-cta{display:flex;flex-direction:column;gap:10px;margin-top:auto;position:sticky;bottom:0;z-index:2;isolation:isolate;padding:var(--s8) 0 calc(var(--s3) + var(--safe-b))}
 .w4-go{background:var(--ink);color:var(--bg)}
 .w4-note{text-align:center;font-size:14px;color:var(--ink-2)}
 .w4-more{text-align:center}
@@ -634,7 +636,9 @@ svg text{fill:var(--ink-3);font-family:var(--font);font-size:11px;font-variant-n
 .opt-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);flex:none}
 .ob-cta,#obCta{margin-top:auto;position:sticky;bottom:calc(var(--s3) + var(--safe-b))}
 /* Le bouton fixé en bas ne recouvre pas la liste : un voile du fond passe derrière lui */
-.q>.ob-cta{z-index:2;bottom:0;margin-inline:calc(-1 * var(--gutter));margin-bottom:calc(-1 * (var(--s5) + var(--safe-b)));padding:var(--s6) var(--gutter) calc(var(--s3) + var(--safe-b));background:linear-gradient(to bottom,transparent,var(--bg) 40%)}
+.q>.ob-cta{z-index:2;isolation:isolate;bottom:0;margin-bottom:calc(-1 * (var(--s5) + var(--safe-b)));padding:var(--s8) 0 calc(var(--s3) + var(--safe-b))}
+/* Voile de verre derrière les boutons fixés en bas : le contenu s'efface en douceur dessous, sans bande de couleur */
+.w4-cta::before,.q>.ob-cta::before{content:"";position:absolute;inset:0 calc(-1 * var(--gutter));z-index:-1;pointer-events:none;background:color-mix(in srgb,var(--bg) 72%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);-webkit-mask:linear-gradient(transparent,#000 40px);mask:linear-gradient(transparent,#000 40px)}
 .q>.ob-cta #obCta{position:static}
 #obCta{width:100%}
 /* Comptes */
@@ -1102,6 +1106,9 @@ const KEY='libre.v1', LKEY='libre.lang';
             (AES-256-GCM), la clé reste dans le trousseau iOS ou le Keystore Android.
             Le chiffrement est fait par le code natif ; la page ne voit jamais la clé. */
 const NATIVE=(()=>{try{const C=window.Capacitor;return !!(C&&C.isNativePlatform&&C.isNativePlatform())}catch(e){return false}})();
+/* Zone de sécurité du haut (heure, encoche) : seulement quand LIBRE occupe vraiment tout l'écran (app native, app installée, page ouverte directement).
+   Dans un cadre (aperçu, visionneuse), l'hôte place déjà la page sous sa propre barre : l'ajouter doublerait le vide en haut. */
+try{let top=true;try{top=window.top===window.self}catch(e){top=false}if(NATIVE||top||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)document.documentElement.classList.add('safe-top')}catch(e){}
 const PLAT=(()=>{try{return NATIVE?window.Capacitor.getPlatform():'web'}catch(e){return 'web'}})();
 const CAP=n=>{try{return NATIVE&&window.Capacitor.Plugins&&window.Capacitor.Plugins[n]||null}catch(e){return null}};
 const VAULT=()=>CAP('LibreVault');
