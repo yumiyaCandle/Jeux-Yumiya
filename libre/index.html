@@ -4750,6 +4750,112 @@ html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b :is([rol
 html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b [role="radiogroup"]>button[aria-checked="true"],html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b .seg.wrap>button[aria-pressed="true"]{background:var(--accent-strong)!important;color:var(--accent-ink)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important}
 html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .j3-prompt .btn.btn:not(.primary):not(:first-of-type){background:rgba(255,255,255,.16)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important}
 html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .sheet:not(:has(#tl-clock,.breath)){background:color-mix(in srgb,var(--v-base) 82%,transparent)!important}
+
+/* ===== LIBRE 20 : M'aider, Ajouter, Comprendre, navigation 5 onglets ===== */
+html:root:not(.fx) body #app :is(.hp,.ln){padding-inline:20px;display:flex;flex-direction:column;gap:20px;max-width:760px;margin-inline:auto}
+html:root:not(.fx) body #app .hp-q{font-size:22px;line-height:28px;font-weight:600;letter-spacing:-.015em;margin:0;color:var(--v-ink)}
+html:root:not(.fx) body #app .hp-list{display:flex;flex-direction:column;gap:12px}
+html:root:not(.fx) body #app .hp-sit{background:var(--v-glass);-webkit-backdrop-filter:var(--v-blur);backdrop-filter:var(--v-blur);box-shadow:var(--ap-rim),var(--ap-shadow);border-radius:26px;overflow:hidden}
+html:root:not(.fx) body #app .hp-sit-b{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;width:100%;padding:16px 18px;cursor:pointer;color:var(--v-ink);min-height:72px}
+html:root:not(.fx) body #app .hp-sit-b:focus-visible{outline:2px solid var(--accent-strong);outline-offset:-2px}
+html:root:not(.fx) body #app .hp-sit-b b{display:block;font-size:17px;font-weight:600}
+html:root:not(.fx) body #app .hp-sit-b .grow>span{display:block;font-size:14px;color:var(--v-mut);margin-top:2px}
+html:root:not(.fx) body #app .hp-ic{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent,#3D6B57) 16%,var(--v-glass-2));color:var(--accent-strong);box-shadow:inset 0 1px 0 var(--v-edge)}
+html:root:not(.fx) body #app .hp-ic svg{width:22px;height:22px}
+html:root:not(.fx) body #app .hp-envie .hp-ic{background:var(--v-sos);color:#fff}
+html:root:not(.fx) body #app .hp-envie{box-shadow:var(--ap-rim),0 0 0 1.5px color-mix(in srgb,var(--v-sos) 40%,transparent),var(--ap-shadow)}
+html:root:not(.fx) body #app .hp-body{padding:0 18px 18px;display:flex;flex-direction:column;gap:12px}
+html:root:not(.fx) body #app .hp-body>p{margin:0;color:var(--v-ink2);font-size:15px;line-height:1.5}
+html:root:not(.fx) body #app .hp-acts{display:flex;flex-direction:column;gap:0;border-radius:18px;overflow:hidden;background:var(--v-glass-2);box-shadow:inset 0 0 0 1px var(--v-line)}
+html:root:not(.fx) body #app .hp-act{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;padding:13px 16px;min-height:52px;cursor:pointer;color:var(--v-ink);font-size:16px;border-top:1px solid var(--v-sep)}
+html:root:not(.fx) body #app .hp-acts .hp-act:first-child{border-top:0}
+html:root:not(.fx) body #app .hp-act>span{flex:1;min-width:0}
+html:root:not(.fx) body #app .hp-act .grow b{display:block;font-weight:500}
+html:root:not(.fx) body #app .hp-act .grow>span{display:block;font-size:13px;color:var(--v-mut)}
+html:root:not(.fx) body #app .hp-act>svg:first-child{color:var(--accent-strong);flex:none}
+html:root:not(.fx) body #app .hp-act>svg:last-child{color:var(--v-mut);flex:none}
+html:root:not(.fx) body #app .hp-act:focus-visible{outline:2px solid var(--accent-strong);outline-offset:-2px}
+html:root:not(.fx) body #app :is(.ln>.hp-act,.ln-res .hp-act){background:var(--v-glass);border-radius:18px;border:0;box-shadow:var(--ap-rim)}
+html:root:not(.fx) body #app .ln-res{display:flex;flex-direction:column;gap:8px}
+html:root:not(.fx) body #app .hp-urg{background:color-mix(in srgb,var(--v-sos) 8%,var(--v-glass));border-radius:26px;padding:18px;box-shadow:var(--ap-rim),inset 0 0 0 1.5px color-mix(in srgb,var(--v-sos) 30%,transparent);display:flex;flex-direction:column;gap:10px;color:var(--v-ink)}
+html:root:not(.fx) body #app .hp-urg p{margin:0;font-size:14px;color:var(--v-ink2)}
+html:root:not(.fx) body #app .hp-urg-h{display:flex;align-items:center;gap:8px;color:#B42318;font-size:17px}
+html:root:not(.fx) body #app .hp-nums{display:flex;flex-wrap:wrap;gap:8px}
+html:root:not(.fx) body #app .hp-num{display:flex;flex-direction:column;align-items:flex-start;padding:10px 14px;border-radius:16px;background:var(--v-glass-2);box-shadow:inset 0 0 0 1px var(--v-line);text-decoration:none;color:var(--v-ink);min-width:84px}
+html:root:not(.fx) body #app .hp-num b{font-size:22px;color:#B42318}
+html:root:not(.fx) body #app .hp-num span{font-size:12px;color:var(--v-mut)}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) body #app :is(.hp-urg-h,.hp-num b){color:#FF8A75}}
+html:root:not(.fx)[data-theme="dark"] body #app :is(.hp-urg-h,.hp-num b){color:#FF8A75}
+/* Ajouter */
+.qa{display:flex;flex-direction:column;gap:8px}
+.qa-it{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:18px;background:var(--v-glass-2,#fff);box-shadow:inset 0 0 0 1px var(--v-line,rgba(0,0,0,.08));cursor:pointer;min-height:60px;color:var(--v-ink,#111)}
+.qa-it b{display:block;font-weight:600}.qa-it .grow>span{display:block;font-size:13px;color:var(--v-mut,#555)}
+.qa-it:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
+.qa-ic{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent,#3D6B57) 16%,transparent);color:var(--accent-strong,#2E5646)}
+.mood5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.mood5 button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 2px;border-radius:16px;border:0;background:var(--v-glass-2,#fff);box-shadow:inset 0 0 0 1px var(--v-line,rgba(0,0,0,.08));color:var(--v-ink,#111);font:inherit;font-size:12px;line-height:1.2;text-align:center;min-height:64px;cursor:pointer}
+.mood5 button i{width:16px;height:16px;border-radius:50%}
+.mood5 button[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--accent-strong,#2E5646)}
+/* Comprendre */
+html:root:not(.fx) body #app .ln-search{display:flex;align-items:center;gap:10px;padding:0 16px;min-height:48px;border-radius:999px;background:var(--v-glass);box-shadow:var(--ap-rim),var(--ap-shadow);color:var(--v-mut)}
+html:root:not(.fx) body #app .ln-search input{all:unset;flex:1;min-width:0;height:48px;color:var(--v-ink);font-size:16px;background:none!important;box-shadow:none!important}
+html:root:not(.fx) body #app .ln-search:focus-within{box-shadow:var(--ap-rim),0 0 0 2px var(--accent-strong)}
+html:root:not(.fx) body #app .ln-list{display:flex;flex-direction:column;gap:10px}
+html:root:not(.fx) body #app .ln-d{background:var(--v-glass);border-radius:22px;box-shadow:var(--ap-rim);padding:0}
+html:root:not(.fx) body #app .ln-d summary{list-style:none;display:flex;align-items:center;gap:10px;padding:16px 18px;cursor:pointer;color:var(--v-ink);font-size:16px;min-height:56px}
+html:root:not(.fx) body #app .ln-d summary::-webkit-details-marker{display:none}
+html:root:not(.fx) body #app .ln-d summary b{flex:1;font-weight:600}
+html:root:not(.fx) body #app .ln-d summary svg{transition:transform .25s;color:var(--v-mut)}
+html:root:not(.fx) body #app .ln-d[open] summary svg{transform:rotate(90deg)}
+html:root:not(.fx) body #app .ln-d p{margin:0;padding:0 18px 16px;color:var(--v-ink2);line-height:1.55}
+html:root:not(.fx) body #app .ln-src{font-size:13px}html:root:not(.fx) body #app .ln-src a{color:var(--accent-strong)}
+html:root:not(.fx) body #app .ln-note{margin:0;color:var(--v-mut);font-size:14px}
+html:root:not(.fx) body #app .ln-h{margin:8px 0 0!important;font-size:20px!important}
+html:root:not(.fx) body #app .ln-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:10px}
+html:root:not(.fx) body #app .ln-card{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:22px;background:var(--v-glass);box-shadow:var(--ap-rim);cursor:pointer;color:var(--v-ink);min-height:64px}
+html:root:not(.fx) body #app .ln-card b{display:block;font-weight:600}
+html:root:not(.fx) body #app .ln-card .grow>span{display:block;font-size:13px;color:var(--v-mut)}
+html:root:not(.fx) body #app .ln-card.mine{box-shadow:var(--ap-rim),inset 0 0 0 1.5px var(--accent)}
+html:root:not(.fx) body #app .ln-card:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
+/* Navigation : sur téléphone, 5 onglets ; « M'aider » est l'aide, en rouge ; le bouton séparé reste sur ordinateur */
+@media (max-width:899px){
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .nav-help.nav-help{display:none!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs.lg-tabs{flex:1 1 auto!important}
+  html:root:not(.fx) body #navWrap .lg-tabs>a[href="#aide"]{color:#C22F21!important}
+  html:root:not(.fx) body #navWrap .lg-tabs>a[href="#aide"] svg{color:#C22F21!important}}
+@media (max-width:899px) and (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) body #navWrap .lg-tabs>a[href="#aide"],html:root:not(.fx):not([data-theme="light"]) body #navWrap .lg-tabs>a[href="#aide"] svg{color:#FF8A75!important}}
+
+/* LIBRE 20 · Accueil */
+html:root:not(.fx) body header.pg-head .hm-date{margin:8px 0 0!important;font-size:14px!important;font-weight:500;color:var(--v-mut)!important;text-transform:none}
+html:root:not(.fx) body header.pg-head .hm-goal{display:flex;align-items:center;gap:6px;margin:8px 0 0!important;font-size:15px!important;color:var(--v-ink)!important;font-weight:500}
+html:root:not(.fx) body header.pg-head .hm-goal svg{color:var(--accent-strong)}
+html:root:not(.fx) body #app .h20-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+html:root:not(.fx) body #app .h20-c{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:22px;background:var(--v-glass);-webkit-backdrop-filter:var(--v-blur);backdrop-filter:var(--v-blur);box-shadow:var(--ap-rim),var(--ap-shadow);min-width:0}
+html:root:not(.fx) body #app .h20-c b{font-family:var(--font-display);font-size:28px;line-height:32px;font-weight:700;letter-spacing:-.03em;color:var(--v-ink)}
+html:root:not(.fx) body #app .h20-c b small{font-size:16px;color:var(--v-mut);font-weight:500}
+html:root:not(.fx) body #app .h20-c>span:last-child{font-size:13px;line-height:17px;color:var(--v-mut)}
+html:root:not(.fx) body #app .h20-ci{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent,#3D6B57) 16%,transparent);color:var(--accent-strong)}
+html:root:not(.fx) body #app .h20-k{margin:0 0 -2px!important}
+html:root:not(.fx) body #app .h20-quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+html:root:not(.fx) body #app .h20-q{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;padding:14px 16px;border-radius:22px;background:var(--v-glass);box-shadow:var(--ap-rim),var(--ap-shadow);cursor:pointer;color:var(--v-ink);font-weight:600;font-size:15px;min-height:84px;-webkit-backdrop-filter:var(--v-blur);backdrop-filter:var(--v-blur)}
+html:root:not(.fx) body #app .h20-q svg{color:var(--accent-strong);width:22px;height:22px}
+html:root:not(.fx) body #app .h20-q:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){html:root:not(.fx) body #app :is(.h20-q,.h20-c):active{transform:scale(.97);transition:transform .08s}}
+@media (min-width:700px){html:root:not(.fx) body #app .h20-cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body header.pg-head .pg-bar .lang-btn{border-radius:999px!important;width:auto!important;white-space:nowrap!important;padding:0 12px!important;gap:4px}
+html:root:not(.fx):not(.zz) body #app .h11-todo .ck-moods button,html:root:not(.fx) .mood5 button{overflow-wrap:normal!important;word-break:normal!important;hyphens:manual!important;font-size:11px!important;padding-inline:1px!important;letter-spacing:-.01em}
+html:root:not(.fx):not(.zz) body #app .h11-todo>.hm-k:not(:first-child){font-size:17px!important;font-weight:600!important;color:var(--v-ink)!important;margin:0 0 -8px!important}
+
+/* LIBRE 20 · Mon suivi : noter en un geste */
+html:root:not(.fx) body #app .sa{display:flex;flex-direction:column;gap:10px}
+html:root:not(.fx) body #app .sa-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+html:root:not(.fx) body #app .sa-it{all:unset;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:12px;border-radius:18px;background:var(--v-glass);box-shadow:var(--ap-rim);cursor:pointer;color:var(--v-ink);font-size:13px;font-weight:600;line-height:1.2;min-height:68px}
+html:root:not(.fx) body #app .sa-it svg{color:var(--accent-strong)}
+html:root:not(.fx) body #app .sa-it:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
+@media (min-width:700px){html:root:not(.fx) body #app .sa-row{grid-template-columns:repeat(6,minmax(0,1fr))}}
+
+html:root:not(.fx):not(.zz) body #app .sa-it span{overflow-wrap:normal!important;word-break:normal!important;-webkit-hyphens:auto;hyphens:auto}
 </style>
 </head>
 <body>
@@ -4917,7 +5023,7 @@ const MILESTONES=[{d:1,t:N_('Premier jour')},{d:3,t:N_('Trois jours')},{d:7,t:N_
 function msShort(m){return m.d===182?tn(6,'{n} mois','mois|{n} mois'):m.d===365?tn(1,'{n} an','{n} ans'):tn(m.d,'{n} j','short|{n} j')}
 const LEVELS=[{xp:0,n:N_('Premier pas')},{xp:100,n:N_('Élan')},{xp:300,n:N_('Volonté')},{xp:600,n:N_('Constance')},{xp:1000,n:N_('Ancrage')},{xp:1600,n:N_('Maîtrise')},{xp:2500,n:N_('Envol')},{xp:3600,n:N_('Sérénité')},{xp:5000,n:N_('Liberté')}];
 const TRIGGERS=[N_('Stress'),N_('Ennui'),N_('Soirée / fête'),N_('Avec des amis'),N_('Solitude'),N_('Fatigue'),N_('Après un repas'),N_('Tristesse'),N_('Colère'),N_('Habitude'),N_('Autre')];
-const MOODS=[{v:1,n:N_('Très bas'),c:'#C07A5E'},{v:2,n:N_('Bas'),c:'#D8AA86'},{v:3,n:N_('Neutre'),c:'#B9B3A6'},{v:4,n:N_('Bien'),c:'#8DB59F'},{v:5,n:N_('Très bien'),c:'#4C7A66'}];
+const MOODS=[{v:1,n:N_('Très difficile'),c:'#C07A5E'},{v:2,n:N_('Difficile'),c:'#D8AA86'},{v:3,n:N_('Moyen'),c:'#B9B3A6'},{v:4,n:N_('Bien'),c:'#8DB59F'},{v:5,n:N_('Très bien'),c:'#4C7A66'}];
 const MOTIVATION=[N_('Chaque heure sans consommer est une victoire réelle. Elle compte.'),N_('Tu n’as pas besoin d’être parfait·e. Tu as juste besoin de continuer.'),N_('Une envie monte, atteint un pic et, le plus souvent, finit par baisser.'),N_('Ton corps se répare déjà. Laisse-lui le temps.'),N_('Tu reprends le contrôle, une décision à la fois.'),N_('Ce que tu fais aujourd’hui, ton toi de demain te dira merci.'),N_('Un écart n’efface rien. Tes progrès restent les tiens.'),N_('La liberté, c’est choisir. Et aujourd’hui, tu choisis.'),N_('Tu as déjà tenu face à des envies. Tu sais le faire.'),N_('Respire. Bois un verre d’eau. Laisse passer quelques minutes avant de décider.')];
 const SUPPORT=[N_('C’est noté. Tes records et ton historique restent intacts.'),N_('Merci de l’avoir noté : c’est comme ça qu’on comprend ses habitudes.'),N_('Un écart ne fait pas une rechute définitive. Le compteur repart maintenant.'),N_('Tu restes sur le chemin. Chaque jour est un nouveau départ.')];
 const ACTIVITIES=[N_('Boire un grand verre d’eau fraîche'),N_('Marcher 10 minutes dehors'),N_('Faire 20 squats ou pompes'),N_('Prendre une douche fraîche'),N_('Appeler ou écrire à quelqu’un'),N_('Mâcher un chewing-gum'),N_('Manger un fruit ou des noix'),N_('Écouter trois morceaux que tu aimes'),N_('Ranger une pièce pendant 5 minutes'),N_('Changer de pièce ou sortir de la situation'),N_('Écrire ce que tu ressens dans ton journal'),N_('Jouer à un jeu sur ton téléphone')];
@@ -5194,6 +5300,7 @@ function renderCore(){
   const v=ui.view;
   let html='';
   if(v==='accueil')html=viewHome();
+  else if(v==='aide')html=viewHelpNow();
   else if(v==='progres')html=viewProgress();
   else if(v==='habitudes')html=viewHabits();
   else if(v==='stats')html=viewStats();
@@ -5212,7 +5319,7 @@ function renderCore(){
   else if(v==='programme')html=viewProgram();
   else if(v==='recompenses')html=viewRewards();
   else if(v==='motivations')html=viewMotiv();
-  else if(v==='comprendre')html=viewUnderstand();
+  else if(v==='comprendre')html=ui.compK?viewUnderstand():viewLearn();
   else if(v==='evolution')html=viewEvolution();
   else if(v==='apercu')html=viewOverview();
   else if(v==='strategies')html=viewStrategies();
@@ -5322,18 +5429,18 @@ function ensureChrome(){
   }
   $('.sosfab')?.remove();
   $('#navWrap').setAttribute('aria-label',t('Navigation principale'));
-  const tabs=[['accueil','home',t('Aujourd’hui')],['outils','heart',t('Mon plan')],['progres','stats',t('Progrès')],['journal','book',t('Journal')]];
-  const c=['outils','biblio','envies','plan','sante','corps','motivations','comprendre','strategies','declencheurs'].includes(ui.view)?'outils':['progres','stats','calendrier','bilans','habitudes','economies'].includes(ui.view)?'progres':ui.view;
+  const tabs=NAV5.map(([k,i,n])=>[k,i,t(n)]);
+  const c=nav5Cur(ui.view);
   /* Barre latérale (ordinateur, tablette en paysage) : mêmes onglets + raccourcis, suivis avec leur pastille et leur compteur, profil.
      Sur téléphone, seuls les 4 onglets et l’Aide restent visibles (barre flottante du bas). */
-  const X=[['profil','user',t('Profil')]];
+  const X=[];
   const A0=S.habits.filter(h=>!h.paused),p=S.profile||{},L=S.profile?levelOf(points()):null;
   const navMini=!!S.prefs.navMini;document.body.classList.toggle('nav-mini',navMini);
   $('#navWrap').innerHTML=`<div class="in"><div class="nav-brand">${logoMark(24,'currentColor')}<span>LIBRE</span><button type="button" class="nav-col nav-x" data-a="navMini" aria-label="${esc(navMini?t('Déplier le menu'):t('Replier le menu'))}" aria-pressed="${navMini}">${ic(navMini?'right':'left','sm')}</button></div>
     <button type="button" class="nav-search nav-x" data-a="search" aria-label="${esc(t('Rechercher'))}">${ic('search','sm')}<span>${esc(t('Rechercher…'))}</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform||'')?'⌘':'Ctrl'} K</kbd></button>
     <p class="nav-sec nav-x">${esc(t('Navigation'))}</p>
     <div class="lg-tabs"><span class="lg-ind" aria-hidden="true"></span>${tabs.map(x=>`<a href="#${x[0]}" ${c===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}${X.map(x=>`<a class="nav-x" href="#${x[0]}" ${ui.view===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}</div>
-    <button type="button" class="nav-help" data-a="sos" aria-label="${esc(t('Aide immédiate : une envie, un moment difficile'))}"><i>${logoMark(26,'#fff')}</i><span>${esc(t('Aide'))}</span></button>
+    <button type="button" class="nav-help" data-a="sos" aria-label="${esc(t('J’ai besoin d’aide'))}"><i>${logoMark(26,'#fff')}</i><span>${esc(t('J’ai besoin d’aide'))}</span></button>
     ${A0.length?`<p class="nav-sec nav-x">${esc(t('Mes suivis'))}</p>${A0.map(h=>`<button type="button" class="nav-hab nav-x" data-a="navHabit" data-id="${h.id}" style="${hcVars(h)}" title="${esc(hName(h))}"><span class="hc-dot" aria-hidden="true"></span><span class="grow">${esc(hName(h))}</span><small class="num">${RED(h)?esc(nf(qtyIn(h,addDays(sod(now()),-6),addDays(sod(now()),1)))):esc(nf(Math.floor((now()-curStart(h))/DAY),0)+' '+t('j'))}</small></button>`).join('')}`:''}
     ${S.profile?`<a class="nav-user nav-x" href="#profil"><span class="nav-av">${esc(((p.name||'?').trim()[0]||'?').toLocaleUpperCase(LOCALE))}</span><span class="grow"><b>${esc(p.name||'')}</b><small>${esc(tn(A0.length,'{n} suivi','{n} suivis'))}</small></span></a>`:''}
   </div>`;
@@ -5371,6 +5478,123 @@ function ringSvg(p,size,stroke,track,col){
   const r=(size-stroke)/2,c=2*Math.PI*r,o=c*(1-Math.min(1,Math.max(0,p)));
   return `<svg viewBox="0 0 ${size} ${size}"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9BF0CB"/><stop offset="1" stop-color="#22C07F"/></linearGradient></defs><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${track}" stroke-width="${stroke}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${o}" style="transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)"/></svg>`;
 }
+/* =====================================================================================================
+   LIBRE 20 — reconstruction de l'expérience : 5 onglets (Accueil, M'aider, Mon suivi, Comprendre, Profil),
+   une aide par situation, un enregistrement rapide, une bibliothèque organisée. Les outils et données existants
+   sont réutilisés tels quels : rien n'est simulé, rien n'est supprimé.
+   ===================================================================================================== */
+const NAV5=[['accueil','home',N_('Accueil')],['aide','pulse',N_('M’aider')],['progres','stats',N_('Mon suivi')],['comprendre','book',N_('Comprendre')],['profil','user',N_('Profil')]];
+const NAV5_GROUP={aide:['aide','outils','plan','motivations','declencheurs','strategies','envies','corps','sante'],progres:['progres','stats','calendrier','bilans','economies','journal','evolution','apercu','recompenses','activite'],comprendre:['comprendre','biblio'],profil:['profil','habitudes']};
+function nav5Cur(v){for(const k in NAV5_GROUP)if(NAV5_GROUP[k].includes(v))return k;return v}
+const curHabit=()=>{const A0=S.habits.filter(h=>!h.paused);return A0.find(h=>h.id===ui.homeHabit)||A0.find(h=>h.id===S.prefs.activeHabit)||A0[0]||null};
+
+/* ---------- M'aider maintenant ---------- */
+const HELP_SIT=[
+ {k:'envie',ic:'pulse',t:N_('J’ai envie de consommer'),s:N_('Je suis guidé·e pendant quelques minutes'),
+  intro:N_('Une envie monte, atteint un pic, puis redescend. On la traverse ensemble : ce que tu ressens, ce qui l’a déclenchée, puis un exercice.'),
+  main:['data-a="s5Open"',N_('Commencer maintenant')],
+  acts:[['data-a="delay10"','clock',N_('Attendre 10 minutes avant de décider')],['data-a="tool" data-id="breath"','heart',N_('Respirer lentement')],['data-a="tool" data-id="urge"','pulse',N_('Surfer sur l’envie')],['data-a="tool" data-id="cbt"','book',N_('Questionner la pensée qui pousse à consommer')],['data-a="tool" data-id="ground"','spark',N_('Revenir au moment présent')],['data-a="qsCall"','phone',N_('Appeler une personne de confiance')],['data-a="sitSheet"','target',N_('Sortir d’une situation à risque')]]},
+ {k:'stress',ic:'heart',t:N_('Je suis stressé·e ou anxieux·se'),s:N_('Faire baisser la tension'),
+  intro:N_('Le stress donne souvent envie de consommer pour se soulager vite. Ces exercices font baisser la tension sans rien consommer.'),
+  main:['data-a="tool" data-id="breath"',N_('Respirer avec moi (3 minutes)')],
+  acts:[['data-a="tool" data-id="ground"','spark',N_('Ancrage 5-4-3-2-1')],['data-a="tool" data-id="stress"','heart',N_('Une action concrète contre le stress')],['data-a="jPrompt" data-v="D’où vient ce stress, selon toi ?"','book',N_('Écrire d’où vient ce stress')],['data-a="qsCall"','phone',N_('En parler à quelqu’un')]]},
+ {k:'peur',ic:'shield',t:N_('J’ai peur de rechuter'),s:N_('Préparer les moments difficiles'),
+  intro:N_('Avoir peur de rechuter, c’est déjà être attentif·ve. Préparer à l’avance ce que tu feras rend les moments difficiles plus faciles.'),
+  main:['data-a="tool" data-id="plan"',N_('Préparer mon plan « si… alors… »')],
+  acts:[['data-a="signsSheet"','info',N_('Repérer mes signaux d’alerte')],['data-a="sitSheet"','target',N_('Mes situations à risque')],['data-a="contactsSheet"','phone',N_('Les personnes qui peuvent m’aider')],['href="#outils"','check',N_('Mon plan complet')]]},
+ {k:'rechute',ic:'refresh',t:N_('J’ai rechuté'),s:N_('Faire le point, sans jugement'),
+  intro:N_('Une rechute ne t’enlève rien : tes jours passés et ce que tu as appris restent acquis. Elle arrive souvent dans un parcours de changement. On fait le point calmement, puis on choisit une prochaine étape.'),
+  main:['data-a="lapse"',N_('Faire le point sur ce qui s’est passé')],
+  acts:[['data-a="logForm"','plus',N_('Noter la consommation (ton historique est gardé)')],['data-a="tool" data-id="plan"','check',N_('Préparer la prochaine fois')],['data-a="hardDay"','heart',N_('Des pistes pour aujourd’hui')],['data-a="qsCall"','phone',N_('En parler à quelqu’un')]]},
+ {k:'seul',ic:'user',t:N_('Je me sens seul·e'),s:N_('Trouver du soutien'),
+  intro:N_('Tu n’as pas à traverser ça seul·e. Une personne de confiance, une ligne d’écoute ou un professionnel peuvent t’aider.'),
+  main:['data-a="qsCall"',N_('Contacter une personne de confiance')],
+  acts:[['data-a="lockSos"','phone',N_('Lignes d’écoute et numéros d’aide')],['data-a="learnRes"','globe',N_('Trouver une aide professionnelle')],['data-a="jPrompt" data-v="Qu’est-ce que je ressens, là, maintenant ?"','book',N_('Écrire ce que je ressens')],['data-a="contactsSheet"','user',N_('Ajouter ou modifier mes proches')]]}
+];
+function helpUrgent(){const HC=HELP[helpCountry()]||{e:[]};
+  return `<section class="hp-urg" aria-label="${esc(t('Urgence médicale'))}"><div class="hp-urg-h">${ic('shield','sm')}<b>${esc(t('Urgence médicale'))}</b></div>
+    <div class="hp-nums">${(HC.e||[]).map(([n,k])=>`<a class="hp-num" href="${telHref(n)}"><b class="num" dir="ltr">${esc(n)}</b><span>${esc(t(LINE_KIND[k]||'Urgences'))}</span></a>`).join('')}</div>
+    <p>${esc(t('Convulsions, confusion, malaise, difficulté à respirer, intoxication, ou pensées de mettre fin à ta vie : appelle immédiatement les urgences.'))}</p>
+    <p>${esc(t('Arrêter brutalement l’alcool, les benzodiazépines, le GHB ou certains médicaments peut être dangereux. Parle à un médecin avant d’arrêter.'))}</p>
+    <button class="link" data-a="lockSos">${esc(t('Tous les numéros d’aide'))}</button></section>`}
+function viewHelpNow(){const k=ui.helpK,h=curHabit();
+  const card=x=>{const open=k===x.k;
+    const fix=a=>a.replace('data-a="lapse"',`data-a="lapse" data-id="${h?h.id:''}"`).replace('data-a="logForm"',`data-a="logForm" data-h="${h?h.id:''}"`);
+    return `<section class="hp-sit ${open?'open':''} hp-${x.k}"><button class="hp-sit-b" data-a="helpK" data-k="${x.k}" aria-expanded="${open}"><span class="hp-ic" aria-hidden="true">${ic(x.ic)}</span><span class="grow"><b>${esc(t(x.t))}</b><span>${esc(t(x.s))}</span></span>${ic(open?'up':'right','sm')}</button>
+    ${open?`<div class="hp-body"><p>${esc(t(x.intro))}</p>${x.main[0].startsWith('href')?`<a class="btn primary block" ${fix(x.main[0])}>${esc(t(x.main[1]))}</a>`:`<button class="btn primary block" ${fix(x.main[0])}>${esc(t(x.main[1]))}</button>`}
+      <div class="hp-acts">${x.acts.map(([a,i,l])=>a.startsWith('href')?`<a class="hp-act" ${a}>${ic(i,'sm')}<span>${esc(t(l))}</span>${ic('right','sm')}</a>`:`<button class="hp-act" ${fix(a)}>${ic(i,'sm')}<span>${esc(t(l))}</span>${ic('right','sm')}</button>`).join('')}</div></div>`:''}</section>`};
+  return topbar(t('M’aider maintenant'))+`<div class="hp fade-in">
+    <p class="hp-q">${esc(t('De quoi as-tu besoin maintenant ?'))}</p>
+    <div class="hp-list">${HELP_SIT.map(card).join('')}</div>
+    ${helpUrgent()}
+    <p class="v7-note">${esc(t('LIBRE t’accompagne, mais ne remplace pas un médecin, un psychologue ou un spécialiste des addictions.'))}</p></div>`}
+
+/* ---------- Ajouter une activité (enregistrement rapide) ---------- */
+function quickAddSheet(){const h=curHabit();
+  const it=(a,i,l,s)=>`<button class="qa-it" ${a}><span class="qa-ic" aria-hidden="true">${ic(i)}</span><span class="grow"><b>${esc(t(l))}</b><span>${esc(t(s))}</span></span></button>`;
+  sheet(t('Ajouter'),`<div class="qa">
+    ${it('data-a="qaCrave"','pulse',N_('Une envie'),N_('Son intensité et ce qui l’a déclenchée'))}
+    ${h?it(`data-a="logForm" data-h="${h.id}"`,'plus',RED(h)||h.goal==='comprendre'?N_('Une consommation ou un comportement'):N_('Une consommation ou un comportement'),N_('Garde ton historique à jour')):''}
+    ${it('data-a="qaMood"','heart',N_('Une émotion'),N_('Comment tu te sens'))}
+    ${it('data-a="jPrompt" data-v="Qu’est-ce qui a été difficile ?"','info',N_('Une situation difficile'),N_('Ce qui s’est passé'))}
+    ${it('data-a="jPrompt" data-v="Qu’est-ce qui a bien marché ?"','check',N_('Une réussite'),N_('Même petite, elle compte'))}
+    ${it('data-a="journalForm"','book',N_('Une remarque'),N_('Écrire librement'))}</div>`)}
+let qaC={n:6,trig:null};
+function qaCraveSheet(){const tr=[...new Set(TRIGGERS)];
+  sheet(t('Une envie'),`<div class="stack"><div class="field"><span class="flabel">${esc(t('Intensité'))} : <b class="num" id="qaN">${qaC.n}</b>/10</span><input type="range" min="1" max="10" value="${qaC.n}" id="qaR" aria-label="${esc(t('Intensité de l’envie'))}"></div>
+    <div class="field"><span class="flabel">${esc(t('Ce qui l’a déclenchée'))}</span><div class="seg wrap chips-lg">${tr.map(x=>`<button type="button" data-a="qaTrig" data-v="${esc(x)}" aria-pressed="${qaC.trig===x}">${esc(t(x))}</button>`).join('')}</div></div>
+    <button class="btn primary block" data-a="qaCraveSave">${esc(t('Enregistrer'))}</button>
+    <button class="btn block" data-a="s5Open">${esc(t('Être guidé·e maintenant'))}</button></div>`)}
+function qaMoodSheet(){const T=TS(),ck=T.checkins[dayKey()];
+  sheet(t('Une émotion'),`<div class="stack"><p class="muted">${esc(t('Comment te sens-tu aujourd’hui ?'))}</p><div class="mood5">${MOOD5().map(m=>`<button type="button" data-a="checkin" data-v="${m.v}" aria-pressed="${!!ck&&ck.mood===m.v}"><i style="background:${m.c}"></i><span>${esc(t(m.n))}</span></button>`).join('')}</div>
+    <button class="btn block" data-a="journalForm">${esc(t('Écrire ce que je ressens'))}</button></div>`)}
+/* Humeur : du meilleur au plus difficile, comme on le dit naturellement */
+const MOOD5=()=>[5,4,3,2,1].map(v=>MOODS.find(m=>m.v===v));
+
+/* ---------- Comprendre ---------- */
+const LEARN_BASE=[
+ [N_('Comment fonctionne une addiction'),N_('Le cerveau apprend vite ce qui soulage ou fait plaisir. Quand une substance ou un comportement procure ce soulagement encore et encore, le cerveau en fait une priorité. Avec le temps, l’envie peut devenir automatique, même quand on ne le souhaite plus.'),['nidaDBB','volkow2016']],
+ [N_('Pourquoi il est difficile d’arrêter'),N_('L’habitude s’associe à des lieux, des heures, des émotions et des personnes. Au début du changement, ces signaux réveillent l’envie. Pour certaines substances, le corps réagit aussi au manque. Ce n’est pas un manque de volonté : c’est un apprentissage qui prend du temps à se défaire.'),['nidaDBB','mclellan2000']],
+ [N_('Ce qui déclenche les envies'),N_('Les déclencheurs sont des situations, des émotions, des lieux, des personnes ou des heures qui donnent envie. Les repérer permet de les préparer à l’avance.'),['nhsTriggers','bowenMarlatt2009']],
+ [N_('Habitude, usage problématique ou dépendance ?'),N_('Faire quelque chose souvent n’est pas forcément une addiction. On parle d’usage problématique quand il crée des difficultés (santé, argent, relations, travail). On parle de dépendance quand on perd le contrôle : on n’arrive pas à réduire malgré l’envie de le faire, l’usage prend de plus en plus de place et continue malgré les conséquences. Seul un professionnel peut poser un diagnostic.'),['whoGaming','nidaDBB']],
+ [N_('Les conséquences possibles'),N_('Elles dépendent de l’addiction et de chaque personne : santé physique et psychique, sommeil, argent, relations, travail ou études. Les fiches de chaque addiction en donnent les principales, avec leurs sources.'),['nidaDBB','who2024']],
+ [N_('Les étapes du changement'),N_('Le changement passe souvent par plusieurs étapes : ne pas encore y penser, hésiter, se préparer, agir, puis maintenir. On peut avancer, reculer et recommencer : c’est normal. Chaque étape a son utilité.'),['magill2009','mclellan2000']]
+];
+const LEARN_FAQ=[
+ [N_('Est-ce que je suis dépendant·e ?'),N_('LIBRE ne pose pas de diagnostic. Des signes peuvent alerter : perte de contrôle, envies fortes, usage qui continue malgré des problèmes. Un médecin ou un centre spécialisé peut t’aider à y voir clair, de façon confidentielle.')],
+ [N_('Faut-il arrêter d’un coup ?'),N_('Pas forcément. Réduire progressivement est un objectif valable. Pour l’alcool, les benzodiazépines, le GHB ou les opioïdes, l’arrêt brutal peut être dangereux : demande l’avis d’un médecin avant.')],
+ [N_('Combien de temps durent les envies ?'),N_('Une envie monte, atteint un pic, puis redescend, souvent en quelques minutes. Attendre, respirer ou changer d’activité aide à la traverser.')],
+ [N_('Une rechute veut-elle dire que j’ai échoué ?'),N_('Non. Les rechutes sont fréquentes dans un parcours de changement. Ce que tu as appris et les jours passés restent acquis. Comprendre ce qui s’est passé aide à préparer la suite.')],
+ [N_('Mes données sont-elles privées ?'),N_('Tout ce que tu notes reste sur ton appareil. Si tu crées un compte, la sauvegarde est chiffrée sur ton appareil avant d’être envoyée : personne d’autre que toi ne peut la lire.')],
+ [N_('À qui en parler ?'),N_('À une personne de confiance, à ton médecin, à un centre spécialisé en addictions ou à un service en ligne anonyme comme SafeZone.ch en Suisse.')],
+ [N_('LIBRE remplace-t-il un traitement ?'),N_('Non. LIBRE t’aide à suivre tes habitudes et à traverser les moments difficiles. Il ne remplace pas un médecin, un psychologue ou un spécialiste des addictions.')]
+];
+const LEARN_RES=[['https://www.safezone.ch',N_('SafeZone.ch'),N_('Conseil en ligne anonyme et gratuit sur les addictions')],['https://www.addictionsuisse.ch',N_('Addiction Suisse'),N_('Informations et conseils sur toutes les addictions')],['https://www.indexaddictions.ch',N_('Indexaddictions.ch'),N_('Trouver un centre d’aide près de chez toi')],['https://www.stop-tabac.ch',N_('stop-tabac.ch'),N_('Aide pour arrêter de fumer')],['https://www.toxinfo.ch',N_('Tox Info Suisse'),N_('Intoxications : 145, 24 h/24')],['https://www.bag.admin.ch/fr/offres-daide-addiction',N_('Office fédéral de la santé publique'),N_('Offres d’aide en cas d’addiction')]];
+function viewLearn(){const tab=ui.learnTab||'bases',mine=new Set(S.habits.map(h=>h.type));
+  const tabs=[['bases',t('Les bases')],['addictions',t('Les addictions')],['faq',t('Questions')],['res',t('Ressources')]];
+  let body='';
+  if(tab==='bases')body=`<div class="ln-list">${LEARN_BASE.map(([q,a,src],i)=>`<details class="ln-d lq-it"${i===0?' open':''}><summary><b>${esc(t(q))}</b>${ic('right','sm')}</summary><p>${esc(t(a))}</p>${src&&src.filter(s=>SRC[s]).length?`<p class="ln-src">${esc(t('Sources'))} : ${src.filter(s=>SRC[s]).map(s=>`<a href="${esc(SRC[s].u)}" target="_blank" rel="noopener">${esc(String(SRC[s].a).split(',')[0])}${SRC[s].y?' ('+esc(SRC[s].y)+')':''}</a>`).join(' · ')}</p>`:''}</details>`).join('')}</div>
+    <a class="hp-act" href="#biblio">${ic('book','sm')}<span>${esc(t('Bibliothèque : articles et exercices'))}</span>${ic('right','sm')}</a>`;
+  else if(tab==='addictions'){const grp=[[t('Substances'),COMP.filter(c=>c.g!=='beh')],[t('Comportements'),COMP.filter(c=>c.g==='beh')]];
+    body=`<p class="ln-note">${esc(t('Une fiche par addiction : comment la reconnaître, les déclencheurs fréquents, ce qui aide et quand demander de l’aide.'))}</p>${grp.map(([g,arr])=>`<h2 class="ln-h">${esc(g)}</h2><div class="ln-cards">${arr.map(c=>`<button class="ln-card lq-it ${c.ty.some(y=>mine.has(y))?'mine':''}" data-a="compOpen" data-k="${c.k}"><span class="hp-ic" aria-hidden="true">${ic(c.ic)}</span><span class="grow"><b>${esc(t(c.n))}</b>${c.ty.some(y=>mine.has(y))?`<span>${esc(t('Tu suis cette addiction'))}</span>`:c.sub?`<span>${esc(t(c.sub))}</span>`:''}</span>${ic('right','sm')}</button>`).join('')}</div>`).join('')}`}
+  else if(tab==='faq')body=`<div class="ln-list">${LEARN_FAQ.map(([q,a])=>`<details class="ln-d lq-it"><summary><b>${esc(t(q))}</b>${ic('right','sm')}</summary><p>${esc(t(a))}</p></details>`).join('')}</div>`;
+  else body=`<p class="ln-note">${esc(t('Des organismes reconnus, en Suisse en priorité. Les liens s’ouvrent dans ton navigateur.'))}</p><div class="ln-res">${LEARN_RES.map(([u,n,d])=>`<a class="hp-act lq-it" href="${u}" target="_blank" rel="noopener">${ic('globe','sm')}<span class="grow"><b>${esc(t(n))}</b><span>${esc(t(d))}</span></span>${ic('right','sm')}</a>`).join('')}</div>${helpLines(false)}`;
+  return topbar(t('Comprendre'))+`<div class="ln fade-in">
+    <div class="ln-search"><label class="sr-only" for="lnQ">${esc(t('Rechercher une information'))}</label>${ic('search','sm')}<input id="lnQ" type="search" autocomplete="off" placeholder="${esc(t('Rechercher une information'))}" value="${esc(ui.lnQ||'')}"></div>
+    <div class="seg ln-tabs" role="group" aria-label="${esc(t('Rubriques'))}">${tabs.map(([k,n])=>`<button data-a="learnTab" data-v="${k}" aria-pressed="${tab===k}">${esc(n)}</button>`).join('')}</div>
+    <div id="lnBody">${body}</div><div id="lnFound" hidden></div>
+    <p class="v7-note">${esc(t('Informations générales, issues de sources publiques. Elles ne remplacent pas l’avis d’un médecin ou d’un professionnel des addictions.'))}</p></div>`}
+/* Recherche : dans toutes les rubriques et les fiches, sans recharger la page */
+function lnSearch(q){q=(q||'').trim().toLowerCase();ui.lnQ=q;const body=$('#lnBody'),out=$('#lnFound');if(!body||!out)return;
+  if(q.length<2){body.hidden=false;out.hidden=true;out.innerHTML='';return}
+  const hit=s=>t(s).toLowerCase().includes(q);const R=[];
+  LEARN_BASE.forEach(([a,b])=>{if(hit(a)||hit(b))R.push(`<details class="ln-d" open><summary><b>${esc(t(a))}</b></summary><p>${esc(t(b))}</p></details>`)});
+  LEARN_FAQ.forEach(([a,b])=>{if(hit(a)||hit(b))R.push(`<details class="ln-d" open><summary><b>${esc(t(a))}</b></summary><p>${esc(t(b))}</p></details>`)});
+  COMP.forEach(c=>{if(hit(c.n)||hit(c.m)||hit(c.d)||hit(c.s)||(c.sub&&hit(c.sub)))R.push(`<button class="ln-card" data-a="compOpen" data-k="${c.k}"><span class="hp-ic" aria-hidden="true">${ic(c.ic)}</span><span class="grow"><b>${esc(t(c.n))}</b></span>${ic('right','sm')}</button>`)});
+  LEARN_RES.forEach(([u,n,d])=>{if(hit(n)||hit(d))R.push(`<a class="hp-act" href="${u}" target="_blank" rel="noopener">${ic('globe','sm')}<span class="grow"><b>${esc(t(n))}</b><span>${esc(t(d))}</span></span></a>`)});
+  body.hidden=true;out.hidden=false;out.innerHTML=R.length?`<p class="ln-note">${esc(tn(R.length,'{n} résultat','{n} résultats'))}</p><div class="ln-list">${R.join('')}</div>`:`<p class="ln-note">${esc(t('Aucun résultat. Essaie un autre mot, ou ouvre la bibliothèque.'))}</p>`}
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='lnQ')lnSearch(e.target.value)});
+
 function viewHome(){
   const p=S.profile,A0=act();
   if(!S.habits.length)return homeHead(p)+`<div class="hm"><section class="hm-p hm-empty"><h2>${esc(t('Ajoute ta première habitude'))}</h2><p class="muted">${esc(t('Choisis ce que tu veux arrêter ou réduire pour lancer ton compteur.'))}</p><button class="btn primary" data-a="habitForm">${esc(t('Ajouter une habitude'))}</button></section></div>`;
@@ -5421,12 +5645,13 @@ return homeHead(p,alt||t(msg.k,msg.v),!alt&&msg.cta?msg.cta:null,A0.length>1?seg
       <button class="btn quiet sm" data-a="logForm" data-h="${h.id}">${esc(t('Détails'))}</button>
       <div class="hm-step2" dir="ltr"><button data-a="quickMinus" data-h="${h.id}" ${tl.length?'':'disabled'} aria-label="${esc(t('Retirer la dernière consommation'))}">−</button><button data-a="quickPlus" data-h="${h.id}" aria-label="${esc(t('Ajouter une consommation'))}">+</button></div></div>
   </section>
-  ${homeWeek11(h)}
+  ${homeCards20(h)}
   ${homeToday11(h,{slip,nx,reduce})}
-  <section class="h11-help" aria-label="${esc(t('Si une envie arrive'))}">${riskNow(h)}
-    <button class="hm-sos" data-a="sos"><span class="hm-sos-ic">${ic('pulse')}</span><span class="grow"><b>${esc(t('J’ai une envie'))}</b><span>${esc(t('Être guidé·e maintenant'))}</span></span>${ic('right','sm')}</button>
-    <button class="btn quiet block h11-delay" data-a="delay10">${ic('clock','sm')}${esc(t('Retarder l’envie de 10 minutes'))}</button>
+  <section class="h11-help" aria-label="${esc(t('Accès rapide'))}">${riskNow(h)}<p class="hm-k h20-k">${esc(t('Accès rapide'))}</p>
+    <button class="hm-sos" data-a="s5Open"><span class="hm-sos-ic">${ic('pulse')}</span><span class="grow"><b>${esc(t('J’ai une envie'))}</b><span>${esc(t('Être guidé·e maintenant'))}</span></span>${ic('right','sm')}</button>
+    <div class="h20-quick"><a class="h20-q" href="#aide">${ic('shield')}<span>${esc(t('J’ai besoin d’aide'))}</span></a><button class="h20-q" data-a="quickAdd">${ic('plus')}<span>${esc(t('Ajouter une activité'))}</span></button></div>
   </section>
+  ${homeWeek11(h)}
   </div>`;
 }
 /* Bloc principal en réduction ou en observation : jamais de compteur « jours sans » (il découragerait).
@@ -5475,12 +5700,24 @@ function situationCard(h,o){const k=homeSituation(h,o);if(!k)return '';
     t('C’est le moment de garder le cap : les envies peuvent revenir, même longtemps après. Un plan prêt à l’avance aide.'),
     `<div class="hm-sit-a"><button class="btn primary" data-a="tool" data-id="plan">${esc(t('Préparer mon plan pour garder le cap'))}</button><button class="btn quiet" data-a="habitForm" data-id="${h.id}">${esc(t('Fixer un nouvel objectif'))}</button></div>`)}
 /* En-tête de l’accueil : date, prénom, phrase du jour (selon la situation) et choix de l’habitude */
+
+/* LIBRE 20 : quelques chiffres seulement, en petites cartes — chacun n'apparaît que s'il a du sens pour cet objectif */
+function homeCards20(h){if(!h)return '';const days=Math.max(0,Math.floor((now()-h.trackStart)/DAY)),w=weekSummary(h),sv=budgetDay(h)>0?Math.max(0,savedOf(h)):null;
+  const card=(v,l,ico)=>`<div class="h20-c"><span class="h20-ci" aria-hidden="true">${ic(ico,'sm')}</span><b class="num">${v}</b><span>${esc(l)}</span></div>`;
+  const c=[card(nf(days,0),tn(days,'jour de suivi','jours de suivi'),'cal')];
+  if(sv!=null)c.push(card(esc(money(sv)),t('économisés'),'coin'));
+  c.push(card(`${nf(w.ok,0)}<small>/${nf(w.n||0,0)}</small>`,RED(h)?t('jours dans ta limite cette semaine'):t('jours sans consommer cette semaine'),'check'));
+  const H=hist().filter(e=>e.ts>=now()-7*DAY&&(!e.habitId||e.habitId===h.id)),held=H.filter(e=>e.outcome==='held').length;
+  if(H.length)c.push(card(nf(held,0),tn(held,'envie traversée en 7 jours','envies traversées en 7 jours'),'pulse'));
+  return `<section class="h20-cards" aria-label="${esc(t('Tes chiffres'))}">${c.join('')}</section>`}
 function homeHead(p,line,cta,seg){
   return `<header class="hm-head pg-head pg-home" data-tone="dawn">
     <div class="pg-bar"><span class="pg-logo logo">${logoMark(24,'currentColor')}<span>LIBRE</span></span>${topActions(true)}</div>
     <div class="hm-hello-row"><div class="hm-hello-t">
-      <h1 class="hm-hello">${esc(cap(fdate(now(),{weekday:'long',day:'numeric',month:'long'}),LOCALE))}</h1>
+      <p class="hm-date">${esc(cap(fdate(now(),{weekday:'long',day:'numeric',month:'long'}),LOCALE))}</p>
+      <h1 class="hm-hello">${esc(p&&p.name?t('Bonjour, {name}',{name:p.name}):t('Bonjour'))}</h1>
       ${line?`<p class="hm-line" aria-live="polite"><span>${esc(line)}</span>${cta?` <button class="link" data-a="${cta[0]}">${esc(t(cta[1]))}</button>`:''}<button class="hm-more-msg" data-a="msgNext" aria-label="${esc(t('Un autre message'))}" title="${esc(t('Un autre message'))}">${ic('refresh','sm')}</button></p>`:''}
+      ${(()=>{const h=curHabit();return h?`<p class="hm-goal">${ic('target','sm')}<span>${esc(goalTxt(h))}</span></p>`:''})()}
     </div>${seg||''}</div>
   </header>`;
 }
@@ -8989,26 +9226,70 @@ const COMP=[
   m:N_('Le THC agit sur le système endocannabinoïde, qui règle notamment l’humeur, le sommeil et l’appétit. Un usage régulier modifie ce système et peut entraîner une dépendance.'),
   d:N_('Chez les personnes qui consomment régulièrement, l’arrêt provoque souvent irritabilité, anxiété, troubles du sommeil, rêves intenses et baisse d’appétit. Ces symptômes commencent en général dans les premiers jours et s’atténuent en une à deux semaines.'),
   s:N_('Prévoir des activités pour le soir et une routine de sommeil aide pendant les premières semaines.')},
- {k:'jeu',n:N_('Jeux d’argent'),ic:'coin',ty:['jeux_argent'],src:['whoGaming','gollwitzer2006','safezone','addictionSuisse'],
+ {k:'jeu',g:'beh',n:N_('Jeux d’argent'),ic:'coin',ty:['jeux_argent'],src:['whoGaming','gollwitzer2006','safezone','addictionSuisse'],
   m:N_('Les gains irréguliers et imprévisibles entretiennent l’envie de rejouer. Le trouble du jeu d’argent est reconnu par l’Organisation mondiale de la Santé dans la classification internationale des maladies (CIM-11), parmi les troubles liés à des comportements addictifs.'),
   d:N_('Vouloir « se refaire » après une perte, cacher ses mises ou emprunter de l’argent sont des signes d’alerte. Les dettes et le secret ajoutent souvent du stress.'),
   s:N_('Limiter l’accès à l’argent et aux sites de jeu (auto-exclusion, blocage, carte limitée) réduit les occasions. En parler à un service spécialisé aide aussi à gérer les dettes.')},
- {k:'reseaux',n:N_('Réseaux sociaux'),ic:'phone',ty:['reseaux'],src:['gollwitzer2006','bowenMarlatt2009','whoGaming'],
+ {k:'reseaux',g:'beh',n:N_('Réseaux sociaux'),ic:'phone',ty:['reseaux'],src:['gollwitzer2006','bowenMarlatt2009','whoGaming'],
   m:N_('Notifications, défilement sans fin et récompenses imprévisibles (likes, messages) attirent l’attention. L’usage problématique des réseaux sociaux n’est pas une maladie distincte dans la CIM-11, mais il peut peser sur le sommeil, l’humeur et les relations.'),
   d:N_('Réduire peut donner l’impression de manquer quelque chose, et l’ennui revient vite au début.'),
   s:N_('Coupe les notifications, éloigne le téléphone la nuit et fixe des moments sans écran. Un plan « si… alors… » aide à remplacer le réflexe.')},
- {k:'ecrans',n:N_('Téléphone et écrans'),ic:'phone',ty:['internet','ecrans'],src:['gollwitzer2006','bowenMarlatt2009','whoGaming'],
+ {k:'ecrans',g:'beh',n:N_('Téléphone et écrans'),ic:'phone',ty:['internet','ecrans'],src:['gollwitzer2006','bowenMarlatt2009','whoGaming'],
   m:N_('Le téléphone est toujours à portée de main et chaque consultation peut apporter quelque chose de nouveau : c’est ce qui crée un geste automatique. Comme pour les réseaux sociaux, ce n’est pas une maladie distincte dans la CIM-11.'),
   d:N_('Au début, l’envie de vérifier revient souvent, surtout dans les moments d’attente ou d’ennui.'),
   s:N_('Range le téléphone hors de vue, utilise les limites de temps du système et prévois une activité de remplacement pour les moments d’attente.')},
- {k:'jv',n:N_('Jeux vidéo'),ic:'spark',ty:['jeux_video'],src:['whoGaming','gollwitzer2006'],
+ {k:'jv',g:'beh',n:N_('Jeux vidéo'),ic:'spark',ty:['jeux_video'],src:['whoGaming','gollwitzer2006'],
   m:N_('Le trouble du jeu vidéo est reconnu dans la CIM-11. Il se caractérise par une perte de contrôle sur le jeu, une priorité croissante donnée au jeu sur les autres activités, et la poursuite malgré les conséquences négatives, en général sur au moins 12 mois. Jouer beaucoup ne suffit pas à parler de trouble.'),
   d:N_('Réduire peut entraîner de l’irritabilité et de l’ennui, surtout le soir.'),
   s:N_('Fixe des heures de jeu, arrête à la fin d’une partie plutôt qu’au milieu, et prévois d’autres activités qui te plaisent.')},
- {k:'autres',n:N_('Autres comportements et substances'),ic:'other',ty:['achats','porno','autre','cocaine','opioides','mdma','amphet','meth','halluc','medic'],src:['nidaDBB','mclellan2000','magill2009','toxinfo'],warn:1,
+ {k:'autres',n:N_('Autres substances'),ic:'other',ty:['autre'],src:['nidaDBB','mclellan2000','magill2009','toxinfo'],warn:1,
   m:N_('Les addictions partagent des mécanismes communs : apprentissage par la récompense, associations avec des situations, difficulté à s’arrêter malgré les conséquences.'),
   d:N_('Pour certaines substances (médicaments anxiolytiques ou somnifères, opioïdes), l’arrêt brutal peut être dangereux. N’arrête jamais seul·e : un professionnel adaptera la diminution.'),
   s:N_('Les approches cognitives et comportementales, la préparation des situations à risque et le soutien d’un professionnel ont montré leur intérêt.')},
+ {k:'cocaine',n:N_('Cocaïne et crack'),sub:N_('Cocaïne, crack (free base)'),ic:'other',ty:['cocaine'],src:['nidaCoc','toxinfo','safezone'],
+  m:N_('La cocaïne stimule fortement le circuit de la récompense, mais peu de temps. La descente qui suit donne souvent envie d’en reprendre vite, ce qui favorise une consommation répétée. Le crack, fumé, agit encore plus vite et plus brièvement.'),
+  d:N_('Après l’arrêt, fatigue, humeur basse, troubles du sommeil et envies intenses sont fréquents, surtout les premières semaines. Douleur dans la poitrine, malaise ou agitation intense après une prise : appelle les urgences.'),
+  s:N_('Repérer les situations qui précèdent la consommation (soirées, argent disponible, certaines personnes) et prévoir une alternative. Un centre spécialisé peut t’accompagner.')},
+ {k:'opioides',n:N_('Héroïne et opioïdes'),sub:N_('Héroïne, médicaments antidouleur opioïdes'),ic:'other',ty:['opioides'],warn:1,src:['nidaOpi','whoOpioid','nidaRx'],
+  m:N_('Les opioïdes agissent sur des récepteurs qui calment la douleur et procurent un bien-être intense. Le corps s’y habitue vite : il en faut plus pour le même effet, et le manque devient très inconfortable.'),
+  d:N_('Le manque provoque douleurs, sueurs, nausées, insomnie et forte anxiété. Le risque d’overdose augmente après une période sans consommer, car le corps n’est plus habitué. Respiration très lente, lèvres bleues, personne qui ne réagit pas : appelle immédiatement les urgences.'),
+  s:N_('Des traitements efficaces existent, notamment les traitements de substitution prescrits par un médecin. Ne reste pas seul·e : un centre spécialisé peut t’accompagner.')},
+ {k:'benzos',n:N_('Benzodiazépines et somnifères'),sub:N_('Anxiolytiques, somnifères'),ic:'shield',ty:['medic'],warn:1,src:['hasBzd','niceNg215','nidaRx'],
+  m:N_('Ces médicaments calment l’anxiété et aident à dormir. Pris longtemps, ils entraînent une accoutumance : leur effet diminue et le corps réagit quand on les arrête.'),
+  d:N_('L’arrêt brutal après un usage prolongé peut provoquer anxiété, insomnie et parfois des convulsions. La diminution doit être progressive et suivie par un médecin.'),
+  s:N_('Parle à ton médecin ou ton pharmacien avant de changer la dose : un plan de diminution progressif est plus sûr et plus confortable.')},
+ {k:'stimulants',n:N_('Amphétamines et méthamphétamine'),sub:N_('Speed, crystal'),ic:'other',ty:['amphet','meth'],src:['nidaMeth','toxinfo'],
+  m:N_('Ces stimulants augmentent fortement l’énergie et la vigilance. L’effet est suivi d’une descente marquée, qui pousse à reconsommer.'),
+  d:N_('Après l’arrêt : grande fatigue, humeur dépressive, sommeil perturbé et envies fortes, parfois pendant plusieurs semaines. Agitation extrême, forte fièvre ou idées de persécution : demande une aide médicale urgente.'),
+  s:N_('Retrouver un rythme de sommeil et des repas réguliers, éviter les contextes de consommation et se faire accompagner par un centre spécialisé.')},
+ {k:'mdma',n:N_('MDMA / ecstasy'),ic:'other',ty:['mdma'],src:['nidaMdma','toxinfo'],
+  m:N_('La MDMA procure euphorie et sentiment de proximité avec les autres. Les jours suivants, l’humeur peut chuter.'),
+  d:N_('Une consommation répétée peut entraîner fatigue, anxiété et baisse de moral. Forte chaleur, confusion ou malaise pendant une soirée : appelle les urgences.'),
+  s:N_('Si tu consommes surtout en soirée, prépare à l’avance ce que tu feras à la place, et avec qui.')},
+ {k:'halluc',n:N_('LSD et hallucinogènes'),sub:N_('LSD, champignons et autres'),ic:'other',ty:['halluc'],src:['nidaHal','toxinfo'],
+  m:N_('Les hallucinogènes modifient les perceptions, les pensées et les émotions. La plupart créent peu de dépendance physique, mais leur usage peut devenir problématique.'),
+  d:N_('Certaines expériences peuvent être très angoissantes, et des troubles des perceptions peuvent revenir après coup chez certaines personnes.'),
+  s:N_('Si l’usage devient difficile à contrôler ou te fait peur, un professionnel peut t’aider à faire le point, sans jugement.')},
+ {k:'ketamine',n:N_('Kétamine'),ic:'other',ty:[],src:['nidaHal','toxinfo'],
+  m:N_('La kétamine est un anesthésiant qui donne une sensation de détachement du corps et de l’environnement. Un usage fréquent peut entraîner une tolérance et des envies répétées.'),
+  d:N_('Un usage régulier peut provoquer des douleurs de la vessie et des difficultés de mémoire. Douleurs urinaires persistantes : consulte un médecin.'),
+  s:N_('Repérer quand et avec qui tu consommes aide à préparer des alternatives. Un centre spécialisé peut t’accompagner.')},
+ {k:'ghb',n:N_('GHB / GBL'),ic:'other',ty:[],warn:1,src:['toxinfo','addictionSuisse'],
+  m:N_('Le GHB et le GBL ont un effet relaxant et désinhibant. L’écart entre la dose recherchée et une dose dangereuse est très faible, surtout avec de l’alcool.'),
+  d:N_('Après un usage fréquent, l’arrêt peut provoquer un sevrage sévère : un suivi médical est nécessaire. Une personne endormie qu’on ne parvient pas à réveiller : appelle immédiatement les urgences.'),
+  s:N_('N’arrête pas seul·e après un usage régulier : parles-en à un médecin ou à un centre spécialisé.')},
+ {k:'achats',n:N_('Achats compulsifs'),ic:'coin',g:'beh',ty:['achats'],src:['black2007','gollwitzer2006'],
+  m:N_('Acheter procure un soulagement ou un plaisir immédiat. Quand ce geste sert surtout à calmer des émotions, il peut devenir difficile à contrôler.'),
+  d:N_('Dettes, achats cachés et culpabilité après coup sont des signes d’alerte.'),
+  s:N_('Attendre 24 heures avant tout achat non prévu, supprimer les cartes enregistrées et noter ce que tu ressens avant d’acheter.')},
+ {k:'sexe',n:N_('Pornographie et sexualité compulsive'),ic:'heart',g:'beh',ty:['porno'],src:['kraus2018','gollwitzer2006'],
+  m:N_('Le trouble du comportement sexuel compulsif est décrit dans la classification internationale des maladies (CIM-11) : perte de contrôle, place croissante du comportement et poursuite malgré les conséquences. Un usage fréquent n’est pas forcément un trouble.'),
+  d:N_('La honte et l’isolement sont fréquents et rendent l’aide plus difficile à demander.'),
+  s:N_('Repérer les moments à risque (soirée, solitude, ennui), installer des filtres et en parler à un professionnel, sans jugement.')},
+ {k:'travail',n:N_('Travail et sport excessifs'),ic:'clock',g:'beh',ty:[],src:['bowenMarlatt2009','gollwitzer2006'],
+  m:N_('Le travail et le sport sont utiles, mais ils peuvent devenir envahissants quand ils servent à fuir des émotions ou qu’on n’arrive plus à s’arrêter. Ce ne sont pas des maladies reconnues à part entière : on parle plutôt d’usage excessif.'),
+  d:N_('Épuisement, blessures répétées, sommeil et relations négligés sont des signes d’alerte.'),
+  s:N_('Fixer des limites de temps, prévoir des jours de repos et en parler à un professionnel si tu n’y arrives pas.')},
 ];
 const COMP_COMMON={t:N_('Les déclencheurs sont des situations, des émotions, des lieux, des personnes ou des heures qui donnent envie. Les repérer permet de les préparer à l’avance.'),
  h:N_('Une habitude est un enchaînement automatique : un signal, un geste, une récompense. Changer le signal ou le geste, plutôt que compter sur la volonté seule, est souvent plus efficace.'),
@@ -9094,7 +9375,7 @@ const A_V7={
     m[k].push(o);save();render();setTimeout(()=>document.querySelector(`form.mv-add[data-k="${k}"] input`)?.focus(),40)},
   mvDel:el=>{const m=MV(),k=el.dataset.k;m[k]=m[k].filter(x=>x.id!==el.dataset.id);save();render()},
   mvDone:el=>{const x=MV()[el.dataset.k].find(y=>y.id===el.dataset.id);if(x){x.done=!x.done;save();render()}},
-  compOpen:el=>{ui.compK=el.dataset.k||null;if(ui.view!=='comprendre')location.hash='comprendre';else{render();scrollTo(0,0)}},
+  compOpen:el=>{ui.compK=el.dataset.k||null;if(ui.view!=='comprendre'){ui.compJust=1;location.hash='comprendre'}else{render();scrollTo(0,0)}},
   evHabit:el=>{ui.evH=el.dataset.id;render()},
 };
 
@@ -9157,13 +9438,29 @@ function saveGoalSheet(){const g=planData().goalSave||{};
   sheet(t('Mon objectif d’épargne'),`<div class="stack"><label class="field"><span class="flabel">${esc(t('Ce que je m’offrirai'))}</span><input type="text" id="sgName" maxlength="60" dir="auto" placeholder="${esc(t('Ex. : un week-end, un vélo…'))}" value="${esc(g.name||'')}"></label>
     <label class="field"><span class="flabel">${esc(t('Montant'))} (${esc(curSym())})</span><input type="number" id="sgAmt" inputmode="decimal" min="1" value="${esc(g.amount||'')}"></label>
     <button class="btn primary block" data-a="saveGoalSave">${esc(t('Enregistrer'))}</button>${g.amount?`<button class="btn quiet sm" data-a="saveGoalDel">${esc(t('Retirer l’objectif'))}</button>`:''}</div>`)}
-function viewProgress(){const {h,html}=habitPick('ovH');if(!h)return topbar(t('Progrès'))+`<div class="v7"><p class="muted">${esc(t('Ajoute un suivi pour voir tes progrès'))}</p></div>`;
+
+/* LIBRE 20 · Mon suivi : noter en un geste, voir l'humeur et l'intensité des envies sur 14 jours */
+function suiviAdd20(h){const it=(a,i,l)=>`<button class="sa-it" ${a}>${ic(i,'sm')}<span>${esc(t(l))}</span></button>`;
+  return `<section class="sa" aria-label="${esc(t('Noter'))}"><p class="kp-l">${esc(t('Noter'))}</p><div class="sa-row">
+    ${it('data-a="qaCrave"','pulse',N_('Une envie'))}${it(`data-a="logForm" data-h="${h.id}"`,'plus',N_('Une consommation'))}${it('data-a="qaMood"','heart',N_('Une émotion'))}
+    ${it('data-a="jPrompt" data-v="Qu’est-ce qui a été difficile ?"','info',N_('Un moment difficile'))}${it('data-a="jPrompt" data-v="Qu’est-ce qui a bien marché ?"','check',N_('Une réussite'))}${it('data-a="journalForm"','book',N_('Une remarque'))}</div></section>`}
+function suiviTrends20(h){const d0=sod(now()),days=[];for(let i=13;i>=0;i--)days.push(addDays(d0,-i));const lab=days.map(d=>new Date(d).getDate()+'');
+  const T=TS(),J=S.journal||[];
+  const mood=days.map(d=>{const ck=T.checkins[dayKey(d)];if(ck&&ck.mood)return ck.mood;const js=J.filter(e=>e.ts>=d&&e.ts<d+DAY&&e.mood);return js.length?Math.round(js.reduce((s,e)=>s+(+e.mood||0),0)/js.length):null});
+  const H=hist().filter(e=>e.before!=null&&(!e.habitId||e.habitId===h.id));
+  const crav=days.map(d=>{const x=H.filter(e=>e.ts>=d&&e.ts<d+DAY);return x.length?Math.round(x.reduce((s,e)=>s+(+e.before||0),0)/x.length*10)/10:null});
+  const has=a=>a.some(v=>v!=null);
+  const box=(ti,sub,vals,fmt,aria)=>`<section class="v7-sec st20"><p class="kp-l">${esc(ti)}</p><p class="small muted">${esc(sub)}</p>${has(vals)?v7Bars(vals,lab,fmt,'',aria):`<p class="small muted">${esc(t('Rien de noté ces 14 derniers jours.'))}</p>`}</section>`;
+  return box(t('Mon moral'),t('De 1 (très difficile) à 5 (très bien), sur 14 jours'),mood,v=>nf(v,0),t('Moral sur 14 jours'))
+    +box(t('Intensité de mes envies'),t('Moyenne par jour, de 1 à 10, sur 14 jours'),crav,v=>nf(v),t('Intensité des envies sur 14 jours'))}
+function viewProgress(){const {h,html}=habitPick('ovH');if(!h)return topbar(t('Mon suivi'))+`<div class="v7"><p class="muted">${esc(t('Ajoute un suivi pour voir tes progrès'))}</p></div>`;
   const rg=ui.ovR||13,[vals,labs]=weeksSeries(h,rg);const [ma,mb]=monthB(0),[pa,pb]=monthB(1),el=Math.max(1,Math.floor((sod(now())-ma)/DAY)+1);
   const cur=okDays(h,ma,mb).ok,prev=okDays(h,pa,Math.min(pb,pa+el*DAY)).ok,H=hist().filter(e=>e.ts>=now()-90*DAY),held=H.filter(e=>e.outcome==='held').length;
   const goal=RED(h)&&h.limit!==''&&+h.limit>0?+h.limit*7/(PER_DAYS[limPer(h)]||1):null;
   const d=(now()-curStart(h))/DAY,done=RED(h)?[]:MILESTONES.filter(m=>m.d<=d),nx=RED(h)?null:nextMilestone(h);
   const link=(href,icn,txt)=>`<a class="mp-row" href="${href}"><span class="mp-ic">${ic(icn)}</span><span class="grow"><b>${esc(txt)}</b></span>${ic('right','sm')}</a>`;
-  return topbar(t('Progrès'))+`<div class="v7 ov pg11 fade-in">${html}
+  return topbar(t('Mon suivi'))+`<div class="v7 ov pg11 fade-in">${html}
+  ${suiviAdd20(h)}
   <div class="kps">${kpi('cal',`${nf(cur,0)}<small>/${nf(el,0)}</small>`,RED(h)?t('jours dans ta limite ce mois-ci'):t('jours sans consommation ce mois-ci'),(cur-prev>=0?'+':'')+nf(cur-prev,0)+' '+t('vs mois dernier'),cur>=prev)}
     ${kpi('coin',esc(money(Math.max(0,totalSaved()))),t('économisés depuis le début'))}
     ${kpi('pulse',H.length?`${nf(Math.round(held/H.length*100),0)}<small>%</small>`:'—',t('envies traversées sur 90 jours'))}</div>
@@ -9171,10 +9468,11 @@ function viewProgress(){const {h,html}=habitPick('ovH');if(!h)return topbar(t('P
     ${goal!=null?`<p class="small muted"><i class="lg-dash" aria-hidden="true"></i> ${esc(t('Ta limite : {q} par semaine',{q:unitN(h,Math.round(goal*10)/10)}))}</p>`:''}</div>
     <div class="seg ov-rg" role="group" aria-label="${esc(t('Période'))}">${[[13,t('3 mois')],[26,t('6 mois')],[52,t('12 mois')]].map(([k,n])=>`<button data-a="ovRange" data-v="${k}" aria-pressed="${rg===k}">${esc(n)}</button>`).join('')}</div></div>
     <div style="--ac-c:var(--accent)">${areaChart(vals,labs,goal,v=>unitN(h,v),t('Consommation par semaine, {n} semaines',{n:nf(rg,0)}))}</div></section>
+  ${suiviTrends20(h)}
   ${saveGoalCard()}
   ${RED(h)?'':`<section class="v7-sec pg-ms"><div class="ov-h"><h2 class="hx">${esc(t('Étapes franchies'))}</h2>${nx?`<p class="small muted">${esc(t('Prochaine : {m}',{m:t(nx.t)}))}</p>`:''}</div>
     ${done.length?`<ol class="pg-ms-l">${done.map(m=>`<li>${medalHtml(m.d,'sm')}<span>${esc(t(m.t))}</span></li>`).join('')}${nx?`<li class="next">${medalHtml(nx.d,'sm ghost')}<span>${esc(t(nx.t))}</span></li>`:''}</ol>`:`<p class="muted small">${esc(t('La première arrive après 24 heures'))}</p>`}</section>`}
-  <div class="mp-list">${link('#calendrier','cal',t('Calendrier'))}${link('#economies','coin',t('Économies'))}${link('#bilans','download',t('Bilan du mois, pour moi ou mon médecin'))}${link('#stats','stats',t('Statistiques détaillées'))}</div>
+  <div class="mp-list">${link('#journal','book',t('Mon journal'))}${link('#calendrier','cal',t('Calendrier'))}${link('#economies','coin',t('Économies'))}${link('#bilans','download',t('Bilan du mois, pour moi ou mon médecin'))}${link('#stats','stats',t('Statistiques détaillées'))}${link('#habitudes','target',t('Mes objectifs'))}</div>
   </div>`}
 function viewOverview(){const {h,html}=habitPick('ovH');if(!h)return topbar(t('Vue d’ensemble'))+`<div class="v7">${pillBar('apercu')}<p class="muted">${esc(t('Ajoute un suivi pour voir ton tableau de bord.'))}</p></div>`;
   const rg=ui.ovR||13,[vals,labs]=weeksSeries(h,rg);const [ma,mb]=monthB(0),[pa,pb]=monthB(1),el=Math.max(1,Math.floor((sod(now())-ma)/DAY)+1);
@@ -9322,8 +9620,7 @@ function weekMarks(h){const d0=sod(now()),ws=weekStart(now()),dn=dowLabels('narr
   const lab=D.map(x=>`${fdate(x.d,{weekday:'long'})} : ${x.r===true?t('réussi'):x.r===false?t('avec consommation'):t('à venir')}`).join(', ');
   return `<ol class="wk" role="img" aria-label="${esc(t('Cette semaine'))} — ${esc(lab)}">${D.map((x,i)=>`<li class="${x.r===true?'ok':x.r===false?'no':'fu'}${x.d===d0?' td':''}" aria-hidden="true"><i></i><span>${esc(dn[i])}</span></li>`).join('')}</ol>`}
 function homeWeek11(h){const w=weekSummary(h);
-  return `<section class="hm-p h11-week" aria-label="${esc(t('Ta semaine'))}"><p class="hm-k">${esc(t('Cette semaine'))}</p>${weekMarks(h)}
-    <div class="h11-st"><div><b class="num">${nf(w.ok,0)}<small> / ${nf(w.n||0,0)}</small></b><span>${esc(t('jours réussis'))}</span></div><div><b class="num">${nf(w.held,0)}</b><span>${esc(t('envies traversées'))}</span></div>${w.sv!=null?`<div><b class="num">${esc(money(w.sv))}</b><span>${esc(t('économisés'))}</span></div>`:''}</div>
+  return `<section class="hm-p h11-week" aria-label="${esc(t('Ta semaine'))}"><p class="hm-k">${esc(t('Ton évolution cette semaine'))}</p>${weekMarks(h)}
     <div class="h11-links"><button class="link" data-a="recap">${esc(t('Bilan de la semaine'))}</button><a class="link" href="#progres">${esc(t('Mes progrès'))}</a></div></section>`}
 const SIGNS=[N_('Je dors mal'),N_('Je m’isole'),N_('Je me dis « juste une fois »'),N_('Je retourne dans les mêmes lieux ou avec les mêmes personnes'),N_('Je suis très stressé·e ou en colère'),N_('Je laisse tomber ce qui m’aidait'),N_('Je garde quelque chose « au cas où »'),N_('Je saute des repas'),N_('Je cache ce que je fais')];
 function signsSheet(){const P=planData(),all=SIGNS.concat(P.signs.filter(x=>!SIGNS.includes(x)));
@@ -9338,12 +9635,12 @@ function homeToday11(h,o){const T=TS(),ck=T.checkins[dayKey()],mood=ck?MOODS.fin
   /* Le message de sécurité et le conseil personnalisé restent toujours visibles, en plus de la situation du moment */
   const top=quitBanner()+situationCard(h,o)+focusCard(h);
   const ckh=`<div class="ck">${ck&&mood?`<p class="ck-done"><span class="muted">${esc(t('Ton humeur du jour'))}</span> <b>${esc(t(mood.n))}</b> <button class="link" data-a="ckReset">${esc(t('Modifier'))}</button>${ck.mood<=2?` · <button class="link" data-a="hardDay">${esc(t('Voir des pistes pour aujourd’hui'))}</button>`:''}</p>`
-    :`<p class="ck-q">${esc(t('Comment te sens-tu aujourd’hui ?'))}</p><div class="ck-moods" role="group">${MOODS.map(m=>`<button data-a="checkin" data-v="${m.v}" aria-label="${esc(t(m.n))}"><span class="mdot" style="background:${m.c}"></span><span>${esc(t(m.n))}</span></button>`).join('')}</div>`}</div>`;
+    :`<p class="ck-q">${esc(t('Comment tu te sens aujourd’hui ?'))}</p><div class="ck-moods" role="group">${MOOD5().map(m=>`<button data-a="checkin" data-v="${m.v}" aria-label="${esc(t(m.n))}"><span class="mdot" style="background:${m.c}"></span><span>${esc(t(m.n))}</span></button>`).join('')}</div>`}</div>`;
   const O=dailyObjectives(),ob=O.find(x=>!x.done);
   const act=T.easy===dayKey()?`<div class="goal easy"><span class="gchk" aria-hidden="true">${ic('heart','sm')}</span><div class="grow"><p>${esc(t('Aujourd’hui, une seule chose compte : prendre soin de toi. Le reste peut attendre.'))}</p><button class="link" data-a="easyOff">${esc(t('Revenir à l’objectif habituel'))}</button></div></div>`
     :ob?`<button class="h11-do" data-a="${ob.a}" ${ob.id?`data-id="${esc(ob.id)}"`:''} ${ob.d?`data-d="${ob.d}"`:''}><span class="grow">${esc(ob.t)}</span>${ic('right','sm')}</button>`
     :`<p class="h11-done">${ic('check','sm')}${esc(t('C’est fait pour aujourd’hui'))}</p>`;
-  return `<section class="hm-p h11-todo" aria-label="${esc(t('Aujourd’hui'))}">${top}${ckh}<p class="hm-k">${esc(t('À faire aujourd’hui'))}</p>${act}</section>`}
+  return `<section class="hm-p h11-todo" aria-label="${esc(t('Aujourd’hui'))}">${top}${ckh}<p class="hm-k">${esc(t('Ton objectif du jour'))}</p>${act}</section>`}
 function homeTodo11(){const O=dailyObjectives(),o=O.find(x=>!x.done);
   if(!o)return `<section class="hm-p h11-todo"><p class="hm-k">${esc(t('À faire aujourd’hui'))}</p><p class="h11-done">${ic('check','sm')}${esc(t('C’est fait pour aujourd’hui'))}</p></section>`;
   return `<section class="hm-p h11-todo"><p class="hm-k">${esc(t('À faire aujourd’hui'))}</p><button class="h11-do" data-a="${o.a}" ${o.id?`data-id="${esc(o.id)}"`:''} ${o.d?`data-d="${o.d}"`:''}><span class="grow">${esc(o.t)}</span>${ic('right','sm')}</button></section>`}
@@ -9635,7 +9932,7 @@ function updateLive(){
     else if(k==='short')el.textContent=durText(ms,true);
   });
 }
-const views=['progres','accueil','habitudes','stats','calendrier','bilans','profil','journal','corps','outils','biblio','envies','plan','sante','activite','coach','programme','recompenses','motivations','comprendre','evolution','apercu','strategies','declencheurs','economies'];
+const views=['aide','progres','accueil','habitudes','stats','calendrier','bilans','profil','journal','corps','outils','biblio','envies','plan','sante','activite','coach','programme','recompenses','motivations','comprendre','evolution','apercu','strategies','declencheurs','economies'];
 /* ---------- Effets « verre et lumière » ----------
    Ouverture : l’écran s’allume en cercle (flou qui se dissipe). Changement d’écran : les blocs entrent l’un après l’autre
    (légère inclinaison, flou). Graphiques : les barres se transforment d’une période à l’autre au lieu de réapparaître.
@@ -9672,6 +9969,23 @@ function route(){const h=location.hash.replace('#','');const prev=ui.view;ui.vie
   if(FXM()){go();return}
   if(document.startViewTransition&&!RM()&&S.profile&&!ui.locked&&prev&&prev!==ui.view){document.documentElement.dataset.dir=navDir(prev,ui.view);document.startViewTransition(go)}else go()}
 window.addEventListener('hashchange',route);
+/* LIBRE 20 : un onglet touché alors qu'on y est déjà ramène à son début (fiche fermée, situation repliée) */
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;const v=a.getAttribute('href').slice(1);
+  if(v===ui.view&&(ui.compK||ui.helpK)){ui.compK=null;ui.helpK=null;render();scrollTo(0,0)}},true);
+window.addEventListener('hashchange',()=>{if(location.hash.slice(1)==='comprendre'&&!ui.compJust)ui.compK=null;ui.compJust=0});
+Object.assign(A,{
+  helpK:el=>{ui.helpK=ui.helpK===el.dataset.k?null:el.dataset.k;render()},
+  jPrompt:el=>journalForm({prompt:el.dataset.v}),
+  learnTab:el=>{ui.learnTab=el.dataset.v;ui.lnQ='';render()},
+  learnRes:()=>{ui.learnTab='res';ui.compK=null;if(ui.view!=='comprendre')location.hash='comprendre';else render()},
+  quickAdd:()=>quickAddSheet(),
+  qaCrave:()=>{qaC={n:6,trig:null};qaCraveSheet()},
+  qaTrig:el=>{qaC.trig=qaC.trig===el.dataset.v?null:el.dataset.v;const r=$('#qaR');if(r)qaC.n=+r.value;qaCraveSheet()},
+  qaCraveSave:()=>{const r=$('#qaR');if(r)qaC.n=+r.value;const h=curHabit();logCraving({habitId:h?h.id:null,before:qaC.n,trigger:qaC.trig});closeSheet();toast(t('Envie enregistrée'));render()},
+  qaMood:()=>qaMoodSheet()
+});
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='qaR'){qaC.n=+e.target.value;const n=$('#qaN');if(n)n.textContent=qaC.n}});
+
 /* LIBRE 18 : le compteur de jours compte jusqu'à sa valeur à la première ouverture, puis anime chaque changement */
 const TWV={};function tweenDays(){if(RM()||FXM())return;document.querySelectorAll('#app .hm-days .num[data-live="days"]').forEach(el=>{const k=el.dataset.h,to=parseInt(String(el.textContent).replace(/\D/g,''),10)||0,from=TWV[k]==null?0:TWV[k];TWV[k]=to;if(from===to||to>3650)return;
   const t0=performance.now(),D=from===0?650:420,e=x=>1-Math.pow(1-x,3);el.textContent=nf(from,0);
@@ -9689,7 +10003,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S.profile
    ===================================================================== */
 const SUCCESS_T=()=>new Set(['Entrée enregistrée','Consommation enregistrée','Plan enregistré','Plan mis à jour','Objectif mis à jour','Objectif atteint','Données restaurées','Données récupérées','Fichier de sauvegarde créé','Verrouillage activé','Merci d’avoir pris ce temps','C’est noté','Sauvegarde copiée','Bien joué','Enregistré','Suivi repris','Consommation retirée'].map(x=>t(x)));
 /* Sens de la transition : vers la droite quand on avance dans les onglets, vers la gauche quand on revient */
-const NAV_ORDER=['accueil','habitudes','stats','calendrier','bilans','outils','plan','journal','envies','biblio','corps','sante','profil','activite'];
+const NAV_ORDER=['accueil','aide','progres','comprendre','profil','habitudes','stats','calendrier','bilans','outils','plan','journal','envies','biblio','corps','sante','profil','activite'];
 function navDir(a,b){const i=NAV_ORDER.indexOf(a),j=NAV_ORDER.indexOf(b);return i<0||j<0||i===j?'none':(j>i)!==isRTL()?'fwd':'back'}
 /* Apparition au défilement : seulement les éléments encore hors de l’écran à l’arrivée sur la page */
 let REV=null;
