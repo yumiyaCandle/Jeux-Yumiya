@@ -136,6 +136,34 @@ Skills : `/find-skills` a été utilisé. Le CLI `npx skills find` ne renvoie ri
 - **Fenêtres** : verre épais presque opaque (95 %) et voile de fond plus marqué. Le contenu d’une fenêtre déjà ouverte (étape suivante de la présentation, d’un exercice, du SOS) change sans rejouer l’apparition. Avant, chaque étape repartait d’un fondu transparent où les textes se superposaient sur iPhone. L’apparition ne fait plus que glisser, sans partir de la transparence.
 - **Barre du haut de l’accueil** : boutons resserrés pour que le logo garde sa place.
 
+### LIBRE 21.5 : moins de cases, ce qui aide vraiment à arrêter
+Sources consultées :
+- recommandations publiques (gov.uk « Stopping smoking: what works », NHS, Tabac Info Service, Vidal, sante.fr) ;
+- revue Cochrane résumée par l’Université d’Oxford ;
+- revues sur les applications d’arrêt (PMC).
+
+Points convergents :
+- choisir une date et l’annoncer ;
+- écrire ses raisons ;
+- repérer ses déclencheurs ;
+- préparer quoi faire au moment de l’envie : attendre quelques minutes, boire de l’eau, changer d’air, respirer lentement ;
+- ne pas rester seul·e ;
+- se faire accompagner : un professionnel, avec ou sans traitement, est la méthode la plus efficace, et arrêter seul la moins efficace ;
+- suivre ses progrès.
+
+Ce qui change dans **Mon plan** :
+- **Mon plan d’arrêt**, en 6 étapes numérotées, dans cet ordre :
+  1. date d’arrêt ;
+  2. raisons ;
+  3. déclencheurs ;
+  4. plan « si… alors » ;
+  5. proches ;
+  6. me faire accompagner (vers la page santé : médecin, pharmacie, ligne d’aide).
+- Chaque étape dit en une phrase pourquoi elle aide, se coche quand elle est faite, et une barre indique combien sont faites.
+- **Quand l’envie monte** : respirer, surfer sur l’envie, moments difficiles, tous les exercices, chacun avec une phrase d’explication.
+- **Plus d’outils** (replié par défaut) : signaux d’alerte, revenir au présent, Comprendre, « Ce qui t’aide ».
+- Rien n’est supprimé ; « Je suis en danger » reste visible.
+
 ## Vérifications
 
 - `node tests/run.js` : 116 tests (dont les 5 scénarios de LIBRE 20). Tests adaptés : navigation LIBRE 21, effets visuels désactivables, ancien profil « verre ».

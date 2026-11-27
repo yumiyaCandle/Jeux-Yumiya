@@ -1438,7 +1438,7 @@ test('LIBRE 12', 'Jour J demain : rappel sur l’accueil avec les étapes restan
 });
 
 test('LIBRE 12', 'Signaux d’alerte : choisis et ajoutés dans Mon plan, rappelés dans l’Aide', async (b, base) => {
-  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle(); await p.go('outils');
+  const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle(); await p.go('outils'); await p.evaluate(() => { const d = document.querySelector('.mp-more'); if (d) d.open = true; });
   await p.click('[data-a="signsSheet"]'); await p.click('#layer [data-a="signToggle"][data-v="Je dors mal"]'); await p.waitForTimeout(150);
   await p.fill('#signIn', 'Je pense au bar en rentrant'); await p.click('[data-a="signAdd"]'); await p.waitForTimeout(150);
   assert.deepEqual((await p.state()).plan.signs, ['Je dors mal', 'Je pense au bar en rentrant']);
