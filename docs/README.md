@@ -2,7 +2,8 @@
 
 | Document | Contenu |
 |---|---|
-| [LIBRE-18.md](LIBRE-18.md) | **Interface actuelle « Aube »** : refonte visuelle complète (scènes de nuit, horizon, une action forte par écran) |
+| [LIBRE-19.md](LIBRE-19.md) | **Interface actuelle « Verre »** : verre liquide sur toute l'app, couleurs par addiction |
+| [LIBRE-18.md](LIBRE-18.md) | Interface « Aube », base de LIBRE 19 : refonte visuelle complète (scènes de nuit, horizon, une action forte par écran) |
 | [LIBRE-17.md](LIBRE-17.md) | Interface précédente « Natif » : reconstruite sur les codes d’iOS (direction C choisie parmi trois) |
 | [LIBRE-16.md](LIBRE-16.md) | **Interface « Jetons »** : second passage /unslop ; jeton d’étape bronze/argent/or, verre réservé à la navigation, une seule teinte d’icônes |
 | [LIBRE-13.md](LIBRE-13.md) | **Interface « Carnet »** : passage /unslop complet (plus de bandeau ni de tuiles, rampe encre, semaine cochée, lignes réglées, titre = la date) |

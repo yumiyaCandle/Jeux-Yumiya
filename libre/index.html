@@ -4211,6 +4211,231 @@ html:root:not(.fx):not(.zz) body #app .hpick>button>.hc-dot{margin-inline-end:8p
 html:root:not(.fx):not(.zz) body :is(#app,header.pg-head) :is(.seg,.segc,.hpick)>:is(button,a)[aria-pressed="true"],html:root:not(.fx):not(.zz) body :is(#app,header.pg-head) :is(.seg,.segc,.hpick)>:is(button,a)[aria-checked="true"]{color:var(--ink)!important}
 
 @media (max-width:360px){html:root:not(.fx):not(.zz) body #navWrap .lg-tabs>a{font-size:10px!important;letter-spacing:-.01em}html:root:not(.fx):not(.zz) body #navWrap .lg-tabs>a span{overflow:visible!important;text-overflow:clip!important}html:root:not(.fx):not(.zz) body header.pg-head .pg-bar :is(button,a):not(.logo){min-width:32px!important;padding:0 4px!important}html:root:not(.fx):not(.zz) body header.pg-head{padding-inline:14px!important}html:root:not(.fx):not(.zz) body #navWrap .nav-help{margin-inline:2px 8px!important}}
+
+/* =====================================================================================================
+   LIBRE 19 « Verre » — verre liquide sur toute l'application, couleurs par addiction (demande de la personne propriétaire)
+   Principes (apple-design §12) : le contenu est posé sur un fond coloré par l'addiction suivie ; les surfaces sont une matière
+   translucide (flou + saturation) avec une arête claire en haut, plus épaisse quand la surface est grande. Jamais de verre clair
+   sur du verre clair. Une seule action forte par écran : la couleur de l'addiction en verre teinté. L'aide reste en rouge.
+   « Réduire la transparence » : toutes les surfaces deviennent opaques. Couche finale, elle remplace l'apparence « Aube ».
+   ===================================================================================================== */
+html:root:not(.fx):not(.zz):not(.zy){
+  --v-base:#E8ECF0;--v-ink:#0F1217;--v-ink2:#3B414B;--v-mut:#4D535D;
+  --v-glass:rgba(255,255,255,.58);--v-glass-2:rgba(255,255,255,.78);--v-glass-3:rgba(255,255,255,.36);
+  --v-edge:rgba(255,255,255,.9);--v-line:rgba(15,18,23,.08);--v-sep:rgba(15,18,23,.10);
+  --v-shadow:0 1px 1px rgba(15,18,23,.04),0 12px 32px -16px rgba(15,18,23,.22);
+  --v-blur:blur(28px) saturate(185%);--v-blur-thick:blur(44px) saturate(190%);
+  --v-tint:var(--hp2,#2E5646);--v-tint-ink:#FFFFFF;--v-sos:#C22F21;
+  --v-r-xl:28px;--v-r-l:22px;--v-r-m:16px;
+  --bg:var(--v-base);--card:var(--v-glass-2);--ink:var(--v-ink);--muted:var(--v-mut);--sep:var(--v-sep);--line:var(--v-line)}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]){
+  --v-base:#06080C;--v-ink:#F2F4F7;--v-ink2:#CDD2DA;--v-mut:#A9AFB9;
+  --v-glass:rgba(255,255,255,.075);--v-glass-2:rgba(255,255,255,.11);--v-glass-3:rgba(255,255,255,.05);
+  --v-edge:rgba(255,255,255,.22);--v-line:rgba(255,255,255,.08);--v-sep:rgba(255,255,255,.10);
+  --v-shadow:0 1px 1px rgba(0,0,0,.3),0 16px 40px -18px rgba(0,0,0,.7);--v-tint:var(--hp5,#1C3050)}}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"]{
+  --v-base:#06080C;--v-ink:#F2F4F7;--v-ink2:#CDD2DA;--v-mut:#A9AFB9;
+  --v-glass:rgba(255,255,255,.075);--v-glass-2:rgba(255,255,255,.11);--v-glass-3:rgba(255,255,255,.05);
+  --v-edge:rgba(255,255,255,.22);--v-line:rgba(255,255,255,.08);--v-sep:rgba(255,255,255,.10);
+  --v-shadow:0 1px 1px rgba(0,0,0,.3),0 16px 40px -18px rgba(0,0,0,.7);--v-tint:var(--hp5,#1C3050)}
+
+/* ---------- Le fond : la couleur de l'addiction, en lumière diffuse, fixe sous le verre ---------- */
+html:root:not(.fx):not(.zz):not(.zy) body,html:root:not(.fx):not(.zz):not(.zy)[data-theme] body{
+  background:
+    radial-gradient(75% 45% at 0% 0%,color-mix(in srgb,var(--hp1,#3D6B57) 38%,transparent),transparent 70%),
+    radial-gradient(70% 50% at 100% 35%,color-mix(in srgb,var(--hp3,#E2EDE6) 95%,transparent),transparent 70%),
+    radial-gradient(90% 55% at 40% 105%,color-mix(in srgb,var(--hp1,#3D6B57) 26%,transparent),transparent 70%),
+    var(--v-base)!important;background-attachment:fixed!important;color:var(--v-ink)!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body{
+  background:
+    radial-gradient(75% 45% at 0% 0%,color-mix(in srgb,var(--hp1,#3D6B57) 42%,transparent),transparent 70%),
+    radial-gradient(70% 50% at 100% 40%,color-mix(in srgb,var(--hp6,#2C4D5C) 55%,transparent),transparent 70%),
+    radial-gradient(90% 55% at 40% 105%,color-mix(in srgb,var(--hp4,#101B30) 90%,transparent),transparent 70%),
+    var(--v-base)!important;background-attachment:fixed!important}}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body{
+  background:
+    radial-gradient(75% 45% at 0% 0%,color-mix(in srgb,var(--hp1,#3D6B57) 42%,transparent),transparent 70%),
+    radial-gradient(70% 50% at 100% 40%,color-mix(in srgb,var(--hp6,#2C4D5C) 55%,transparent),transparent 70%),
+    radial-gradient(90% 55% at 40% 105%,color-mix(in srgb,var(--hp4,#101B30) 90%,transparent),transparent 70%),
+    var(--v-base)!important;background-attachment:fixed!important}
+html:root:not(.fx):not(.zz):not(.zy) body #amb{display:none!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(.hm-hello,.pg-title,.large-title){font-size:32px!important;line-height:38px!important;font-weight:700!important;letter-spacing:-.02em!important}
+
+/* ---------- La matière : une seule recette de verre, trois épaisseurs ---------- */
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.h11-week,.h11-todo,.kps,.ov-chart,.sg,.card,.gd,.v7-sec,.hm-sit,.focus,.qb,.goal.easy,.hm-risk,.h11-do,.j3-top,.rd3){
+  background:var(--v-glass)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;
+  box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line),var(--v-shadow)!important;border:0!important;border-radius:var(--v-r-xl)!important;color:var(--v-ink)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.h11-week,.h11-todo,.kps,.ov-chart,.pg-ms){padding:20px!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.h11-week,.h11-todo)>.hm-k{font-size:20px!important;line-height:26px!important;margin:0 0 14px!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11-todo :is(.hm-sit,.focus,.qb,.h11-do,.goal.easy){background:var(--v-glass-2)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:var(--v-r-l)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11-todo .ck-moods button{background:var(--v-glass-2)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;border-radius:var(--v-r-m)!important;color:var(--v-ink2)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.hm-k,.kp-l,.x-k,.kicker,.mp-h){color:var(--v-mut)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.muted,.small.muted,.hm-sub):not(.hm-hero *):not(.j3-prompt *){color:var(--v-mut)!important}
+
+/* ---------- Compteur : verre teinté de la couleur de l'addiction, reflet en haut ---------- */
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-hero{
+  --a-n-ink:#FFFFFF;--a-n-mut:rgba(255,255,255,.82);--a-n-line:rgba(255,255,255,.22);
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 38%),color-mix(in srgb,color-mix(in srgb,var(--v-tint) 84%,#000) 93%,transparent)!important;
+  -webkit-backdrop-filter:var(--v-blur-thick)!important;backdrop-filter:var(--v-blur-thick)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 1px rgba(255,255,255,.14),0 24px 48px -24px color-mix(in srgb,var(--v-tint) 80%,transparent)!important;
+  border-radius:32px!important;margin:0!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-hero::before{display:none!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-hero .hm-pill{color:#FFFFFF!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-days .num{font-size:clamp(76px,22vw,96px)!important;font-weight:700!important;letter-spacing:-.045em!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-rec,html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-rec *{background:rgba(255,255,255,.18)!important;color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body .hz-p{stroke:#FFFFFF}
+html:root:not(.fx):not(.zz):not(.zy) body .hz-s{fill:#FFFFFF;filter:drop-shadow(0 0 6px rgba(255,255,255,.9))}
+html:root:not(.fx):not(.zz):not(.zy) body .hz-b{stroke:rgba(255,255,255,.35)}
+html:root:not(.fx):not(.zz):not(.zy) body .hz-g{stroke:rgba(255,255,255,.22)}
+html:root:not(.fx):not(.zz):not(.zy) body .hz-e{fill:transparent;stroke:rgba(255,255,255,.7)}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-hero .h11-log .hm-step2 button{background:rgba(255,255,255,.18)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-hero .h11-log .hm-step2 button:last-child{background:#FFFFFF!important;color:var(--v-tint)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .hm-medal>span:last-child{color:rgba(255,255,255,.85)!important}
+
+/* Semaine et chiffres */
+html:root:not(.fx):not(.zz):not(.zy) body .wk li.ok i{background:var(--accent)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .wk i{background:var(--v-glass-2)!important;box-shadow:inset 0 0 0 1px var(--v-line)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .wk li.ok i{box-shadow:inset 0 1px 0 rgba(255,255,255,.4)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .wk li.no i{background:transparent!important;box-shadow:inset 0 0 0 2px var(--v-ink2)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .wk li.fu i{background:transparent!important;box-shadow:inset 0 0 0 1px var(--v-sep)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11-st{border-top:1px solid var(--v-sep)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11-st>div{border-color:var(--v-sep)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11-st b{font-size:clamp(22px,7vw,28px)!important}
+
+/* ---------- L'envie : verre teinté rouge, la seule action forte ---------- */
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11-help .hm-sos{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 45%),color-mix(in srgb,var(--v-sos) 92%,transparent)!important;
+  -webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 18px 36px -20px rgba(217,58,43,.9)!important;border-radius:var(--v-r-xl)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11-help .h11-delay{background:var(--v-glass)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;border-radius:999px!important;color:var(--v-ink)!important}
+
+/* ---------- Listes (Mon plan, Progrès, Profil) : un bloc de verre, rangées séparées par un filet ---------- */
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp-row,html:root:not(.fx):not(.zz):not(.zy) body #app .pf-cat{background:var(--v-glass)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;box-shadow:inset 1px 0 0 var(--v-line),inset -1px 0 0 var(--v-line)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:not(.mp-row + .mp-row),html:root:not(.fx):not(.zz):not(.zy) body #app .pf-cat:not(.pf-cat + .pf-cat){border-top-left-radius:var(--v-r-xl)!important;border-top-right-radius:var(--v-r-xl)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 1px 0 0 var(--v-line),inset -1px 0 0 var(--v-line)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:not(:has(+ .mp-row)),html:root:not(.fx):not(.zz):not(.zy) body #app .pf-cat:not(:has(+ .pf-cat)){border-bottom-left-radius:var(--v-r-xl)!important;border-bottom-right-radius:var(--v-r-xl)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:only-of-type{box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line),var(--v-shadow)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:has(+ .mp-row)::after,html:root:not(.fx):not(.zz):not(.zy) body #app .pf-cat + .pf-cat::before{background:var(--v-sep)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp-row:active{background:var(--v-glass-2)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.mp-row,.kp,.pf-cat) :is(.mp-ic,.kp-ic,.pf-ic).mp-ic,html:root:not(.fx):not(.zz):not(.zy) body #app :is(.mp-ic,.kp-ic,.pf-ic){
+  background:color-mix(in srgb,var(--accent,#3D6B57) 16%,var(--v-glass-2))!important;color:var(--accent-strong,#2E5646)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;border-radius:12px!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.mp-ic,.kp-ic,.pf-ic) svg{color:var(--accent-strong,#2E5646)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp-danger .mp-ic.mp-ic{background:var(--v-sos)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp-danger .mp-ic svg{color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp-danger b{color:#B42318!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body #app .mp-danger b{color:#FF8A75!important}}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body #app .mp-danger b{color:#FF8A75!important}
+/* Jour J : verre teinté comme le compteur */
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp>.mp-row[data-a="quitDay"]{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 45%),color-mix(in srgb,color-mix(in srgb,var(--v-tint) 84%,#000) 93%,transparent)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 18px 36px -22px color-mix(in srgb,var(--v-tint) 80%,transparent)!important;border-radius:var(--v-r-xl)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp>.mp-row[data-a="quitDay"] :is(b,.grow>span,svg){color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp>.mp-row[data-a="quitDay"] .mp-ic.mp-ic{background:rgba(255,255,255,.22)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp>.mp-row[data-a="quitDay"] .mp-ic svg{color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .mp>.mp-row[data-a="quitDay"] .grow>span{opacity:.85}
+/* Journal : la question du jour en verre teinté */
+html:root:not(.fx):not(.zz):not(.zy) body #app .j3-prompt.j3-prompt{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 45%),color-mix(in srgb,color-mix(in srgb,var(--v-tint) 84%,#000) 93%,transparent)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)!important;border-radius:var(--v-r-xl)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .j3-prompt .btn.btn:first-of-type{color:var(--v-tint)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .card.row .hico{background:color-mix(in srgb,var(--v-tint) 88%,transparent)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)!important;color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .card.row:has(.hico){background:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+
+/* Progrès */
+html:root:not(.fx):not(.zz):not(.zy) body #app .kps .kp{border-top-color:var(--v-sep)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .kps .kp:first-child{padding-top:0!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .kps .kp:last-child{padding-bottom:0!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .kp-b{background:var(--v-glass-2)!important;box-shadow:inset 0 0 0 1px var(--v-line)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .pg-ms-l{margin:0 -20px!important}
+
+/* ---------- Contrôles : capsule de verre, le choix est une goutte plus claire ---------- */
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) :is(.seg:not(.wrap),.segc,.hpick,.pills,[role="radiogroup"]){
+  background:var(--v-glass)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;border-radius:999px!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) :is(.seg,.segc,.hpick,.pills)>:is(button,a):is([aria-pressed="true"],[aria-checked="true"],[aria-current="page"],[aria-selected="true"]){
+  background:var(--v-glass-2)!important;color:var(--v-ink)!important;box-shadow:inset 0 1px 0 var(--v-edge),0 4px 14px -6px rgba(15,18,23,.3)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.seg.wrap,.chips-lg) button{background:var(--v-glass)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;color:var(--v-ink)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,.sheet) :is(.seg.wrap,.chips-lg) button[aria-pressed="true"]{background:var(--accent-strong)!important;color:var(--accent-ink)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important}
+
+/* Boutons : principal = verre teinté de l'addiction ; secondaire = verre ; danger = verre rouge */
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,.sheet,#layer) .btn{border-radius:999px!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,.sheet,#layer) .btn.primary{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 50%),var(--accent-strong)!important;color:var(--accent-ink)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 22px -12px color-mix(in srgb,var(--accent-strong) 85%,transparent)!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,.sheet,#layer) .btn:not(.primary):not(.danger){background:var(--v-glass-2)!important;color:var(--v-ink)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,.sheet,#layer) .btn.danger{background:var(--v-sos)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.h11-links .link,.link){color:var(--accent-strong)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-hero .btn{color:#fff!important;background:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+
+/* En-tête : boutons ronds en verre */
+html:root:not(.fx):not(.zz):not(.zy) body header.pg-head .pg-bar :is(button,a):not(.logo){background:var(--v-glass)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;margin-left:6px}
+html:root:not(.fx):not(.zz):not(.zy) body header.pg-head .pg-bar :is(.tacts,.top-acts,div){gap:0!important}
+
+/* Fenêtres : verre épais ; champs en verre fin */
+html:root:not(.fx):not(.zz):not(.zy) body .sheet{background:color-mix(in srgb,var(--v-base) 72%,transparent)!important;-webkit-backdrop-filter:var(--v-blur-thick)!important;backdrop-filter:var(--v-blur-thick)!important;box-shadow:inset 0 1px 0 var(--v-edge),0 -20px 50px -20px rgba(0,0,0,.4)!important;border-radius:32px 32px 0 0!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet .sheet-h{background:transparent!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(.sheet,#app) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea){background:var(--v-glass-2)!important;border:0!important;box-shadow:inset 0 0 0 1px var(--v-line)!important;color:var(--v-ink)!important}
+
+/* ---------- Barre d'onglets : capsule de verre flottante, détachée du bord (téléphone) ---------- */
+@media (max-width:899px){
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav,html:root:not(.fx):not(.zz):not(.zy) body.lgd #navWrap.nav{
+    left:max(12px,env(safe-area-inset-left,0px))!important;right:max(12px,env(safe-area-inset-right,0px))!important;bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;
+    padding:6px!important;border-radius:999px!important;background:var(--v-glass)!important;-webkit-backdrop-filter:var(--v-blur-thick)!important;backdrop-filter:var(--v-blur-thick)!important;
+    box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line),0 20px 40px -18px rgba(15,18,23,.45)!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs{min-height:52px!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a{border-radius:999px!important;padding-top:5px!important;color:var(--v-mut)!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a[aria-current="page"]{background:var(--v-glass-2)!important;color:var(--accent-strong)!important;box-shadow:inset 0 1px 0 var(--v-edge),0 4px 12px -6px rgba(15,18,23,.3)!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a[aria-current="page"]::before{display:none!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .nav-help{height:52px!important;margin:0 0 0 4px!important;border-radius:999px!important;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 50%),var(--v-sos)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45)!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #app{padding-bottom:calc(112px + env(safe-area-inset-bottom,0px))!important}
+}
+@media (min-width:900px){
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav{background:var(--v-glass)!important;-webkit-backdrop-filter:var(--v-blur-thick)!important;backdrop-filter:var(--v-blur-thick)!important;box-shadow:inset -1px 0 0 var(--v-line),inset 0 1px 0 var(--v-edge)!important;border-radius:0 28px 28px 0!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap :is(.lg-tabs>a,a.nav-x)[aria-current="page"]{background:var(--v-glass-2)!important;color:var(--accent-strong)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .nav-help{background:var(--v-sos)!important}
+}
+
+/* ---------- Aide : fond profond teinté par l'addiction, verre dessus ---------- */
+html:root:not(.fx):not(.zz):not(.zy) body .qsos{background:radial-gradient(80% 50% at 0% 0%,color-mix(in srgb,var(--hp1,#3D6B57) 45%,transparent),transparent 70%),radial-gradient(90% 60% at 100% 100%,color-mix(in srgb,var(--hp6,#2C4D5C) 55%,transparent),transparent 70%),#080B12!important}
+html:root:not(.fx):not(.zz):not(.zy) body .qsos::before{display:none!important}
+html:root:not(.fx):not(.zz):not(.zy) body .qsos .qs-tri{background:rgba(255,255,255,.08)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.07)!important;border-radius:var(--v-r-xl)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .qsos .qs-tri>.qs-t-main{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 50%),var(--v-sos)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .qsos .qs-breath>i.qs-ic-breath{background:rgba(255,255,255,.14)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .qsos .qs-breath>i.qs-ic-breath svg{color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body .qsos :is(.qs-help,.qs-motiv,.qs-signs){background:rgba(255,255,255,.08)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)!important;border-radius:999px!important}
+html:root:not(.fx):not(.zz):not(.zy) body .qsos .qs-signs{border-radius:var(--v-r-xl)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .qsos .link{color:#fff!important;text-decoration:underline}
+/* Exercices d'urgence : même fond, la bulle de respiration est une goutte de verre clair */
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath){background:radial-gradient(80% 50% at 0% 0%,color-mix(in srgb,var(--hp1,#3D6B57) 45%,transparent),transparent 70%),#080B12!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath)::before{display:none!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) :is(.link,summary){color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) input[type=range]{accent-color:#fff}
+html:root:not(.fx):not(.zz):not(.zy) body :is(.borb,.breath .orb){background:radial-gradient(circle at 40% 30%,#fff,rgba(255,255,255,.82) 60%,color-mix(in srgb,var(--hp7,#9CC7B1) 60%,#fff))!important;box-shadow:0 0 0 16px rgba(255,255,255,.07),0 0 70px 8px color-mix(in srgb,var(--accent,#9CC7B1) 55%,transparent)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .borb-wrap::before{box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet .borb-txt :is(b,span),html:root:not(.fx):not(.zz):not(.zy) body .breath .txt{color:#0F1217!important}
+
+/* L'écran de départ, le questionnaire et les comptes prennent aussi le fond de l'app */
+html:root:not(.fx):not(.zz):not(.zy) body:has(#app :is(.q,.auth,.welcome4)){background:radial-gradient(75% 45% at 0% 0%,rgba(61,107,87,.55),transparent 70%),radial-gradient(80% 55% at 100% 100%,rgba(44,77,92,.6),transparent 70%),#080B12!important}
+
+@media (prefers-reduced-transparency:reduce){
+  html:root:not(.fx):not(.zz):not(.zy) body *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  html:root:not(.fx):not(.zz):not(.zy) body{--v-glass:#FFFFFF;--v-glass-2:#F4F6F8}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav,html:root:not(.fx):not(.zz):not(.zy) body .sheet{background:var(--v-base)!important}}
+@media (prefers-reduced-transparency:reduce) and (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy) body{--v-glass:#161A21;--v-glass-2:#1E232B}}
+@media (prefers-contrast:more){html:root:not(.fx):not(.zz):not(.zy){--v-line:rgba(15,18,23,.35)}}
+
+/* LIBRE 19 : contrastes */
+html:root:not(.fx):not(.zz):not(.zy) body #app .pg-ms-l li span{color:var(--v-ink2)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .hm-medal>span:last-child{color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(.sheet,#layer) .link:not(.qsos *){color:color-mix(in srgb,var(--accent-strong) 80%,#000)!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body :is(.sheet,#layer) .link:not(.qsos *){color:var(--accent-strong)!important}html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body #app .tile .k{color:var(--v-ink2)!important}}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body :is(.sheet,#layer) .link:not(.qsos *){color:var(--accent-strong)!important}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body #app .tile .k{color:var(--v-ink2)!important}
+
+/* LIBRE 19 : exercices d'urgence — boutons et liens clairs sur le fond sombre, texte de la bulle lisible */
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) .btn.btn:not(.primary){background:rgba(255,255,255,.12)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.22)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) .btn.btn.primary{background:#fff!important;color:#0F1217!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) :is(.link,.link:not(.qsos *),summary){color:#fff!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) .sheet-h{background:transparent!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet .borb-txt.borb-txt :is(b,span){color:#0F1217!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) :is(.obs,.card,div[class*="rate"]){background:rgba(255,255,255,.07)!important;-webkit-backdrop-filter:var(--v-blur)!important;backdrop-filter:var(--v-blur)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) :is(button:not(.btn):not(.link),.opt){background:rgba(255,255,255,.08)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.18)!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) .borb-txt :is(b,span){color:#0F1217!important}
+html:root:not(.fx):not(.zz):not(.zy) body .sheet:has(#tl-clock,.breath) .obs{border-radius:var(--v-r-xl)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs,html:root:not(.fx):not(.zz):not(.zy) body #navWrap .in{background:none!important;box-shadow:none!important;border:0!important;outline:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind{display:none!important}
 </style>
 </head>
 <body>
