@@ -15,6 +15,8 @@ Outils à utiliser réellement : `/find-skills`, `/apple-design`, `/unslop`, `/2
 
 Interface actuelle : **LIBRE 19 « Verre »**, décrite dans [docs/LIBRE-19.md](docs/LIBRE-19.md). Elle applique le verre liquide sur toute l'app et garde les couleurs par addiction, à la demande de la personne propriétaire. Elle se pose sur LIBRE 18 « Aube » ([docs/LIBRE-18.md](docs/LIBRE-18.md)).
 
+Organisation actuelle : **LIBRE 20**, avec 5 onglets (Accueil, M’aider, Mon suivi, Comprendre, Profil), décrite dans [docs/LIBRE-20.md](docs/LIBRE-20.md). Le brief de reconstruction fonctionnelle est résumé dans ce document.
+
 Préférences exprimées après le brief :
 - un rendu professionnel ;
 - la couleur de chaque addiction conservée ;

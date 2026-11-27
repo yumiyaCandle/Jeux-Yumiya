@@ -14,7 +14,7 @@ let fails=0;(async()=>{const {srv,url}=await serve();const b=await launch();cons
 for(const scheme of ['light','dark']){
  const st=profileState({types:['cigarette','alcool'],days:60});st.journal=[{id:'j1',ts:Date.now()-D,mood:2,craving:4,text:'Note',triggers:['Stress']}];
  const p=await page(b,url,{init:seed(st),colorScheme:scheme});await p.goto(url);await p.settle();
- for(const v of ['accueil','habitudes','stats','calendrier','bilans','journal','outils','biblio','profil','progres','motivations','comprendre','plan','strategies','declencheurs','economies']){await p.go(v);await p.waitForTimeout(300);const r=await p.evaluate(FN);if(r.length){fails++;console.log(scheme,v,'\n  '+r.join('\n  '))}}
+ for(const v of ['accueil','aide','habitudes','stats','calendrier','bilans','journal','outils','biblio','profil','progres','motivations','comprendre','plan','strategies','declencheurs','economies']){await p.go(v);await p.waitForTimeout(300);const r=await p.evaluate(FN);if(r.length){fails++;console.log(scheme,v,'\n  '+r.join('\n  '))}}
  await p.go('accueil');await p.evaluate(()=>document.querySelector('[data-a="logForm"]').click());await p.waitForTimeout(400);const r=await p.evaluate(FN);if(r.length)fails++,console.log(scheme,'form','\n  '+r.join('\n  '));await p.closeLayer();
  await p.click('.hm-sos');await p.waitForTimeout(400);const r2=await p.evaluate(FN);if(r2.length)fails++,console.log(scheme,'sos','\n  '+r2.join('\n  '));
  await p.ctx.close()}

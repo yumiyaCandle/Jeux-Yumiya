@@ -5500,7 +5500,7 @@ const HELP_SIT=[
  {k:'stress',ic:'heart',t:N_('Je suis stressé·e ou anxieux·se'),s:N_('Faire baisser la tension'),
   intro:N_('Le stress donne souvent envie de consommer pour se soulager vite. Ces exercices font baisser la tension sans rien consommer.'),
   main:['data-a="tool" data-id="breath"',N_('Respirer avec moi (3 minutes)')],
-  acts:[['data-a="tool" data-id="ground"','spark',N_('Ancrage 5-4-3-2-1')],['data-a="tool" data-id="stress"','heart',N_('Une action concrète contre le stress')],['data-a="jPrompt" data-v="D’où vient ce stress, selon toi ?"','book',N_('Écrire d’où vient ce stress')],['data-a="qsCall"','phone',N_('En parler à quelqu’un')]]},
+  acts:[['data-a="tool" data-id="ground"','spark',N_('Ancrage 5-4-3-2-1')],['data-a="tool" data-id="stress"','heart',N_('Une action concrète contre le stress')],['data-a="jAsk" data-v="D’où vient ce stress, selon toi ?"','book',N_('Écrire d’où vient ce stress')],['data-a="qsCall"','phone',N_('En parler à quelqu’un')]]},
  {k:'peur',ic:'shield',t:N_('J’ai peur de rechuter'),s:N_('Préparer les moments difficiles'),
   intro:N_('Avoir peur de rechuter, c’est déjà être attentif·ve. Préparer à l’avance ce que tu feras rend les moments difficiles plus faciles.'),
   main:['data-a="tool" data-id="plan"',N_('Préparer mon plan « si… alors… »')],
@@ -5512,7 +5512,7 @@ const HELP_SIT=[
  {k:'seul',ic:'user',t:N_('Je me sens seul·e'),s:N_('Trouver du soutien'),
   intro:N_('Tu n’as pas à traverser ça seul·e. Une personne de confiance, une ligne d’écoute ou un professionnel peuvent t’aider.'),
   main:['data-a="qsCall"',N_('Contacter une personne de confiance')],
-  acts:[['data-a="lockSos"','phone',N_('Lignes d’écoute et numéros d’aide')],['data-a="learnRes"','globe',N_('Trouver une aide professionnelle')],['data-a="jPrompt" data-v="Qu’est-ce que je ressens, là, maintenant ?"','book',N_('Écrire ce que je ressens')],['data-a="contactsSheet"','user',N_('Ajouter ou modifier mes proches')]]}
+  acts:[['data-a="lockSos"','phone',N_('Lignes d’écoute et numéros d’aide')],['data-a="learnRes"','globe',N_('Trouver une aide professionnelle')],['data-a="jAsk" data-v="Qu’est-ce que je ressens, là, maintenant ?"','book',N_('Écrire ce que je ressens')],['data-a="contactsSheet"','user',N_('Ajouter ou modifier mes proches')]]}
 ];
 function helpUrgent(){const HC=HELP[helpCountry()]||{e:[]};
   return `<section class="hp-urg" aria-label="${esc(t('Urgence médicale'))}"><div class="hp-urg-h">${ic('shield','sm')}<b>${esc(t('Urgence médicale'))}</b></div>
@@ -5542,8 +5542,8 @@ function quickAddSheet(){const h=curHabit();
     ${it('data-a="qaCrave"','pulse',N_('Une envie'),N_('Son intensité et ce qui l’a déclenchée'))}
     ${h?it(`data-a="logForm" data-h="${h.id}"`,'plus',RED(h)||h.goal==='comprendre'?N_('Une consommation ou un comportement'):N_('Une consommation ou un comportement'),N_('Garde ton historique à jour')):''}
     ${it('data-a="qaMood"','heart',N_('Une émotion'),N_('Comment tu te sens'))}
-    ${it('data-a="jPrompt" data-v="Qu’est-ce qui a été difficile ?"','info',N_('Une situation difficile'),N_('Ce qui s’est passé'))}
-    ${it('data-a="jPrompt" data-v="Qu’est-ce qui a bien marché ?"','check',N_('Une réussite'),N_('Même petite, elle compte'))}
+    ${it('data-a="jAsk" data-v="Qu’est-ce qui a été difficile ?"','info',N_('Une situation difficile'),N_('Ce qui s’est passé'))}
+    ${it('data-a="jAsk" data-v="Qu’est-ce qui a bien marché ?"','check',N_('Une réussite'),N_('Même petite, elle compte'))}
     ${it('data-a="journalForm"','book',N_('Une remarque'),N_('Écrire librement'))}</div>`)}
 let qaC={n:6,trig:null};
 function qaCraveSheet(){const tr=[...new Set(TRIGGERS)];
@@ -6596,7 +6596,7 @@ function renderQ(){
     :`<div class="unit-in"><input type="number" class="big-in" data-ob="height" inputmode="numeric" placeholder="${esc(t('Taille'))}" value="${esc(o.height)}"><span>cm</span></div><div class="unit-in"><input type="number" class="big-in" data-ob="weight" inputmode="decimal" placeholder="${esc(t('Poids (facultatif)'))}" value="${esc(o.weight)}"><span>kg</span></div>`)}
   else if(ty==='habits'){q=t('Qu’est-ce que tu veux changer ?');sub=t('Choisis-en une ou plusieurs. Chacune aura son propre compteur.');body=typePicker('obToggleType',v=>o.types.includes(v))+(o.types.length>1?`<p class="small muted tp-note">${esc(t('La première choisie sera ton addiction principale. Tu pourras la changer dans « Habitudes ».'))}</p>`:'')}
   else if(ty==='label'){q=k==='medic'?t('De quel médicament s’agit-il ? (facultatif)'):t('De quelle substance s’agit-il ?');sub=t('Elle restera privée, comme tout le reste.');body=`<input type="text" class="big-in" data-ob="h.${k}.label" maxlength="30" dir="auto" placeholder="${esc(t('Ex. : sucre, jeux, café…'))}" value="${esc(h.label)}">`}
-  else if(ty==='goal'){q=t((GOALQ[k]||(k==='autre'?GOALQ.autre:N_('Quel est ton objectif ?'))),{what:what(k)});sub=t('Tu pourras changer d’objectif à tout moment.');body=`<div class="opts">${opt('obGoal',`data-k="${k}" data-v="arreter"`,t('Arrêter complètement'),t('Un compteur de jours sans consommer'),h.goal==='arreter','target')}${opt('obGoal',`data-k="${k}" data-v="diminuer"`,t('Réduire ma consommation'),t('Une limite maximum, à ton rythme'),h.goal==='diminuer'&&h.goalNote!=='ctl','stats')}${opt('obGoal',`data-k="${k}" data-v="diminuer" data-n="ctl"`,t('Mieux contrôler mon comportement'),t('Garder la main, sans forcément arrêter'),h.goal==='diminuer'&&h.goalNote==='ctl','check')}${opt('obGoal',`data-k="${k}" data-v="comprendre"`,t('Comprendre mon addiction'),t('Observer sans objectif chiffré'),h.goal==='comprendre'&&h.goalNote!=='unsure','book')}${opt('obGoal',`data-k="${k}" data-v="comprendre" data-n="unsure"`,t('Je ne sais pas encore'),t('Tu pourras choisir plus tard'),h.goal==='comprendre'&&h.goalNote==='unsure','info')}</div>`}
+  else if(ty==='goal'){q=t((GOALQ[k]||(k==='autre'?GOALQ.autre:N_('Quel est ton objectif ?'))),{what:what(k)});sub=t('Tu pourras changer d’objectif à tout moment.');body=`<div class="opts">${opt('obPick',`data-p="h.${k}.goal" data-v="arreter" data-auto="1" data-gn=""`,t('Arrêter complètement'),t('Un compteur de jours sans consommer'),h.goal==='arreter','target')}${opt('obPick',`data-p="h.${k}.goal" data-v="diminuer" data-auto="1" data-gn=""`,t('Réduire ma consommation'),t('Une limite maximum, à ton rythme'),h.goal==='diminuer'&&h.goalNote!=='ctl','stats')}${opt('obPick',`data-p="h.${k}.goal" data-v="diminuer" data-auto="1" data-gn="ctl"`,t('Mieux contrôler mon comportement'),t('Garder la main, sans forcément arrêter'),h.goal==='diminuer'&&h.goalNote==='ctl','check')}${opt('obPick',`data-p="h.${k}.goal" data-v="comprendre" data-auto="1" data-gn=""`,t('Comprendre mon addiction'),t('Observer sans objectif chiffré'),h.goal==='comprendre'&&h.goalNote!=='unsure','book')}${opt('obPick',`data-p="h.${k}.goal" data-v="comprendre" data-auto="1" data-gn="unsure"`,t('Je ne sais pas encore'),t('Tu pourras choisir plus tard'),h.goal==='comprendre'&&h.goalNote==='unsure','info')}</div>`}
   else if(ty==='since'){q=t((VERB[k]||(k==='autre'?VERB.autre:N_('Depuis combien de temps ?'))),{what:what(k)});sub=t('Il n’y a pas de mauvaise réponse : cela aide à mieux comprendre ce que tu traverses.');body=`<div class="opts">${SINCE.map(([v,n])=>opt('obSince',`data-k="${k}" data-o="${v}"`,t(n),'',h.sinceOpt===v)).join('')}</div>`}
   else if(ty==='qty'){const isA=k==='alcool';if(isA)ensureDrink(h);const u=unitsWord(k,2);q=tMode(k)==='money'?t('Combien dépenses-tu en moyenne ?'):t('Combien de {unit} en moyenne ?',{unit:u});sub=t('Une estimation suffit. Elle sert à calculer ce que tu évites et à te proposer un objectif réaliste.');
     body=`${isA?drinkPicker(h,'obDrink'):''}${stepper(`h.${k}.qty`,h.qtyPer==='mois'?t('{unit} par mois',{unit:u}):h.qtyPer==='semaine'?t('{unit} par semaine',{unit:u}):t('{unit} par jour',{unit:u}),0)}<div class="seg center">${[['jour',t('Par jour')],['semaine',t('Par semaine')],['mois',t('Par mois')]].map(([v,n])=>`<button type="button" data-a="obPick" data-p="h.${k}.qtyPer" data-v="${v}" aria-pressed="${h.qtyPer===v}">${esc(n)}</button>`).join('')}</div>${isA?`<p class="ob-sum" id="ob-alc-sum" aria-live="polite">${esc(alcSumTxt(h))}</p>`:''}`}
@@ -8790,7 +8790,7 @@ const A={
   delay10:()=>openTool('delay',{from:'sos',habit:ui.homeHabit||(act()[0]||{}).id||''}),
   obJump:el=>{const i=obSteps().indexOf(el.dataset.to);if(i>=0){ui.obStep=i+1;render();scrollTo(0,0)}},
   obBack:()=>{ui.obStep=Math.max(0,ui.obStep-1);render();scrollTo(0,0)},
-  obPick:el=>{setP(el.dataset.p,el.dataset.v);render();if(el.dataset.auto)obAuto()},
+  obPick:el=>{setP(el.dataset.p,el.dataset.v);if(el.dataset.gn!=null&&/\.goal$/.test(el.dataset.p)){const h=ui.ob.h[el.dataset.p.split('.')[1]];if(h){h.goalNote=el.dataset.gn;if(h.goal==='comprendre')h.limit=''}}render();if(el.dataset.auto)obAuto()},
   obUnits:el=>{S.prefs.units=el.dataset.v;save();render()},
   obLimPer:el=>{const h=ui.ob.h[el.dataset.k];const old=PER_DAYS[h.limitPer]||1,nw=PER_DAYS[el.dataset.v];if(h.limit!==''&&h.limit!=null)h.limit=String(Math.round((+h.limit/old)*nw*2)/2);h.limitPer=el.dataset.v;render()},
   obToggleType:el=>{const k=el.dataset.k,o=ui.ob;if(o.types.includes(k))o.types=o.types.filter(x=>x!==k);else{o.types=o.types.concat(k);if(!o.h[k])o.h[k]=Object.assign(newHabitDraft(k),{goal:'',qty:DEF_QTY[k],qtyPer:k==='puff'?'semaine':'jour',sinceOpt:'',lastOpt:''})}render()},
@@ -8801,7 +8801,6 @@ const A={
   obStepper:el=>{const p=el.dataset.p,v=Math.max(+el.dataset.min||0,(+getP(p)||0)+(+el.dataset.d));setP(p,String(v));const i=document.querySelector(`[data-ob="${p}"]`);if(i)i.value=v;obRefreshCta()},
   setCur:el=>{S.prefs.currency=el.dataset.v;applyLocale();save();render()},
   obEst:el=>{ui.ob.h[el.dataset.k].budget=el.dataset.v;render()},
-  obGoal:el=>{const h=ui.ob.h[el.dataset.k];if(!h)return;h.goal=el.dataset.v;h.goalNote=el.dataset.n||'';if(h.goal==='comprendre')h.limit='';render();obAuto()},
   obDiff:el=>{const v=el.dataset.v,o=ui.ob;o.diff=(o.diff||[]).includes(v)?o.diff.filter(x=>x!==v):(o.diff||[]).concat(v);render()},
   obHard:el=>{const v=el.dataset.v,o=ui.ob;o.hard=(o.hard||[]).includes(v)?o.hard.filter(x=>x!==v):(o.hard||[]).concat(v);render()},
   obFlag:el=>{const o=ui.ob,f=el.dataset.f;o[f]=o[f]===false;render()},
@@ -9453,7 +9452,7 @@ function saveGoalSheet(){const g=planData().goalSave||{};
 function suiviAdd20(h){const it=(a,i,l)=>`<button class="sa-it" ${a}>${ic(i,'sm')}<span>${esc(t(l))}</span></button>`;
   return `<section class="sa" aria-label="${esc(t('Noter'))}"><p class="kp-l">${esc(t('Noter'))}</p><div class="sa-row">
     ${it('data-a="qaCrave"','pulse',N_('Une envie'))}${it(`data-a="logForm" data-h="${h.id}"`,'plus',N_('Une consommation'))}${it('data-a="qaMood"','heart',N_('Une émotion'))}
-    ${it('data-a="jPrompt" data-v="Qu’est-ce qui a été difficile ?"','info',N_('Un moment difficile'))}${it('data-a="jPrompt" data-v="Qu’est-ce qui a bien marché ?"','check',N_('Une réussite'))}${it('data-a="journalForm"','book',N_('Une remarque'))}</div></section>`}
+    ${it('data-a="jAsk" data-v="Qu’est-ce qui a été difficile ?"','info',N_('Un moment difficile'))}${it('data-a="jAsk" data-v="Qu’est-ce qui a bien marché ?"','check',N_('Une réussite'))}${it('data-a="journalForm"','book',N_('Une remarque'))}</div></section>`}
 function suiviTrends20(h){const d0=sod(now()),days=[];for(let i=13;i>=0;i--)days.push(addDays(d0,-i));const lab=days.map(d=>new Date(d).getDate()+'');
   const T=TS(),J=S.journal||[];
   const mood=days.map(d=>{const ck=T.checkins[dayKey(d)];if(ck&&ck.mood)return ck.mood;const js=J.filter(e=>e.ts>=d&&e.ts<d+DAY&&e.mood);return js.length?Math.round(js.reduce((s,e)=>s+(+e.mood||0),0)/js.length):null});
@@ -9631,7 +9630,7 @@ function weekMarks(h){const d0=sod(now()),ws=weekStart(now()),dn=dowLabels('narr
   return `<ol class="wk" role="img" aria-label="${esc(t('Cette semaine'))} — ${esc(lab)}">${D.map((x,i)=>`<li class="${x.r===true?'ok':x.r===false?'no':'fu'}${x.d===d0?' td':''}" aria-hidden="true"><i></i><span>${esc(dn[i])}</span></li>`).join('')}</ol>`}
 function homeWeek11(h){const w=weekSummary(h);
   return `<section class="hm-p h11-week" aria-label="${esc(t('Ta semaine'))}"><p class="hm-k">${esc(t('Ton évolution cette semaine'))}</p>${weekMarks(h)}
-    <div class="h11-links"><button class="link" data-a="recap">${esc(t('Bilan de la semaine'))}</button><a class="link" href="#progres">${esc(t('Mes progrès'))}</a></div></section>`}
+    </section>`}
 const SIGNS=[N_('Je dors mal'),N_('Je m’isole'),N_('Je me dis « juste une fois »'),N_('Je retourne dans les mêmes lieux ou avec les mêmes personnes'),N_('Je suis très stressé·e ou en colère'),N_('Je laisse tomber ce qui m’aidait'),N_('Je garde quelque chose « au cas où »'),N_('Je saute des repas'),N_('Je cache ce que je fais')];
 function signsSheet(){const P=planData(),all=SIGNS.concat(P.signs.filter(x=>!SIGNS.includes(x)));
   sheet(t('Mes signaux d’alerte'),`<div class="stack"><p class="muted">${esc(t('Les signes qui annoncent souvent une reprise, chez toi. Les repérer tôt laisse le temps d’agir.'))}</p>
@@ -9985,7 +9984,7 @@ document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest
 window.addEventListener('hashchange',()=>{if(location.hash.slice(1)==='comprendre'&&!ui.compJust)ui.compK=null;ui.compJust=0});
 Object.assign(A,{
   helpK:el=>{ui.helpK=ui.helpK===el.dataset.k?null:el.dataset.k;render()},
-  jPrompt:el=>journalForm({prompt:el.dataset.v}),
+  jAsk:el=>journalForm({prompt:el.dataset.v}),
   learnTab:el=>{ui.learnTab=el.dataset.v;ui.lnQ='';render()},
   learnRes:()=>{ui.learnTab='res';ui.compK=null;if(ui.view!=='comprendre')location.hash='comprendre';else render()},
   quickAdd:()=>quickAddSheet(),
