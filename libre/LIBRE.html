@@ -1000,9 +1000,14 @@ body.discreet #app .num:hover,body.discreet #app .num:focus{filter:none}
 .h20-c .num{font-size:20px}
 .h20-c>span:last-child{font-size:12px}
 /* Accès rapide : une seule action forte (l'envie) ; les autres raccourcis sont discrets */
-.h20-quick{display:flex;gap:var(--s4);margin-top:var(--s2)}
-.h20-q{min-height:44px;padding:0;background:none;box-shadow:none;color:var(--accent-strong);font-weight:600}
-.h20-q svg{color:inherit;width:18px;height:18px}
+.h20-quick{display:flex;gap:var(--s2);margin-top:var(--s3)}
+.h20-quick>.h20-q{flex:1 1 auto}
+/* Raccourcis de l'accueil : capsules de verre, comme les autres commandes */
+.h20-q{min-height:48px;padding:0 14px;border-radius:999px;justify-content:center;background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim);color:var(--ink);font-weight:600;font-size:14px;gap:8px;padding:0 12px;white-space:nowrap;min-width:0}
+.h20-q span{overflow:hidden;text-overflow:ellipsis}
+.h20-q svg{display:none}
+/* Lignes seules (hors liste), comme « Mon objectif d'épargne » : panneau de verre */
+.mp-row.sg-new{border-radius:var(--r-group);background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim),var(--lg-drop)}
 /* En-tête : sur téléphone, l'avatar double l'onglet Profil ; sur ordinateur, la marque est déjà dans la barre latérale */
 @media (max-width:1023px){.tacts .avatar-btn{display:none}}
 @media (min-width:1024px){.pg-bar .pg-logo{visibility:hidden}}
@@ -1061,7 +1066,11 @@ html.calm :is(.card,.v7-sec,.sec,.fold,.hs,.mp-list,.hp-sit,.hc-card,.kps,.plan-
 .act-ring{position:relative;width:92px;height:92px;display:grid;place-items:center}
 .act-ring svg{position:absolute;inset:0;width:100%;height:100%}
 .act-ring circle{fill:none;stroke-width:7}
-.act-ring .ar-bg{stroke:color-mix(in srgb,var(--accent) 16%,transparent)}
+.act-ring .ar-bg{stroke:color-mix(in srgb,var(--accent) 14%,transparent)}
+.act-ring .ar-fg{filter:drop-shadow(0 0 4px color-mix(in srgb,var(--accent) 45%,transparent))}
+/* Disque de verre au centre de l'anneau */
+.act-ring::before{content:"";position:absolute;inset:22%;border-radius:50%;background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim),0 6px 14px -8px rgba(0,0,0,.35)}
+.act-ring .ar-v{position:relative}
 .act-ring .ar-fg{stroke:var(--accent);stroke-linecap:round;transition:stroke-dasharray .9s var(--ease)}
 .act-ring .ar-v{font:600 21px/1 var(--font-round);color:var(--ink);letter-spacing:-.02em}
 .act-ring .ar-v small{font-size:12px;font-weight:600;color:var(--ink-2);margin-left:1px}
@@ -2072,8 +2081,14 @@ function homeMedal(h){if(RED(h)||h.goal==='comprendre')return '';const pv=prevMi
 function hzArc(p){p=Math.max(0,Math.min(1,+p||0));const x0=8,x2=312,y0=54,cx=160,cy=-10,q=(a,b,c)=>(1-p)*(1-p)*a+2*(1-p)*p*b+p*p*c;
   return `<svg class="hz" viewBox="0 0 320 62" aria-hidden="true" focusable="false"><path class="hz-g" d="M0 54H320"/><path class="hz-b" d="M${x0} ${y0}Q${cx} ${cy} ${x2} ${y0}"/><path class="hz-p" d="M${x0} ${y0}Q${cx} ${cy} ${x2} ${y0}" pathLength="100" stroke-dasharray="${(p*100).toFixed(2)} 100"/><circle class="hz-e" cx="${x2}" cy="${y0}" r="4"/><circle class="hz-s" cx="${q(x0,cx,x2).toFixed(1)}" cy="${q(y0,cy,y0).toFixed(1)}" r="6"/></svg>`}
 /* Anneau d'activité (accueil) : la progression vers la prochaine étape, lisible d'un coup d'œil */
-function actRing(p,aria){const v=Math.max(0,Math.min(1,+p||0)),pc=Math.round(v*100);
-  return `<div class="act-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pc}" aria-label="${esc(aria)}"><svg viewBox="0 0 64 64" aria-hidden="true"><circle class="ar-bg" cx="32" cy="32" r="27"/>${pc>0?`<circle class="ar-fg" cx="32" cy="32" r="27" pathLength="100" stroke-dasharray="${pc} 100" transform="rotate(-90 32 32)"/>`:''}</svg><span class="ar-v num" aria-hidden="true">${pc}<small>%</small></span></div>`}
+function actRing(p,aria){const v=Math.max(0,Math.min(1,+p||0)),pc=Math.round(v*100),g='ar'+(actRing.n=(actRing.n||0)+1);
+  /* Anneau en Liquid Glass : tube de verre (dégradé de lumière en haut à gauche), arc de la teinte avec reflet, disque de verre au centre */
+  return `<div class="act-ring" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pc}" aria-label="${esc(aria)}"><svg viewBox="0 0 64 64" aria-hidden="true"><defs>
+    <linearGradient id="${g}t" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".5" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity=".28"/></linearGradient>
+    <linearGradient id="${g}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+    <circle class="ar-bg" cx="32" cy="32" r="27"/><circle cx="32" cy="32" r="27" fill="none" stroke="url(#${g}t)" stroke-width="7" opacity=".55"/>
+    <circle cx="32" cy="32" r="30.6" fill="none" stroke="url(#${g}t)" stroke-width=".6"/><circle cx="32" cy="32" r="23.4" fill="none" stroke="url(#${g}t)" stroke-width=".6" opacity=".7"/>
+    ${pc>0?`<circle class="ar-fg" cx="32" cy="32" r="27" pathLength="100" stroke-dasharray="${pc} 100" transform="rotate(-90 32 32)"/><circle cx="32" cy="32" r="28.4" fill="none" stroke="url(#${g}s)" stroke-width="2" stroke-linecap="round" pathLength="100" stroke-dasharray="${Math.max(0,pc-2)} 100" transform="rotate(-90 32 32)" opacity=".8"/>`:''}</svg><span class="ar-v num" aria-hidden="true">${pc}<small>%</small></span></div>`}
 function hmBar(p,big,label,aria,cls){const v=Math.max(0,Math.min(1,+p||0));return `<div class="hb ${cls||''}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(v*100)}" aria-label="${esc(aria||'')}"><i style="width:${(v*100).toFixed(1)}%"></i></div>`}
 function hmRing(p,big,label,aria,cls,orbs){const r=52,c=2*Math.PI*r,v=Math.max(0,Math.min(1,p));
   const gid='hrg'+(hmRing.n=(hmRing.n||0)+1);

@@ -96,6 +96,8 @@ Comme la barre d’onglets d’iOS 26 :
 - un simple toucher garde son comportement ;
 - avec moins d’animations demandé par le système, la goutte bouge sans effet de loupe.
 
+Verre étendu : les raccourcis « J’ai besoin d’aide » et « Ajouter une activité » sont des capsules de verre, « Mon objectif d’épargne » un panneau de verre. L’anneau de l’accueil est en Liquid Glass : tube de verre éclairé en haut à gauche, arc de la teinte avec un reflet, pourcentage posé sur un disque de verre.
+
 Corrigé en même temps : les listes de cases à choix multiples de l’inscription (« Qu’est-ce qui est le plus difficile », « Pourquoi tu fais ça ? ») étaient rognées en cercle, parce qu’elles recevaient le style des sélecteurs à goutte.
 
 ## Vérifications
