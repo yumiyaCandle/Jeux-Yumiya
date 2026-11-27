@@ -4856,6 +4856,18 @@ html:root:not(.fx) body #app .sa-it:focus-visible{outline:2px solid var(--accent
 html:root:not(.fx):not(.zz) body #app .sa-it span{overflow-wrap:normal!important;word-break:normal!important;-webkit-hyphens:auto;hyphens:auto}
 
 .w4-welcome{margin:10px 0 0;font-size:17px;line-height:1.45;color:#E6E3DC;max-width:32ch}
+/* LIBRE 20 — barre du haut compacte sur téléphone (5 boutons + logo tiennent sans déborder) */
+@media (max-width:440px){
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body header.pg-head .pg-bar .tacts{gap:4px!important;flex-wrap:nowrap!important;min-width:0}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body header.pg-head .pg-bar .tacts>:is(button,a){width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;flex:0 0 40px!important;margin-left:0!important;padding:0!important;justify-content:center}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body header.pg-head .pg-bar .tacts>.lang-btn>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+/* LIBRE 20 — Mon suivi : deux colonnes sur téléphone pour que « Une consommation » tienne sur une ligne */
+@media (max-width:440px){html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .sa-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .sa-it{flex-direction:row!important;align-items:center!important;gap:10px!important;min-height:52px}}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .sa-it span{-webkit-hyphens:manual!important;hyphens:manual!important}
+/* Comprendre : le champ de recherche se fond dans sa pilule de verre */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .ln-search #lnQ{background:transparent!important;box-shadow:none!important;border:0!important;outline-offset:2px}
 </style>
 </head>
 <body>
