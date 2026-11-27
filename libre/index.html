@@ -3433,6 +3433,82 @@ html:not(.fx) #app .hpick :is(button,a){border-radius:8px!important}
 
 @media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) .mp-danger b,html:root:not(.fx):not([data-theme="light"]) .mp-danger .mp-ic{color:#FF9B9B!important}}
 html:root:not(.fx)[data-theme="dark"] .mp-danger b,html:root:not(.fx)[data-theme="dark"] .mp-danger .mp-ic{color:#FF9B9B!important}
+
+/* ===== LIBRE 14 « Carnet en couleurs » (apple-design, unslop, inspiration 21st.dev) =====
+   La structure du carnet reste ; la couleur revient là où elle a un sens :
+   - le compteur prend la couleur de l'addiction (dégradé dans une seule teinte), comme une carte Apple Santé ;
+   - un voile de cette couleur en haut de page ;
+   - chaque rubrique a sa pastille de couleur avec un pictogramme blanc, comme les Réglages de l'iPhone ;
+   - chaque chiffre a sa couleur de catégorie ; « J'ai une envie » en corail. */
+html:not(.fx) body{background:linear-gradient(180deg,color-mix(in srgb,var(--hp3) 75%,var(--bg)) 0,var(--bg) 360px) no-repeat,var(--bg)!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) body{background:linear-gradient(180deg,color-mix(in srgb,var(--hp1) 26%,var(--bg)) 0,var(--bg) 360px) no-repeat,var(--bg)!important}}
+html:root:not(.fx)[data-theme="dark"] body{background:linear-gradient(180deg,color-mix(in srgb,var(--hp1) 26%,var(--bg)) 0,var(--bg) 360px) no-repeat,var(--bg)!important}
+
+/* Profondeur douce (Apple) au lieu du simple filet */
+html:not(.fx) #app :is(.h11-week,.h11-todo,.v7-sec,.kp,.card,.sg,.mp-row){box-shadow:0 1px 2px rgba(17,24,39,.04),0 8px 24px -12px rgba(17,24,39,.14)!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) #app :is(.h11-week,.h11-todo,.v7-sec,.kp,.card,.sg,.mp-row){box-shadow:inset 0 0 0 1px var(--line)!important}}
+html:root:not(.fx)[data-theme="dark"] #app :is(.h11-week,.h11-todo,.v7-sec,.kp,.card,.sg,.mp-row){box-shadow:inset 0 0 0 1px var(--line)!important}
+
+/* Moment : le compteur en couleur de l'addiction */
+html:not(.fx) #app .h11 .hm-hero{background:linear-gradient(155deg,var(--hp1) 0%,var(--hp2) 100%)!important;color:#fff!important;box-shadow:0 18px 40px -22px color-mix(in srgb,var(--hp2) 80%,transparent)!important}
+html:not(.fx) #app .h11 .hm-hero *:not(svg):not(path):not(circle){color:#fff!important}
+html:not(.fx) #app .h11 .hm-hero :is(.hm-since,.hm-sub,.hm-k,.hm-slip,.hm-red-sub){color:rgba(255,255,255,.92)!important}
+html:not(.fx) #app .h11 .hm-hero .hm-pill{background:rgba(255,255,255,.18)!important}
+html:not(.fx) #app .h11 .hm-hero .hb{background:rgba(255,255,255,.22)}
+html:not(.fx) #app .h11 .hm-hero .hb i{background:#fff}
+html:not(.fx) #app .h11-log{border-top:1px solid rgba(255,255,255,.2)!important}
+html:not(.fx) #app .h11-log .grow,html:not(.fx) #app .h11-log .grow b{color:#fff!important}
+html:not(.fx) #app .h11-log .btn.quiet,html:not(.fx) #app .h11-log .hm-step2 button{background:rgba(255,255,255,.18)!important;color:#fff!important}
+
+/* Chiffres de la semaine : une couleur par sens */
+html:not(.fx) #app .h11-st>div:nth-child(1) b{color:var(--accent-strong)!important}
+html:not(.fx) #app .h11-st>div:nth-child(2) b{color:#7A3FC2!important}
+html:not(.fx) #app .h11-st>div:nth-child(3) b{color:#A35200!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) #app .h11-st>div:nth-child(2) b{color:#C9A7F5!important}html:root:not(.fx):not([data-theme="light"]) #app .h11-st>div:nth-child(3) b{color:#FFB35C!important}}
+html:root:not(.fx)[data-theme="dark"] #app .h11-st>div:nth-child(2) b{color:#C9A7F5!important}
+html:root:not(.fx)[data-theme="dark"] #app .h11-st>div:nth-child(3) b{color:#FFB35C!important}
+
+/* « J'ai une envie » : corail, l'action qui compte */
+html:not(.fx) #app .h11-help .hm-sos{background:linear-gradient(160deg,#E2553A 0%,#C2412A 100%)!important;color:#fff!important;box-shadow:0 14px 30px -18px rgba(194,65,42,.9)!important}
+html:not(.fx) #app .h11-help .hm-sos *{color:#fff!important}
+html:not(.fx) body #navWrap .nav-help>i{background:linear-gradient(160deg,#E2553A,#C2412A)!important;color:#fff!important}
+
+/* Pastilles de couleur (pictogramme blanc), comme les Réglages de l'iPhone */
+html:not(.fx) #app .mp-row{background:var(--card)!important;border-radius:14px!important;border-bottom:0!important;margin-bottom:8px}
+html:not(.fx) .mp-row:hover{background:var(--card)!important;filter:brightness(.98)}
+html:not(.fx) #app .mp-ic{width:32px!important;height:32px!important;border-radius:9px!important;color:#fff!important;background:#8E8E93!important;display:grid!important;place-items:center}
+html:not(.fx) #app .mp-ic svg{width:18px;height:18px}
+html:not(.fx) #app [data-a="quitDay"] .mp-ic{background:#5856D6!important}
+html:not(.fx) #app [href="#motivations"] .mp-ic{background:#E0245E!important}
+html:not(.fx) #app [href="#declencheurs"] .mp-ic{background:#F2780C!important}
+html:not(.fx) #app [href="#plan"] .mp-ic{background:#2E9E4F!important}
+html:not(.fx) #app [data-a="signsSheet"] .mp-ic{background:#F5B800!important;color:#3A2A00!important}
+html:not(.fx) #app [data-a="contactsSheet"] .mp-ic{background:#0A7AFF!important}
+html:not(.fx) #app [data-a="sitSheet"] .mp-ic{background:#A045D8!important}
+html:not(.fx) #app [href="#comprendre"] .mp-ic{background:#1A9FB8!important}
+html:not(.fx) #app [data-a="tool"][data-id="breath"] .mp-ic{background:#2BB5A0!important}
+html:not(.fx) #app [data-a="tool"][data-id="ground"] .mp-ic{background:#5E8CF0!important}
+html:not(.fx) #app [data-a="tool"][data-id="urge"] .mp-ic{background:#E2553A!important}
+html:not(.fx) #app [data-a="allTools"] .mp-ic{background:#6E6E78!important}
+html:not(.fx) #app .mp-danger .mp-ic{background:#D7263D!important}
+html:not(.fx) #app .mp-danger b{color:inherit!important}
+html:not(.fx) #app .cr-rec .mp-ic{background:var(--hp1)!important}
+html:not(.fx) #app .pg11 [href="#calendrier"] .mp-ic{background:#E0245E!important}
+html:not(.fx) #app .pg11 [href="#economies"] .mp-ic{background:#2E9E4F!important}
+html:not(.fx) #app .pg11 [href="#bilans"] .mp-ic{background:#0A7AFF!important}
+html:not(.fx) #app .pg11 [href="#stats"] .mp-ic{background:#5856D6!important}
+html:not(.fx) #app .sg-new .mp-ic{background:#F2A900!important;color:#3A2A00!important}
+
+/* Progrès : chaque chiffre dans sa couleur, pictogramme en pastille */
+html:not(.fx) #app .kp-ic{width:32px!important;height:32px!important;border-radius:9px!important;color:#fff!important;display:grid!important;place-items:center}
+html:not(.fx) #app .kps .kp:nth-child(1) .kp-ic{background:#E0245E!important}
+html:not(.fx) #app .kps .kp:nth-child(2) .kp-ic{background:#2E9E4F!important}
+html:not(.fx) #app .kps .kp:nth-child(3) .kp-ic{background:#A045D8!important}
+html:not(.fx) #app .sg-bar i{background:linear-gradient(90deg,#F2A900,#E2553A)!important}
+html:not(.fx) #app .pg-ms-l li{background:color-mix(in srgb,var(--hp3) 60%,var(--card))!important}
+
+@media (prefers-color-scheme:dark){html:root:not(.fx):not([data-theme="light"]) #app .pg-ms-l li{background:color-mix(in srgb,var(--hp1) 28%,var(--card))!important}}
+html:root:not(.fx)[data-theme="dark"] #app .pg-ms-l li{background:color-mix(in srgb,var(--hp1) 28%,var(--card))!important}
 </style>
 </head>
 <body>
