@@ -4530,6 +4530,90 @@ html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a.lg-hot{color:var(-
 
 html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a{position:relative!important;z-index:2!important}
 html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind{z-index:0!important}
+
+/* ===== LIBRE 19 · Verre liquide, finition iOS ===== */
+/* Bords : la lumière accroche les deux arêtes (haut-gauche clair, bas-droite plus doux), comme une vraie lame de verre */
+html:root:not(.fx):not(.zz):not(.zy){--lg-rim:inset 1.5px 1.5px 0 -0.5px rgba(255,255,255,.95),inset -1px -1px 0 -0.5px rgba(255,255,255,.55),inset 0 0 0 1px rgba(255,255,255,.28)}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]){--lg-rim:inset 1.5px 1.5px 0 -0.5px rgba(255,255,255,.38),inset -1px -1px 0 -0.5px rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.08)}}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"]{--lg-rim:inset 1.5px 1.5px 0 -0.5px rgba(255,255,255,.38),inset -1px -1px 0 -0.5px rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,255,255,.08)}
+
+/* Barre d'onglets et barre latérale : verre plus clair et plus réfractant, reflet qui suit le pointeur */
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav{isolation:isolate}
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav::after{content:""!important;display:block!important;position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:3;
+  background:radial-gradient(160px 120px at var(--lx,30%) var(--ly,0%),rgba(255,255,255,.42),transparent 70%);mix-blend-mode:soft-light;transition:background .2s}
+@media (max-width:899px){
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav{background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,.22))!important;
+    box-shadow:var(--lg-rim),0 18px 40px -16px rgba(15,18,23,.42),0 2px 6px rgba(15,18,23,.06)!important}
+  /* Défilement vers le bas : la barre se fait compacte comme sur iOS (les libellés s'effacent, la barre rétrécit) */
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav{transition:left .45s cubic-bezier(.3,1.25,.4,1),right .45s cubic-bezier(.3,1.25,.4,1),padding .35s,transform .45s cubic-bezier(.3,1.25,.4,1)}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-min #navWrap.nav{left:max(48px,env(safe-area-inset-left,0px))!important;right:max(48px,env(safe-area-inset-right,0px))!important;padding:4px!important}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-min #navWrap .lg-tabs{min-height:44px!important}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-min #navWrap .lg-tabs>a>span{opacity:0;max-height:0;overflow:hidden!important;margin:0!important}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-min #navWrap .lg-tabs>a{padding-top:0!important;justify-content:center}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-min #navWrap .nav-help{height:44px!important}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-min #navWrap .nav-help>span{display:none!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a>span{transition:opacity .25s,max-height .3s}}
+html.lg-refract:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav{backdrop-filter:url(#lgRefract) blur(18px) saturate(200%) brightness(1.05)!important}
+@media (min-width:900px){html.lg-refract:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav{backdrop-filter:url(#lgRefract) blur(30px) saturate(210%) brightness(1.04)!important}}
+
+/* La goutte : une lentille — plus transparente, elle grossit et déforme ce qu'elle survole, arêtes lumineuses */
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind{background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.42))!important;
+  box-shadow:var(--lg-rim),0 6px 18px -6px rgba(15,18,23,.35)!important}
+html.lg-refract:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind{backdrop-filter:url(#lgRefract) blur(1.5px) saturate(190%) brightness(1.1)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind.drag{background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.18))!important;scale:1.2 1.16}
+html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind::after{content:"";position:absolute;inset:2px 10% auto;height:42%;border-radius:999px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,0))}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body #navWrap .lg-ind.lg-ind::after{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0))}}
+
+/* Boutons de verre : à l'appui ils gonflent et s'éclairent (retour immédiat, ressort) */
+@media (prefers-reduced-motion:no-preference){
+  html:root:not(.fx):not(.zz):not(.zy) body :is(#navWrap .nav-help,header.pg-head .pg-bar :is(button,a):not(.logo),#app .h11-help .hm-sos,#app .btn,#app .h11-log .hm-step2 button,.qsos .qs-t,#app .seg>button,#app .hpick>button){
+    transition:transform .35s cubic-bezier(.3,1.6,.4,1),filter .2s!important}
+  html:root:not(.fx):not(.zz):not(.zy) body :is(#navWrap .nav-help,header.pg-head .pg-bar :is(button,a):not(.logo),#app .h11-log .hm-step2 button,#app .seg>button,#app .hpick>button):active{transform:scale(1.1)!important;filter:brightness(1.12) saturate(1.1)}
+  html:root:not(.fx):not(.zz):not(.zy) body :is(#app .h11-help .hm-sos,#app .btn,.qsos .qs-t):active{transform:scale(1.025)!important;filter:brightness(1.08)}}
+
+/* Surfaces : même arête lumineuse partout (panneaux, listes, compteur) */
+html:root:not(.fx):not(.zz):not(.zy) body #app :is(.h11-week,.h11-todo,.kps,.ov-chart,.sg,.pg-ms,.hm-risk){box-shadow:var(--lg-rim),var(--v-shadow)!important}
+html:root:not(.fx):not(.zz):not(.zy) body #app .h11 .hm-hero{box-shadow:inset 1.5px 1.5px 0 -0.5px rgba(255,255,255,.6),inset -1px -1px 0 -0.5px rgba(255,255,255,.25),inset 0 0 0 1px rgba(255,255,255,.12),0 24px 48px -24px color-mix(in srgb,var(--v-tint) 80%,transparent)!important}
+html:root:not(.fx):not(.zz):not(.zy) body header.pg-head .pg-bar :is(button,a):not(.logo){box-shadow:var(--lg-rim)!important}
+@media (prefers-reduced-transparency:reduce){html.lg-refract:root:not(.fx) body :is(#navWrap.nav,#navWrap .lg-ind){backdrop-filter:none!important}}
+
+/* LIBRE 19 · Goutte des sélecteurs */
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) .has-drop{position:relative;isolation:isolate}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) .has-drop>:is(button,a){position:relative;z-index:1}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) .has-drop>:is(button,a):is([aria-pressed="true"],[aria-checked="true"],[aria-selected="true"],[aria-current="page"]){background:transparent!important;box-shadow:none!important}
+html:root:not(.fx):not(.zz):not(.zy) body .seg-drop{position:absolute;top:0;left:0;z-index:0;border-radius:999px;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.7));box-shadow:var(--lg-rim),0 6px 16px -8px rgba(15,18,23,.38);
+  transition:transform .55s cubic-bezier(.34,1.32,.5,1),width .55s cubic-bezier(.34,1.32,.5,1),height .4s,opacity .2s}
+html:root:not(.fx):not(.zz):not(.zy) body .seg-drop::after{content:"";position:absolute;inset:2px 12% auto;height:40%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,0))}
+html:root:not(.fx):not(.zz):not(.zy) body .seg-drop.mv{animation:dropX .55s cubic-bezier(.3,1.1,.4,1)}
+html.lg-refract:root:not(.fx):not(.zz):not(.zy) body .seg-drop{backdrop-filter:url(#lgRefract) blur(1px) saturate(180%) brightness(1.08)}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body .seg-drop{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))}html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body .seg-drop::after{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0))}}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body .seg-drop{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))}
+@media (prefers-reduced-motion:reduce){html:root:not(.fx) body .seg-drop{transition:opacity .2s}html:root:not(.fx) body .seg-drop.mv{animation:none}}
+/* Survol de la barre latérale : la goutte se penche, l'onglet survolé s'éclaire d'un voile de verre */
+@media (min-width:900px){
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-ind.lg-ind{transition:transform .55s cubic-bezier(.34,1.32,.5,1),width .55s cubic-bezier(.34,1.32,.5,1),height .55s cubic-bezier(.34,1.32,.5,1),translate .35s cubic-bezier(.3,1.5,.4,1),scale .35s cubic-bezier(.3,1.5,.4,1),opacity .2s!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .lg-tabs>a:not([aria-current="page"]):hover{background:rgba(255,255,255,.22)!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)!important}
+  /* plus de matière derrière la barre : la couleur de l'addiction s'y concentre, la réfraction se voit */
+  html:root:not(.fx):not(.zz):not(.zy) body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:340px;pointer-events:none;z-index:-1;
+    background:radial-gradient(60% 35% at 30% 18%,color-mix(in srgb,var(--hp1,#3D6B57) 30%,transparent),transparent 70%),radial-gradient(70% 30% at 70% 80%,color-mix(in srgb,var(--hp6,#2C4D5C) 26%,transparent),transparent 70%)}
+}
+
+/* Sélecteur d'en-tête (accueil) : son curseur devient la même goutte de verre */
+html:root:not(.fx):not(.zz):not(.zy) body .segc{position:relative;isolation:isolate}
+html:root:not(.fx):not(.zz):not(.zy) body .segc>:is(button,a){position:relative;z-index:1}
+html:root:not(.fx):not(.zz):not(.zy) body .segc.ready>:is(button,a):is([aria-checked="true"],[aria-current="page"]){background:transparent!important;box-shadow:none!important}
+html:root:not(.fx):not(.zz):not(.zy) body .segc .segc-thumb{display:block!important;position:absolute;top:3px;bottom:3px;z-index:0;border-radius:999px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.7))!important;box-shadow:var(--lg-rim),0 6px 16px -8px rgba(15,18,23,.38)!important;
+  transition:left .55s cubic-bezier(.34,1.32,.5,1),width .55s cubic-bezier(.34,1.32,.5,1)!important;opacity:0}
+html:root:not(.fx):not(.zz):not(.zy) body .segc.ready .segc-thumb{opacity:1}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body .segc .segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))!important}}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body .segc .segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) .segc.ready>:is(button,a):is([aria-checked="true"],[aria-current="page"]){background:transparent!important;box-shadow:none!important}
+html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) .segc .segc-thumb.segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.7))!important;box-shadow:var(--lg-rim),0 6px 16px -8px rgba(15,18,23,.38)!important}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body :is(#app,header.pg-head) .segc .segc-thumb.segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))!important}}
+html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body :is(#app,header.pg-head) .segc .segc-thumb.segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))!important}
 </style>
 </head>
 <body>
@@ -5029,6 +5113,39 @@ function lgPlace(animate){const box=$('#navWrap .lg-tabs'),ind=box&&box.querySel
   if(LG_POS&&animate&&!RM()&&(LG_POS.x!==r.x||LG_POS.y!==r.y)){ind.style.transition='none';set(LG_POS);void ind.offsetWidth;ind.style.transition='';ind.classList.add('mv');requestAnimationFrame(()=>set(r));setTimeout(()=>ind.classList.remove('mv'),520)}
   else set(r);ind.style.opacity='1';LG_POS=r}
 window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
+/* LIBRE 19 · Sélecteurs en verre liquide : une goutte glisse et s'étire d'un choix à l'autre (Cigarettes/Alcool, 3/6/12 mois…).
+   Elle part de l'ancien choix (gardé en mémoire même si l'écran est redessiné) et se pose avec un ressort. */
+const SEGD_POS=new Map();
+function segDrops(){if(FX())return;document.querySelectorAll('#app :is(.seg:not(.wrap),.hpick),header.pg-head :is(.seg:not(.wrap),.hpick)').forEach((c,i)=>{
+  const act=c.querySelector(':scope>:is([aria-pressed="true"],[aria-checked="true"],[aria-selected="true"],[aria-current="page"])');
+  let d=c.querySelector(':scope>.seg-drop');if(!act){if(d)d.style.opacity='0';return}
+  if(!d){d=document.createElement('span');d.className='seg-drop';d.setAttribute('aria-hidden','true');c.prepend(d)}
+  const key=(c.getAttribute('aria-label')||c.className)+'|'+i+'|'+ui.view,r={x:act.offsetLeft,y:act.offsetTop,w:act.offsetWidth,h:act.offsetHeight},o=SEGD_POS.get(key);
+  const set=p=>{d.style.width=p.w+'px';d.style.height=p.h+'px';d.style.transform=`translate(${p.x}px,${p.y}px)`};
+  if(o&&!RM()&&(o.x!==r.x||o.y!==r.y)&&!d.dataset.at){d.style.transition='none';set(o);void d.offsetWidth;d.style.transition='';d.classList.add('mv');requestAnimationFrame(()=>set(r));setTimeout(()=>d.classList.remove('mv'),560)}
+  else if(d.dataset.at!==`${r.x},${r.y},${r.w}`)set(r);
+  d.dataset.at=`${r.x},${r.y},${r.w}`;d.style.opacity='1';c.classList.add('has-drop');SEGD_POS.set(key,r)})}
+(()=>{let q=0;const run=()=>{if(q)return;q=requestAnimationFrame(()=>{q=0;try{segDrops()}catch(e){}})};
+  new MutationObserver(ms=>{if(ms.some(m=>!(m.target.classList&&m.target.classList.contains('seg-drop'))))run()}).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['aria-pressed','aria-checked','aria-selected']});
+  addEventListener('resize',run)})();
+/* Barre latérale (ordinateur) : au survol, la goutte se penche vers l'onglet visé, comme sur macOS */
+document.addEventListener('pointerover',e=>{if(innerWidth<900||RM()||e.pointerType!=='mouse')return;const a=e.target.closest&&e.target.closest('#navWrap .lg-tabs>a');const ind=$('#navWrap .lg-ind');if(!ind||ind.classList.contains('drag'))return;
+  const cur=$('#navWrap .lg-tabs>a[aria-current="page"]');if(!a||!cur||a===cur){ind.style.translate='';ind.style.scale='';return}
+  const dir=Math.sign(a.offsetTop-cur.offsetTop);ind.style.translate=`0 ${dir*7}px`;ind.style.scale='1.01 1.07'},{passive:true});
+
+/* La goutte suit la barre quand elle change de taille (barre compacte au défilement, repli de la barre latérale) */
+function lgFollow(ms=560){const t0=performance.now();const f=()=>{if(!document.querySelector('#navWrap .lg-ind.drag')){LG_POS=null;lgPlace(false)}if(performance.now()-t0<ms)requestAnimationFrame(f)};requestAnimationFrame(f)}
+/* LIBRE 19 · Verre liquide (suite) :
+   1) réfraction : un filtre SVG déforme légèrement ce qui passe sous la barre et la goutte, comme une lentille (Chromium ;
+      ailleurs le verre reste flouté, sans déformation) ;
+   2) reflet : la lumière glisse sur le verre en suivant le doigt ou la souris. Rien si « réduire les animations ». */
+(()=>{try{const ok=CSS.supports('backdrop-filter','url(#x) blur(2px)')&&/Chrome\//.test(navigator.userAgent);
+  if(ok){document.documentElement.classList.add('lg-refract');const ns='http://www.w3.org/2000/svg',sv=document.createElementNS(ns,'svg');sv.setAttribute('aria-hidden','true');sv.setAttribute('width','0');sv.setAttribute('height','0');sv.style.position='absolute';
+    sv.innerHTML='<filter id="lgRefract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.006 0.011" numOctaves="2" seed="11" result="n"/><feGaussianBlur in="n" stdDeviation="3" result="nb"/><feDisplacementMap in="SourceGraphic" in2="nb" scale="34" xChannelSelector="R" yChannelSelector="G"/></filter>';
+    (document.body?Promise.resolve():new Promise(r=>addEventListener('DOMContentLoaded',r))).then(()=>document.body.appendChild(sv))}}catch(e){}
+  let raf=0;document.addEventListener('pointermove',e=>{if(RM()||raf)return;raf=requestAnimationFrame(()=>{raf=0;const n=$('#navWrap');if(!n)return;const r=n.getBoundingClientRect();
+    n.style.setProperty('--lx',((e.clientX-r.left)/Math.max(1,r.width)*100).toFixed(1)+'%');n.style.setProperty('--ly',((e.clientY-r.top)/Math.max(1,r.height)*100).toFixed(1)+'%')})},{passive:true})})();
+
 /* LIBRE 19 : la goutte se saisit au doigt ou à la souris, comme sur iOS (apple-design §2-6).
    Elle suit le pointeur 1:1 (en loupe), résiste au-delà des bords, puis au lâcher file vers l'onglet visé par l'élan
    (projection de la vitesse), en repartant de sa position actuelle. Un simple appui reste un clic normal. */
@@ -5060,7 +5177,7 @@ window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
 
 /* Téléphone : la barre se réduit quand on fait défiler vers le bas, revient dès qu’on remonte */
 (()=>{let y0=0;window.addEventListener('scroll',()=>{const y=scrollY;if(innerWidth>=900){document.body.classList.remove('nav-min');return}
-  if(y>y0+10&&y>120)document.body.classList.add('nav-min');else if(y<y0-10||y<60)document.body.classList.remove('nav-min');if(Math.abs(y-y0)>10)y0=y},{passive:true})})();
+  const was=document.body.classList.contains('nav-min');if(y>y0+10&&y>120)document.body.classList.add('nav-min');else if(y<y0-10||y<60)document.body.classList.remove('nav-min');if(was!==document.body.classList.contains('nav-min'))lgFollow();if(Math.abs(y-y0)>10)y0=y},{passive:true})})();
 function ensureChrome(){
   if(!$('#skipLink')){const a=document.createElement('a');a.id='skipLink';a.className='skip-link';a.href='#app';a.addEventListener('click',e=>{e.preventDefault();const m=$('#app');m.setAttribute('tabindex','-1');m.focus()});document.body.prepend(a)}
   $('#skipLink').textContent=t('Aller au contenu');
