@@ -4203,12 +4203,14 @@ html:root:not(.fx):not(.zz) body #app .q .opt[aria-pressed="true"]::after{backgr
 html:root:not(.fx):not(.zz) body #app .q :is(h2,h3,.q-group,.flabel){color:#E6E3DC!important}
 
 /* LIBRE 18 : sélecteurs de suivi (Tout / Cigarettes / Alcool) — chaque choix respire */
-html:root:not(.fx):not(.zz) body :is(#app,header.pg-head) :is(.seg:not(.wrap),.segc,.hpick,.pills){display:inline-flex!important;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none}
-html:root:not(.fx):not(.zz) body :is(#app,header.pg-head) :is(.seg:not(.wrap),.segc,.hpick,.pills)>:is(button,a){padding:0 16px!important;display:inline-flex!important;align-items:center;justify-content:center;gap:0;white-space:nowrap;flex:1 0 auto;min-width:44px}
+html:root:not(.fx):not(.zz) body :is(#app,header.pg-head) :is(.seg:not(.wrap),.hpick,.pills){display:inline-flex!important;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none}
+html:root:not(.fx):not(.zz) body :is(#app,header.pg-head) :is(.seg:not(.wrap),.hpick,.pills)>:is(button,a){padding:0 16px!important;display:inline-flex!important;align-items:center;justify-content:center;gap:0;white-space:nowrap;flex:1 0 auto;min-width:44px}
 html:root:not(.fx):not(.zz) body .hc-dot::before{box-shadow:none!important;width:8px!important;height:8px!important}
 
 html:root:not(.fx):not(.zz) body #app .hpick>button>.hc-dot{margin-inline-end:8px!important}
 html:root:not(.fx):not(.zz) body :is(#app,header.pg-head) :is(.seg,.segc,.hpick)>:is(button,a)[aria-pressed="true"],html:root:not(.fx):not(.zz) body :is(#app,header.pg-head) :is(.seg,.segc,.hpick)>:is(button,a)[aria-checked="true"]{color:var(--ink)!important}
+
+@media (max-width:360px){html:root:not(.fx):not(.zz) body #navWrap .lg-tabs>a{font-size:10px!important;letter-spacing:-.01em}html:root:not(.fx):not(.zz) body #navWrap .lg-tabs>a span{overflow:visible!important;text-overflow:clip!important}html:root:not(.fx):not(.zz) body header.pg-head .pg-bar :is(button,a):not(.logo){min-width:32px!important;padding:0 4px!important}html:root:not(.fx):not(.zz) body header.pg-head{padding-inline:14px!important}html:root:not(.fx):not(.zz) body #navWrap .nav-help{margin-inline:2px 8px!important}}
 </style>
 </head>
 <body>
