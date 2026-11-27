@@ -64,7 +64,7 @@ Applications regardées : Smoke Free, QuitNow!, Kwit, I Am Sober, Reframe, Sunny
 
 ## Graphiques et Liquid Glass (LIBRE 21.2)
 Demande : plus de graphiques, plus précis, avec de vrais chiffres et moins de texte ; encore plus de Liquid Glass. Skills utilisés : `dataviz` (règles de graphiques), `/unslop` (mode retouche), `/apple-design` (matériaux, typographie), `/find-skills` (aucun skill de graphiques trouvé sur skills.sh pour « charts », « dataviz », « data visualization »).
-- **Accueil** : un anneau « Activité » (progression vers la prochaine étape, en %) remplace la barre fine ; en réduction avec limite, la barre reste. La ligne « Depuis le dernier arrêt » est masquée au-delà de 2 jours (elle répétait le chiffre).
+- **Accueil** : l’en-tête se limite à la date et au prénom ; le message de motivation qui suivait est retiré de l’écran (il reste envoyé en notification « Message du jour », réglage « motivation »). Un anneau « Activité » (progression vers la prochaine étape, en %) remplace la barre fine ; en réduction avec limite, la barre reste. La ligne « Depuis le dernier arrêt » est masquée au-delà de 2 jours (elle répétait le chiffre).
 - **Progrès** :
   - **Argent économisé** : courbe cumulée semaine par semaine (calcul `savedOf`), 3, 6 ou 12 mois.
   - **Quand arrivent tes envies** : envies notées sur 90 jours, par tranches de 4 heures.

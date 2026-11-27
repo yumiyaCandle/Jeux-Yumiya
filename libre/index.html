@@ -1944,7 +1944,7 @@ function homeHead(p,line,cta,seg){
     <div class="hm-hello-row"><div class="hm-hello-t">
       <p class="hm-date">${esc(cap(fdate(now(),{weekday:'long',day:'numeric',month:'long'}),LOCALE))}</p>
       <h1 class="hm-hello">${esc(p&&p.name?t('Bonjour, {name}',{name:p.name}):t('Bonjour'))}</h1>
-      ${line?`<p class="hm-line" aria-live="polite"><span>${esc(line)}</span>${cta?` <button class="link" data-a="${cta[0]}">${esc(t(cta[1]))}</button>`:''}<button class="hm-more-msg" data-a="msgNext" aria-label="${esc(t('Un autre message'))}" title="${esc(t('Un autre message'))}">${ic('refresh','sm')}</button></p>`:''}
+      ${/* LIBRE 21.2 : en-tête réduit à la date et au prénom, à la demande de la personne propriétaire. Le message du jour reste disponible en notification (réglage « motivation »). */''}
       ${(()=>{const h=curHabit();return h?`<p class="hm-goal">${ic('target','sm')}<span>${esc(goalTxt(h))}</span></p>`:''})()}
     </div>${seg||''}</div>
   </header>`;
