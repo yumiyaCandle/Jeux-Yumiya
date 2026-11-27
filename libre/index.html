@@ -3870,7 +3870,6 @@ html:not(.fx) body .qsos .qs-t>i{width:29px!important;height:29px!important;bord
 html:not(.fx) body .qsos .qs-t>i svg{color:#fff!important;width:18px;height:18px}
 html:not(.fx) body .qsos .qs-t-main>i{background:#FF9500!important}
 html:not(.fx) body .qsos .qs-t[data-a="delay10"]>i{background:#5856D6!important}
-html:not(.fx) body .qsos .qs-breath>i.qs-dot{background:#30B0C7!important;animation:none!important}
 html:not(.fx) body .qsos .qs-call>i,html:not(.fx) body .qsos .qs-t[data-a="qsCall"]>i{background:#34C759!important}
 html:not(.fx) body .qsos .qs-t-danger>i{background:#FF3B30!important}
 html:not(.fx) body .qsos .qs-t-danger b{color:#D70015!important}
@@ -3888,8 +3887,7 @@ html:root:not(.fx)[data-theme="dark"] body .qsos :is(.qs-t-danger b,.qs-alert){c
 html:not(.fx) body .qsos svg [stroke="#fff"],html:not(.fx) body .qsos svg [stroke="#FFF"]{stroke:var(--ink)!important}
 html:not(.fx) body .qsos svg [fill="#fff"],html:not(.fx) body .qsos svg [fill="#FFF"]{fill:var(--ink)!important}
 
-html:not(.fx) body .qsos .qs-breath>i.qs-dot{position:relative}
-html:not(.fx) body .qsos .qs-breath>i.qs-dot::after{content:"";position:absolute;inset:5px;background:#fff;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M3 8h10a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M3 8h10a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7'/%3E%3C/svg%3E") center/contain no-repeat}
+html:not(.fx) body .qsos .qs-breath>i.qs-ic-breath{background:#30B0C7!important}
 </style>
 </head>
 <body>
@@ -4065,7 +4063,7 @@ const TIPS=[[N_('Retarder'),N_('Dis-toi « pas maintenant, dans 10 minutes ». S
 const TRIG_TIP={'Stress':N_('Prépare un geste anti-stress : 5 respirations lentes ou 10 minutes de marche.'),'Ennui':N_('Garde une liste d’activités rapides sous la main pour les moments creux.'),'Soirée / fête':N_('Prévois une boisson sans alcool et une heure de départ avant la soirée.'),'Avec des amis':N_('Dis à un ami proche ce que tu fais : son soutien change tout.'),'Solitude':N_('Programme un appel ou une sortie aux moments où tu es seul·e.'),'Fatigue':N_('La fatigue amplifie les envies : un coucher plus tôt peut vraiment aider.'),'Après un repas':N_('Après le repas, lève-toi tout de suite : vaisselle, marche, brossage de dents.'),'Tristesse':N_('Écris ce que tu ressens dans ton journal ou parle à quelqu’un de confiance.'),'Colère':N_('Avant de réagir, sors quelques minutes et respire.'),'Habitude':N_('Change un détail de ta routine pour casser l’automatisme.')};
 
 /* ============ Icônes ============ */
-const P={star:'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z',
+const P={wind:'M3 8h10a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7',star:'M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z',
   home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
   target:'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 7.5a4.5 4.5 0 1 0 0 9a4.5 4.5 0 1 0 0-9zM12 11.2a.8.8 0 1 0 0 1.6a.8.8 0 1 0 0-1.6z',
   stats:'M5 20V11M12 20V5M19 20v-6M3 20h18',cal:'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
@@ -7027,7 +7025,7 @@ function drawQuickSos(){
     <div class="qs-tri">
       <button class="qs-t qs-t-main" data-a="s5Open"><i>${ic('pulse')}</i><span><b>${esc(t('J’ai une envie'))}</b><span>${esc(t('Être guidé·e, étape par étape'))}</span></span>${ic('right','sm')}</button>
       <button class="qs-t" data-a="delay10"><i>${ic('clock')}</i><span><b>${esc(t('Retarder de 10 minutes'))}</b><span>${esc(t('Laisser l’envie redescendre'))}</span></span>${ic('right','sm')}</button>
-      <button class="qs-t qs-breath" data-a="qsBreath"><i class="qs-dot" aria-hidden="true"></i><span><b>${esc(t('Respirer avec moi'))}</b><span>${esc(t('2 minutes, sans rien préparer'))}</span></span>${ic('right','sm')}</button>
+      <button class="qs-t qs-breath" data-a="qsBreath"><i class="qs-ic-breath" aria-hidden="true">${ic('wind')}</i><span><b>${esc(t('Respirer avec moi'))}</b><span>${esc(t('2 minutes, sans rien préparer'))}</span></span>${ic('right','sm')}</button>
       ${c0&&c0.phone?`<a href="${telHref(c0.phone)}" class="qs-t qs-call qs-call-top"><i>${ic('phone')}</i><span><b>${esc(t('Appeler {name}',{name:c0.name}))}</b><span>${esc(t('Parler à quelqu’un de confiance'))}</span></span>${ic('right','sm')}</a>`:`<button class="qs-t" data-a="qsCall"><i>${ic('phone')}</i><span><b>${esc(t('J’ai besoin de parler'))}</b><span>${esc(t('Ajouter une personne de confiance'))}</span></span>${ic('right','sm')}</button>`}
       <button class="qs-t qs-t-danger" data-a="qsDanger"><i>${ic('shield')}</i><span><b>${esc(t('Je suis en danger'))}</b><span>${esc(t('Numéros d’urgence et lignes d’écoute'))}</span></span>${ic('right','sm')}</button>
     </div>
