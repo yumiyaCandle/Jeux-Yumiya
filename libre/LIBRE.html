@@ -261,6 +261,19 @@ details.fold[open] .fold-b{animation:rise var(--t) var(--ease) both}
 .seg-drop.lift,.lg-ind.lift{z-index:2;background:color-mix(in srgb,var(--surface-solid) 28%,transparent);-webkit-backdrop-filter:saturate(210%) brightness(1.1);backdrop-filter:saturate(210%) brightness(1.1);box-shadow:inset 1.5px 1.5px 0 -.5px rgba(255,255,255,.95),inset -1.5px -1.5px 0 -.5px rgba(255,255,255,.55),inset 0 0 14px rgba(255,255,255,.22),0 12px 26px -10px rgba(0,0,0,.38)}
 .lg-tabs>a.drop-hov{color:var(--accent-strong)}
 :is(.seg,.hpick)>button.drop-hov{color:var(--ink)}
+/* Langue de l'application : liste groupée façon Réglages, panneaux de verre */
+#langList{display:flex;flex-direction:column}
+.lang-h{margin:var(--s4) 0 var(--s2) var(--s4);font:600 13px/1.3 var(--font);color:var(--ink-3)}
+#langList>.lang-h:first-child{margin-top:0}
+.langs{display:flex;flex-direction:column;border-radius:var(--r-group);overflow:hidden;background:var(--lg-fill);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim)}
+.lang-item{position:relative;display:flex;align-items:center;gap:var(--s3);width:100%;min-height:56px;padding:10px var(--s4);text-align:start;color:var(--ink)}
+.lang-item+.lang-item::before{content:"";position:absolute;top:0;left:var(--s4);right:0;height:.5px;background:var(--line-2)}
+.lang-item .grow{display:flex;flex-direction:column;gap:2px}
+.lang-item b{font:500 17px/1.25 var(--font)}
+.lang-item .grow>span{font-size:14px;color:var(--ink-2)}
+.lang-item[aria-selected="true"] b{font-weight:600}
+.lang-ck{color:var(--accent-strong);display:grid;place-items:center;flex:none}
+.lang-item:active{background:var(--surface-2)}
 /* Puces de choix */
 .chips,.cr-chips,.s5-chips,.seg.wrap,.chips-lg,.pills{display:flex;flex-wrap:wrap;gap:var(--s2)}
 .chip,.seg.wrap>button,.chips-lg>button,.pills>button,.cr-chip,.s5-chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;color:var(--ink);font:500 16px/1.2 var(--font);background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim);transition:background-color var(--t) var(--ease),color var(--t) var(--ease),transform var(--t-fast) var(--ease)}
@@ -1630,7 +1643,9 @@ window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
   document.addEventListener('pointermove',e=>{if(!D||e.pointerId!==D.id)return;const dx=e.clientX-D.x0;if(!D.moved&&Math.abs(dx)<6)return;
     if(!D.moved){D.moved=true;D.d.style.transition='width .14s var(--ease),transform .06s linear';try{D.c.setPointerCapture(D.id)}catch(_){}}
     const its=items(D.c),lo=its[0].offsetLeft,last=its[its.length-1],hi=last.offsetLeft+last.offsetWidth;
-    const cx=D.cx0+dx,b=nearest(its,Math.max(lo,Math.min(hi,cx))),w=b.offsetWidth;let x=cx-w/2;
+    const raw=D.cx0+dx,b=nearest(its,Math.max(lo,Math.min(hi,raw))),w=b.offsetWidth,bc=b.offsetLeft+w/2;
+    /* aimantation : la goutte est attirée vers le choix le plus proche (jamais à cheval entre deux libellés) */
+    const cx=raw+(bc-raw)*.6;let x=cx-w/2;
     if(x<lo)x=lo-(lo-x)*.22;if(x+w>hi)x=hi-w+(x+w-hi)*.22;
     if(b!==D.hov){D.hov.classList.remove('drop-hov');b.classList.add('drop-hov');D.hov=b}
     put(x,w,1.14)},{passive:true});
@@ -1638,10 +1653,15 @@ window.addEventListener('resize',()=>{LG_POS=null;lgPlace(false)});
     b.classList.remove('drop-hov');d.classList.remove('lift');d.style.transition='';
     if(moved&&e&&e.type==='pointerup'){skipUntil=Date.now()+450;
       if(nav){LG_POS=cur}else{const list=[...document.querySelectorAll(SEGD_Q)],i=list.indexOf(c);SEGD_POS.set((c.getAttribute('aria-label')||c.className)+'|'+i+'|'+ui.view,cur);d.dataset.at=''}
-      put(b.offsetLeft,b.offsetWidth,1);if(!isAct(b))setTimeout(()=>b.click(),0)}
+      put(b.offsetLeft,b.offsetWidth,1);if(!isAct(b))setTimeout(()=>b.click(),0);
+      /* une fois l'écran redessiné, la goutte se recale exactement sur le nouveau choix */
+      setTimeout(()=>{try{document.querySelectorAll('.seg-drop.lift,.lg-ind.lift').forEach(x=>x.classList.remove('lift'));segDrops();lgPlace(false)}catch(_){}},380)}
     else put(D.it.offsetLeft,D.it.offsetWidth,1);
     D=null};
   document.addEventListener('pointerup',end,true);document.addEventListener('pointercancel',end,true);
+  /* filets de sécurité : si le système coupe le geste, la goutte se repose toujours */
+  document.addEventListener('touchend',()=>{if(D)end({type:'pointerup',pointerId:D.id})},true);document.addEventListener('touchcancel',()=>{if(D)end({type:'pointercancel',pointerId:D.id})},true);
+  window.addEventListener('blur',()=>{if(D)end({type:'pointercancel',pointerId:D.id})});
   /* un lien pressé lancerait le glisser-déposer natif du navigateur (qui coupe les mouvements du pointeur) */
   document.addEventListener('dragstart',e=>{const c=e.target.closest&&e.target.closest('a,button');if(c&&isCont(c.parentElement))e.preventDefault()},true);
   /* le clic natif qui suit un glisser ne doit pas rechoisir l'ancien élément */
@@ -2818,26 +2838,28 @@ function langPicker(){
   ui.langQ='';
   sheet(t('Langue de l’application'),`<div class="stack" style="gap:12px">
     <div class="search">${ic('search','sm')}<input type="search" id="langQ" placeholder="${esc(t('Rechercher une langue'))}" autocomplete="off" aria-label="${esc(t('Rechercher une langue'))}"></div>
-    <div id="langList" class="langs"></div>
+    <div id="langList"></div>
     <p class="small muted">${esc(t('« Complète » : toute l’application est traduite. « Partielle » ou « Pas encore traduite » : les textes manquants s’affichent en anglais.'))}</p></div>`,L=>{
       const q=L.querySelector('#langQ');q.oninput=()=>{ui.langQ=q.value;drawLangList()};drawLangList();
       setTimeout(()=>L.querySelector('[aria-selected="true"]')?.scrollIntoView({block:'center'}),50)});
 }
 function drawLangList(){
+  /* Liste comme les Réglages d'iOS : la langue choisie porte une coche ; la traduction partielle est simplement indiquée sous le nom. Aucune langue n'apparaît deux fois. */
   const box=$('#langList');if(!box)return;
   const q=ui.langQ.trim().toLowerCase();
   const all=langItems();
   const devices=[...new Set((navigator.languages||[]).map(l=>{const c=catalogFor(l);return l.toLowerCase().startsWith('fr')?'fr':c||baseLang(l)}))];
   const match=x=>!q||[x.native,x.local,x.en,x.c].some(s=>s&&s.toLowerCase().includes(q));
-  const coll=new Intl.Collator(LOCALE);
-  const full=all.filter(x=>x.st==='full'&&match(x)).sort((a,b)=>coll.compare(a.local||a.native,b.local||b.native));
-  const rest=all.filter(x=>x.st!=='full'&&match(x)).sort((a,b)=>coll.compare(a.local||a.native,b.local||b.native));
-  const sug=q?[]:all.filter(x=>devices.includes(x.c)&&x.c!==LANG);
-  const row=x=>`<button class="lang-item" role="option" data-a="setLang" data-l="${x.c}" aria-selected="${x.c===LANG}" lang="${x.c}"><span class="grow" style="text-align:start"><b dir="auto">${esc(x.native)}</b><span class="small muted" style="display:block">${esc(x.local&&x.local!==x.native?x.local:x.en)}</span></span>${x.st==='full'?`<span class="lang-badge b-full">${esc(t('Complète'))}</span>`:x.st==='ui'?`<span class="lang-badge b-full">${esc(t('Interface complète'))}</span>`:x.st==='partial'?`<span class="lang-badge b-partial">${esc(t('Partielle'))}</span>`:`<span class="lang-badge b-none">${esc(t('Anglais en attendant'))}</span>`}${x.c===LANG?`<span class="lang-ck">✓</span>`:''}</button>`;
-  box.innerHTML=(sug.length?`<p class="eyebrow">${esc(t('Langues de ton appareil'))}</p>${sug.map(row).join('')}`:'')
-    +(full.length?`<p class="eyebrow">${esc(t('Traduction complète'))}</p>${full.map(row).join('')}`:'')
-    +(rest.length?`<p class="eyebrow">${esc(t('Autres langues ({n})',{n:nf(rest.length,0)}))}</p>${rest.map(row).join('')}`:'')
-    +(!full.length&&!rest.length?`<p class="muted">${esc(t('Aucune langue trouvée.'))}</p>`:'');
+  const coll=new Intl.Collator(LOCALE),by=(a,b)=>coll.compare(a.native,b.native);
+  const sug=q?[]:all.filter(x=>devices.includes(x.c)).sort(by),seen=new Set(sug.map(x=>x.c));
+  const full=all.filter(x=>x.st==='full'&&match(x)&&!seen.has(x.c)).sort(by);
+  const rest=all.filter(x=>x.st!=='full'&&match(x)&&!seen.has(x.c)).sort(by);
+  const note=x=>x.st==='full'?'':x.st==='ui'?t('Interface complète'):x.st==='partial'?t('Partielle'):t('Anglais en attendant');
+  const row=x=>{const sub=[x.local&&x.local!==x.native?x.local:'',note(x)].filter(Boolean).join(' · ');
+    return `<button type="button" class="lang-item" role="option" data-a="setLang" data-l="${x.c}" aria-selected="${x.c===LANG}" lang="${x.c}"><span class="grow"><b dir="auto">${esc(x.native)}</b>${sub?`<span dir="auto">${esc(sub)}</span>`:''}</span>${x.c===LANG?`<span class="lang-ck" aria-hidden="true">${ic('check','sm')}</span>`:''}</button>`};
+  const grp=(title,list)=>list.length?`<p class="lang-h">${esc(title)}</p><div class="langs">${list.map(row).join('')}</div>`:'';
+  box.innerHTML=grp(t('Langues de ton appareil'),sug)+grp(t('Traduction complète'),full)+grp(t('Autres langues ({n})',{n:nf(rest.length,0)}),rest)
+    +(!sug.length&&!full.length&&!rest.length?`<p class="muted">${esc(t('Aucune langue trouvée.'))}</p>`:'');
 }
 function setLang(code){
   const prevDir=document.documentElement.dir;
