@@ -4891,6 +4891,37 @@ html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .seg.chips-lg:not(#_):not(#__
 html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .v7-sec.st20{padding:20px!important}
 /* Objectif d'épargne (pas encore défini) : une vraie carte arrondie */
 html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .mp-row.sg-new{border-radius:22px!important;border:0!important;background:var(--v-glass)!important;box-shadow:inset 0 1px 0 var(--v-edge),inset 0 0 0 1px var(--v-line)!important;padding:16px 18px!important;width:100%;box-sizing:border-box}
+/* LIBRE 20 — passe /unslop (polissage) */
+/* 1. Marges : les 5 onglets partagent le même bord sur téléphone (24 px, comme Profil) */
+@media (max-width:440px){
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app:is([data-view="accueil"],[data-view="aide"],[data-view="progres"],[data-view="comprendre"],[data-view="profil"])>:is(header.pg-head,.hm,.hp,.v7,.ln){padding-left:0!important;padding-right:0!important}
+}
+/* 2. Bouton « J'ai une envie » : rouge net, ombre neutre, pas de reflet en dégradé ni de lueur rouge */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .hm-sos{background-image:none!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 20px -12px rgba(15,18,23,.45)!important}
+/* 3. Cartes de chiffres de l'accueil : les chiffres seuls, la carte impaire prend toute la largeur */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .h20-cards>.h20-c:last-child:nth-child(odd){grid-column:1/-1}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .h20-c>.h20-ci{display:none!important}
+/* 4. Icônes des chiffres de Mon suivi : une seule teinte neutre */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .kp .kp-ic{background:var(--v-glass-2)!important;color:var(--v-ink)!important;box-shadow:inset 0 0 0 1px var(--v-line)!important}
+/* 5. Graphiques : libellés d'au moins 11 px à l'écran (réglé en JS : svgTextFit) */
+/* 6. Numéros d'urgence : trois colonnes égales */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .hp-nums{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .hp-nums>.hp-num{min-width:0}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .hp-nums>.hp-num>span{overflow-wrap:anywhere;font-size:.8rem;line-height:1.3}
+/* 7. Onglets de Comprendre : grille 2 × 2 dans un rectangle arrondi (rayons emboîtés), pas une pilule sur deux lignes */
+@media (max-width:440px){
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .seg.ln-tabs{display:grid!important;grid-template-columns:1fr 1fr;border-radius:20px!important;padding:4px!important;gap:4px!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .seg.ln-tabs>button{border-radius:16px!important;min-height:44px!important;margin:0!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .seg.ln-tabs>.seg-drop{border-radius:16px!important}
+}
+/* LIBRE 20 — passe /apple-design */
+/* Espacement des lettres selon la taille (comme la table de San Francisco) : serré en grand, légèrement ouvert en petit.
+   -0,135 px à 17 px, 0 à 14 px, +0,09 px à 12 px. Spécificité nulle : les titres qui ont leur propre réglage le gardent. */
+:where(body) :where(*){letter-spacing:calc(.63px - .045em)}
+/* Retour immédiat à la pression sur les commandes ajoutées par LIBRE 20 */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body :is(.h20-q,.hp-sit-b,.hp-num,.sa-it,.em-btn,.w4-go,.w4-alt,.ln-card,.lang-row,.hp-act,.mp-row.sg-new){transition:transform .1s ease-out,background-color .15s ease-out}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body :is(.h20-q,.hp-sit-b,.hp-num,.sa-it,.em-btn,.w4-go,.w4-alt,.ln-card,.lang-row,.hp-act,.mp-row.sg-new):active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){html:root:not(.fx):not(.zz):not(.zy):not(.zx) body :is(.h20-q,.hp-sit-b,.hp-num,.sa-it,.em-btn,.w4-go,.w4-alt,.ln-card,.lang-row,.hp-act,.mp-row.sg-new):active{transform:none;opacity:.8}}
 </style>
 </head>
 <body>
@@ -4964,7 +4995,7 @@ function raw(s){
 let DIG=null;// chiffres locaux (ex. ٠١٢ en arabe) appliqués aux nombres écrits dans les traductions, hors balises HTML
 function localDigits(x){return DIG&&typeof x==='string'?x.replace(/(<[^>]*>)|(\{\w+\})|(\d)/g,(m,tag,ph,d)=>tag||ph||DIG[d]):x}
 function fill(s,v){s=localDigits(s);return v?String(s).replace(/\{(\w+)\}/g,(m,k)=>v[k]!=null?v[k]:m):s}
-function t(s,v){const r=raw(s);return fill(r!=null&&typeof r==='string'?r:stripCtx(s),v)}
+function t(s,v){const r=raw(s);const o=fill(r!=null&&typeof r==='string'?r:stripCtx(s),v);return LANG==='fr'&&typeof o==='string'?o.replace(/ \?/g,'\u00a0?'):o}
 function tn(n,one,other,v){
   v=Object.assign({n:nf(n)},v||{});const r=raw(other);
   if(r!=null){if(typeof r==='string')return fill(r,v);let cat='other';try{cat=PR.select(n)}catch(e){}return fill(r[cat]!=null?r[cat]:r.other,v)}
@@ -5636,6 +5667,10 @@ function lnSearch(q){q=(q||'').trim().toLowerCase();ui.lnQ=q;const body=$('#lnBo
   body.hidden=true;out.hidden=false;out.innerHTML=R.length?`<p class="ln-note">${esc(tn(R.length,'{n} résultat','{n} résultats'))}</p><div class="ln-list">${R.join('')}</div>`:`<p class="ln-note">${esc(t('Aucun résultat. Essaie un autre mot, ou ouvre la bibliothèque.'))}</p>`}
 document.addEventListener('input',e=>{if(e.target&&e.target.id==='lnQ')lnSearch(e.target.value)});
 
+/* LIBRE 20 — les graphiques sont mis à l'échelle : on garantit 11 px réels à l'écran pour leurs libellés */
+function svgTextFit(){const app=document.getElementById('app');if(!app)return;app.querySelectorAll('svg[viewBox] text').forEach(tx=>{const s=tx.ownerSVGElement,vb=s&&s.viewBox&&s.viewBox.baseVal,w=s&&s.getBoundingClientRect().width;if(!vb||!vb.width||!w)return;
+  const k=vb.width/w,cur=parseFloat(getComputedStyle(tx).fontSize)||0;if(cur/k<11)tx.style.fontSize=(11*k).toFixed(2)+'px'})}
+(function(){let q=0;const go=()=>{if(q)return;q=requestAnimationFrame(()=>{q=0;svgTextFit()})};const st=()=>{const app=document.getElementById('app');if(!app)return setTimeout(st,200);new MutationObserver(go).observe(app,{childList:true,subtree:true});addEventListener('resize',go);go()};st()})();
 function viewHome(){
   const p=S.profile,A0=act();
   if(!S.habits.length)return homeHead(p)+`<div class="hm"><section class="hm-p hm-empty"><h2>${esc(t('Ajoute ta première habitude'))}</h2><p class="muted">${esc(t('Choisis ce que tu veux arrêter ou réduire pour lancer ton compteur.'))}</p><button class="btn primary" data-a="habitForm">${esc(t('Ajouter une habitude'))}</button></section></div>`;
