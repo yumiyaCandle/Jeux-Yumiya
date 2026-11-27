@@ -4614,6 +4614,8 @@ html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) .segc.ready>:
 html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) .segc .segc-thumb.segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.7))!important;box-shadow:var(--lg-rim),0 6px 16px -8px rgba(15,18,23,.38)!important}
 @media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body :is(#app,header.pg-head) .segc .segc-thumb.segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))!important}}
 html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body :is(#app,header.pg-head) .segc .segc-thumb.segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))!important}
+
+@media (max-width:899px){html:root:not(.fx) body #navWrap .lg-tabs>a.nav-x{display:none!important}}
 </style>
 </head>
 <body>
@@ -5108,7 +5110,7 @@ function refreshBell(){const b=$('#bellCount');if(!b)return;const u=S.notifs.fil
 /* Verre liquide : la goutte qui marque l’onglet actif glisse de l’ancien onglet vers le nouveau en s’étirant */
 let LG_POS=null;
 function lgPlace(animate){const box=$('#navWrap .lg-tabs'),ind=box&&box.querySelector('.lg-ind'),a=box&&box.querySelector('a[aria-current="page"]');if(!ind)return;
-  if(!a){ind.style.opacity='0';return}const r={x:a.offsetLeft,y:a.offsetTop,w:a.offsetWidth,h:a.offsetHeight};
+  if(!a||!a.offsetWidth){ind.style.opacity='0';LG_POS=null;return}const r={x:a.offsetLeft,y:a.offsetTop,w:a.offsetWidth,h:a.offsetHeight};
   const set=p=>{ind.style.width=p.w+'px';ind.style.height=p.h+'px';ind.style.transform=`translate(${p.x}px,${p.y}px)`};
   if(LG_POS&&animate&&!RM()&&(LG_POS.x!==r.x||LG_POS.y!==r.y)){ind.style.transition='none';set(LG_POS);void ind.offsetWidth;ind.style.transition='';ind.classList.add('mv');requestAnimationFrame(()=>set(r));setTimeout(()=>ind.classList.remove('mv'),520)}
   else set(r);ind.style.opacity='1';LG_POS=r}
@@ -5151,7 +5153,7 @@ function lgFollow(ms=560){const t0=performance.now();const f=()=>{if(!document.q
    (projection de la vitesse), en repartant de sa position actuelle. Un simple appui reste un clic normal. */
 (()=>{let st=null,eat=false;const rub=(o,d,c=.55)=>(o*d*c)/(d+c*Math.abs(o));
   const proj=v=>(v/1000)*.99/(1-.99);
-  const tabsOf=b=>[...b.querySelectorAll(':scope>a')];
+  const tabsOf=b=>[...b.querySelectorAll(':scope>a')].filter(a=>a.offsetWidth>0);
   document.addEventListener('pointerdown',e=>{const b=e.target.closest&&e.target.closest('#navWrap .lg-tabs');if(!b||e.button>0||RM()||FX())return;
     const ind=b.querySelector('.lg-ind'),cur=b.querySelector(':scope>a[aria-current="page"]');if(!ind||!cur||ind.style.opacity==='0')return;
     const V=innerWidth>=900,base={x:cur.offsetLeft,y:cur.offsetTop,w:cur.offsetWidth,h:cur.offsetHeight};
@@ -5196,9 +5198,8 @@ function ensureChrome(){
   $('#navWrap').innerHTML=`<div class="in"><div class="nav-brand">${logoMark(24,'currentColor')}<span>LIBRE</span><button type="button" class="nav-col nav-x" data-a="navMini" aria-label="${esc(navMini?t('Déplier le menu'):t('Replier le menu'))}" aria-pressed="${navMini}">${ic(navMini?'right':'left','sm')}</button></div>
     <button type="button" class="nav-search nav-x" data-a="search" aria-label="${esc(t('Rechercher'))}">${ic('search','sm')}<span>${esc(t('Rechercher…'))}</span><kbd>${/Mac|iPhone|iPad/.test(navigator.platform||'')?'⌘':'Ctrl'} K</kbd></button>
     <p class="nav-sec nav-x">${esc(t('Navigation'))}</p>
-    <div class="lg-tabs"><span class="lg-ind" aria-hidden="true"></span>${tabs.map(x=>`<a href="#${x[0]}" ${c===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}</div>
+    <div class="lg-tabs"><span class="lg-ind" aria-hidden="true"></span>${tabs.map(x=>`<a href="#${x[0]}" ${c===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}${X.map(x=>`<a class="nav-x" href="#${x[0]}" ${ui.view===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}</div>
     <button type="button" class="nav-help" data-a="sos" aria-label="${esc(t('Aide immédiate : une envie, un moment difficile'))}"><i>${logoMark(26,'#fff')}</i><span>${esc(t('Aide'))}</span></button>
-    ${X.map(x=>`<a class="nav-x" href="#${x[0]}" ${ui.view===x[0]?'aria-current="page"':''} title="${esc(x[2])}">${ic(x[1])}<span>${esc(x[2])}</span></a>`).join('')}
     ${A0.length?`<p class="nav-sec nav-x">${esc(t('Mes suivis'))}</p>${A0.map(h=>`<button type="button" class="nav-hab nav-x" data-a="navHabit" data-id="${h.id}" style="${hcVars(h)}" title="${esc(hName(h))}"><span class="hc-dot" aria-hidden="true"></span><span class="grow">${esc(hName(h))}</span><small class="num">${RED(h)?esc(nf(qtyIn(h,addDays(sod(now()),-6),addDays(sod(now()),1)))):esc(nf(Math.floor((now()-curStart(h))/DAY),0)+' '+t('j'))}</small></button>`).join('')}`:''}
     ${S.profile?`<a class="nav-user nav-x" href="#profil"><span class="nav-av">${esc(((p.name||'?').trim()[0]||'?').toLocaleUpperCase(LOCALE))}</span><span class="grow"><b>${esc(p.name||'')}</b><small>${esc(tn(A0.length,'{n} suivi','{n} suivis'))}</small></span></a>`:''}
   </div>`;

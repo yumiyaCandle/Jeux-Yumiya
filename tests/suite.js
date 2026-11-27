@@ -1314,7 +1314,7 @@ test('Interface', 'Ordinateur : barre latérale en verre (sections, suivis avec 
   await p.keyboard.press('Control+k'); await p.waitForSelector('#sQ'); await p.closeLayer();
   await p.click('.nav-hab[data-id="h1"]'); await p.waitForTimeout(200); assert.equal((await p.state()).prefs.activeHabit, 'h1');
   await p.click('[data-a="navMini"]'); await p.reload(); await p.settle(); assert.ok(await p.evaluate(() => document.body.classList.contains('nav-mini')), 'menu replié mémorisé');
-  await p.go('profil'); assert.ok(await p.$('.nav .in>a[aria-current="page"][href="#profil"]')); noErr(p);
+  await p.go('profil'); assert.ok(await p.$('.nav .lg-tabs>a.nav-x[aria-current="page"][href="#profil"]')); noErr(p);
 });
 test('Interface', 'Téléphone : la barre du bas garde 4 onglets et l’Aide ; les entrées de la barre latérale restent cachées', async (b, base) => {
   const p = await page(b, base, { init: seed(v7State()) }); await p.goto(base); await p.settle();
@@ -1368,8 +1368,10 @@ test('LIBRE 11', 'Accueil en 4 éléments : compteur avec saisie du jour, semain
 
 test('LIBRE 11', 'Navigation : Aujourd’hui, Mon plan, Progrès, Journal ; les pages retirées mènent à leur nouvelle place', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
-  const tabs = await p.$$eval('nav .lg-tabs > a', a => a.map(x => x.textContent.trim()));
+  const tabs = await p.$$eval('nav .lg-tabs > a:not(.nav-x)', a => a.map(x => x.textContent.trim()));
   assert.deepEqual(tabs, ['Aujourd’hui', 'Mon plan', 'Progrès', 'Journal']);
+  /* LIBRE 19 : Profil est dans la même liste que les onglets (pour la goutte), réservé à la barre latérale de l'ordinateur */
+  assert.deepEqual(await p.$$eval('nav .lg-tabs > a.nav-x', a => a.map(x => x.getAttribute('href'))), ['#profil']);
   for (const [from, to] of [['coach', 'accueil'], ['recompenses', 'progres'], ['programme', 'outils'], ['apercu', 'progres'], ['evolution', 'progres']]) {
     await p.evaluate(v => { location.hash = v; }, from); await p.waitForFunction(v => document.getElementById('app').dataset.view === v, to, { timeout: 5000 });
   }
