@@ -104,6 +104,8 @@ Goutte : attirée vers le choix le plus proche pendant le glisser (jamais à che
 
 Langue de l’application : liste groupée façon Réglages (langues de l’appareil, traduction complète, autres), une coche sur la langue choisie, l’état de traduction en petit sous le nom, aucune langue en double.
 
+Jour / nuit : un bouton lune/soleil remplace l’œil en haut de l’accueil ; un toucher bascule le thème (fondu doux, gardé après rechargement). Le mode discret reste dans Profil › Confidentialité. Le verre clair est rendu plus translucide, avec une tranche plus nette et une lumière de fond plus présente, pour être aussi lisible comme verre que le sombre.
+
 Corrigé en même temps : les listes de cases à choix multiples de l’inscription (« Qu’est-ce qui est le plus difficile », « Pourquoi tu fais ça ? ») étaient rognées en cercle, parce qu’elles recevaient le style des sélecteurs à goutte.
 
 ## Vérifications

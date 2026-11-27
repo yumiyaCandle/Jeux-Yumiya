@@ -1235,7 +1235,7 @@ test('Recherche', 'La recherche trouve articles, exercices, SOS et réglages, et
 });
 test('Mode discret', 'Masque les noms des addictions et brouille les chiffres ; mémorisé', async (b, base) => {
   const p = await page(b, base, { init: seed(dashState()) }); await p.goto(base); await p.settle();
-  await p.click('.tacts [data-a="discreet"]'); await p.closeLayer(); await p.waitForTimeout(200);
+  await p.go('profil'); await p.closeLayer(); await p.evaluate(() => document.querySelector('[data-a="discreet"]').click()); await p.waitForTimeout(200); await p.go('accueil'); await p.closeLayer();
   const txt = await p.textContent('#app'); assert.ok(!/Cigarettes|Alcool/.test(txt), 'noms masqués'); assert.match(txt, /Suivi 1/);
   assert.match(await p.evaluate(() => getComputedStyle(document.querySelector('.hm-days .num')).filter), /blur/);
   await p.reload(); await p.settle(); assert.ok(await p.evaluate(() => document.body.classList.contains('discreet'))); noErr(p);
@@ -1533,4 +1533,13 @@ test('LIBRE 21', 'Inscription : les cases à choix multiples ne sont jamais rogn
   assert.ok(bad.seen, 'étape à cases atteinte'); assert.deepEqual(bad.out, []); noErr(p);
 });
 
+test('LIBRE 21', 'Bouton jour / nuit en haut de l’accueil : bascule le thème et le garde', async (b, base) => {
+  const p = await page(b, base, { colorScheme: 'light', init: seed(profileState({})) }); await p.goto(base); await p.settle(); await p.closeLayer();
+  assert.ok(!(await p.$('.tacts [data-a="discreet"]')), 'l’œil n’est plus dans la barre du haut');
+  await p.click('.tacts [data-a="themeFlip"]'); await p.waitForTimeout(300);
+  assert.equal(await p.evaluate(() => document.documentElement.dataset.theme), 'dark');
+  await p.reload(); await p.settle(); assert.equal(await p.evaluate(() => document.documentElement.dataset.theme), 'dark', 'gardé après rechargement');
+  await p.closeLayer(); await p.click('.tacts [data-a="themeFlip"]'); await p.waitForTimeout(300);
+  assert.equal(await p.evaluate(() => document.documentElement.dataset.theme), 'light'); noErr(p);
+});
 module.exports = { T };
