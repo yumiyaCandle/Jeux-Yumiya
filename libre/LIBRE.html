@@ -4616,6 +4616,15 @@ html:root:not(.fx):not(.zz):not(.zy) body :is(#app,header.pg-head) .segc .segc-t
 html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body :is(#app,header.pg-head) .segc .segc-thumb.segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.1))!important}
 
 @media (max-width:899px){html:root:not(.fx) body #navWrap .lg-tabs>a.nav-x{display:none!important}}
+
+/* Barre latérale repliée (ordinateur) : seulement les symboles, centrés ; la goutte reste un rond autour du symbole */
+@media (min-width:900px){
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-mini #navWrap .lg-tabs>a>span,
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-mini #navWrap :is(.nav-help>span,.nav-search>span,.nav-search kbd,.nav-sec,.nav-hab .grow,.nav-hab small,.nav-user .grow,.nav-brand>span){display:none!important}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-mini #navWrap .lg-tabs>a{justify-content:center!important;padding-inline:0!important;gap:0!important;min-height:48px}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-mini #navWrap .lg-ind.lg-ind{border-radius:16px!important}
+  html:root:not(.fx):not(.zz):not(.zy) body.nav-mini #navWrap :is(.nav-hab,.nav-user,.nav-search){justify-content:center!important;padding-inline:0!important}
+}
 </style>
 </head>
 <body>
@@ -8946,7 +8955,7 @@ const PLAN_SUG7={emotions:[N_('Stress'),N_('Tristesse'),N_('Colère'),N_('Solitu
  relapse:[N_('Me rappeler qu’une reprise n’efface pas ce que j’ai fait'),N_('Noter ce qui s’est passé dans mon journal, sans me juger'),N_('Appeler une personne de confiance'),N_('Reprendre mon plan dès le lendemain'),N_('En parler à un professionnel si cela se répète')]};
 
 const A_V7={
-  navMini:()=>{S.prefs.navMini=!S.prefs.navMini;save();ensureChrome();LG_POS=null;setTimeout(()=>lgPlace(false),320)},
+  navMini:()=>{S.prefs.navMini=!S.prefs.navMini;save();ensureChrome();LG_POS=null;lgFollow(650)},
   navHabit:el=>{ui.homeHabit=el.dataset.id;S.prefs.activeHabit=el.dataset.id;save();if(ui.view!=='accueil')location.hash='accueil';else render()},
   progStart:()=>{S.prog={start:sod(now()),done:{},note:{},past:[]};save();render();toast(t('Programme commencé'),t('Jour 1 : tes motivations.'))},
   progDay:el=>progSheet(+el.dataset.d),
