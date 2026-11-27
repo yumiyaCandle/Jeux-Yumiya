@@ -62,6 +62,32 @@ Cinq onglets : **Aujourd’hui · Progrès · Aide (au centre, en corail) · Mon
 ## Comparaison avec le marché
 Applications regardées : Smoke Free, QuitNow!, Kwit, I Am Sober, Reframe, Sunnyside (fiches App Store et revues publiques). LIBRE couvrait déjà l’essentiel : journal des envies avec contexte, frise de santé (« Mon corps »), économies, étapes, programme, réduction, aide guidée et numéros d’urgence. Ajouté : l’engagement du jour. Écartés pour l’instant : communauté et discussion (Internet et modération nécessaires), carte des envies par GPS (donnée sensible), abonnements et coachs payants, médicaments sur ordonnance (hors du rôle de LIBRE).
 
+## Graphiques et Liquid Glass (LIBRE 21.2)
+Demande : plus de graphiques, plus précis, avec de vrais chiffres et moins de texte ; encore plus de Liquid Glass. Skills utilisés : `dataviz` (règles de graphiques), `/unslop` (mode retouche), `/apple-design` (matériaux, typographie), `/find-skills` (aucun skill de graphiques trouvé sur skills.sh pour « charts », « dataviz », « data visualization »).
+- **Accueil** : un anneau « Activité » (progression vers la prochaine étape, en %) remplace la barre fine ; en réduction avec limite, la barre reste. La ligne « Depuis le dernier arrêt » est masquée au-delà de 2 jours (elle répétait le chiffre).
+- **Progrès** :
+  - **Argent économisé** : courbe cumulée semaine par semaine (calcul `savedOf`), 3, 6 ou 12 mois.
+  - **Quand arrivent tes envies** : envies notées sur 90 jours, par tranches de 4 heures.
+  - Le graphique « Consommation par semaine » n’apparaît plus en arrêt quand la période ne compte aucune consommation (il était vide) ; il reste en réduction et dans Statistiques détaillées.
+  - Sous-titres raccourcis (« 14 jours · de 1 à 5 »), état vide « Pas encore de données ».
+- **Règles appliquées à tous les graphiques** (`areaChart`, `v7Bars`, `bars`) :
+  - axe arrondi au plus près (`niceTop` : la courbe remplit le cadre) ;
+  - grille en filets pleins ;
+  - ligne de 2 px, voile à 10 % ;
+  - point final cerclé avec sa valeur ;
+  - barres de 24 px au plus, arrondies en haut, carrées sur la ligne de base ;
+  - valeur écrite seulement sur la plus haute et la plus récente, les autres au survol ;
+  - texte toujours en encre de texte ;
+  - échelles fixes pour le moral (5) et l’intensité (10).
+- **Corrigé** : les barres de Statistiques détaillées s’affichaient comme des tirets sombres (une règle CSS de jauge s’appliquait aux barres SVG, et leurs couleurs n’étaient pas définies) ; la grille et la bulle d’information des courbes n’avaient aucun style.
+- **Liquid Glass** :
+  - jetons `--lg-fill`, `--lg-blur`, `--lg-rim`, `--lg-drop` et `--lg-ctl` ;
+  - tranche spéculaire (lumière en haut à gauche, reflet en bas à droite) et lueur interne ;
+  - appliqué aux panneaux, à la carte de l’accueil, aux boutons discrets, sélecteurs, puces et au bouton « − ».
+- **Lumière de fond** :
+  - la teinte de l’addiction, diffuse et fixe, que le verre floute au défilement. Elle était déjà prévue, mais un fond opaque sur `body` la masquait.
+  - Désactivée en affichage sobre et quand le système demande moins de transparence.
+
 ## Vérifications
 
 - `node tests/run.js` : 116 tests (dont les 5 scénarios de LIBRE 20). Tests adaptés : navigation LIBRE 21, effets visuels désactivables, ancien profil « verre ».
