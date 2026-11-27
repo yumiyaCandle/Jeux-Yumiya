@@ -62,3 +62,14 @@ Les pages apple.com n’ont pas pu être lues depuis l’environnement, dont le 
 - `npm run -s check:contrast` : aucun texte sous AA, en clair et en sombre.
 - `npm run -s check:targets` : toutes les zones tactiles font au moins 24 × 24 px.
 - `node tests/run.js` : suite complète.
+
+## Verre liquide : départ, questionnaire et comptes
+
+Sur demande, l’écran de départ, le questionnaire d’inscription et les écrans de compte (création, connexion, code, clé de récupération) passent en « verre liquide » :
+- **Fond** : une nuit avec la lumière de l’aube et la couleur du suivi, pour que le verre ait quelque chose à réfracter.
+- **Surfaces** : options, sélecteurs, champs et plaque du formulaire sont en verre (flou et saturation, arête claire en haut).
+- **Action principale** : une goutte de verre clair, épaisse.
+- **Choix sélectionné** : plus clair et cerclé d’ambre.
+- **Barres collantes** : en haut et en bas, en verre dépoli.
+
+Avec « Réduire la transparence », toutes ces surfaces deviennent opaques. Le reste de l’app garde des surfaces pleines : le verre y avait été jugé trop « IA ».

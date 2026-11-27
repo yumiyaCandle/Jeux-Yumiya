@@ -4116,6 +4116,91 @@ html:root:not(.fx):not(.zz) body #navWrap .nav-help>i svg circle{fill:#FFD3B8!im
 html:root:not(.fx):not(.zz) body #app .h11 .hm-side svg.hz{max-width:420px}
 
 html:root:not(.fx):not(.zz) body #app .kps .kp{background:none!important;padding-left:0!important;padding-right:0!important}
+
+/* ===== LIBRE 18 : verre liquide pour l'accueil de départ, le questionnaire et les comptes =====
+   Demandé pour ces écrans seulement. Une nuit, avec la lumière de l'aube et la couleur du suivi, est posée derrière :
+   le verre a quelque chose à réfracter. Surfaces : verre + flou + saturation, arête claire en haut ; l'action principale
+   est une goutte de verre clair, épaisse. « Réduire la transparence » : surfaces opaques. */
+html:root:not(.fx):not(.zz) body:has(#app :is(.q,.auth,.welcome4)){
+  --gl:rgba(255,255,255,.08);--gl-2:rgba(255,255,255,.16);--gl-edge:rgba(255,255,255,.28);--gl-line:rgba(255,255,255,.12);
+  --gl-blur:blur(24px) saturate(180%);
+  background:
+    radial-gradient(70% 45% at 100% 0%,color-mix(in srgb,var(--hp2,#3E6B8A) 55%,transparent),transparent 70%),
+    radial-gradient(80% 50% at 0% 105%,rgba(242,179,94,.38),transparent 70%),
+    radial-gradient(60% 40% at 90% 90%,rgba(194,65,42,.22),transparent 70%),
+    #0B0F1C!important;background-attachment:fixed!important;color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4){background:transparent!important;color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4) :is(h1,h2,h3,b,strong,label,legend,.flabel,.opt,.q-step b,.unit-lbl,.w4-tag){color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4) :is(p,small,span,.sub,.small,.muted,.q-step,.au-sub,.w4-legal,.opt small){color:#C4C8D2}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4) :is(h1){letter-spacing:-.025em!important}
+
+/* Surfaces de verre */
+html:root:not(.fx):not(.zz) body #app :is(.q .opt,.q .seg,.q .stepper button,.q input:not([type=checkbox]):not([type=radio]):not([type=range]),.q select,.q textarea,.q .tile,.q .notice,.q .q-tag,.q .iconbtn,
+  .welcome4 .w4-feat li,.welcome4 .w4-lang,.welcome4 .w4-mark,.welcome4 .w4-alt,
+  .auth .seg,.auth input:not([type=checkbox]),.auth .iconbtn,.auth .au-key,.auth .btn.ghost,.auth .au-check){
+  background:var(--gl)!important;-webkit-backdrop-filter:var(--gl-blur)!important;backdrop-filter:var(--gl-blur)!important;
+  box-shadow:inset 0 1px 0 var(--gl-edge),inset 0 0 0 1px var(--gl-line),0 10px 30px -18px rgba(0,0,0,.6)!important;border:0!important;color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app :is(.q .opt,.welcome4 .w4-feat li){border-radius:22px!important}
+html:root:not(.fx):not(.zz) body #app :is(.q .seg,.auth .seg){border-radius:999px!important;padding:4px!important;gap:2px!important}
+html:root:not(.fx):not(.zz) body #app :is(.q .seg.wrap){border-radius:24px!important}
+html:root:not(.fx):not(.zz) body #app :is(.q .seg,.auth .seg) :is(button,a){background:transparent!important;color:#E6E3DC!important;border-radius:999px!important;box-shadow:none!important;border:0!important}
+html:root:not(.fx):not(.zz) body #app :is(.q .stepper button,.q .iconbtn,.auth .iconbtn,.welcome4 .w4-lang){border-radius:999px!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth) :is(input,select,textarea){border-radius:16px!important}
+html:root:not(.fx):not(.zz) body #app .q .stepper input{background:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth) ::placeholder{color:#9EA4B1!important}
+html:root:not(.fx):not(.zz) body #app :is(.q .opt-ic,.welcome4 .w4-feat li>i){background:var(--gl-2)!important;box-shadow:inset 0 1px 0 var(--gl-edge)!important;border-radius:12px!important;color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app :is(.q .opt-ic,.welcome4 .w4-feat li>i) svg{color:#F3F0EA!important}
+
+/* Choisi : une goutte plus claire, cerclée de lumière d'aube */
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth) :is(.opt[aria-pressed="true"],.opt[aria-checked="true"],.seg :is([aria-pressed="true"],[aria-checked="true"],[aria-selected="true"])){
+  background:rgba(255,255,255,.22)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(242,179,94,.75),0 8px 20px -10px rgba(0,0,0,.5)!important}
+html:root:not(.fx):not(.zz) body #app .q .opt[aria-pressed="true"] *{color:#fff!important}
+
+/* Action principale : verre clair épais ; secondaire : verre ; désactivée : verre éteint */
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4) .btn.primary,html:root:not(.fx):not(.zz) body #app .welcome4 .w4-go{
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.82))!important;color:#0E1220!important;border-radius:999px!important;min-height:56px!important;
+  -webkit-backdrop-filter:var(--gl-blur)!important;backdrop-filter:var(--gl-blur)!important;box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06),0 14px 30px -16px rgba(0,0,0,.7)!important;border:0!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4) .btn.primary:disabled{background:rgba(255,255,255,.14)!important;color:#C4C8D2!important;box-shadow:inset 0 1px 0 var(--gl-edge),inset 0 0 0 1px var(--gl-line)!important;opacity:1!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4) .btn:not(.primary):not(.w4-go){border-radius:999px!important;min-height:52px}
+html:root:not(.fx):not(.zz) body #app .q .ob-cta{background:linear-gradient(180deg,transparent,rgba(11,15,28,.85) 40%)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4) .link{color:#F2B35E!important}
+html:root:not(.fx):not(.zz) body #app .q :is(.q-secs .qseg){background:rgba(255,255,255,.16)!important}
+html:root:not(.fx):not(.zz) body #app .q .q-secs .qseg i{background:#F2B35E!important}
+html:root:not(.fx):not(.zz) body #app .q .q-tag{border-radius:999px!important;color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app .q .q-tag svg{color:#F2B35E!important}
+html:root:not(.fx):not(.zz) body #app .q .tile .k{color:#C4C8D2!important}html:root:not(.fx):not(.zz) body #app .q .tile .v{color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app .q .ready b{color:#F2B35E!important}
+html:root:not(.fx):not(.zz) body #app .welcome4 .w4-mark{border-radius:28px!important}
+html:root:not(.fx):not(.zz) body #app .welcome4 .w4-hero h1{font-size:56px!important;letter-spacing:-.04em!important}
+html:root:not(.fx):not(.zz) body #app .au-err{background:rgba(194,65,42,.22)!important;color:#FFD0C6!important;border-radius:14px!important;box-shadow:inset 0 0 0 1px rgba(255,138,117,.4)!important}
+
+@media (prefers-reduced-transparency:reduce){
+  html:root:not(.fx):not(.zz) body #app :is(.q,.auth,.welcome4) *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  html:root:not(.fx):not(.zz) body #app :is(.q .opt,.q .seg,.q .stepper button,.q input,.welcome4 .w4-feat li,.auth .seg,.auth input){background:#1C2233!important}}
+@media (prefers-reduced-motion:no-preference){
+  html:root:not(.fx):not(.zz) body #app :is(.q .opt,.q .seg button,.q .stepper button,.btn):active{transform:scale(.97);transition:transform .08s}}
+
+/* Verre liquide (suite) : le formulaire de compte est une plaque de verre ; le bas de l'accueil de départ ne bouche plus la lumière */
+html:root:not(.fx):not(.zz) body #app .auth .au-body{background:rgba(255,255,255,.07)!important;-webkit-backdrop-filter:blur(30px) saturate(180%)!important;backdrop-filter:blur(30px) saturate(180%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26),inset 0 0 0 1px rgba(255,255,255,.10),0 24px 60px -30px rgba(0,0,0,.8)!important;border:0!important;border-radius:32px!important;color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app .auth .au-body :is(h1,label,b){color:#F3F0EA!important}
+html:root:not(.fx):not(.zz) body #app .auth .au-body :is(p,.au-sub,small,.small){color:#C9CCD4!important}
+html:root:not(.fx):not(.zz) body #app .auth .au-foot,html:root:not(.fx):not(.zz) body #app .auth .au-foot *{color:#C9CCD4!important}
+html:root:not(.fx):not(.zz) body #app .auth input:focus{box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 0 0 2px rgba(242,179,94,.7)!important;outline:0!important}
+html:root:not(.fx):not(.zz) body #app .welcome4 .w4-cta{background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html:root:not(.fx):not(.zz) body #app .welcome4 .w4-cta::before,html:root:not(.fx):not(.zz) body #app .welcome4 .w4-cta::after{display:none!important}
+html:root:not(.fx):not(.zz) body #app .welcome4 .w4-alt{background:rgba(255,255,255,.10)!important;color:#F3F0EA!important;border-radius:999px!important;min-height:56px!important}
+html:root:not(.fx):not(.zz) body #app .welcome4 .w4-go{color:#0E1220!important}
+html:root:not(.fx):not(.zz) body #app :is(.q,.auth) .seg :is([aria-pressed="true"],[aria-checked="true"],[aria-selected="true"]) svg{color:#F2B35E!important}
+
+/* Verre liquide (fin) : barres collantes en verre dépoli, indicateurs de choix visibles */
+html:root:not(.fx):not(.zz) body #app .welcome4 .w4-cta{background:rgba(11,15,28,.55)!important;-webkit-backdrop-filter:blur(26px) saturate(180%)!important;backdrop-filter:blur(26px) saturate(180%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14)!important;margin-inline:-20px!important;padding-inline:20px!important;border-radius:28px 28px 0 0!important}
+html:root:not(.fx):not(.zz) body #app .q .q-top{background:rgba(11,15,28,.5)!important;-webkit-backdrop-filter:blur(22px) saturate(180%)!important;backdrop-filter:blur(22px) saturate(180%)!important;border-radius:0 0 20px 20px}
+html:root:not(.fx):not(.zz) body #app .q .q-top svg,html:root:not(.fx):not(.zz) body #app .q .q-step,html:root:not(.fx):not(.zz) body #app .q .q-step *{color:#E6E3DC!important}
+html:root:not(.fx):not(.zz) body #app .q .opt::after,html:root:not(.fx):not(.zz) body #app .q .opt>i:last-child{border-color:rgba(255,255,255,.45)!important}
+html:root:not(.fx):not(.zz) body #app .q .opt[aria-pressed="true"]::after{background:#F2B35E!important;border-color:#F2B35E!important}
+html:root:not(.fx):not(.zz) body #app .q :is(h2,h3,.q-group,.flabel){color:#E6E3DC!important}
 </style>
 </head>
 <body>
