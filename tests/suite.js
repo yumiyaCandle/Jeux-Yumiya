@@ -1199,7 +1199,7 @@ test('Scénario', 'Nouveau téléphone : profil complet, export chiffré, restau
   const txt = await exportEncrypted(p, 'phrase-de-passe-solide');
   const q = await page(b, base); await q.goto(base); await q.waitForSelector('[data-a="obNext"]');
   const file = require('path').join(require('os').tmpdir(), 'libre-test-sauvegarde.libre.json'); fs.writeFileSync(file, txt);
-  const [chooser] = await Promise.all([q.waitForEvent('filechooser'), q.click('[data-a="importFile"]')]);
+  const [chooser] = await Promise.all([q.waitForEvent('filechooser'), q.evaluate(() => { document.querySelector('.w4-more').open = true; }).then(() => q.click('[data-a="importFile"]'))]);
   await chooser.setFiles(file); await q.waitForTimeout(500);
   await q.fill('#layer input[type=password]', 'phrase-de-passe-solide'); await q.evaluate(() => document.querySelector('#layer form').requestSubmit()); await q.waitForTimeout(2500);
   const conf = await q.$('#layer .btn.primary, #layer .btn.danger'); if (conf) { await conf.click(); await q.waitForTimeout(500); }
