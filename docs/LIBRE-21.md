@@ -37,6 +37,7 @@ Cinq onglets : **Aujourd’hui · Progrès · Aide (au centre, en corail) · Mon
 ## Fonctionnalités
 
 ### Ajoutées
+- **Engagement du jour** (accueil, dans la carte du suivi) : inspiré du « daily pledge » d’I Am Sober. Le matin, « Je m’engage » (ne pas consommer, ou rester dans ma limite en réduction) ; à partir de 18 h, « As-tu tenu ton engagement ? » Oui / Pas cette fois. La réponse est seulement enregistrée (`tools.pledges`, par jour) : elle n’ajoute aucune consommation et ne remet aucun compteur à zéro. Absent en mode Observation. Fonctionne hors ligne ; les anciennes sauvegardes sans cette clé s’ouvrent normalement.
 - **Ton année** (Progrès) : 52 barres fines, une par semaine, hauteur = jours tenus (sans consommer, ou dans la limite) ; total, meilleure semaine, semaine en cours. Données réelles uniquement (calcul `okDays`). Inspirée d’un composant de 21st.dev (« Heat Strip »), réécrite sans framework.
 - **Affichage sobre** : l’interrupteur « Effets visuels » (Profil › Apparence) coupe le flou, rend les surfaces opaques et supprime les animations d’écran.
 
@@ -45,6 +46,7 @@ Cinq onglets : **Aujourd’hui · Progrès · Aide (au centre, en corail) · Mon
 - Les panneaux « Pour toi, maintenant » ne s’ajoutent plus à une situation « journée difficile » (une seule suggestion).
 
 ### Retirées
+- **Code de la page « Vue d’ensemble »** (`viewOverview`) : doublon exact de Progrès, déjà inaccessible (redirigée vers Progrès depuis LIBRE 11). La redirection de `#apercu` est conservée pour les anciens liens.
 - **Le galet de verre** (`pebbleSVG`, `polishOf`), d’abord pensé comme signature : jugé peu professionnel par la personne propriétaire, il est retiré partout (accueil, bienvenue, listes, barre latérale). Aucune donnée n’en dépendait.
 - **Cartes de chiffres de l’accueil** : déplacées, pas supprimées ; les mêmes chiffres sont dans Progrès.
 - **Photos d’illustration** (banque d’images Pexels : une soignante masquée, un sablier, une main qui écrit) : génériques, sans lien avec la personne. Les fichiers restent dans `libre/photos/` ; un drapeau (`PHOTOS_ON`) permet de les réafficher. Les photos personnelles de « Mes motivations » ne sont pas concernées.
@@ -56,6 +58,9 @@ Cinq onglets : **Aujourd’hui · Progrès · Aide (au centre, en corail) · Mon
 - Les listes « Jour de… à… » du thème « selon l’heure » n’étaient reliées à aucune action : elles fonctionnent.
 - Libellés de graphiques illisibles (8,5 px) : au moins 11 px réels, et les libellés qui se chevauchent sont masqués.
 - Couleur de thème du navigateur (barre d’état) alignée sur le thème clair ou sombre réellement affiché.
+
+## Comparaison avec le marché
+Applications regardées : Smoke Free, QuitNow!, Kwit, I Am Sober, Reframe, Sunnyside (fiches App Store et revues publiques). LIBRE couvrait déjà l’essentiel : journal des envies avec contexte, frise de santé (« Mon corps »), économies, étapes, programme, réduction, aide guidée et numéros d’urgence. Ajouté : l’engagement du jour. Écartés pour l’instant : communauté et discussion (Internet et modération nécessaires), carte des envies par GPS (donnée sensible), abonnements et coachs payants, médicaments sur ordonnance (hors du rôle de LIBRE).
 
 ## Vérifications
 

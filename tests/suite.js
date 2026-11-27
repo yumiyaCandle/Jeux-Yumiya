@@ -1499,4 +1499,20 @@ test('LIBRE 20', 'Scénario 4 — rechute : message sans culpabilité, faire le 
   await p.go('accueil'); assert.match(await p.textContent('#app'), /jours sans cigarettes au total|jours de suivi/, 'les jours passés restent visibles'); noErr(p);
 });
 
+test('LIBRE 21', 'Engagement du jour : le matin on s’engage, le soir on répond ; anciennes sauvegardes sans engagement acceptées', async (b, base) => {
+  const st = profileState({ types: ['cigarette'] }); delete (st.tools || {}).pledges;
+  const p = await page(b, base, { init: seed(st) });
+  const d = new Date(); d.setHours(9, 0, 0, 0); await p.clock.setFixedTime(d);
+  await p.goto(base); await p.waitForSelector('#app[data-view="accueil"]'); await p.closeLayer();
+  assert.match(await p.textContent('.hm-hero .pl-row'), /Ne pas consommer aujourd’hui/);
+  await p.click('[data-a="pledge"]'); await p.closeLayer();
+  assert.match(await p.textContent('.hm-hero .pl-row'), /Engagé·e depuis/);
+  let s = await p.state(); const k = Object.keys(s.tools.pledges); assert.equal(k.length, 1); assert.equal(s.tools.pledges[k[0]].kept, null);
+  d.setHours(20); await p.clock.setFixedTime(d); await p.go('progres'); await p.go('accueil'); await p.closeLayer();
+  assert.match(await p.textContent('.hm-hero .pl-row'), /As-tu tenu ton engagement/);
+  await p.click('[data-a="pledgeKept"][data-v="1"]');
+  assert.match(await p.textContent('.hm-hero .pl-row'), /Engagement tenu aujourd’hui/);
+  s = await p.state(); assert.equal(s.tools.pledges[k[0]].kept, true); assert.equal(s.logs.length, st.logs.length, 'aucune consommation ajoutée'); noErr(p);
+});
+
 module.exports = { T };
