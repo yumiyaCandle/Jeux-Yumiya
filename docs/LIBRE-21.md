@@ -123,6 +123,18 @@ Skills : `/find-skills` a été utilisé. Le CLI `npx skills find` ne renvoie ri
   - c’est le principe de la carte d’adaptation (« coping card ») des thérapies cognitivo-comportementales ;
   - aucune donnée inventée : s’il manque un élément, un bouton propose de le créer.
 
+### LIBRE 21.4 : explications concrètes et finitions
+- **Présentation** : chaque onglet montre en plus trois gestes concrets, par exemple « Appuie sur + pour noter une consommation, sur − pour corriger ».
+- **Bouton « ? »** : présent en haut des cinq onglets. Il ouvre l’explication de l’onglet où l’on se trouve, avec un accès à toute la présentation.
+- **Journal** : la question du jour était illisible (texte blanc sur verre clair) ; elle est maintenant en verre, avec un texte sombre.
+- **Calendrier** :
+  - les jours sont colorés selon la légende : sans consommation en teinte de l’addiction, avec consommation en ocre ;
+  - les points d’étape, de record et de journal sont visibles ;
+  - la légende utilise les mêmes couleurs ;
+  - les tuiles de chiffres sont en verre.
+- **Mon plan** : chaque ligne est un panneau de verre, comme dans Profil.
+- **Barre du haut de l’accueil** : boutons resserrés pour que le logo garde sa place.
+
 ## Vérifications
 
 - `node tests/run.js` : 116 tests (dont les 5 scénarios de LIBRE 20). Tests adaptés : navigation LIBRE 21, effets visuels désactivables, ancien profil « verre ».
