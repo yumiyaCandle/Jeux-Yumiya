@@ -430,14 +430,16 @@ test('Apparence', 'Couleurs d’accent : contraste des boutons ≥ 4,5:1 en clai
   }
 }, { slow: true });
 
-test('Apparence', 'Réglage : changer la couleur et activer les effets (verre), conservé après rechargement', async (b, base) => {
+test('Apparence', 'LIBRE 21 : effets visuels (verre, animations) actifs par défaut ; désactivables pour un affichage sobre, conservé après rechargement', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
-  assert.ok(!(await p.evaluate(() => document.documentElement.classList.contains('fx'))), 'Horizon (sans effets) par défaut');
+  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('calm')), false, 'effets actifs par défaut');
   await p.go('profil'); await p.closeLayer(); await p.openFold('p-look');
-  await p.click('label.switch:has([data-a="fxToggle"])'); await p.waitForTimeout(300); await p.openFold('p-look'); await p.click('[data-a="setAccent"][data-v="indigo"]'); await p.waitForTimeout(200);
+  assert.equal(await p.isChecked('input[data-a="fxToggle"]'), true, 'interrupteur coché par défaut');
+  await p.click('label.switch:has([data-a="fxToggle"])'); await p.waitForTimeout(300);
   await p.reload(); await p.waitForSelector('#app[data-view]');
-  const r = await p.evaluate(() => [document.documentElement.dataset.accent, document.documentElement.classList.contains('fx'), getComputedStyle(document.getElementById('amb')).display]);
-  assert.deepEqual(r.slice(0, 2), ['indigo', true], JSON.stringify(r)); const pr = (await p.state()).prefs; assert.equal(pr.accent, 'indigo'); assert.equal(pr.look, 'verre'); noErr(p);
+  const r = await p.evaluate(() => [document.documentElement.classList.contains('calm'), getComputedStyle(document.querySelector('.lg-tabs')).backdropFilter]);
+  assert.equal(r[0], true, 'affichage sobre conservé'); assert.ok(!r[1] || r[1] === 'none', 'plus de flou : ' + r[1]);
+  assert.equal((await p.state()).prefs.calm, true); noErr(p);
 });
 
 test('Apparence', 'Moins d’animations demandé par le système : aucune animation d’écran', async (b, base) => {
@@ -446,7 +448,7 @@ test('Apparence', 'Moins d’animations demandé par le système : aucune animat
   assert.equal(n, 0, 'animations : ' + n); noErr(p);
 });
 
-test('Apparence', 'Option « verre » : animations d’ouverture, entrée des blocs, barres qui se transforment', async (b, base) => {
+test('Apparence', 'Animations (sans « moins d’animations ») : ouverture, entrée des blocs, barres qui se transforment', async (b, base) => {
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, locale: 'fr-CH' }); const st = profileState(); st.prefs.look = 'verre';
   st.logs = Array.from({ length: 40 }, (_, i) => ({ id: 'l' + i, habitId: 'h0', type: 'cigarette', ts: Date.now() - i * 15 * 36e5, qty: 1 }));
   await ctx.addInitScript(([s]) => { if (!sessionStorage.getItem('__seeded')) { localStorage.setItem('libre.v1', JSON.stringify(s)); sessionStorage.setItem('__seeded', '1'); } }, [st]);
@@ -911,16 +913,12 @@ test('Parcours 11', 'Notifications refusées dans le téléphone : rien n’est 
   noErr(p);
 });
 
-test('Apparence', 'Identité « Envol » par défaut, y compris pour les profils existants ; l’ancien style « verre » reste une option', async (b, base) => {
-  const st = profileState({}); st.prefs.fx = true;
+test('Apparence', 'LIBRE 21 : un ancien profil réglé sur « verre » (LIBRE 8) s’ouvre normalement dans la nouvelle identité, couleur de l’addiction comprise', async (b, base) => {
+  const st = profileState({}); st.prefs.fx = true; st.prefs.look = 'verre';
   const p = await page(b, base, { init: seed(st) }); await p.goto(base); await p.settle();
-  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'Envol par défaut');
-  await p.go('profil'); await p.openFold('p-look'); await p.evaluate(() => document.querySelector('input[data-a="fxToggle"]').click()); await p.waitForTimeout(200);
-  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), true, 'verre activé à la demande');
-  assert.equal((await stateOf(p)).prefs.look, 'verre');
-  await p.reload(); await p.waitForSelector('#app[data-view]');
-  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), true, 'choix conservé');
-  noErr(p);
+  assert.equal(await p.evaluate(() => document.documentElement.classList.contains('fx')), false, 'plus de style « verre » à part : le verre est partout');
+  assert.ok(await p.evaluate(() => !!document.documentElement.dataset.htheme), 'la couleur de l’addiction s’applique');
+  assert.ok(await p.$('.hm-hero .pb-stone svg'), 'le galet est affiché'); noErr(p);
 });
 
 /* ---------- Couleur de chaque addiction ---------- */
@@ -1370,12 +1368,13 @@ test('LIBRE 11', 'Accueil : compteur avec saisie du jour, chiffres, humeur et ob
   noErr(p);
 });
 
-test('LIBRE 11', 'Navigation : Accueil, M’aider, Mon suivi, Comprendre, Profil ; les pages retirées mènent à leur nouvelle place', async (b, base) => {
+test('LIBRE 11', 'Navigation : Aujourd’hui, Progrès, Aide, Mon plan, Profil ; les pages retirées mènent à leur nouvelle place', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState()) }); await p.goto(base); await p.settle();
   const tabs = await p.$$eval('nav .lg-tabs > a:not(.nav-x)', a => a.map(x => x.textContent.trim()));
-  /* LIBRE 20 : cinq onglets — Accueil, M’aider, Mon suivi, Comprendre, Profil */
-  assert.deepEqual(tabs, ['Accueil', 'M’aider', 'Mon suivi', 'Comprendre', 'Profil']);
-  assert.deepEqual(await p.$$eval('nav .lg-tabs > a', a => a.map(x => x.getAttribute('href'))), ['#accueil', '#aide', '#progres', '#comprendre', '#profil']);
+  /* LIBRE 21 : cinq onglets — Aujourd’hui, Progrès, Aide (au centre), Mon plan, Profil ; Comprendre est rangé dans Mon plan */
+  assert.deepEqual(tabs, ['Aujourd’hui', 'Progrès', 'Aide', 'Mon plan', 'Profil']);
+  assert.deepEqual(await p.$$eval('nav .lg-tabs > a', a => a.map(x => x.getAttribute('href'))), ['#accueil', '#progres', '#aide', '#outils', '#profil']);
+  await p.go('comprendre'); assert.equal(await p.$eval('nav .lg-tabs > a[aria-current="page"]', a => a.getAttribute('href')), '#outils', 'Comprendre est sous Mon plan');
   for (const [from, to] of [['coach', 'accueil'], ['recompenses', 'progres'], ['programme', 'outils'], ['apercu', 'progres'], ['evolution', 'progres']]) {
     await p.evaluate(v => { location.hash = v; }, from); await p.waitForFunction(v => document.getElementById('app').dataset.view === v, to, { timeout: 5000 });
   }
@@ -1479,7 +1478,7 @@ test('LIBRE 20', 'Scénario 2 — envie : M’aider maintenant, situation « J�
 test('LIBRE 20', 'Scénario 3 — suivi : noter une consommation et une envie, les chiffres et graphiques se mettent à jour, l’historique est gardé', async (b, base) => {
   const p = await page(b, base, { init: seed(profileState({ types: ['cigarette'] })) }); await p.goto(base); await p.settle();
   await p.click('nav .lg-tabs a[href="#progres"]'); await p.waitForSelector('#app[data-view="progres"]');
-  assert.match(await p.textContent('#app'), /Mon suivi/); assert.equal(await p.locator('.sa-it').count(), 6, 'six façons de noter');
+  assert.match(await p.textContent('#app'), /Progrès/); assert.equal(await p.locator('.sa-it').count(), 6, 'six façons de noter');
   await p.click('.sa-it[data-a="qaCrave"]'); await p.click('[data-a="qaTrig"][data-v="Stress"]'); await p.click('[data-a="qaCraveSave"]'); await p.waitForTimeout(200);
   let s = await p.state(); const cr = (s.tools.history || []).filter(e => e.trigger === 'Stress' && e.before === 6); assert.equal(cr.length, 1, 'envie enregistrée avec son intensité et son déclencheur');
   await p.click('.sa-it[data-a="logForm"]'); await p.waitForSelector('#layer .sheet'); await p.evaluate(() => { const b = [...document.querySelectorAll('#layer .btn.primary')].find(x => x.offsetParent); b && b.click(); }); await p.waitForTimeout(300);
