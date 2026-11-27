@@ -273,7 +273,7 @@ test('Natif', 'Coffre momentanément inaccessible : LIBRE attend, n’écrit rie
   const calls = await p.evaluate(() => window.__calls.map(c => c[0])); assert.ok(!calls.includes('LibreVault.move'), 'rien n’est mis de côté');
   assert.equal(await p.evaluate(() => localStorage.getItem('libre.v1')), null, 'rien d’écrit en clair');
   await p.evaluate(() => sessionStorage.setItem('__busy', 'off')); await p.click('[data-a="vaultRetry"]');
-  await p.waitForSelector('#app[data-view="journal"]', { timeout: 8000 }); await p.go('accueil');
+  await p.waitForSelector('#app[data-view="journal"]', { timeout: 8000 }); await p.go('profil');
   assert.match(await p.textContent('#app'), /Gardée/, 'données rouvertes');
   assert.deepEqual(p.errors, []);
 });

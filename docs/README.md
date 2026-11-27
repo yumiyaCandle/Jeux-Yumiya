@@ -2,6 +2,7 @@
 
 | Document | Contenu |
 |---|---|
+| [LIBRE-13.md](LIBRE-13.md) | **Interface actuelle « Carnet »** : passage /unslop complet (plus de bandeau ni de tuiles, rampe encre, semaine cochée, lignes réglées, titre = la date) |
 | [LIBRE-12.md](LIBRE-12.md) | **Jour et nuit** : thème au choix ou selon l’heure (7 h – 20 h), rappels du Jour J, signaux d’alerte, objectif d’épargne, revue web-design-guidelines |
 | [LIBRE-11.md](LIBRE-11.md) | **Interface « Allégée »** : 4 onglets (Aujourd’hui, Mon plan, Progrès, Journal) et Aide ; accueil en 4 éléments ; Jour J ; retarder l’envie de 10 min ; fonctions retirées de l’affichage (données gardées) ; méthode unslop |
 | [LIBRE-9.md](LIBRE-9.md) | **Tableau de bord** : analyse de la vidéo d'inspiration et transposition (vue d'ensemble, stratégies en colonnes, déclencheurs, économies et relevé) |
