@@ -4455,6 +4455,41 @@ html:root:not(.fx):not(.zz):not(.zy) body #app .btn{white-space:normal!important
 html:root:not(.fx):not(.zz):not(.zy) body #app .kp-b{display:inline-block!important;white-space:normal!important;line-height:1.3!important;padding:3px 10px!important;border-radius:12px!important;max-width:100%;vertical-align:middle}
 
 @media (max-width:360px){html:root:not(.fx):not(.zz):not(.zy) body #navWrap .nav-help{flex-direction:column!important;gap:1px!important;padding:0 10px!important;width:auto!important}html:root:not(.fx):not(.zz):not(.zy) body #navWrap .nav-help>span{position:static!important;width:auto!important;height:auto!important;clip:auto!important;overflow:visible!important;font-size:10px!important;line-height:1.1!important}html:root:not(.fx):not(.zz):not(.zy) body #navWrap .nav-help>i,html:root:not(.fx):not(.zz):not(.zy) body #navWrap .nav-help>i svg{width:20px!important;height:20px!important}}
+
+/* LIBRE 19 : barre latérale (ordinateur) en verre liquide, comme la barre d'onglets de l'iPhone :
+   panneau flottant translucide, la couleur de l'addiction passe à travers ; arête lumineuse ; éléments en gouttes de verre */
+@media (min-width:900px){
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav{
+    background:linear-gradient(160deg,rgba(255,255,255,.34),rgba(255,255,255,.14) 45%,rgba(255,255,255,.22))!important;
+    -webkit-backdrop-filter:blur(36px) saturate(210%) brightness(1.04)!important;backdrop-filter:blur(36px) saturate(210%) brightness(1.04)!important;
+    border-radius:30px!important;border:1px solid rgba(255,255,255,.55)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.25),inset 1px 0 0 rgba(255,255,255,.35),0 30px 60px -28px rgba(15,18,23,.45),0 2px 6px rgba(15,18,23,.06)!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav::before{content:""!important;display:block!important;position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:radial-gradient(120% 40% at 30% 0%,rgba(255,255,255,.45),transparent 60%),radial-gradient(80% 30% at 100% 100%,color-mix(in srgb,var(--hp1,#3D6B57) 14%,transparent),transparent 70%)!important;z-index:0}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav>.in{position:relative;z-index:1}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap :is(.lg-tabs>a,a.nav-x,.nav-hab){border-radius:16px!important;color:var(--v-ink)!important;transition:background .2s,box-shadow .2s}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap :is(.lg-tabs>a,a.nav-x,.nav-hab):hover{background:rgba(255,255,255,.28)!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap :is(.lg-tabs>a,a.nav-x)[aria-current="page"]{
+    background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.55))!important;color:var(--accent-strong)!important;
+    box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.6),0 6px 16px -8px rgba(15,18,23,.35)!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap :is(.nav-search,.nav-col){background:rgba(255,255,255,.3)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.85),inset 0 0 0 1px rgba(255,255,255,.4)!important;border:0!important;border-radius:999px!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .nav-search kbd{background:rgba(255,255,255,.55)!important;box-shadow:inset 0 0 0 1px rgba(15,18,23,.08)!important;border:0!important}
+  html:root:not(.fx):not(.zz):not(.zy) body #navWrap .nav-help{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 55%),var(--v-sos)!important;border-radius:999px!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 12px 24px -12px rgba(194,47,33,.8)!important;border:0!important}
+}
+@media (min-width:900px) and (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body #navWrap.nav{
+  background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04) 45%,rgba(255,255,255,.08))!important;border-color:rgba(255,255,255,.16)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 30px 60px -28px rgba(0,0,0,.8)!important}
+  html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body #navWrap.nav::before{background:radial-gradient(120% 40% at 30% 0%,rgba(255,255,255,.10),transparent 60%)!important}
+  html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body #navWrap :is(.lg-tabs>a,a.nav-x)[aria-current="page"]{background:rgba(255,255,255,.14)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)!important}
+  html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body #navWrap :is(.nav-search,.nav-col){background:rgba(255,255,255,.08)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)!important}}
+@media (min-width:900px){html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body #navWrap.nav{background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04) 45%,rgba(255,255,255,.08))!important;border-color:rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 30px 60px -28px rgba(0,0,0,.8)!important}
+  html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body #navWrap :is(.lg-tabs>a,a.nav-x)[aria-current="page"]{background:rgba(255,255,255,.14)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)!important}}
+@media (min-width:900px) and (prefers-reduced-transparency:reduce){html:root:not(.fx):not(.zz):not(.zy) body #navWrap.nav{background:var(--v-base)!important}}
+
+@media (min-width:900px) and (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not([data-theme="light"]) body #navWrap .nav-search kbd{background:rgba(255,255,255,.14)!important;color:#F2F4F7!important}}
+@media (min-width:900px){html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body #navWrap .nav-search kbd{background:rgba(255,255,255,.14)!important;color:#F2F4F7!important}}
 </style>
 </head>
 <body>
