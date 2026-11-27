@@ -4625,6 +4625,129 @@ html:root:not(.fx):not(.zz):not(.zy)[data-theme="dark"] body :is(#app,header.pg-
   html:root:not(.fx):not(.zz):not(.zy) body.nav-mini #navWrap .lg-ind.lg-ind{border-radius:16px!important}
   html:root:not(.fx):not(.zz):not(.zy) body.nav-mini #navWrap :is(.nav-hab,.nav-user,.nav-search){justify-content:center!important;padding-inline:0!important}
 }
+
+/* ===== LIBRE 19 · Verre liquide d'après les références Apple (Musique iOS 26, Siri, iOS 27) =====
+   - verre très clair : on voit nettement le contenu dessous, légèrement flouté ;
+   - arête épaisse et lumineuse (la lentille), ombre courte et douce ;
+   - onglet actif = pastille grise translucide, icône et libellé dans la couleur de l'addiction ;
+   - l'Aide est un bouton rond séparé de la barre, comme la loupe de Musique ;
+   - interrupteurs : bouton de verre plus large que le rail. */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx){
+  --ap-glass:rgba(255,255,255,.18);--ap-glass-2:rgba(255,255,255,.32);
+  --ap-rim:inset 0 0 0 1.5px rgba(255,255,255,.55),inset 1px 1.5px 1px -0.5px rgba(255,255,255,.95),inset -1px -1.5px 1px -0.5px rgba(255,255,255,.5);
+  --ap-shadow:0 0 0 .5px rgba(15,18,23,.10),0 10px 28px -10px rgba(15,18,23,.28);
+  --ap-pill:rgba(118,118,128,.16);--ap-blur:blur(10px) saturate(190%) brightness(1.06)}
+@media (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not(.zx):not([data-theme="light"]){
+  --ap-glass:rgba(255,255,255,.06);--ap-glass-2:rgba(255,255,255,.12);
+  --ap-rim:inset 0 0 0 1.5px rgba(255,255,255,.14),inset 1px 1.5px 1px -0.5px rgba(255,255,255,.4),inset -1px -1.5px 1px -0.5px rgba(255,255,255,.14);
+  --ap-shadow:0 0 0 .5px rgba(0,0,0,.4),0 12px 30px -10px rgba(0,0,0,.6);--ap-pill:rgba(255,255,255,.14);--ap-blur:blur(12px) saturate(170%) brightness(.95)}}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx)[data-theme="dark"]{
+  --ap-glass:rgba(255,255,255,.06);--ap-glass-2:rgba(255,255,255,.12);
+  --ap-rim:inset 0 0 0 1.5px rgba(255,255,255,.14),inset 1px 1.5px 1px -0.5px rgba(255,255,255,.4),inset -1px -1.5px 1px -0.5px rgba(255,255,255,.14);
+  --ap-shadow:0 0 0 .5px rgba(0,0,0,.4),0 12px 30px -10px rgba(0,0,0,.6);--ap-pill:rgba(255,255,255,.14);--ap-blur:blur(12px) saturate(170%) brightness(.95)}
+
+/* ---- Barre d'onglets (téléphone) : capsule claire + bouton Aide rond détaché ---- */
+@media (max-width:899px){
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap.nav{background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding:0!important;border:0!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap.nav::after{display:none!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .in{gap:10px!important;align-items:center!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs.lg-tabs{background:var(--ap-glass)!important;-webkit-backdrop-filter:var(--ap-blur)!important;backdrop-filter:var(--ap-blur)!important;
+    box-shadow:var(--ap-rim),var(--ap-shadow)!important;border-radius:999px!important;padding:5px!important;min-height:62px!important}
+  html.lg-refract:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs.lg-tabs{backdrop-filter:url(#lgRefract) blur(8px) saturate(190%) brightness(1.06)!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .nav-help.nav-help{flex:0 0 auto!important;width:62px!important;height:62px!important;margin:0!important;padding:0!important;border-radius:50%!important;
+    background:color-mix(in srgb,var(--v-sos) 88%,transparent)!important;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35),inset 1px 1.5px 1px -0.5px rgba(255,255,255,.75),var(--ap-shadow)!important;
+    -webkit-backdrop-filter:var(--ap-blur)!important;backdrop-filter:var(--ap-blur)!important;flex-direction:column!important;gap:1px!important;justify-content:center!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .nav-help>span{position:static!important;width:auto!important;height:auto!important;clip:auto!important;overflow:visible!important;font-size:10px!important;line-height:1.1!important;color:#fff!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .nav-help>i,html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .nav-help>i svg{width:22px!important;height:22px!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body.nav-min #navWrap .lg-tabs.lg-tabs{min-height:50px!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body.nav-min #navWrap .nav-help.nav-help{width:50px!important;height:50px!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body.nav-min #navWrap.nav{left:max(36px,env(safe-area-inset-left,0px))!important;right:max(36px,env(safe-area-inset-right,0px))!important}
+}
+/* ---- Onglet actif : pastille grise translucide, couleur de l'addiction sur l'icône et le libellé ---- */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-ind.lg-ind{background:var(--ap-pill)!important;box-shadow:inset 0 .5px 0 rgba(255,255,255,.5)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-ind.lg-ind::after{display:none}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs>a{color:var(--v-ink)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs>a[aria-current="page"],html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs>a.lg-hot{color:var(--accent-strong)!important}
+/* Saisie : la pastille devient une lentille claire qui grossit (comme quand on glisse le doigt sur la barre d'iOS) */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-ind.lg-ind.drag{background:rgba(255,255,255,.22)!important;box-shadow:var(--ap-rim),0 10px 24px -10px rgba(15,18,23,.35)!important;scale:1.22 1.18}
+html.lg-refract:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-ind.lg-ind.drag{backdrop-filter:url(#lgRefract) blur(.5px) saturate(200%) brightness(1.12)!important}
+
+/* ---- Barre latérale (ordinateur) : même verre clair et même pastille ---- */
+@media (min-width:900px){
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap.nav{background:var(--ap-glass)!important;box-shadow:var(--ap-rim),var(--ap-shadow)!important;border:0!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap.nav::before{background:radial-gradient(120% 30% at 30% 0%,rgba(255,255,255,.3),transparent 60%)!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap :is(.nav-search,.nav-col){background:var(--ap-pill)!important;box-shadow:inset 0 .5px 0 rgba(255,255,255,.5)!important}
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs>a:not([aria-current="page"]):hover{background:rgba(118,118,128,.08)!important;box-shadow:none!important}
+}
+
+/* ---- Sélecteurs : même pastille grise que les onglets (comme le contrôle segmenté d'iOS 26) ---- */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body :is(#app,header.pg-head) :is(.seg:not(.wrap),.hpick,.segc){background:var(--ap-glass)!important;box-shadow:var(--ap-rim),var(--ap-shadow)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .seg-drop,html:root:not(.fx):not(.zz):not(.zy):not(.zx) body :is(#app,header.pg-head) .segc .segc-thumb.segc-thumb{background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.66))!important;box-shadow:var(--ap-rim),0 3px 10px -4px rgba(15,18,23,.3)!important}
+
+/* ---- En-tête : boutons ronds en verre clair à arête épaisse (comme la loupe de Musique) ---- */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body header.pg-head .pg-bar :is(button,a):not(.logo){background:var(--ap-glass)!important;box-shadow:var(--ap-rim),var(--ap-shadow)!important;min-width:44px!important;min-height:44px!important;border-radius:50%!important}
+
+/* ---- Panneaux et listes : verre plus clair, arête lentille ---- */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app :is(.h11-week,.h11-todo,.kps,.ov-chart,.sg,.pg-ms,.hm-risk,.j3-top,.rd3,.card:not(.row):not(.j3-prompt)){background:color-mix(in srgb,var(--v-glass) 100%,transparent)!important;box-shadow:var(--ap-rim),var(--ap-shadow)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:not(.mp-row + .mp-row),html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat:not(.pf-cat + .pf-cat){box-shadow:inset 0 1.5px 0 rgba(255,255,255,.8),inset 1.5px 0 0 rgba(255,255,255,.45),inset -1.5px 0 0 rgba(255,255,255,.45)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .mp-row,html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat{box-shadow:inset 1.5px 0 0 rgba(255,255,255,.45),inset -1.5px 0 0 rgba(255,255,255,.45)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app :is(.mp,.mp-ex,.mp-list)>.mp-row:not(:has(+ .mp-row)),html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat:not(:has(+ .pf-cat)){box-shadow:inset 0 -1.5px 0 rgba(255,255,255,.4),inset 1.5px 0 0 rgba(255,255,255,.45),inset -1.5px 0 0 rgba(255,255,255,.45),0 10px 28px -14px rgba(15,18,23,.22)!important}
+/* Compteur et cartes teintées : verre coloré avec halo lumineux en bas (comme la carte Siri) */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .h11 .hm-hero::after{content:"";position:absolute;left:8%;right:8%;bottom:-1px;height:40%;pointer-events:none;border-radius:50%;z-index:0;
+  background:radial-gradient(60% 80% at 50% 100%,rgba(255,255,255,.22),transparent 70%)}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .h11 .hm-hero>*{position:relative;z-index:1}
+
+/* ---- Boutons : secondaire = pilule de verre grise, principal = couleur pleine (comme Annuler / Accepter) ---- */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body :is(#app,.sheet,#layer) .btn:not(.primary):not(.danger){background:var(--ap-pill)!important;box-shadow:inset 0 .5px 0 rgba(255,255,255,.6)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body :is(#app,.sheet,#layer) .btn.primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 20px -10px color-mix(in srgb,var(--accent-strong) 80%,transparent)!important}
+
+/* ---- Fenêtres : plaque de verre clair, grand rayon ---- */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .sheet:not(:has(#tl-clock,.breath)){background:color-mix(in srgb,var(--v-base) 62%,transparent)!important;box-shadow:var(--ap-rim),0 -20px 50px -20px rgba(0,0,0,.35)!important;border-radius:34px 34px 0 0!important}
+
+/* ---- Interrupteurs : bouton de verre plus large que le rail (iOS 27) ---- */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .switch{width:52px!important;height:30px!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .switch span{background:rgba(120,120,128,.24)!important;border-radius:999px!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .switch input:checked+span{background:#34C759!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .switch span::after{top:2px!important;left:2px!important;width:30px!important;height:26px!important;border-radius:999px!important;
+  background:linear-gradient(180deg,#fff,rgba(255,255,255,.92))!important;box-shadow:0 0 0 .5px rgba(0,0,0,.06),0 3px 8px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.9)!important;
+  transition:transform .4s cubic-bezier(.3,1.5,.5,1),width .2s,background .2s!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .switch input:checked+span::after{transform:translateX(18px)!important}
+[dir="rtl"] html:root:not(.fx) body .switch input:checked+span::after{transform:translateX(-18px)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .switch:active span::after{width:36px!important;background:rgba(255,255,255,.55)!important;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.95),0 4px 12px rgba(0,0,0,.2)!important;-webkit-backdrop-filter:blur(2px) saturate(200%);backdrop-filter:blur(2px) saturate(200%)}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .switch:active input:checked+span::after{transform:translateX(12px)!important}
+
+@media (prefers-reduced-transparency:reduce){html:root:not(.fx) body #navWrap .lg-tabs.lg-tabs,html:root:not(.fx) body #navWrap.nav{background:var(--v-base)!important;backdrop-filter:none!important}}
+
+/* Barre d'onglets : verre clair mais dépoli, pour que les libellés restent lisibles quel que soit le contenu dessous */
+@media (max-width:899px){
+  html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs.lg-tabs{background:rgba(250,250,252,.56)!important;-webkit-backdrop-filter:blur(16px) saturate(190%) brightness(1.04)!important;backdrop-filter:blur(16px) saturate(190%) brightness(1.04)!important}
+  html.lg-refract:root:not(.fx):not(.zz):not(.zy):not(.zx) body #navWrap .lg-tabs.lg-tabs{backdrop-filter:url(#lgRefract) blur(16px) saturate(190%) brightness(1.04)!important}}
+@media (max-width:899px) and (prefers-color-scheme:dark){html:root:not(.fx):not(.zz):not(.zy):not(.zx):not([data-theme="light"]) body #navWrap .lg-tabs.lg-tabs{background:rgba(28,30,34,.55)!important}}
+@media (max-width:899px){html:root:not(.fx):not(.zz):not(.zy):not(.zx)[data-theme="dark"] body #navWrap .lg-tabs.lg-tabs{background:rgba(28,30,34,.55)!important}}
+
+/* Téléphone : la capsule et le bouton Aide gardent chacun leur image vivante pendant les transitions,
+   sans isoler le verre de ce qu'il y a derrière (sinon le flou ne voit plus la page) */
+@media (max-width:899px){
+  html:not(.fx) #navWrap{view-transition-name:none!important}
+  html:not(.fx) #navWrap .lg-tabs{view-transition-name:libre-tabs}
+  html:not(.fx) #navWrap .nav-help{view-transition-name:libre-help}}
+html:not(.fx)::view-transition-group(libre-tabs),html:not(.fx)::view-transition-group(libre-help){animation:none}
+html:not(.fx)::view-transition-old(libre-tabs),html:not(.fx)::view-transition-old(libre-help){display:none}
+html:not(.fx)::view-transition-new(libre-tabs),html:not(.fx)::view-transition-new(libre-help){animation:none}
+
+/* Profil : le contenu déplié respire, et pas de verre posé sur du verre */
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b{padding:0 20px 20px 68px!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b :is(.card,.list,.li){background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:0!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b .card{padding:0!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b :is(.seg:not(.wrap),.hpick){width:max-content;max-width:100%;background:var(--ap-pill)!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b .btn:not(.primary){background:var(--ap-pill)!important}
+@media (max-width:599px){html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b{padding:0 16px 16px 16px!important}}
+
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b :is([role="radiogroup"],.seg.wrap,.pal-row,.hc-pick){background:transparent!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding:0!important}
+
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b [role="radiogroup"]>button[aria-checked="true"],html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .pf-cat .fold-b .seg.wrap>button[aria-pressed="true"]{background:var(--accent-strong)!important;color:var(--accent-ink)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body #app .j3-prompt .btn.btn:not(.primary):not(:first-of-type){background:rgba(255,255,255,.16)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)!important}
+html:root:not(.fx):not(.zz):not(.zy):not(.zx) body .sheet:not(:has(#tl-clock,.breath)){background:color-mix(in srgb,var(--v-base) 82%,transparent)!important}
 </style>
 </head>
 <body>
