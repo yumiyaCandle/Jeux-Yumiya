@@ -356,6 +356,8 @@ details.fold[open] .fold-b{animation:rise var(--t) var(--ease) both}
 .pg-home .tacts>.iconbtn{width:40px;height:40px}
 .pg-home .tact-lang{padding:0 10px;min-height:40px}
 .tour-acts>.btn{font-size:16px;padding:0 12px}
+/* Petits écrans (320 px) : le logo garde son icône seule, boutons un peu plus petits */
+@media (max-width:360px){.pg-home .pg-logo>span{display:none}.pg-home .tacts>.iconbtn{width:36px;height:36px}.pg-home .tact-lang{padding:0 8px}.pg-home .tacts{gap:3px}}
 /* Puces de choix */
 .chips,.cr-chips,.s5-chips,.seg.wrap,.chips-lg,.pills{display:flex;flex-wrap:wrap;gap:var(--s2)}
 .chip,.seg.wrap>button,.chips-lg>button,.pills>button,.cr-chip,.s5-chip{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;color:var(--ink);font:500 16px/1.2 var(--font);background:var(--lg-ctl);-webkit-backdrop-filter:var(--lg-blur);backdrop-filter:var(--lg-blur);box-shadow:var(--lg-rim);transition:background-color var(--t) var(--ease),color var(--t) var(--ease),transform var(--t-fast) var(--ease)}
@@ -4623,11 +4625,11 @@ function viewTools(){
       ${row('','sitSheet','spark',t('Moments difficiles'),t('Des gestes concrets selon la situation'))}
       <button class="mp-row" data-a="allTools"><span class="mp-ic">${ic('book')}</span><span class="grow"><b>${esc(t('Tous les exercices'))}</b></span>${ic('right','sm')}</button>
     </div>
+    ${WH.length?`<section class="cr-rec"><p class="mp-h">${esc(t('Ce qui t’aide'))}</p><div class="mp-ex">${WH.map(w=>`<button class="mp-row" data-a="${w.a}" ${w.a==='tool'?`data-id="${w.id}"`:`data-k="${w.id}"`}><span class="mp-ic">${ic(w.ic)}</span><span class="grow"><b>${esc(w.name)}</b><span>${esc(w.why)}</span></span>${ic('right','sm')}</button>`).join('')}</div></section>`:''}
     <details class="mp-more"><summary>${esc(t('Plus d’outils'))}</summary><div class="mp-ex">
       ${row('','signsSheet','info',t('Mes signaux d’alerte'),P.signs.length?P.signs.slice(0,2).map(x=>t(x)).join(', '):t('Les repérer tôt'))}
       <button class="mp-row" data-a="tool" data-id="ground"><span class="mp-ic">${ic('spark')}</span><span class="grow"><b>${esc(t('Revenir au présent'))}</b></span>${ic('right','sm')}</button>
       ${row('#comprendre','','book',t('Comprendre'),t('Fiches courtes et sourcées'))}
-      ${WH.map(w=>`<button class="mp-row" data-a="${w.a}" ${w.a==='tool'?`data-id="${w.id}"`:`data-k="${w.id}"`}><span class="mp-ic">${ic(w.ic)}</span><span class="grow"><b>${esc(w.name)}</b><span>${esc(w.why)}</span></span>${ic('right','sm')}</button>`).join('')}
     </div></details>
     <button class="mp-row mp-danger" data-a="spDanger"><span class="mp-ic">${ic('phone')}</span><span class="grow"><b>${esc(t('Je suis en danger'))}</b></span>${ic('right','sm')}</button>
   </div>`}

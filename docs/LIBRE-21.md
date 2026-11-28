@@ -161,7 +161,8 @@ Ce qui change dans **Mon plan** :
   6. me faire accompagner (vers la page santé : médecin, pharmacie, ligne d’aide).
 - Chaque étape dit en une phrase pourquoi elle aide, se coche quand elle est faite, et une barre indique combien sont faites.
 - **Quand l’envie monte** : respirer, surfer sur l’envie, moments difficiles, tous les exercices, chacun avec une phrase d’explication.
-- **Plus d’outils** (replié par défaut) : signaux d’alerte, revenir au présent, Comprendre, « Ce qui t’aide ».
+- **Ce qui t’aide** reste visible quand il existe : ce sont les exercices que la personne a notés comme utiles.
+- **Plus d’outils** (replié par défaut) : signaux d’alerte, revenir au présent, Comprendre.
 - Rien n’est supprimé ; « Je suis en danger » reste visible.
 
 ## Vérifications
